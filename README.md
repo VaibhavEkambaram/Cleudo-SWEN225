@@ -5,3 +5,7 @@ A group project with 3 members
 	- Baxter Kirikiri
 	- Vaibhav Ekambaram
 	
+### CRC Cards Documentation ###
+
+[insert document link here upon development start]
+	
