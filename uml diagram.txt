@@ -1,0 +1,79 @@
+interface Card {
+}
+
+class WeaponCard{
+  isA Card;
+}class CharacterCard
+{
+  isA Card;
+}
+
+class RoomCard
+{
+  isA Card;
+}
+
+class Room
+{
+}
+
+class Player
+{
+}
+
+class Game
+{
+}
+
+class Board
+{
+}
+
+class BoardPosition
+{
+}
+
+//$?[End_of_model]$?
+
+namespace -;
+
+
+class WeaponCard
+{
+  position 129 159 109 41;
+}
+
+class CharacterCard
+{
+  position 293 158 109 41;
+}
+
+class RoomCard
+{
+  position 454 158 109 41;
+}
+
+class Room
+{
+  position 35 249 109 61;
+}
+
+class Player
+{
+  position 33 327 109 61;
+}
+
+class Game
+{
+  position 31 401 109 61;
+}
+
+class Board
+{
+  position 31 479 109 61;
+}
+
+class BoardPosition
+{
+  position 30 555 109 61;
+}
