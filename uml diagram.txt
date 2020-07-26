@@ -1,11 +1,15 @@
 interface Card {
   String name;
   String description;
+  String toString(); // general toString method
 }
 
 class WeaponCard{
   isA Card;
-}class CharacterCard
+  String weaponName; // name of weapon character represents
+}
+
+class CharacterCard
 {
   isA Card;
   char color; // Text form of character e.g. W for white due to print display
@@ -14,15 +18,20 @@ class WeaponCard{
 class RoomCard
 {
   isA Card;
+  Room room;
 }
 
 class Room
 {
+  RoomCard roomCard;
+  WeaponCard possibleWeapon;
+  
 }
 
 class Player
 {
   Card hand; // Make this a list of cards
+  Boolean currentPlayer;
 }
 
 class Game
@@ -43,6 +52,8 @@ public void createPlayers(int num){
 
 class Board
 {
+  BoardPosition[] boardPositions; //list of every position on board
+  Game game; // current game
 }
 
 class BoardPosition
