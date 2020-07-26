@@ -1,37 +1,41 @@
+
 interface Card {
-  String name;
-  String description;
   String toString(); // general toString method
 }
 
+//---------------------------------
+// Cards Implementation
+//---------------------------------
 class WeaponCard{
   isA Card;
-  String weaponName; // name of weapon character represents
+  
+  String weapon; // weapon name
 }
 
 class CharacterCard
 {
   isA Card;
+  
   char color; // Text form of character e.g. W for white due to print display
 }
 
 class RoomCard
 {
   isA Card;
-  Room room;
+  
+  Room room; // Room class to store more information
 }
+//---------------------------------
+
 
 class Room
 {
-  RoomCard roomCard;
-  WeaponCard possibleWeapon;
-  
 }
+
 
 class Player
 {
   Card hand; // Make this a list of cards
-  Boolean currentPlayer;
 }
 
 class Game
@@ -43,7 +47,7 @@ public void printGame(){
 }
 public void startGame(){
   board = new Board(); // Create starting board
-  
+
 }
 public void createPlayers(int num){
 // For num, roll dice and create num Players
@@ -52,13 +56,11 @@ public void createPlayers(int num){
 
 class Board
 {
-  BoardPosition[] boardPositions; //list of every position on board
-  Game game; // current game
 }
-
 class BoardPosition
 {
 }
+
 
 
 
@@ -71,6 +73,7 @@ class Square
 
 class WeaponCard
 {
+  position 129 159 109 41;
   position 131 160 109 41;
 }
 
@@ -78,17 +81,14 @@ class CharacterCard
 {
   position 293 158 109 41;
 }
-
 class RoomCard
 {
   position 454 158 109 41;
 }
-
 class Room
 {
-  position 35 249 109 61;
-}
-
+  position 448 365 109 61;
+  }
 class Player
 {
   position 33 327 109 61;
@@ -96,23 +96,18 @@ class Player
 
 class Game
 {
+  position 201 424 197 129;
   position 172 248 194 112;
 }
 
 class Board
 {
+  position 31 479 109 61;
   position 33 409 109 61;
 }
 
 class BoardPosition
 {
+  position 30 555 109 61;
   position 32 481 109 61;
-}//$?[End_of_model]$?
-
-namespace -;
-
-
-class Square
-{
-  position 33 558 109 61;
 }
