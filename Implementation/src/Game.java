@@ -30,7 +30,7 @@ public class Game {
     //------------------------
 
     public Game() {
-
+        initializeGame();
         //System.out.println(rollDice());
     }
 
@@ -48,6 +48,11 @@ public class Game {
                 "\n");
         new Game();
     }
+
+    public void initializeGame(){
+        System.out.println("How many players wish to participate?");
+    }
+
 
     //------------------------
     // INTERFACE
