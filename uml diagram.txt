@@ -1,113 +1,181 @@
-
 interface Card {
-  String toString(); // general toString method
+    String toString();
 }
 
-//---------------------------------
-// Cards Implementation
-//---------------------------------
-class WeaponCard{
-  isA Card;
-  
-  String weapon; // weapon name
-}
 
-class CharacterCard
+class WeaponCard
 {
-  isA Card;
-  
-  char color; // Text form of character e.g. W for white due to print display
+  weapon;
+isA Card;
 }
 
 class RoomCard
 {
-  isA Card;
-  
-  Room room; // Room class to store more information
+  roomName;
+Room room;
+isA Card;
+  * -- * Scenario;
 }
-//---------------------------------
 
+class CharacterCard
+{
+  characterName;
+isA Card;
+    * -- * Scenario;
+}
+
+class Scenario
+{
+  RoomCard roomCard;
+  WeaponCard weapon;
+  CharacterCard murderer;
+    * -- * WeaponCard;
+public Boolean isEqual(Scenario o){
+
+}
+}
 
 class Room
 {
-}
-
-
-class Player
-{
-  Card hand; // Make this a list of cards
+  RoomCard roomCard;
+  WeaponCard weapon;
+  * -- * WeaponCard;
+    * -- * RoomCard;
 }
 
 class Game
 {
-Board board;
+  Board board;
+  Player currentPlayer;
+  Scenario murderScenario;
+  
+  Player[] players;
+  
+    * -- * Scenario;
+public int rollDice(){
 
-public void printGame(){
-  System.out.println(""); // Print the game state
 }
-public void startGame(){
-  board = new Board(); // Create starting board
+public void dealCards(){
 
 }
-public void createPlayers(int num){
-// For num, roll dice and create num Players
+public void suggestion(){
+
+}
+public boolean accusation(){
+
+}
+}
+
+class Player
+{
+  CharacterCard character;
+  Card[] hand;
+  boolean canAccuse;
+  boolean canRefute;
+  Position currentPosition;
+public void refutation(RoomCard arg0,CharacterCard arg1,WeaponCard arg2){
+
 }
 }
 
 class Board
 {
+  Position[] tiles;
+  * -- * Scenario;
+  * -- * Position;
+public boolean movePlayer(Player arg0,Tile arg1,int arg2){
+
 }
-class BoardPosition
+}
+
+class Position
 {
+  Room inRoom;
+  CharacterCard hasCharacter;
+  WeaponCard hasWeapon;
+  boolean passableTile;
 }
 
-
-
+//$?[End_of_model]$?
 
 namespace -;
 
 
-class Square
-{
-}
-
 class WeaponCard
 {
-  position 129 159 109 41;
-  position 131 160 109 41;
+  position 20 205 157 95;
+}
+
+class RoomCard
+{
+  position 199 207 157 95;
+  position.association RoomCard__Scenario 124,112 73,0;
 }
 
 class CharacterCard
 {
-  position 293 158 109 41;
+  position 376 206 157 78;
+    position.association CharacterCard__Scenario 91,104 167,0;
+  position.association CharacterCard__Player 177,48 0,43;
 }
+
+class Scenario
+{
+  position 261 444 221 129;
+  position.association Scenario__WeaponCard 25,0 157,95;
+}
+
+class WeaponCard
+{
+  position 20 205 157 95;
+}
+
 class RoomCard
 {
-  position 454 158 109 41;
+  position 199 207 157 95;
 }
+
+class CharacterCard
+{
+  position 376 206 157 78;
+}
+
+class Scenario
+{
+  position 261 444 221 129;
+}
+
 class Room
 {
-  position 448 365 109 61;
-  }
-class Player
-{
-  position 33 327 109 61;
+  position 21 395 170 95;
+  position.association Room__WeaponCard 89,0 102,95;
+    position.association Room__RoomCard 117,0 27,112;
 }
 
 class Game
 {
-  position 201 424 197 129;
-  position 172 248 194 112;
+  position 664 403 199 197;
+  position.association Game__Scenario 0,56 221,96;
+  position.association Game__Player 199,27 0,137;
+  position.association Game__Player 199,10 0,137;
+  position.association Game__Player 199,29 0,152;
+  position.association Game__Player 199,5 0,125;
+  position.association Game__Player 199,33 0,141;
+}
+
+class Player
+{
+  position 936 255 194 146;
 }
 
 class Board
 {
-  position 31 479 109 61;
-  position 33 409 109 61;
+  position 342 652 282 95;
+  position.association Board__Scenario 71,0 199,129;
+  position.association Board__Position 0,49 219,45;
 }
 
-class BoardPosition
+class Position
 {
-  position 30 555 109 61;
-  position 32 481 109 61;
+  position 65 653 219 129;
 }
