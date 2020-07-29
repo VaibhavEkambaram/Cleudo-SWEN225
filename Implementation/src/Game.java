@@ -225,7 +225,7 @@ public class Game {
 
     // line 61 "model.ump"
     public int rollDice() {
-        return null;
+        return 0;
     }
 
     // line 64 "model.ump"
