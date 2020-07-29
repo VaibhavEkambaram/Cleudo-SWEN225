@@ -1,0 +1,226 @@
+//Unable to update umple code due to error at null
+//Unable to update umple code due to error at null
+//Unable to update umple code due to error at null
+//Unable to update umple code due to error at null
+interface Card {
+    String toString();
+}
+
+
+class WeaponCard
+{
+  weapon;
+isA Card;
+}
+
+class RoomCard
+{
+  roomName;
+Room room;
+isA Card;
+  * -- * Scenario;
+}
+
+class CharacterCard
+{
+  characterName;
+isA Card;
+    * -- * Scenario;
+}
+
+class Scenario
+{
+  RoomCard roomCard;
+  WeaponCard weapon;
+  CharacterCard murderer;
+    * -- * WeaponCard;
+public Boolean isEqual(Scenario o){
+
+}
+}
+
+class Room
+{
+  RoomCard roomCard;
+  WeaponCard weapon;
+  CharacterCard character;
+}
+
+class Game
+{
+  Board board;
+  Player currentPlayer;
+  Scenario murderScenario;
+  
+  Player[] players;
+  
+    * -- * Scenario;
+public int rollDice(){
+
+}
+public void dealCards(){
+
+}
+public void suggestion(){
+
+}
+public boolean accusation(){
+
+}
+}
+
+class Player
+{
+  CharacterCard character;
+  Card[] hand;
+  boolean canAccuse;
+  boolean canRefute;
+  Position currentPosition;
+public void refutation(RoomCard arg0,CharacterCard arg1,WeaponCard arg2){
+
+}
+public Boolean checkInRoom(){ // Check if player is in a room
+  if (currentPosition.isRoom) {
+    return true;
+}
+}
+}
+
+class Board
+{
+  Position[] tiles;
+  * -- * Scenario;
+  * -- * Position;
+public boolean movePlayer(Player arg0,Tile arg1,int arg2){
+
+}
+}
+
+class Position
+{
+  Room inRoom;
+  /* Not quite sure we will need this as the Room card should store this information for us, instead of individual tiles.
+  CharacterCard hasCharacter;
+  WeaponCard hasWeapon;
+  */
+  boolean passableTile;
+  displayName;
+  Boolean isRoom;
+  }
+
+
+
+namespace -;
+
+
+class WeaponCard
+{
+  position 20 205 157 95;
+}
+
+class RoomCard
+{
+  position 199 207 157 95;
+  position.association RoomCard__Scenario 124,112 73,0;
+}
+
+class CharacterCard
+{
+  position 376 206 157 78;
+    position.association CharacterCard__Scenario 91,104 167,0;
+  position.association CharacterCard__Player 177,48 0,43;
+}
+
+class Scenario
+{
+  position 261 444 221 129;
+  position.association Scenario__WeaponCard 25,0 157,95;
+}
+
+class WeaponCard
+{
+  position 20 205 157 95;
+}
+
+class RoomCard
+{
+  position 199 207 157 95;
+}
+
+class CharacterCard
+{
+  position 376 206 157 78;
+}
+
+class Scenario
+{
+  position 261 444 221 129;
+}
+
+class Room
+{
+  position 29 398 195 112;
+  }
+
+class Game
+{
+  position 664 403 199 197;
+  position.association Game__Scenario 0,56 222,92;
+  position.association Game__Player 199,27 0,137;
+  position.association Game__Player 199,10 0,137;
+  position.association Game__Player 199,29 0,152;
+  position.association Game__Player 199,5 0,125;
+  position.association Game__Player 199,33 0,141;
+  position.association Game__Player 168,0 221,195;
+}
+
+class Player
+{
+  position 663 123 406 163;
+}
+
+class Board
+{
+  position 336 644 282 95;
+  position.association Board__Scenario 71,0 199,129;
+  position.association Board__Position 0,49 220,51;
+}
+
+class Position
+{
+  position 31 569 219 163;
+  position.association Position__Room 106,0 89,101;
+}//$?[End_of_model]$?
+
+namespace -;
+
+
+class WeaponCard
+{
+  position 20 205 157 95;
+}
+
+class RoomCard
+{
+  position 199 207 157 95;
+}
+
+class CharacterCard
+{
+  position 376 206 157 78;
+}
+
+class Scenario
+{
+  position 261 444 221 129;
+}
+
+class Room
+{
+  position 29 398 195 112;
+}
+
+class Game
+{
+  position 664 403 199 197;
+}
