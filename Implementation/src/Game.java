@@ -225,7 +225,7 @@ public class Game {
 
     // line 61 "model.ump"
     public int rollDice() {
-
+        return null;
     }
 
     // line 64 "model.ump"
@@ -240,7 +240,7 @@ public class Game {
 
     // line 70 "model.ump"
     public boolean accusation() {
-
+        return false;
     }
 
 
