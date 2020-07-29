@@ -130,9 +130,10 @@ public class Player {
     // line 83 "model.ump"
     public Boolean checkInRoom() {
         // Check if player is in a room
-        if (currentPosition.isRoom) {
-            return true;
-        }
+        // if (currentPosition.isRoom) {
+        //   return true;
+        //}
+        return false;
     }
 
 

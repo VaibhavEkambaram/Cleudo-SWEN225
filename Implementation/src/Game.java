@@ -5,6 +5,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 // line 50 "model.ump"
 // line 166 "model.ump"
@@ -15,9 +16,9 @@ public class Game {
     // MEMBER VARIABLES
     //------------------------
 
-    private final List<Player> players;
+    private List<Player> players;
     //Game Associations
-    private final List<Scenario> scenarios;
+    private List<Scenario> scenarios;
     //Game Attributes
     private Board board;
     private Player currentPlayer;
@@ -27,12 +28,25 @@ public class Game {
     // CONSTRUCTOR
     //------------------------
 
-    public Game(Board aBoard, Player aCurrentPlayer, Scenario aMurderScenario) {
-        board = aBoard;
-        currentPlayer = aCurrentPlayer;
-        murderScenario = aMurderScenario;
-        players = new ArrayList<Player>();
-        scenarios = new ArrayList<Scenario>();
+    public Game() {
+        System.out.println("print board here!");
+
+        System.out.println(rollDice());
+    }
+
+    public static void main(String[] args){
+        System.out.println("--------------------------------\n" +
+                "\t\t\tCluedo!\n" +
+                "--------------------------------\n" +
+                "SWEN225 Assignment 1\n" +
+                "A group project by:\n" +
+                "* Vaibhav Ekambaram \n" +
+                "* Cameron Li\n" +
+                "* Baxter Kirikiri\n" +
+                "--------------------------------\n" +
+                "\n" +
+                "\n");
+        new Game();
     }
 
     //------------------------
@@ -225,7 +239,14 @@ public class Game {
 
     // line 61 "model.ump"
     public int rollDice() {
-        return 0;
+
+        // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
+        int firstResult = new Random().nextInt(6) + 1;
+        int secondResult = new Random().nextInt(6) + 1;
+
+        System.out.println("first dice throw: "+firstResult);
+        System.out.println("second dice throw: "+secondResult);
+        return firstResult + secondResult;
     }
 
     // line 64 "model.ump"
