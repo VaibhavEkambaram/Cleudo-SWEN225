@@ -24,14 +24,14 @@ public class Game {
     private Player currentPlayer;
     private Scenario murderScenario;
 
+
     //------------------------
     // CONSTRUCTOR
     //------------------------
 
     public Game() {
-        System.out.println("print board here!");
 
-        System.out.println(rollDice());
+        //System.out.println(rollDice());
     }
 
     public static void main(String[] args){
