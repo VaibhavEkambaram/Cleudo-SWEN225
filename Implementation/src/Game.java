@@ -100,20 +100,35 @@ public class Game {
                         & - Spanner
                          */
 
-        List<Position> tiles = new ArrayList<>();
+        /**TODO: fix x co-ordinate values
+         *       implement rooms (might need to change how we identify a room tbh)**/
+        boardPositions = new LinkedHashMap<>();
         String[] boardLines = board.split("\n");
+        int yLine = 0;
         for(String line : boardLines){
             String[] chars = line.split("|");
-            for(int i=0; i < chars.length; i++){
-                if(i % 2 !=0){
-                    //TODO: maybe create constructor for this
-                    Position p = new Position(chars[i].charAt(0));
-                    tiles.add(p);
-                }
+            for(int x=0; x < chars.length; x++){
+                    int xLine = x;
+                    String key = xLine + ", " + yLine;
+                    Room noRoom = new Room("null");
+                    if (chars[x].equals("x") || chars[x].equals("#")) {
+                        boardPositions.put(key, new Position(noRoom, false, xLine, yLine));
+                    } else if(chars[x].equals("_") || Character.isLetter(chars[x].charAt(0))){
+                        boardPositions.put(key, new Position(noRoom, true, xLine, yLine));
+                    }
             }
+            yLine++;
         }
 
         System.out.println(board);
+       /** Testing code for co-ordinates (currently prints the correct number of positions (24*25 = 600)
+        *  but the x co-ordinates initially only use odd numbers and then use impossible numbers like 41 later on)
+        int numPositions = 0;
+        for(String key : boardPositions.keySet()){
+            System.out.println(key);
+            numPositions++;
+        }
+        System.out.println("NumCords: " + numPositions);**/
     }
 
     public static void main(String[] args){
@@ -148,8 +163,6 @@ public class Game {
             }
         }
 
-        boardPositions = new HashMap<String, Position>();
-        this.generatePositions();
 
         Scenario murderScenario = initialiseDeck();
         players = new ArrayList<>();
