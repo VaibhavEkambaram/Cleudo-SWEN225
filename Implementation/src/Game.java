@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,8 +50,20 @@ public class Game {
         new Game();
     }
 
-    public void initializeGame(){
-        System.out.println("How many players wish to participate?");
+    public void initializeGame() {
+        System.out.println("How many players wish to participate? (3 - 6)");
+        int input = 0;
+        char number = 0;
+        try {
+            input = System.in.read();
+            number = (char) input;
+        } catch (IOException e) {
+            System.out.println("Error reading from user");
+        }
+
+        System.out.println(input);
+        System.out.println(number);
+        System.out.println((double) number);
     }
 
 
