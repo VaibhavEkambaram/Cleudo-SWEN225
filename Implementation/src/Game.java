@@ -2,11 +2,7 @@
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 // line 50 "model.ump"
 // line 166 "model.ump"
@@ -53,22 +49,11 @@ public class Game {
     public void initializeGame() {
         System.out.println("How many players wish to participate? (3 - 6)");
         int input = 0;
+        Scanner sc = new Scanner(System.in);
         while (input < 3 || input > 6) {
-            input = enterPlayers();
+            String number = sc.nextLine();
+            input = Integer.parseInt(number);
         }
-    }
-
-    public int enterPlayers() {
-        int input = 0;
-        String number = "";
-        try {
-            input = System.in.read();
-            number = Character.toString((char) input); // Remove character information (char to int isn't what we want)
-        } catch (IOException e) {
-            System.out.println("Error reading from user");
-        }
-        input = Integer.parseInt(number);
-        return input;
     }
 
 
