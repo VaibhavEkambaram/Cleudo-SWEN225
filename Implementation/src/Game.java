@@ -15,7 +15,13 @@ public class Game {
 
     private List<Card> deck;
     private List<Player> players;
-    private Set<Room> rooms;
+
+    // Identifiers
+    private List<WeaponCard> weapons;
+    private List<Room> rooms;
+    private List<RoomCard> roomCards;
+    private List<CharacterCard> characters;
+
     //Game Associations
     private List<Scenario> scenarios;
     //Game Attributes
@@ -76,13 +82,13 @@ public class Game {
 
     public void initializeGame() {
         System.out.println("How many players wish to participate? (3 - 6)");
-        int input = 0;
+        int numPlayers = 0;
         Scanner sc = new Scanner(System.in);
-        while (input < 3 || input > 6) {
+        while (numPlayers < 3 || numPlayers > 6) {
             boolean isNumber = true;
             String number = sc.nextLine();
             try {
-                input = Integer.parseInt(number);
+                numPlayers = Integer.parseInt(number);
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a number");
                 isNumber = false;
@@ -92,22 +98,30 @@ public class Game {
             }
         }
 
+        Scenario murderScenario = initialiseDeck();
+
+        for (int n = 0; n < numPlayers; n++) {
+            players.add(new Player(characters.get(n)));
+        }
+    }
+
+    private Scenario initialiseDeck() {
         // Adding cards
         deck = new ArrayList<>();
 
         // Weapons
         String[] wepNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
-        List<WeaponCard> weaponCards = new ArrayList<>();
+        weapons = new ArrayList<>();
         for (String w : wepNames) {
             WeaponCard weapon = new WeaponCard(w);
-            weaponCards.add(weapon);
+            weapons.add(weapon);
             deck.add(weapon);
         }
 
         // Rooms
         String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study",
                 "Library", "Billiard Room", " Conservatory", "Ballroom"};
-        List<RoomCard> roomCards = new ArrayList<>();
+        roomCards = new ArrayList<>();
         for (String r : roomNames) {
             Room newRoom = new Room(r);
             rooms.add(newRoom);
@@ -119,18 +133,20 @@ public class Game {
         // Characters
         String[] characterNames = {"Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum",
                 "Ms. Scarlet", "Col. Mustard"};
-        List<CharacterCard> characterCards = new ArrayList<>();
+        characters = new ArrayList<>();
         for (String c : characterNames) {
             CharacterCard character = new CharacterCard(c);
-            characterCards.add(character);
+            characters.add(character);
             deck.add(character);
         }
-        // Murder Scenario of Random Cards
-        Scenario murderScenario = new Scenario(weaponCards.get(new Random().nextInt(wepNames.length - 1) + 1),
-                roomCards.get(new Random().nextInt(roomNames.length - 1) + 1),
-                characterCards.get(new Random().nextInt(characterNames.length - 1) + 1));
 
         Collections.shuffle(deck);
+        // Murder Scenario of Random Cards
+        Scenario murderScenario = new Scenario(weapons.get(new Random().nextInt(wepNames.length - 1) + 1),
+                roomCards.get(new Random().nextInt(roomNames.length - 1) + 1),
+                characters.get(new Random().nextInt(characterNames.length - 1) + 1));
+
+        return murderScenario;
     }
 
 

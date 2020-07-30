@@ -16,20 +16,20 @@ public class Player {
     private final List<Card> hand;
     //Player Attributes
     private CharacterCard character;
-    private boolean canAccuse;
-    private boolean canRefute;
+    private boolean canAccuse = true;
+    private boolean canRefute = true;
     private Position currentPosition;
 
     //------------------------
     // CONSTRUCTOR
     //------------------------
 
-    public Player(CharacterCard aCharacter, boolean aCanAccuse, boolean aCanRefute, Position aCurrentPosition) {
+    public Player(CharacterCard aCharacter) {
         character = aCharacter;
         hand = new ArrayList<Card>();
-        canAccuse = aCanAccuse;
-        canRefute = aCanRefute;
-        currentPosition = aCurrentPosition;
+        //canAccuse = aCanAccuse;
+        //canRefute = aCanRefute;
+        //currentPosition = aCurrentPosition;
     }
 
     //------------------------

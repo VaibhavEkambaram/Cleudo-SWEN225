@@ -2,10 +2,6 @@
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 // line 100 "model.ump"
 // line 190 "model.ump"
 public class Position {
@@ -14,8 +10,7 @@ public class Position {
     // MEMBER VARIABLES
     //------------------------
 
-    //Position Associations
-    private final List<Board> boards;
+
     //Position Attributes
     private Room inRoom;
     private boolean passableTile;
@@ -26,12 +21,10 @@ public class Position {
     // CONSTRUCTOR
     //------------------------
 
-    public Position(Room aInRoom, boolean aPassableTile, String aDisplayName, boolean aIsRoom) {
+    public Position(Room aInRoom, boolean aPassableTile, String aDisplayName) {
         inRoom = aInRoom;
         passableTile = aPassableTile;
         displayName = aDisplayName;
-        isRoom = aIsRoom;
-        boards = new ArrayList<Board>();
     }
 
     //------------------------
@@ -97,7 +90,8 @@ public class Position {
         return isRoom;
     }
 
-    /* Code from template association_GetMany */
+    /*
+    /* Code from template association_GetMany
     public Board getBoard(int index) {
         Board aBoard = boards.get(index);
         return aBoard;
@@ -123,7 +117,7 @@ public class Position {
         return index;
     }
 
-    /* Code from template association_AddManyToManyMethod */
+    // Code from template association_AddManyToManyMethod
     public boolean addBoard(Board aBoard) {
         boolean wasAdded = false;
         if (boards.contains(aBoard)) {
@@ -141,7 +135,7 @@ public class Position {
         return wasAdded;
     }
 
-    /* Code from template association_RemoveMany */
+    // Code from template association_RemoveMany
     public boolean removeBoard(Board aBoard) {
         boolean wasRemoved = false;
         if (!boards.contains(aBoard)) {
@@ -161,7 +155,7 @@ public class Position {
         return wasRemoved;
     }
 
-    /* Code from template association_AddIndexControlFunctions */
+    // Code from template association_AddIndexControlFunctions
     public boolean addBoardAt(Board aBoard, int index) {
         boolean wasAdded = false;
         if (addBoard(aBoard)) {
@@ -203,6 +197,8 @@ public class Position {
             aBoard.removePosition(this);
         }
     }
+
+    */
 
 
     public String toString() {
