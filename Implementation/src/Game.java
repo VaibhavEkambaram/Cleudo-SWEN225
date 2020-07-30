@@ -13,6 +13,7 @@ public class Game {
     // MEMBER VARIABLES
     //------------------------
 
+    private List<Card> deck;
     private List<Player> players;
     //Game Associations
     private List<Scenario> scenarios;
@@ -63,6 +64,17 @@ public class Game {
                 System.out.println("Please enter a number between 3 and 6");
             }
         }
+
+        // Adding cards
+        deck = new ArrayList<>();
+        String[] wepNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
+        List<WeaponCard> weapons = new ArrayList<>();
+        for (String s : wepNames) {
+            weapons.add(new WeaponCard(s));
+        }
+        String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study",
+                "Library", "Billiard Room", " Conservatory", "Ballroom"};
+
     }
 
 
