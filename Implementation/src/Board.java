@@ -208,7 +208,8 @@ public class Board {
         return wasAdded;
     }
 
-    /* Code from template association_AddManyToManyMethod */
+    /*
+    // Code from template association_AddManyToManyMethod
     public boolean addPosition(Position aPosition) {
         boolean wasAdded = false;
         if (positions.contains(aPosition)) {
@@ -226,7 +227,7 @@ public class Board {
         return wasAdded;
     }
 
-    /* Code from template association_RemoveMany */
+    // Code from template association_RemoveMany
     public boolean removePosition(Position aPosition) {
         boolean wasRemoved = false;
         if (!positions.contains(aPosition)) {
@@ -246,7 +247,7 @@ public class Board {
         return wasRemoved;
     }
 
-    /* Code from template association_AddIndexControlFunctions */
+    // Code from template association_AddIndexControlFunctions
     public boolean addPositionAt(Position aPosition, int index) {
         boolean wasAdded = false;
         if (addPosition(aPosition)) {
@@ -299,6 +300,8 @@ public class Board {
         return false;
     }
 
+
+     */
 
     public String toString() {
         return super.toString() + "[" + "]";

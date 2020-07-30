@@ -101,12 +101,13 @@ public class Game {
         }
 
         Scenario murderScenario = initialiseDeck();
-
+        players = new ArrayList<>();
         for (int n = 0; n < numPlayers; n++) {
             players.add(new Player(characters.get(n)));
         }
     }
 
+    // Create the deck and murder scenario
     private Scenario initialiseDeck() {
         // Adding cards
         deck = new ArrayList<>();
@@ -123,6 +124,7 @@ public class Game {
         // Rooms
         String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study",
                 "Library", "Billiard Room", " Conservatory", "Ballroom"};
+        rooms = new ArrayList<>();
         roomCards = new ArrayList<>();
         for (String r : roomNames) {
             Room newRoom = new Room(r);
