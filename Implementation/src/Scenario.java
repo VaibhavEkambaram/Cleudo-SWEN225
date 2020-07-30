@@ -31,7 +31,7 @@ public class Scenario {
     // CONSTRUCTOR
     //------------------------
 
-    public Scenario(RoomCard aRoomCard, WeaponCard aWeapon, CharacterCard aMurderer) {
+    public Scenario(WeaponCard aWeapon, RoomCard aRoomCard, CharacterCard aMurderer) {
         roomCard = aRoomCard;
         weapon = aWeapon;
         murderer = aMurderer;
