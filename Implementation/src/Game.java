@@ -357,6 +357,7 @@ public class Game {
 
     // line 64 "model.ump"
     public void dealCards() {
+        //Add cards from the deck list to a stack, then deal them to each player until the stack is empty
         Stack<Card> toBeDealt = new Stack<>();
         for(Card c : this.deck){
             toBeDealt.push(c);
