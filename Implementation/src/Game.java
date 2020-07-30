@@ -13,7 +13,9 @@ public class Game {
     // MEMBER VARIABLES
     //------------------------
 
+    private List<Card> deck;
     private List<Player> players;
+    private Set<Room> rooms;
     //Game Associations
     private List<Scenario> scenarios;
     //Game Attributes
@@ -91,6 +93,46 @@ public class Game {
                 System.out.println("Please enter a number between 3 and 6");
             }
         }
+
+        // Adding cards
+        deck = new ArrayList<>();
+
+        // Weapons
+        String[] wepNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
+        List<WeaponCard> weaponCards = new ArrayList<>();
+        for (String w : wepNames) {
+            WeaponCard weapon = new WeaponCard(w);
+            weaponCards.add(weapon);
+            deck.add(weapon);
+        }
+
+        // Rooms
+        String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study",
+                "Library", "Billiard Room", " Conservatory", "Ballroom"};
+        List<RoomCard> roomCards = new ArrayList<>();
+        for (String r : roomNames) {
+            Room newRoom = new Room(r);
+            rooms.add(newRoom);
+            RoomCard newRoomCard = new RoomCard(r, newRoom);
+            roomCards.add(newRoomCard);
+            deck.add(newRoomCard);
+        }
+
+        // Characters
+        String[] characterNames = {"Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum",
+                "Ms. Scarlet", "Col. Mustard"};
+        List<CharacterCard> characterCards = new ArrayList<>();
+        for (String c : characterNames) {
+            CharacterCard character = new CharacterCard(c);
+            characterCards.add(character);
+            deck.add(character);
+        }
+        // Murder Scenario of Random Cards
+        Scenario murderScenario = new Scenario(weaponCards.get(new Random().nextInt(wepNames.length - 1) + 1),
+                roomCards.get(new Random().nextInt(roomNames.length - 1) + 1),
+                characterCards.get(new Random().nextInt(characterNames.length - 1) + 1));
+
+        Collections.shuffle(deck);
     }
 
 

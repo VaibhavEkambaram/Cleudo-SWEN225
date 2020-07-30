@@ -12,6 +12,7 @@ public class Room {
     //------------------------
 
     //Room Attributes
+    private String roomName;
     private RoomCard roomCard;
     private WeaponCard weapon;
     private CharacterCard character;
@@ -20,10 +21,8 @@ public class Room {
     // CONSTRUCTOR
     //------------------------
 
-    public Room(RoomCard aRoomCard, WeaponCard aWeapon, CharacterCard aCharacter) {
-        roomCard = aRoomCard;
-        weapon = aWeapon;
-        character = aCharacter;
+    public Room(String roomName) {
+        this.roomName = roomName;
     }
 
     //------------------------
