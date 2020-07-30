@@ -105,6 +105,7 @@ public class Game {
         for (int n = 0; n < numPlayers; n++) {
             players.add(new Player(characters.get(n)));
         }
+        this.dealCards();
     }
 
     // Create the deck and murder scenario
@@ -356,7 +357,17 @@ public class Game {
 
     // line 64 "model.ump"
     public void dealCards() {
+        Stack<Card> toBeDealt = new Stack<>();
+        for(Card c : this.deck){
+            toBeDealt.push(c);
+        }
 
+        while(!toBeDealt.isEmpty()){
+            for(Player p : this.players){
+                p.addHand(toBeDealt.pop());
+            }
+        }
+        System.out.println("Cards Dealt");
     }
 
     // line 67 "model.ump"
