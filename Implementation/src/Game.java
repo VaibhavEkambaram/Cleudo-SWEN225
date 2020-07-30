@@ -53,17 +53,22 @@ public class Game {
     public void initializeGame() {
         System.out.println("How many players wish to participate? (3 - 6)");
         int input = 0;
-        char number = 0;
+        while (input < 3 || input > 6) {
+            input = enterPlayers();
+        }
+    }
+
+    public int enterPlayers() {
+        int input = 0;
+        String number = "";
         try {
             input = System.in.read();
-            number = (char) input;
+            number = Character.toString((char) input); // Remove character information (char to int isn't what we want)
         } catch (IOException e) {
             System.out.println("Error reading from user");
         }
-
-        System.out.println(input);
-        System.out.println(number);
-        System.out.println((double) number);
+        input = Integer.parseInt(number);
+        return input;
     }
 
 
