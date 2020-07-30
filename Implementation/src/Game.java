@@ -37,7 +37,7 @@ public class Game {
 
     public Game() {
         initializeGame();
-        //System.out.println(rollDice());
+
         String board =  "   1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 \n" +
                         "1 |x|x|x|x|x|x|x|x|x|W|x|x|x|x|G|x|x|x|x|x|x|x|x|x|\n" +
                         "2 |#|#|#|#|#|#|x|_|_|_|#|#|#|#|_|_|_|x|#|#|#|#|#|#|\n" +
@@ -98,8 +98,20 @@ public class Game {
                         % - Revolver
                         @ - Rope
                         & - Spanner
-
                          */
+
+        List<Position> tiles = new ArrayList<>();
+        String[] boardLines = board.split("\n");
+        for(String line : boardLines){
+            String[] chars = line.split("|");
+            for(int i=0; i < chars.length; i++){
+                if(i % 2 !=0){
+                    //TODO: maybe create constructor for this
+                    Position p = new Position(chars[i].charAt(0));
+                    tiles.add(p);
+                }
+            }
+        }
 
         System.out.println(board);
     }
