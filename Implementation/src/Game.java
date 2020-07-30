@@ -52,7 +52,11 @@ public class Game {
         Scanner sc = new Scanner(System.in);
         while (input < 3 || input > 6) {
             String number = sc.nextLine();
-            input = Integer.parseInt(number);
+            try {
+                input = Integer.parseInt(number);
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a number");
+            }
         }
     }
 
