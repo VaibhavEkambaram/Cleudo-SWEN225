@@ -386,7 +386,7 @@ public class Scenario {
 
     /* Code from template association_AddManyToManyMethod */
     public boolean addCharacterCard(CharacterCard aCharacterCard) {
-        boolean wasAdded = false;
+       /* boolean wasAdded = false;
         if (characterCards.contains(aCharacterCard)) {
             return false;
         }
@@ -400,6 +400,8 @@ public class Scenario {
             }
         }
         return wasAdded;
+        */
+        return false;
     }
 
     /* Code from template association_RemoveMany */
@@ -411,15 +413,16 @@ public class Scenario {
 
         int oldIndex = characterCards.indexOf(aCharacterCard);
         characterCards.remove(oldIndex);
-        if (aCharacterCard.indexOfScenario(this) == -1) {
+       // if (aCharacterCard.indexOfScenario(this) == -1) {
             wasRemoved = true;
-        } else {
-            wasRemoved = aCharacterCard.removeScenario(this);
-            if (!wasRemoved) {
-                characterCards.add(oldIndex, aCharacterCard);
-            }
-        }
-        return wasRemoved;
+       // } else {
+           // wasRemoved = aCharacterCard.removeScenario(this);
+           // if (!wasRemoved) {
+           ////     characterCards.add(oldIndex, aCharacterCard);
+           // }
+       // }
+       // return wasRemoved;
+        return false;
     }
 
     /* Code from template association_AddIndexControlFunctions */
@@ -617,7 +620,7 @@ public class Scenario {
         ArrayList<CharacterCard> copyOfCharacterCards = new ArrayList<CharacterCard>(characterCards);
         characterCards.clear();
         for (CharacterCard aCharacterCard : copyOfCharacterCards) {
-            aCharacterCard.removeScenario(this);
+          //  aCharacterCard.removeScenario(this);
         }
         ArrayList<Game> copyOfGames = new ArrayList<Game>(games);
         games.clear();
