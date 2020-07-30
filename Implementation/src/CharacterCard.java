@@ -2,10 +2,6 @@
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 // line 25 "model.ump"
 // line 128 "model.ump"
 // line 151 "model.ump"
@@ -16,27 +12,49 @@ public class CharacterCard implements Card {
     // MEMBER VARIABLES
     //------------------------
 
-
     //CharacterCard Attributes
     private String characterName;
+    private final char characterBoardChar;
+    private Position initPosition;
+    
+    /**
+     * CharacterCard Constructor
+     *
+     * @param c name of the character
+     * @param p initial starting position (tile) on board
+     */
+    public CharacterCard(String c, Position p) {
+        this.characterName = c;
+        this.initPosition = p;
 
 
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
+        switch (characterName) {
+            case "Mrs. White":
+                characterBoardChar = '1';
+                break;
+            case "Mr. Green":
+                characterBoardChar = '2';
+                break;
+            case "Mrs. Peacock":
+                characterBoardChar = '3';
+                break;
+            case "Prof. Plum":
+                characterBoardChar = '4';
+                break;
+            case "Ms. Scarlett":
+                characterBoardChar = '5';
+                break;
+            case "Col. Mustard":
+                characterBoardChar = '6';
+                break;
+            default:
+                characterBoardChar = '-';
+                break;
+        }
 
-    public CharacterCard(String aCharacterName) {
-        characterName = aCharacterName;
+
     }
 
-    //------------------------
-    // INTERFACE
-    //------------------------
-
-    /* Code from template association_MinimumNumberOfMethod */
-    public static int minimumNumberOfScenarios() {
-        return 0;
-    }
 
     public boolean setCharacterName(String aCharacterName) {
         boolean wasSet = false;
@@ -49,15 +67,20 @@ public class CharacterCard implements Card {
         return characterName;
     }
 
+    public char getCharacterBoardChar() {
+        return characterBoardChar;
+    }
 
     public void delete() {
+    }
 
+    public Position getStartPosition() {
+        return initPosition;
     }
 
 
     @Override
     public String toString() {
-        return "";
+        return getCharacterName();
     }
-
 }
