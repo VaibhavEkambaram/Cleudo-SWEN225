@@ -16,15 +16,19 @@ public class Position {
     private boolean passableTile;
     private String displayName;
     private boolean isRoom;
+    private int xLoc;
+    private int yLoc;
 
     //------------------------
     // CONSTRUCTOR
     //------------------------
 
-    public Position(Room aInRoom, boolean aPassableTile, String aDisplayName) {
+    public Position(Room aInRoom, boolean aPassableTile, int x, int y) {
         inRoom = aInRoom;
         passableTile = aPassableTile;
-        displayName = aDisplayName;
+        displayName = x + ", " + y;
+        xLoc = x;
+        yLoc = y;
     }
 
     //------------------------
