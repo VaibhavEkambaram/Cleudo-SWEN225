@@ -51,11 +51,16 @@ public class Game {
         int input = 0;
         Scanner sc = new Scanner(System.in);
         while (input < 3 || input > 6) {
+            boolean isNumber = true;
             String number = sc.nextLine();
             try {
                 input = Integer.parseInt(number);
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a number");
+                isNumber = false;
+            }
+            if (isNumber) {
+                System.out.println("Please enter a number between 3 and 6");
             }
         }
     }
