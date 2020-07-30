@@ -158,12 +158,7 @@ public class CharacterCard implements Card {
     }
 
 
-    /**
-     * Unable to update umple code due to error at null
-     * Unable to update umple code due to error at null
-     * Unable to update umple code due to error at null
-     * Unable to update umple code due to error at null
-     */
+
     @Override
     public String toString() {
         return "";
