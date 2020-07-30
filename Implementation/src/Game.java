@@ -21,6 +21,7 @@ public class Game {
     private List<Room> rooms;
     private List<RoomCard> roomCards;
     private List<CharacterCard> characters;
+    private Map<String, Position> boardPositions;
 
     //Game Associations
     private List<Scenario> scenarios;
@@ -99,9 +100,6 @@ public class Game {
                          */
 
         System.out.println(board);
-
-
-
     }
 
     public static void main(String[] args){
@@ -135,6 +133,9 @@ public class Game {
                 System.out.println("Please enter a number between 3 and 6");
             }
         }
+
+        boardPositions = new HashMap<String, Position>();
+        this.generatePositions();
 
         Scenario murderScenario = initialiseDeck();
         players = new ArrayList<>();
@@ -188,6 +189,18 @@ public class Game {
                 characters.get(new Random().nextInt(characterNames.length - 1) + 1));
 
         return murderScenario;
+    }
+
+    private void generatePositions(){
+        //Create a position object for each co-ordinate on the board. These are stored in a map as a field of the game class.
+        for(int x= 0; x < 24; x++){
+           for(int y=0; y<25; y++){
+               String key = x + ", " + y;
+               Room noRoom = new Room("No Room"); //there are no rooms yet so I'll just use this as filler for the room parameter
+               Position newPosition = new Position(noRoom,true,x,y);
+               this.boardPositions.put(key, newPosition);
+           }
+        }
     }
 
 
