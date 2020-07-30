@@ -65,12 +65,36 @@ public class Game {
 
                         /*
 
+                        ** Players **
                         S - Miss Scarlet
                         M - Colonel Mustard
                         U - Professor Plum
                         P - Mrs Peacock
                         G - Mr Green
                         W - Mrs White
+
+                        ** Board **
+                        x - Null Area (Off limits)
+                        # - Room Wall
+
+                        ** Rooms **
+                        C - Conservatory
+                        B - Ball Room
+                        K - Kitchen
+                        I - Billiard Room
+                        D - Dining Room
+                        L - Library
+                        O - Lounge
+                        H - Hall
+                        Y - Study
+
+                        ** Weapons **
+                        ? - Candlestick
+                        ! - Dagger
+                        $ - Lead Pipe
+                        % - Revolver
+                        @ - Rope
+                        & - Spanner
 
                          */
 
