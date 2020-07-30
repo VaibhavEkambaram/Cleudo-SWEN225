@@ -241,15 +241,16 @@ public class Scenario {
             return false;
         }
         weaponCards.add(aWeaponCard);
-        if (aWeaponCard.indexOfScenario(this) != -1) {
+        //if (aWeaponCard.indexOfScenario(this) != -1) {
             wasAdded = true;
-        } else {
-            wasAdded = aWeaponCard.addScenario(this);
-            if (!wasAdded) {
-                weaponCards.remove(aWeaponCard);
-            }
-        }
-        return wasAdded;
+        //} else {
+           // wasAdded = aWeaponCard.addScenario(this);
+           // if (!wasAdded) {
+          //      weaponCards.remove(aWeaponCard);
+          //  }
+       // }
+       // return wasAdded;
+        return false;
     }
 
     /* Code from template association_RemoveMany */
@@ -261,7 +262,7 @@ public class Scenario {
 
         int oldIndex = weaponCards.indexOf(aWeaponCard);
         weaponCards.remove(oldIndex);
-        if (aWeaponCard.indexOfScenario(this) == -1) {
+        /*if (aWeaponCard.indexOfScenario(this) == -1) {
             wasRemoved = true;
         } else {
             wasRemoved = aWeaponCard.removeScenario(this);
@@ -270,6 +271,9 @@ public class Scenario {
             }
         }
         return wasRemoved;
+
+         */
+        return false;
     }
 
     /* Code from template association_AddIndexControlFunctions */
@@ -603,7 +607,7 @@ public class Scenario {
         ArrayList<WeaponCard> copyOfWeaponCards = new ArrayList<WeaponCard>(weaponCards);
         weaponCards.clear();
         for (WeaponCard aWeaponCard : copyOfWeaponCards) {
-            aWeaponCard.removeScenario(this);
+           // aWeaponCard.removeScenario(this);
         }
         ArrayList<RoomCard> copyOfRoomCards = new ArrayList<RoomCard>(roomCards);
         roomCards.clear();

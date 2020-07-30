@@ -77,7 +77,8 @@ public class WeaponCard implements Card {
     }
 
     /**
-     * Overridden toString method
+     * Overridden toString methods
+     *
      * @return weapon card string
      */
     @Override
