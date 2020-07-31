@@ -31,6 +31,13 @@ public class Board {
     }
 
     public String toString() {
-        return super.toString() + "[" + "]";
+        StringBuilder boardPrint = new StringBuilder();
+        for (int i = 0; i < positions.length; i++) {
+            for (int j = 0; j < positions[0].length; j++) {
+                boardPrint.append("|" + positions[i][j].toString());
+            }
+            boardPrint.append("|\n");
+        }
+        return boardPrint.toString();
     }
 }

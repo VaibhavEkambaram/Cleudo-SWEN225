@@ -39,6 +39,9 @@ public class Position {
         this.xLoc = x;
         this.yLoc = y;
         this.canMove = canMove;
+        if (!canMove) {
+            this.displayName = "x";
+        }
     }
 
     public Position(int x, int y, boolean canMove, CharacterCard character) {
@@ -57,9 +60,10 @@ public class Position {
         this.inRoom = inRoom;
         this.isRoom = true;
         this.passableTile = passableTile;
-        this.displayName = inRoom.getRoomChar();
-        if (isShow) {
-            this.displayName = this.inRoom.getRoomChar();
+        if (this.passableTile == false) {
+            this.displayName = inRoom.getRoomChar().toLowerCase();
+        } else if (isShow) {
+            this.displayName = inRoom.getRoomChar();
         }
     }
 
@@ -129,9 +133,6 @@ public class Position {
 
 
     public String toString() {
-        if (character != null) {
-            return character.getCharacterName();
-        }
-        return "_";
+        return this.displayName;
     }
 }

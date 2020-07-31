@@ -100,6 +100,7 @@ public class Game {
                          */
 
         initBoard(boardLayout);
+        //System.out.println(board);
     }
 
     public static void main(String[] args){
@@ -190,7 +191,7 @@ public class Game {
         murderScenario = newMurderScenario;
     }
 
-    private Board initBoard(String boardLayout) {
+    private void initBoard(String boardLayout) {
         Board board = new Board();
         Scanner layoutScan = new Scanner(boardLayout);
         int y = -1;
@@ -214,7 +215,7 @@ public class Game {
 
                 if (newPosition == null) {
                     for (Room r : rooms) {
-                        if (positionName == r.getRoomChar()) {
+                        if (positionName.equals(r.getRoomChar())) {
                             newPosition = new Position(x, y, true, true, false, r);
                             break;
                         } else if (positionName.equals("s" + r.getRoomChar())) { // show
@@ -232,18 +233,19 @@ public class Game {
 
                 if (newPosition == null) {
                     for (CharacterCard c : characters) {
-                        //System.out.println(positionName + c.getCharacterBoardChar());
-                        if (positionName == c.getCharacterBoardChar()) {
+                        if (positionName.equals(c.getCharacterBoardChar())) {
                             newPosition = new Position(x, y, true, c);
                             break;
                         }
                     }
                 }
-
+                board.addPosition(x, y, newPosition);
             }
             positionScan.close();
         }
-        return null;
+        layoutScan.close();
+        this.board = board;
+        System.out.println(this.board);
     }
 
     private void genPositions() {

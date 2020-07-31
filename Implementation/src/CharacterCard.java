@@ -80,6 +80,6 @@ public class CharacterCard implements Card {
 
     @Override
     public String toString() {
-        return getCharacterName();
+        return getCharacterBoardChar();
     }
 }
