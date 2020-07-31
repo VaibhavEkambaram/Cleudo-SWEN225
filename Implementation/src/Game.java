@@ -28,7 +28,7 @@ public class Game {
     //Game Attributes
     private Board board;
     private Player currentPlayer;
-    private Scenario murderScenario;
+    private Scenario murderScenario;  // Random Murder Scenario that players must find
 
 
     //------------------------
@@ -100,7 +100,7 @@ public class Game {
                          */
 
         initBoard(boardLayout);
-        //System.out.println(board);
+        System.out.println(this.board); // Initial Display
     }
 
     public static void main(String[] args){
@@ -195,48 +195,47 @@ public class Game {
         Board board = new Board();
         Scanner layoutScan = new Scanner(boardLayout);
         int y = -1;
+        // Scan row (y)
         while (layoutScan.hasNextLine()) {
-            String scanLine = layoutScan.nextLine();
-            // Increment column, and setup rows
+            String scanLine = layoutScan.nextLine(); // Scanned row (y)
             y++;
             int x = -1;
-            Scanner positionScan = new Scanner(scanLine);
+            Scanner positionScan = new Scanner(scanLine); // Scan Column (x)
             while (positionScan.hasNext()) {
-                String positionName = positionScan.next();
+                String positionName = positionScan.next(); // Scanned Column (x)
                 x++; // Increment row
                 Position newPosition = null;
-                // Add a but load of if statements here :D
-                if (positionName.equals("x")) {
+                if (positionName.equals("x")) { // Check for "x", a forbidden position
                     newPosition = new Position(x, y, false);
                 }
-                if (positionName.equals("_")) {
+                if (positionName.equals("_")) { // Check for "_" the basic moveable position
                     newPosition = new Position(x, y, true);
                 }
 
-                if (newPosition == null) {
-                    for (Room r : rooms) {
-                        if (positionName.equals(r.getRoomChar())) {
+                if (newPosition == null) { // If still haven't found anything
+                    for (Room r : rooms) { // Check for a room
+                        if (positionName.equals(r.getRoomChar())) { // Is this an inner room position?
                             newPosition = new Position(x, y, true, true, false, r);
                             break;
-                        } else if (positionName.equals("d" + r.getRoomChar())) { // door
-                            newPosition = new Position(x, y, true, true, false, r);
+                        } else if (positionName.equals("d" + r.getRoomChar())) { // Is this a room door?
+                            newPosition = new Position(x, y, true, true, true, r);
                             break;
-                        } else if (positionName.equals(r.getRoomChar().toLowerCase())) { // wall
+                        } else if (positionName.equals(r.getRoomChar().toLowerCase())) { // Is this an outer room position?
                             newPosition = new Position(x, y, true, false, false, r);
                             break;
                         }
                     }
                 }
 
-                if (newPosition == null) {
+                if (newPosition == null) { // If still haven't found anything
                     for (CharacterCard c : characters) {
-                        if (positionName.equals(c.getCharacterBoardChar())) {
-                            for (Player p : players) {
-                                if (p.getCharacter().equals(c)) {
+                        if (positionName.equals(c.getCharacterBoardChar())) { // Check if position is a character
+                            for (Player p : players) { // Make sure that a player is playing the character
+                                if (p.getCharacter().equals(c)) { // Case player for character exists, create Character position
                                     p.setCurrentPosition(newPosition);
                                     newPosition = new Position(x, y, true, c);
                                     break;
-                                } else {
+                                } else { // Else, is a basic moveable position "_"
                                     newPosition = new Position(x, y, true);
                                 }
                             }
@@ -244,13 +243,12 @@ public class Game {
                         }
                     }
                 }
-                board.addPosition(x, y, newPosition);
+                board.addPosition(y, x, newPosition); // Add found position
             }
             positionScan.close();
         }
         layoutScan.close();
-        this.board = board;
-        System.out.println(this.board);
+        this.board = board; // Set board
     }
 
     //------------------------

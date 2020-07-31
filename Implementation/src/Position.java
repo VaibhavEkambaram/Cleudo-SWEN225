@@ -35,6 +35,7 @@ public class Position {
         yLoc = y;
     }
 
+    // Default Constructor
     public Position(int x, int y, boolean canMove) {
         this.xLoc = x;
         this.yLoc = y;
@@ -44,6 +45,7 @@ public class Position {
         }
     }
 
+    // Character Position Constructor
     public Position(int x, int y, boolean canMove, CharacterCard character) {
         this.xLoc = x;
         this.yLoc = y;
@@ -53,6 +55,7 @@ public class Position {
         this.displayName = character.getCharacterBoardChar();
     }
 
+    // Room Position Constructor
     public Position(int x, int y, boolean canMove, boolean passableTile, boolean isShow, Room inRoom) {
         this.xLoc = x;
         this.yLoc = y;
@@ -60,10 +63,11 @@ public class Position {
         this.inRoom = inRoom;
         this.isRoom = true;
         this.passableTile = passableTile;
+        // Check for door or outer wall
         if (this.passableTile == false) {
             this.displayName = inRoom.getRoomChar().toLowerCase();
         } else if (isShow) {
-            this.displayName = inRoom.getRoomChar();
+            this.displayName = "z";
         }
     }
 
