@@ -164,7 +164,7 @@ public class Game {
         }
 
 
-        Scenario murderScenario = initialiseDeck();
+        initialiseDeck();
         players = new ArrayList<>();
         for (int n = 0; n < numPlayers; n++) {
             players.add(new Player(characters.get(n)));
@@ -173,7 +173,7 @@ public class Game {
     }
 
     // Create the deck and murder scenario
-    private Scenario initialiseDeck() {
+    private void initialiseDeck() {
         // Adding cards
         deck = new ArrayList<>();
 
@@ -212,11 +212,11 @@ public class Game {
 
         Collections.shuffle(deck);
         // Murder Scenario of Random Cards
-        Scenario murderScenario = new Scenario(weapons.get(new Random().nextInt(wepNames.length - 1) + 1),
+        Scenario newMurderScenario = new Scenario(weapons.get(new Random().nextInt(wepNames.length - 1) + 1),
                 roomCards.get(new Random().nextInt(roomNames.length - 1) + 1),
                 characters.get(new Random().nextInt(characterNames.length - 1) + 1));
 
-        return murderScenario;
+        murderScenario = newMurderScenario;
     }
 
     private void generatePositions(){
@@ -255,25 +255,6 @@ public class Game {
         return wasSet;
     }
 
-    public boolean setMurderScenario(Scenario aMurderScenario) {
-        boolean wasSet = false;
-        murderScenario = aMurderScenario;
-        wasSet = true;
-        return wasSet;
-    }
-
-    /* Code from template attribute_SetMany */
-    public boolean addPlayer(Player aPlayer) {
-        boolean wasAdded = false;
-        wasAdded = players.add(aPlayer);
-        return wasAdded;
-    }
-
-    public boolean removePlayer(Player aPlayer) {
-        boolean wasRemoved = false;
-        wasRemoved = players.remove(aPlayer);
-        return wasRemoved;
-    }
 
     public Board getBoard() {
         return board;
@@ -313,112 +294,6 @@ public class Game {
         return index;
     }
 
-    /* Code from template association_GetMany */
-    public Scenario getScenario(int index) {
-        Scenario aScenario = scenarios.get(index);
-        return aScenario;
-    }
-
-    public List<Scenario> getScenarios() {
-        List<Scenario> newScenarios = Collections.unmodifiableList(scenarios);
-        return newScenarios;
-    }
-
-    public int numberOfScenarios() {
-        int number = scenarios.size();
-        return number;
-    }
-
-    public boolean hasScenarios() {
-        boolean has = scenarios.size() > 0;
-        return has;
-    }
-
-    public int indexOfScenario(Scenario aScenario) {
-        int index = scenarios.indexOf(aScenario);
-        return index;
-    }
-
-    /* Code from template association_AddManyToManyMethod */
-    public boolean addScenario(Scenario aScenario) {
-        boolean wasAdded = false;
-        if (scenarios.contains(aScenario)) {
-            return false;
-        }
-        scenarios.add(aScenario);
-        if (aScenario.indexOfGame(this) != -1) {
-            wasAdded = true;
-        } else {
-            wasAdded = aScenario.addGame(this);
-            if (!wasAdded) {
-                scenarios.remove(aScenario);
-            }
-        }
-        return wasAdded;
-    }
-
-    /* Code from template association_RemoveMany */
-    public boolean removeScenario(Scenario aScenario) {
-        boolean wasRemoved = false;
-        if (!scenarios.contains(aScenario)) {
-            return wasRemoved;
-        }
-
-        int oldIndex = scenarios.indexOf(aScenario);
-        scenarios.remove(oldIndex);
-        if (aScenario.indexOfGame(this) == -1) {
-            wasRemoved = true;
-        } else {
-            wasRemoved = aScenario.removeGame(this);
-            if (!wasRemoved) {
-                scenarios.add(oldIndex, aScenario);
-            }
-        }
-        return wasRemoved;
-    }
-
-    /* Code from template association_AddIndexControlFunctions */
-    public boolean addScenarioAt(Scenario aScenario, int index) {
-        boolean wasAdded = false;
-        if (addScenario(aScenario)) {
-            if (index < 0) {
-                index = 0;
-            }
-            if (index > numberOfScenarios()) {
-                index = numberOfScenarios() - 1;
-            }
-            scenarios.remove(aScenario);
-            scenarios.add(index, aScenario);
-            wasAdded = true;
-        }
-        return wasAdded;
-    }
-
-    public boolean addOrMoveScenarioAt(Scenario aScenario, int index) {
-        boolean wasAdded = false;
-        if (scenarios.contains(aScenario)) {
-            if (index < 0) {
-                index = 0;
-            }
-            if (index > numberOfScenarios()) {
-                index = numberOfScenarios() - 1;
-            }
-            scenarios.remove(aScenario);
-            scenarios.add(index, aScenario);
-            wasAdded = true;
-        } else {
-            wasAdded = addScenarioAt(aScenario, index);
-        }
-        return wasAdded;
-    }
-
-    public void delete() {
-        ArrayList<Scenario> copyOfScenarios = new ArrayList<Scenario>(scenarios);
-        scenarios.clear();
-        for (Scenario aScenario : copyOfScenarios) {
-            aScenario.removeGame(this);
-        }
-    }
 
     // line 61 "model.ump"
     public int rollDice() {
@@ -441,7 +316,10 @@ public class Game {
         }
 
         while(!toBeDealt.isEmpty()){
-            for(Player p : this.players){
+            for(Player p : this.players) {
+                if (toBeDealt.isEmpty()) {
+                    break;
+                }
                 p.addHand(toBeDealt.pop());
             }
         }

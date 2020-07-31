@@ -67,9 +67,6 @@ public class Room {
 
 
     public String toString() {
-        return super.toString() + "[" + "]" + System.getProperties().getProperty("line.separator") +
-                "  " + "roomCard" + "=" + (getRoomCard() != null ? !getRoomCard().equals(this) ? getRoomCard().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-                "  " + "weapon" + "=" + (getWeapon() != null ? !getWeapon().equals(this) ? getWeapon().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-                "  " + "character" + "=" + (getCharacter() != null ? !getCharacter().equals(this) ? getCharacter().toString().replaceAll("  ", "    ") : "this" : "null");
+        return this.roomName;
     }
 }

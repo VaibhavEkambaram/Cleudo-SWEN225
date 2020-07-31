@@ -89,87 +89,6 @@ public class RoomCard implements Card {
         return index;
     }
 
-    /* Code from template association_AddManyToManyMethod */
-    public boolean addScenario(Scenario aScenario) {
-        boolean wasAdded = false;
-        if (scenarios.contains(aScenario)) {
-            return false;
-        }
-        scenarios.add(aScenario);
-        if (aScenario.indexOfRoomCard(this) != -1) {
-            wasAdded = true;
-        } else {
-            wasAdded = aScenario.addRoomCard(this);
-            if (!wasAdded) {
-                scenarios.remove(aScenario);
-            }
-        }
-        return wasAdded;
-    }
-
-    /* Code from template association_RemoveMany */
-    public boolean removeScenario(Scenario aScenario) {
-        boolean wasRemoved = false;
-        if (!scenarios.contains(aScenario)) {
-            return wasRemoved;
-        }
-
-        int oldIndex = scenarios.indexOf(aScenario);
-        scenarios.remove(oldIndex);
-        if (aScenario.indexOfRoomCard(this) == -1) {
-            wasRemoved = true;
-        } else {
-            wasRemoved = aScenario.removeRoomCard(this);
-            if (!wasRemoved) {
-                scenarios.add(oldIndex, aScenario);
-            }
-        }
-        return wasRemoved;
-    }
-
-    /* Code from template association_AddIndexControlFunctions */
-    public boolean addScenarioAt(Scenario aScenario, int index) {
-        boolean wasAdded = false;
-        if (addScenario(aScenario)) {
-            if (index < 0) {
-                index = 0;
-            }
-            if (index > numberOfScenarios()) {
-                index = numberOfScenarios() - 1;
-            }
-            scenarios.remove(aScenario);
-            scenarios.add(index, aScenario);
-            wasAdded = true;
-        }
-        return wasAdded;
-    }
-
-    public boolean addOrMoveScenarioAt(Scenario aScenario, int index) {
-        boolean wasAdded = false;
-        if (scenarios.contains(aScenario)) {
-            if (index < 0) {
-                index = 0;
-            }
-            if (index > numberOfScenarios()) {
-                index = numberOfScenarios() - 1;
-            }
-            scenarios.remove(aScenario);
-            scenarios.add(index, aScenario);
-            wasAdded = true;
-        } else {
-            wasAdded = addScenarioAt(aScenario, index);
-        }
-        return wasAdded;
-    }
-
-    public void delete() {
-        ArrayList<Scenario> copyOfScenarios = new ArrayList<Scenario>(scenarios);
-        scenarios.clear();
-        for (Scenario aScenario : copyOfScenarios) {
-            aScenario.removeRoomCard(this);
-        }
-    }
-
 
     /**
      * Unable to update umple code due to error at null
@@ -179,7 +98,7 @@ public class RoomCard implements Card {
      */
     @Override
     public String toString() {
-        return "";
+        return roomName;
     }
 
 }
