@@ -160,7 +160,7 @@ public class Game {
 
         // Rooms
         String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study",
-                "Library", "Billiard Room", " Conservatory", "Ballroom"};
+                "Library", "Billiard Room", "Conservatory", "Ball Room"};
         rooms = new ArrayList<>();
         roomCards = new ArrayList<>();
         for (String r : roomNames) {
@@ -203,39 +203,45 @@ public class Game {
             while (positionScan.hasNext()) {
                 String positionName = positionScan.next();
                 x++; // Increment row
-                System.out.print("|" + positionName);
                 Position newPosition = null;
                 // Add a but load of if statements here :D
-                if (positionName == "x") {
+                if (positionName.equals("x")) {
                     newPosition = new Position(x, y, false);
                 }
-                if (positionName == "_") {
+                if (positionName.equals("_")) {
                     newPosition = new Position(x, y, true);
                 }
+
+                if (newPosition == null) {
+                    for (Room r : rooms) {
+                        if (positionName == r.getRoomChar()) {
+                            newPosition = new Position(x, y, true, true, r);
+                            break;
+                        } else if (positionName.equals("s" + r.getRoomChar())) { // show
+                            //System.out.println(positionName);
+                            //break;
+                        } else if (positionName.equals("d" + r.getRoomChar())) { // door
+                            //System.out.println(positionName);
+                            //break;
+                        } else if (positionName.equals(r.getRoomChar().toLowerCase())) { // wall
+                            newPosition = new Position(x, y, true, false, r);
+                            break;
+                        }
+                    }
+                }
+
                 if (newPosition == null) {
                     for (CharacterCard c : characters) {
+                        //System.out.println(positionName + c.getCharacterBoardChar());
                         if (positionName == c.getCharacterBoardChar()) {
                             newPosition = new Position(x, y, true, c);
                             break;
                         }
                     }
                 }
-                if (newPosition == null) {
-                    for (Room r : rooms) {
-                        if (positionName == r.getRoomChar()) {
-                            newPosition = new Position(x, y, false, r);
-                        } else if (positionName == "s" + r.getRoomChar()) { // show
 
-                        } else if (positionName == "d" + r.getRoomChar()) { // door
-
-                        } else if (positionName == r.getRoomChar().toLowerCase()) { // wall
-
-                        }
-                    }
-                }
             }
             positionScan.close();
-            System.out.println("|");
         }
         return null;
     }

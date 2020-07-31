@@ -25,30 +25,38 @@ public class Room {
 
     public Room(String roomName) {
         this.roomName = roomName;
-
         switch (roomName) {
-            case ("Conservatory"):
-                roomChar = "C";
-            case ("Ball Room"):
-                roomChar = "B";
-            case ("Kitchen"):
-                roomChar = "K";
-            case ("Billiard Room"):
-                roomChar = "I";
-            case ("Dining Room"):
-                roomChar = "D";
-            case ("Library"):
-                roomChar = "L";
-            case ("Lounge"):
-                roomChar = "O";
-            case ("Hall"):
-                roomChar = "H";
-            case ("Study"):
-                roomChar = "Y";
+            case "Conservatory":
+                this.roomChar = "C";
+                break;
+            case "Ball Room":
+                this.roomChar = "B";
+                break;
+            case "Kitchen":
+                this.roomChar = "K";
+                break;
+            case "Billiard Room":
+                this.roomChar = "I";
+                break;
+            case "Dining Room":
+                this.roomChar = "D";
+                break;
+            case "Library":
+                this.roomChar = "L";
+                break;
+            case "Lounge":
+                this.roomChar = "O";
+                break;
+            case "Hall":
+                this.roomChar = "H";
+                break;
+            case "Study":
+                this.roomChar = "Y";
+                break;
             default:
-                roomChar = "-";
+                this.roomChar = "-";
+                break;
         }
-
     }
 
     //------------------------
