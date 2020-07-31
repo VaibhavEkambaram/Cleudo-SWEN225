@@ -51,7 +51,7 @@ public class Scenario {
 
     /**
      * Character Card Get Method
-     * @return
+     * @return murderer character card
      */
     public CharacterCard getMurderer() {
         return murderer;
