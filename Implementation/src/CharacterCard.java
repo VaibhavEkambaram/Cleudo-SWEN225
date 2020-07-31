@@ -15,7 +15,6 @@ public class CharacterCard implements Card {
     //CharacterCard Attributes
     private String characterName;
     private final String characterBoardChar;
-    private final Position initPosition;
 
     /**
      * CharacterCard Constructor
@@ -69,9 +68,6 @@ public class CharacterCard implements Card {
     public void delete() {
     }
 
-    public Position getStartPosition() {
-        return initPosition;
-    }
 
 
     @Override

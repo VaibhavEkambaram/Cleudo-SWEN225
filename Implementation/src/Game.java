@@ -43,7 +43,7 @@ public class Game {
                 " k K K K K k _ _ b b b B B b b b _ _ c C C C C c \n" +
                 " k K K K K k _ _ b B B B B B B b _ _ c C C C C c \n" +
                 " k K K K K k _ _ b B B B B B B b _ _ dC c C C c c \n" +
-                " k K K K K k _ _ dB B B B B B B dB _ _ _ c c c c x \n" +
+                " k k K K K k _ _ dB B B B B B B dB _ _ _ c c c c x \n" +
                 " x k k k dK k _ _ b B B B B B B b _ _ _ _ _ _ _ 3 \n" +
                 " _ _ _ _ _ _ _ _ b dB b b b b dB b _ _ _ _ _ _ _ x \n" +
                 " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i \n" +
@@ -61,7 +61,7 @@ public class Game {
                 " o O O O O O o _ _ h H H H H dH _ _ _ _ _ _ _ _ x \n" +
                 " o O O O O O o _ _ h H H H H h _ _ dY y y y y y y \n" +
                 " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
-                " o O O O O O o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
+                " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                 " o o o o o o x 5 x h h h h h h x _ x y y y y y y \n";
 
                         /*
