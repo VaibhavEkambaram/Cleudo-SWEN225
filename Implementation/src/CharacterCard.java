@@ -27,7 +27,6 @@ public class CharacterCard implements Card {
         this.characterName = c;
         this.initPosition = p;
 
-
         switch (characterName) {
             case "Mrs. White":
                 characterBoardChar = '1';

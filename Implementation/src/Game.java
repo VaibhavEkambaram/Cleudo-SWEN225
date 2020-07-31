@@ -38,31 +38,31 @@ public class Game {
     public Game() {
         initializeGame();
 
-        String board =  "|x|x|x|x|x|x|x|x|x|1|x|x|x|x|2|x|x|x|x|x|x|x|x|x|\n" +
-                        "|#|#|#|#|#|#|x|_|_|_|#|#|#|#|_|_|_|x|#|#|#|#|#|#|\n" +
-                        "|#|_|_|_|_|#|_|_|#|#|#|_|_|#|#|#|_|_|#|_|_|_|_|#|\n" +
-                        "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|#|_|_|_|_|#|\n" +
-                        "|#|_|_|_|_|#|_|_|#|_|_|_|_|_|_|#|_|_|C|#|_|_|#|#|\n" +
-                        "|#|_|_|_|_|#|_|_|b|_|_|_|_|_|_|b|_|_|_|#|#|#|#|x|\n" +
-                        "|x|#|#|#|K|#|_|_|#|_|_|_|_|_|_|#|_|_|_|_|_|_|_|3|\n" +
-                        "|_|_|_|_|_|_|_|_|#|B|#|#|#|#|B|#|_|_|_|_|_|_|_|x|\n" +
-                        "|x|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|#|#|#|#|\n" +
-                        "|#|#|#|#|#|_|_|_|_|_|_|_|_|_|_|_|_|_|i|_|_|_|_|#|\n" +
-                        "|#|_|_|_|#|#|#|#|_|_|x|x|x|x|x|_|_|_|#|_|_|_|_|#|\n" +
-                        "|#|_|_|_|_|_|_|#|_|_|x|x|x|x|x|_|_|_|#|_|_|_|_|#|\n" +
-                        "|#|_|_|_|_|_|_|d|_|_|x|x|x|x|x|_|_|_|#|#|#|#|I|#|\n" +
-                        "|#|_|_|_|_|_|_|#|_|_|x|x|x|x|x|_|_|_|_|_|_|_|_|x|\n" +
-                        "|#|_|_|_|_|_|_|#|_|_|x|x|x|x|x|_|_|_|#|#|L|#|#|x|\n" +
-                        "|#|#|#|#|#|#|D|#|_|_|x|x|x|x|x|_|_|#|#|_|_|_|#|#|\n" +
-                        "|x|_|_|_|_|_|_|_|_|_|x|x|x|x|x|_|_|l|_|_|_|_|_|#|\n" +
-                        "|6|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|#|#|_|_|_|#|#|\n" +
-                        "|x|_|_|_|_|_|_|_|_|#|#|H|H|#|#|_|_|_|#|#|#|#|#|x|\n" +
-                        "|#|#|#|#|#|#|O|_|_|#|_|_|_|_|#|_|_|_|_|_|_|_|_|4|\n" +
-                        "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|h|_|_|_|_|_|_|_|_|x|\n" +
-                        "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|Y|#|#|#|#|#|#|\n" +
-                        "|#|_|_|_|_|_|#|_|_|#|_|_|_|_|#|_|_|#|_|_|_|_|_|#|\n" +
-                        "|#|_|_|_|_|#|#|_|_|#|_|_|_|_|#|_|_|#|#|_|_|_|_|#|\n" +
-                        "|#|#|#|#|#|#|x|5|x|#|#|#|#|#|#|x|_|x|#|#|#|#|#|#|\n";
+        String board = "xxxxxxxxx1xxxx2xxxxxxxxx\n" +
+                "######x___####___x######\n" +
+                "#____#__###__###__#____#\n" +
+                "#____#__#______#__#____#\n" +
+                "#____#__#______#__C#__##\n" +
+                "#____#__b______b___####x\n" +
+                "x###K#__#______#_______3\n" +
+                "________#B####B#_______x\n" +
+                "x_________________######\n" +
+                "#####_____________i____#\n" +
+                "#___####__xxxxx___#____#\n" +
+                "#______#__xxxxx___#____#\n" +
+                "#______d__xxxxx___####I#\n" +
+                "#______#__xxxxx________x\n" +
+                "#______#__xxxxx___##L##x\n" +
+                "######D#__xxxxx__##___##\n" +
+                "x_________xxxxx__l_____#\n" +
+                "6________________##___##\n" +
+                "x________##HH##___#####x\n" +
+                "######O__#____#________4\n" +
+                "#_____#__#____h________x\n" +
+                "#_____#__#____#__Y######\n" +
+                "#_____#__#____#__#_____#\n" +
+                "#____##__#____#__##____#\n" +
+                "######x5x######x_x######\n";
 
                         /*
 
@@ -99,35 +99,7 @@ public class Game {
                         & - Spanner
                          */
 
-        /**TODO: fix x co-ordinate values
-         *       implement rooms (might need to change how we identify a room tbh)**/
-        boardPositions = new LinkedHashMap<>();
-        String[] boardLines = board.split("\n");
-        int yLine = 1;
-        for(String line : boardLines){
-            String[] chars = line.split("|");
-            for(int x=0; x < chars.length; x++){
-                    int xLine = x-1;
-                    String key = xLine + ", " + yLine;
-                    Room noRoom = new Room("null");
-                    if (chars[x].equals("x") || chars[x].equals("#")) {
-                        boardPositions.put(key, new Position(noRoom, false, xLine, yLine));
-                    } else if(chars[x].equals("_") || Character.isLetter(chars[x].charAt(0))){
-                        boardPositions.put(key, new Position(noRoom, true, xLine, yLine));
-                    }
-            }
-            yLine++;
-        }
 
-        System.out.println(board);
-       //Testing code for co-ordinates (currently prints the correct number of positions (24*25 = 600)
-        // but the x co-ordinates initially only use odd numbers and then use impossible numbers like 41 later on)
-        int numPositions = 0;
-        for(String key : boardPositions.keySet()){
-            System.out.println(key);
-            numPositions++;
-        }
-        System.out.println("NumCords: " + numPositions);
     }
 
     public static void main(String[] args){
@@ -198,7 +170,6 @@ public class Game {
             deck.add(newRoomCard);
         }
 
-        // Characters
         String[] characterNames = {"Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum",
                 "Ms. Scarlett", "Col. Mustard"};
         characters = new ArrayList<>();
