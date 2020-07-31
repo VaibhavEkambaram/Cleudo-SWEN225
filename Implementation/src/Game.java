@@ -221,7 +221,17 @@ public class Game {
                     }
                 }
                 if (newPosition == null) {
+                    for (Room r : rooms) {
+                        if (positionName == r.getRoomChar()) {
+                            newPosition = new Position(x, y, false, r);
+                        } else if (positionName == "s" + r.getRoomChar()) { // show
 
+                        } else if (positionName == "d" + r.getRoomChar()) { // door
+
+                        } else if (positionName == r.getRoomChar().toLowerCase()) { // wall
+
+                        }
+                    }
                 }
             }
             positionScan.close();

@@ -44,6 +44,17 @@ public class Position {
         this.yLoc = y;
         this.canMove = canMove;
         this.character = character;
+
+        this.displayName = character.getCharacterBoardChar();
+    }
+
+    public Position(int x, int y, boolean canMove, Room inRoom) {
+        this.xLoc = x;
+        this.yLoc = y;
+        this.canMove = canMove;
+        this.inRoom = inRoom;
+
+        this.displayName = inRoom.getRoomChar();
     }
 
     //------------------------

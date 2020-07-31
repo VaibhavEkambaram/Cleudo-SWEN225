@@ -25,17 +25,6 @@ public class Room {
 
     public Room(String roomName) {
         this.roomName = roomName;
-        /*
-        C - Conservatory
-        B - Ball Room
-        K - Kitchen
-        I - Billiard Room
-        D - Dining Room
-        L - Library
-        O - Lounge
-        H - Hall
-        Y - Study
-         */
 
         switch (roomName) {
             case ("Conservatory"):
@@ -97,6 +86,10 @@ public class Room {
 
     public CharacterCard getCharacter() {
         return character;
+    }
+
+    public String getRoomChar() {
+        return roomChar;
     }
 
     public void delete() {
