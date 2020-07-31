@@ -41,7 +41,7 @@ public class Game {
         String boardLayout = " x x x x x x x x x 1 x x x x 2 x x x x x x x x x \n" +
                 " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
                 " k K K K K k _ _ b b b B B b b b _ _ c C C C C c \n" +
-                " k K sK K K k _ _ b B B sB B B B b _ _ c C C sC c C \n" +
+                " k K K K K k _ _ b B B B B B B b _ _ c C C C C c \n" +
                 " k K K K K k _ _ b B B B B B B b _ _ dC c C C c c \n" +
                 " k K K K K k _ _ dB B B B B B B dB _ _ _ c c c c x \n" +
                 " x k k k dK k _ _ b B B B B B B b _ _ _ _ _ _ _ 3 \n" +
@@ -59,7 +59,7 @@ public class Game {
                 " x _ _ _ _ _ _ _ _ h h dH dH h h _ _ _ l l l l l x \n" +
                 " o o o o o o dO _ _ h H H H H h _ _ _ _ _ _ _ _ 4 \n" +
                 " o O O O O O o _ _ h H H H H dH _ _ _ _ _ _ _ _ x \n" +
-                " o O O sO O O o _ _ h H H H H h _ _ dY y y y y y y \n" +
+                " o O O O O O o _ _ h H H H H h _ _ dY y y y y y y \n" +
                 " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
                 " o O O O O O o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                 " o o o o o o x 5 x h h h h h h x _ x y y y y y y \n";
@@ -177,7 +177,7 @@ public class Game {
         characters = new ArrayList<>();
         for (String c : characterNames) {
             //TODO: add position here
-            CharacterCard character = new CharacterCard(c,null);
+            CharacterCard character = new CharacterCard(c);
             characters.add(character);
             deck.add(character);
         }
@@ -218,9 +218,6 @@ public class Game {
                         if (positionName.equals(r.getRoomChar())) {
                             newPosition = new Position(x, y, true, true, false, r);
                             break;
-                        } else if (positionName.equals("s" + r.getRoomChar())) { // show
-                            newPosition = new Position(x, y, true, true, true, r);
-                            break;
                         } else if (positionName.equals("d" + r.getRoomChar())) { // door
                             newPosition = new Position(x, y, true, true, false, r);
                             break;
@@ -234,7 +231,15 @@ public class Game {
                 if (newPosition == null) {
                     for (CharacterCard c : characters) {
                         if (positionName.equals(c.getCharacterBoardChar())) {
-                            newPosition = new Position(x, y, true, c);
+                            for (Player p : players) {
+                                if (p.getCharacter().equals(c)) {
+                                    p.setCurrentPosition(newPosition);
+                                    newPosition = new Position(x, y, true, c);
+                                    break;
+                                } else {
+                                    newPosition = new Position(x, y, true);
+                                }
+                            }
                             break;
                         }
                     }
@@ -247,19 +252,6 @@ public class Game {
         this.board = board;
         System.out.println(this.board);
     }
-
-    private void genPositions() {
-        //Create a position object for each co-ordinate on the board. These are stored in a map as a field of the game class.
-        for (int x = 1; x <= 24; x++) {
-            for (int y = 1; y <= 25; y++) {
-                String key = x + ", " + y;
-                Room noRoom = new Room("No Room"); //there are no rooms yet so I'll just use this as filler for the room parameter
-                Position newPosition = new Position(noRoom, true, x, y);
-                this.boardPositions.put(key, newPosition);
-            }
-        }
-    }
-
 
     //------------------------
     // INTERFACE

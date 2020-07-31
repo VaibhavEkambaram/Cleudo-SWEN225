@@ -21,11 +21,9 @@ public class CharacterCard implements Card {
      * CharacterCard Constructor
      *
      * @param c name of the character
-     * @param p initial starting position (tile) on board
      */
-    public CharacterCard(String c, Position p) {
+    public CharacterCard(String c) {
         this.characterName = c;
-        this.initPosition = p;
 
         switch (characterName) {
             case "Mrs. White":
