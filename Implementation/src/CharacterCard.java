@@ -14,7 +14,7 @@ public class CharacterCard implements Card {
 
     //CharacterCard Attributes
     private String characterName;
-    private final char characterBoardChar;
+    private final String characterBoardChar;
     private Position initPosition;
     
     /**
@@ -29,25 +29,25 @@ public class CharacterCard implements Card {
 
         switch (characterName) {
             case "Mrs. White":
-                characterBoardChar = '1';
+                characterBoardChar = "1";
                 break;
             case "Mr. Green":
-                characterBoardChar = '2';
+                characterBoardChar = "2";
                 break;
             case "Mrs. Peacock":
-                characterBoardChar = '3';
+                characterBoardChar = "3";
                 break;
             case "Prof. Plum":
-                characterBoardChar = '4';
+                characterBoardChar = "4";
                 break;
             case "Ms. Scarlett":
-                characterBoardChar = '5';
+                characterBoardChar = "5";
                 break;
             case "Col. Mustard":
-                characterBoardChar = '6';
+                characterBoardChar = "6";
                 break;
             default:
-                characterBoardChar = '-';
+                characterBoardChar = "-";
                 break;
         }
 
@@ -66,7 +66,7 @@ public class CharacterCard implements Card {
         return characterName;
     }
 
-    public char getCharacterBoardChar() {
+    public String getCharacterBoardChar() {
         return characterBoardChar;
     }
 

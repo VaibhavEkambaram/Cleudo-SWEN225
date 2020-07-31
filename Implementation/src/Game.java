@@ -203,14 +203,29 @@ public class Game {
             while (positionScan.hasNext()) {
                 String positionName = positionScan.next();
                 x++; // Increment row
-                Position newPosition;
+                System.out.print("|" + positionName);
+                Position newPosition = null;
+                // Add a but load of if statements here :D
                 if (positionName == "x") {
                     newPosition = new Position(x, y, false);
                 }
+                if (positionName == "_") {
+                    newPosition = new Position(x, y, true);
+                }
+                if (newPosition == null) {
+                    for (CharacterCard c : characters) {
+                        if (positionName == c.getCharacterBoardChar()) {
+                            newPosition = new Position(x, y, true, c);
+                            break;
+                        }
+                    }
+                }
+                if (newPosition == null) {
 
-
+                }
             }
             positionScan.close();
+            System.out.println("|");
         }
         return null;
     }

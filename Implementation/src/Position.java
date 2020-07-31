@@ -39,6 +39,13 @@ public class Position {
         this.canMove = canMove;
     }
 
+    public Position(int x, int y, boolean canMove, CharacterCard character) {
+        this.xLoc = x;
+        this.yLoc = y;
+        this.canMove = canMove;
+        this.character = character;
+    }
+
     //------------------------
     // INTERFACE
     //------------------------
