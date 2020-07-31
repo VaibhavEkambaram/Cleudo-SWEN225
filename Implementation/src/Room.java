@@ -13,6 +13,8 @@ public class Room {
 
     //Room Attributes
     private String roomName;
+    private String roomChar;
+
     private RoomCard roomCard;
     private WeaponCard weapon;
     private CharacterCard character;
@@ -23,6 +25,38 @@ public class Room {
 
     public Room(String roomName) {
         this.roomName = roomName;
+        switch (roomName) {
+            case "Conservatory":
+                this.roomChar = "C";
+                break;
+            case "Ball Room":
+                this.roomChar = "B";
+                break;
+            case "Kitchen":
+                this.roomChar = "K";
+                break;
+            case "Billiard Room":
+                this.roomChar = "I";
+                break;
+            case "Dining Room":
+                this.roomChar = "D";
+                break;
+            case "Library":
+                this.roomChar = "L";
+                break;
+            case "Lounge":
+                this.roomChar = "O";
+                break;
+            case "Hall":
+                this.roomChar = "H";
+                break;
+            case "Study":
+                this.roomChar = "Y";
+                break;
+            default:
+                this.roomChar = "-";
+                break;
+        }
     }
 
     //------------------------
@@ -60,6 +94,10 @@ public class Room {
 
     public CharacterCard getCharacter() {
         return character;
+    }
+
+    public String getRoomChar() {
+        return roomChar;
     }
 
     public void delete() {
