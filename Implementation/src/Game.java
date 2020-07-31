@@ -36,33 +36,33 @@ public class Game {
     //------------------------
 
     public Game() {
-        initializeGame();
+        initGame();
 
-        String board = "xxxxxxxxx1xxxx2xxxxxxxxx\n" +
-                "######x___####___x######\n" +
-                "#____#__###__###__#____#\n" +
-                "#____#__#______#__#____#\n" +
-                "#____#__#______#__C#__##\n" +
-                "#____#__b______b___####x\n" +
-                "x###K#__#______#_______3\n" +
-                "________#B####B#_______x\n" +
-                "x_________________######\n" +
-                "#####_____________i____#\n" +
-                "#___####__xxxxx___#____#\n" +
-                "#______#__xxxxx___#____#\n" +
-                "#______d__xxxxx___####I#\n" +
-                "#______#__xxxxx________x\n" +
-                "#______#__xxxxx___##L##x\n" +
-                "######D#__xxxxx__##___##\n" +
-                "x_________xxxxx__l_____#\n" +
-                "6________________##___##\n" +
-                "x________##HH##___#####x\n" +
-                "######O__#____#________4\n" +
-                "#_____#__#____h________x\n" +
-                "#_____#__#____#__Y######\n" +
-                "#_____#__#____#__#_____#\n" +
-                "#____##__#____#__##____#\n" +
-                "######x5x######x_x######\n";
+        String boardLayout = " x x x x x x x x x 1 x x x x 2 x x x x x x x x x \n" +
+                " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
+                " k K K K K k _ _ b b b B B b b b _ _ c C C C C c \n" +
+                " k K sK K K k _ _ b B B sB B B B b _ _ c C C sC c C \n" +
+                " k K K K K k _ _ b B B B B B B b _ _ dC c C C c c \n" +
+                " k K K K K k _ _ dB B B B B B B dB _ _ _ c c c c x \n" +
+                " x k k k dK k _ _ b B B B B B B b _ _ _ _ _ _ _ 3 \n" +
+                " _ _ _ _ _ _ _ _ b dB b b b b dB b _ _ _ _ _ _ _ x \n" +
+                " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i \n" +
+                " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ dI I I I I i \n" +
+                " d D D D d d d d _ _ x x x x x _ _ _ i I I I I i \n" +
+                " d D D D D D D d _ _ x x x x x _ _ _ i I I I I i \n" +
+                " d D D D D D D dD _ _ x x x x x _ _ _ i i i i dI i \n" +
+                " d D D D D D D d _ _ x x x x x _ _ _ _ _ _ _ _ x \n" +
+                " d D D D D D D d _ _ x x x x x _ _ _ l l dL l l x \n" +
+                " d d d d d d dD d _ _ x x x x x _ _ l l L L L l l \n" +
+                " x _ _ _ _ _ _ _ _ _ x x x x x _ _ dL L L L L L l \n" +
+                " 6 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l \n" +
+                " x _ _ _ _ _ _ _ _ h h dH dH h h _ _ _ l l l l l x \n" +
+                " o o o o o o dO _ _ h H H H H h _ _ _ _ _ _ _ _ 4 \n" +
+                " o O O O O O o _ _ h H H H H dH _ _ _ _ _ _ _ _ x \n" +
+                " o O O sO O O o _ _ h H H H H h _ _ dY y y y y y y \n" +
+                " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
+                " o O O O O O o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
+                " o o o o o o x 5 x h h h h h h x _ x y y y y y y \n";
 
                         /*
 
@@ -99,7 +99,7 @@ public class Game {
                         & - Spanner
                          */
 
-
+        initBoard(boardLayout);
     }
 
     public static void main(String[] args){
@@ -116,7 +116,8 @@ public class Game {
         new Game();
     }
 
-    public void initializeGame() {
+    // Ask user for number of players
+    public void initGame() {
         System.out.println("How many players wish to participate? (3 - 6)");
         int numPlayers = 0;
         Scanner sc = new Scanner(System.in);
@@ -135,7 +136,7 @@ public class Game {
         }
 
 
-        initialiseDeck();
+        initDeck();
         players = new ArrayList<>();
         for (int n = 0; n < numPlayers; n++) {
             players.add(new Player(characters.get(n)));
@@ -144,7 +145,7 @@ public class Game {
     }
 
     // Create the deck and murder scenario
-    private void initialiseDeck() {
+    private void initDeck() {
         // Adding cards
         deck = new ArrayList<>();
 
@@ -189,15 +190,40 @@ public class Game {
         murderScenario = newMurderScenario;
     }
 
-    private void generatePositions(){
+    private Board initBoard(String boardLayout) {
+        Board board = new Board();
+        Scanner layoutScan = new Scanner(boardLayout);
+        int y = -1;
+        while (layoutScan.hasNextLine()) {
+            String scanLine = layoutScan.nextLine();
+            // Increment column, and setup rows
+            y++;
+            int x = -1;
+            Scanner positionScan = new Scanner(scanLine);
+            while (positionScan.hasNext()) {
+                String positionName = positionScan.next();
+                x++; // Increment row
+                Position newPosition;
+                if (positionName == "x") {
+                    newPosition = new Position(x, y, false);
+                }
+
+
+            }
+            positionScan.close();
+        }
+        return null;
+    }
+
+    private void genPositions() {
         //Create a position object for each co-ordinate on the board. These are stored in a map as a field of the game class.
-        for(int x = 1; x <= 24; x++){
-           for(int y = 1; y <= 25; y++){
-               String key = x + ", " + y;
-               Room noRoom = new Room("No Room"); //there are no rooms yet so I'll just use this as filler for the room parameter
-               Position newPosition = new Position(noRoom,true,x,y);
-               this.boardPositions.put(key, newPosition);
-           }
+        for (int x = 1; x <= 24; x++) {
+            for (int y = 1; y <= 25; y++) {
+                String key = x + ", " + y;
+                Room noRoom = new Room("No Room"); //there are no rooms yet so I'll just use this as filler for the room parameter
+                Position newPosition = new Position(noRoom, true, x, y);
+                this.boardPositions.put(key, newPosition);
+            }
         }
     }
 

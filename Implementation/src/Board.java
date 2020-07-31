@@ -17,7 +17,7 @@ public class Board {
 
     //Board Associations
     private List<Scenario> scenarios;
-    private Position[][] positions;
+    private Position[][] positions = new Position[24][25];
 
     //------------------------
     // CONSTRUCTOR
@@ -26,6 +26,9 @@ public class Board {
     public Board() {
     }
 
+    public void addPosition(int x, int y, Position position) {
+        positions[x][y] = position;
+    }
 
     public String toString() {
         return super.toString() + "[" + "]";

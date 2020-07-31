@@ -13,6 +13,7 @@ public class Position {
 
     //Position Attributes
     private CharacterCard character;
+    private boolean canMove;
     private Room inRoom;
     private boolean passableTile;
     private String displayName;
@@ -30,6 +31,12 @@ public class Position {
         displayName = x + ", " + y;
         xLoc = x;
         yLoc = y;
+    }
+
+    public Position(int x, int y, boolean canMove) {
+        this.xLoc = x;
+        this.yLoc = y;
+        this.canMove = canMove;
     }
 
     //------------------------
