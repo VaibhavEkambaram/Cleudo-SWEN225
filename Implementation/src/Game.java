@@ -102,7 +102,7 @@ public class Game {
         initBoard(boardLayout);
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println("--------------------------------\n" +
                 "\t\t\tCluedo!\n" +
                 "--------------------------------\n" +
@@ -176,7 +176,7 @@ public class Game {
         characters = new ArrayList<>();
         for (String c : characterNames) {
             //TODO: add position here
-            CharacterCard character = new CharacterCard(c,null);
+            CharacterCard character = new CharacterCard(c, null);
             characters.add(character);
             deck.add(character);
         }
@@ -313,8 +313,8 @@ public class Game {
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
 
-        System.out.println("first dice throw: "+firstResult);
-        System.out.println("second dice throw: "+secondResult);
+        System.out.println("first dice throw: " + firstResult);
+        System.out.println("second dice throw: " + secondResult);
         return firstResult + secondResult;
     }
 
@@ -322,12 +322,12 @@ public class Game {
     public void dealCards() {
         //Add cards from the deck list to a stack, then deal them to each player until the stack is empty
         Stack<Card> toBeDealt = new Stack<>();
-        for(Card c : this.deck){
+        for (Card c : this.deck) {
             toBeDealt.push(c);
         }
 
-        while(!toBeDealt.isEmpty()){
-            for(Player p : this.players) {
+        while (!toBeDealt.isEmpty()) {
+            for (Player p : this.players) {
                 if (toBeDealt.isEmpty()) {
                     break;
                 }
@@ -348,10 +348,4 @@ public class Game {
     }
 
 
-    public String toString() {
-        return super.toString() + "[" + "]" + System.getProperties().getProperty("line.separator") +
-                "  " + "board" + "=" + (getBoard() != null ? !getBoard().equals(this) ? getBoard().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-                "  " + "currentPlayer" + "=" + (getCurrentPlayer() != null ? !getCurrentPlayer().equals(this) ? getCurrentPlayer().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-                "  " + "murderScenario" + "=" + (getMurderScenario() != null ? !getMurderScenario().equals(this) ? getMurderScenario().toString().replaceAll("  ", "    ") : "this" : "null");
-    }
 }

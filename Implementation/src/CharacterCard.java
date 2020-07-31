@@ -15,8 +15,8 @@ public class CharacterCard implements Card {
     //CharacterCard Attributes
     private String characterName;
     private final String characterBoardChar;
-    private Position initPosition;
-    
+    private final Position initPosition;
+
     /**
      * CharacterCard Constructor
      *
@@ -50,13 +50,11 @@ public class CharacterCard implements Card {
                 characterBoardChar = "-";
                 break;
         }
-
-
     }
 
 
     public boolean setCharacterName(String aCharacterName) {
-        boolean wasSet = false;
+        boolean wasSet;
         characterName = aCharacterName;
         wasSet = true;
         return wasSet;

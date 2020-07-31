@@ -26,7 +26,7 @@ public class Player {
 
     public Player(CharacterCard aCharacter) {
         character = aCharacter;
-        hand = new ArrayList<Card>();
+        hand = new ArrayList<>();
         //canAccuse = aCanAccuse;
         //canRefute = aCanRefute;
         //currentPosition = aCurrentPosition;

@@ -55,7 +55,7 @@ public class WeaponCard implements Card {
     }
 
     /**
-     * Update Room Location
+     * Update Weapon Room Location
      *
      * @param r room to replace with
      */
@@ -64,7 +64,7 @@ public class WeaponCard implements Card {
     }
 
     /**
-     * Get Room Location
+     * Get Weapon Room Location
      *
      * @return room
      */
@@ -77,7 +77,7 @@ public class WeaponCard implements Card {
     }
 
     /**
-     * Overridden toString methods
+     * Overridden toString method
      *
      * @return weapon card string
      */
