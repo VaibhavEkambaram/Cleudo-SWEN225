@@ -215,16 +215,16 @@ public class Game {
                 if (newPosition == null) {
                     for (Room r : rooms) {
                         if (positionName == r.getRoomChar()) {
-                            newPosition = new Position(x, y, true, true, r);
+                            newPosition = new Position(x, y, true, true, false, r);
                             break;
                         } else if (positionName.equals("s" + r.getRoomChar())) { // show
-                            //System.out.println(positionName);
-                            //break;
+                            newPosition = new Position(x, y, true, true, true, r);
+                            break;
                         } else if (positionName.equals("d" + r.getRoomChar())) { // door
-                            //System.out.println(positionName);
-                            //break;
+                            newPosition = new Position(x, y, true, true, false, r);
+                            break;
                         } else if (positionName.equals(r.getRoomChar().toLowerCase())) { // wall
-                            newPosition = new Position(x, y, true, false, r);
+                            newPosition = new Position(x, y, true, false, false, r);
                             break;
                         }
                     }

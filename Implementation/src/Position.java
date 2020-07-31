@@ -14,7 +14,7 @@ public class Position {
     //Position Attributes
     private CharacterCard character;
     private Room inRoom;
-    private String displayName;
+    private String displayName = "_";
 
     private boolean isRoom = false;
     private boolean passableTile;
@@ -50,7 +50,7 @@ public class Position {
         this.displayName = character.getCharacterBoardChar();
     }
 
-    public Position(int x, int y, boolean canMove, boolean passableTile, Room inRoom) {
+    public Position(int x, int y, boolean canMove, boolean passableTile, boolean isShow, Room inRoom) {
         this.xLoc = x;
         this.yLoc = y;
         this.canMove = canMove;
@@ -58,6 +58,9 @@ public class Position {
         this.isRoom = true;
         this.passableTile = passableTile;
         this.displayName = inRoom.getRoomChar();
+        if (isShow) {
+            this.displayName = this.inRoom.getRoomChar();
+        }
     }
 
 
