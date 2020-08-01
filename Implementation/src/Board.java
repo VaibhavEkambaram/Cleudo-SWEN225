@@ -29,7 +29,10 @@ public class Board {
 
     public String toString() {
         StringBuilder boardPrint = new StringBuilder();
-        for (Position[] position : positions) {
+        boardPrint.append("      a b c d e f g h i j k l m n o p q r s t u v w x\n\n");
+        for (int i = 0; i < positions.length; i++) {
+            boardPrint.append(i+1).append(i + 1 < 10 ? "    " : "   ");
+            Position[] position = positions[i];
             for (int j = 0; j < positions[0].length; j++) {
                 boardPrint.append("|").append(position[j].toString());
             }
