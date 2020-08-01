@@ -119,14 +119,41 @@ public class Game {
 
             System.out.println("Select position to move to:");
             System.out.println("Current Players Hand:");
-            for(Card c : p.getHand()){
-                System.out.println("\t"+c.toString());
+            for (Card c : p.getHand()) {
+                System.out.println("\t" + c.toString());
             }
 
             System.out.println("Enter command [accusation][suggestion]:");
-
+            input();
         }
         //}
+    }
+
+    public void input() {
+        Scanner inputScan = new Scanner(System.in);
+        boolean valid = false;
+        while (!valid) {
+            String command = inputScan.nextLine();
+            if (command.equals("accusation")) {
+                System.out.println("accusation");
+            } else if (command.equals("suggestion")) {
+                System.out.println("suggestion");
+            } else if (command.length() >= 4 && command.substring(0, 3).equals("up-")) {
+                System.out.println("up");
+            } else if (command.length() >= 6 && command.substring(0, 5).equals("left-")) {
+                System.out.println("left");
+            } else if (command.length() >= 7 && command.substring(0, 6).equals("right-")) {
+                System.out.println("right");
+            } else if (command.length() >= 6 && command.substring(0, 5).equals("down-")) {
+                System.out.println("down");
+            }
+
+            if (!valid) {
+                System.out.println("Please enter a proper command");
+                System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
+            }
+        }
+
     }
 
 
