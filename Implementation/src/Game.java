@@ -112,9 +112,9 @@ public class Game {
 
         // while(gameRunning) {
         for (Player p : players) {
-
+            System.out.println("------------------------------------------------------------------------");
             System.out.println("\n" + this.board + "\n");
-            System.out.println("Current Player: " + p.getCharacter().getCharacterName());
+            System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
             System.out.println("Result: " + rollDice());
 
             System.out.println("Select position to move to:");
@@ -123,8 +123,6 @@ public class Game {
 
         }
         //}
-
-
     }
 
 

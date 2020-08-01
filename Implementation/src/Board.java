@@ -2,8 +2,10 @@
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 
-import java.util.List;
-
+/**
+ * Board Class
+ * A board is made up of position classes, which are then all stored in this class
+ */
 // line 90 "model.ump"
 // line 183 "model.ump"
 public class Board {
@@ -21,14 +23,12 @@ public class Board {
     //------------------------
 
 
-
     public void addPosition(int y, int x, Position position) {
         positions[y][x] = position; // Board is in (y, x) format
     }
 
     public String toString() {
         StringBuilder boardPrint = new StringBuilder();
-
         for (Position[] position : positions) {
             for (int j = 0; j < positions[0].length; j++) {
                 boardPrint.append("|").append(position[j].toString());

@@ -14,14 +14,10 @@ public class WeaponCard implements Card {
     //------------------------
     // MEMBER VARIABLES
     //------------------------
+
     //WeaponCard Attributes
     private String weaponString; // name of the weapon
     private Room room; // room where the weapon is located
-
-
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
 
     /**
      * Constructor Method for WeaponCard
@@ -71,7 +67,6 @@ public class WeaponCard implements Card {
     public Room getRoom() {
         return room;
     }
-
 
     public void delete() {
     }

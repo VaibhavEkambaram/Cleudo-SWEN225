@@ -19,7 +19,6 @@ public class RoomCard implements Card {
     private final String roomName; // the name of this room
     private final Room room; // room object
 
-
     /**
      * RoomCard Constructor
      *
@@ -34,7 +33,6 @@ public class RoomCard implements Card {
     //------------------------
     // INTERFACE
     //------------------------
-
 
     /**
      * Retrieve Room Name
