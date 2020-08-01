@@ -118,12 +118,18 @@ public class Game {
             System.out.println("Result: " + rollDice());
 
             System.out.println("Select position to move to:");
-            System.out.println("Current Players Hand:");
-            for(Card c : p.getHand()){
-                System.out.println("\t"+c.toString());
-            }
+            Scanner s= new Scanner(System.in);
+            String str= s.nextLine();
+            System.out.print("You have entered: "+str+"\n");
 
+            System.out.println("Current Players Hand:");
+            for (Card c : p.getHand()) {
+                System.out.println("\t" + c.toString());
+            }
+            Scanner sc= new Scanner(System.in);
             System.out.println("Enter command [accusation][suggestion]:");
+            String sr= sc.nextLine();
+            System.out.print("You have entered: "+sr+"\n");
 
         }
         //}
@@ -335,8 +341,8 @@ public class Game {
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
 
-        System.out.println("first dice throw: " + firstResult);
-        System.out.println("second dice throw: " + secondResult);
+        System.out.println("first dice throw: " + firstResult + "\t\t" + "second dice throw: " + secondResult);
+        //System.out.println();
         return firstResult + secondResult;
     }
 
