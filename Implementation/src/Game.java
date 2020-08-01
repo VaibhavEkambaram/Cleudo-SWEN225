@@ -107,21 +107,25 @@ public class Game {
     }
 
 
-    public void mainGameLoop(){
+    public void mainGameLoop() {
+        System.out.println("\nMurder Scenario: " + murderScenario.toString() + " (SECRET DO NOT LOOK!)");
 
-       // while(gameRunning) {
-            for (Player p : players) {
+        // while(gameRunning) {
+        for (Player p : players) {
 
-                System.out.println("\n" + this.board + "\n");
-                System.out.println("Current Player: " + p.getCharacter().getCharacterName());
-                System.out.println("Result: "+rollDice());
-            }
+            System.out.println("\n" + this.board + "\n");
+            System.out.println("Current Player: " + p.getCharacter().getCharacterName());
+            System.out.println("Result: " + rollDice());
+
+            System.out.println("Select position to move to:");
+
+            System.out.println("Enter command [accusation][suggestion]:");
+
+        }
         //}
 
 
     }
-
-
 
 
     // Ask user for number of players
@@ -187,6 +191,8 @@ public class Game {
             characters.add(character);
             deck.add(character);
         }
+
+        //TODO: account for only active players?
 
         Collections.shuffle(deck);
         // Murder Scenario of Random Cards
@@ -327,8 +333,8 @@ public class Game {
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
 
-        System.out.println("first dice throw: "+firstResult);
-        System.out.println("second dice throw: "+secondResult);
+        System.out.println("first dice throw: " + firstResult);
+        System.out.println("second dice throw: " + secondResult);
         return firstResult + secondResult;
     }
 
@@ -336,12 +342,12 @@ public class Game {
     public void dealCards() {
         //Add cards from the deck list to a stack, then deal them to each player until the stack is empty
         Stack<Card> toBeDealt = new Stack<>();
-        for(Card c : this.deck){
+        for (Card c : this.deck) {
             toBeDealt.push(c);
         }
 
-        while(!toBeDealt.isEmpty()){
-            for(Player p : this.players) {
+        while (!toBeDealt.isEmpty()) {
+            for (Player p : this.players) {
                 if (toBeDealt.isEmpty()) {
                     break;
                 }
@@ -362,7 +368,7 @@ public class Game {
     }
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println("--------------------------------\n" +
                 "\t\t\tCluedo!\n" +
                 "--------------------------------\n" +
