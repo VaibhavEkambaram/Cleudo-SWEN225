@@ -109,13 +109,14 @@ public class Game {
 
     public void mainGameLoop(){
 
+       // while(gameRunning) {
+            for (Player p : players) {
 
-            for(Player p : players){
-
-                System.out.println("\n"+this.board+"\n");
+                System.out.println("\n" + this.board + "\n");
                 System.out.println("Current Player: " + p.getCharacter().getCharacterName());
+                System.out.println(rollDice());
             }
-
+        //}
 
 
     }
