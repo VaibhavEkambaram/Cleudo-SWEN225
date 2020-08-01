@@ -134,18 +134,27 @@ public class Game {
         boolean valid = false;
         while (!valid) {
             String command = inputScan.nextLine();
-            if (command.equals("accusation")) {
-                System.out.println("accusation");
-            } else if (command.equals("suggestion")) {
-                System.out.println("suggestion");
-            } else if (command.length() >= 4 && command.substring(0, 3).equals("up-")) {
-                System.out.println("up");
-            } else if (command.length() >= 6 && command.substring(0, 5).equals("left-")) {
-                System.out.println("left");
-            } else if (command.length() >= 7 && command.substring(0, 6).equals("right-")) {
-                System.out.println("right");
-            } else if (command.length() >= 6 && command.substring(0, 5).equals("down-")) {
-                System.out.println("down");
+            String direction = "";
+            int spaces = 0;
+            try {
+                if (command.equals("accusation")) {
+                    System.out.println("accusation");
+                } else if (command.equals("suggestion")) {
+                    System.out.println("suggestion");
+                } else if (command.length() >= 4 && command.substring(0, 3).equals("up-")) {
+                    direction = "up";
+                    spaces = Integer.parseInt(command.substring(4));
+                } else if (command.length() >= 6 && command.substring(0, 5).equals("left-")) {
+                    direction = "left";
+                    spaces = Integer.parseInt(command.substring(6));
+                } else if (command.length() >= 7 && command.substring(0, 6).equals("right-")) {
+                    direction = "right";
+                    spaces = Integer.parseInt(command.substring(7));
+                } else if (command.length() >= 6 && command.substring(0, 5).equals("down-")) {
+                    direction = "down";
+                    spaces = Integer.parseInt(command.substring(6));
+                }
+            } catch (NumberFormatException e) {
             }
         }
 
@@ -154,7 +163,6 @@ public class Game {
             System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
         }
     }
-
 
     // Ask user for number of players
     public void initGame() {
