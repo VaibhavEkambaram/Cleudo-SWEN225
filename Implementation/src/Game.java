@@ -124,7 +124,7 @@ public class Game {
             }
 
             System.out.println("Enter command [accusation][suggestion]:");
-
+            input();
         }
         //}
     }
