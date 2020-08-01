@@ -114,7 +114,7 @@ public class Game {
 
                 System.out.println("\n" + this.board + "\n");
                 System.out.println("Current Player: " + p.getCharacter().getCharacterName());
-                System.out.println(rollDice());
+                System.out.println("Result: "+rollDice());
             }
         //}
 
