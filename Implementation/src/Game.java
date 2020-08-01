@@ -40,13 +40,13 @@ public class Game {
     public Game() {
         initGame();
 
-        String boardLayout = " x x x x x x x x x 1 x x x x 2 x x x x x x x x x \n" +
+        String boardLayout = " x x x x x x x x x 3 x x x x 4 x x x x x x x x x \n" +
                 " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
                 " k K K K K k _ _ b b b B B b b b _ _ c C C C C c \n" +
                 " k K K K K k _ _ b B B B B B B b _ _ c C C C C c \n" +
                 " k K K K K k _ _ b B B B B B B b _ _ dC c C C c c \n" +
                 " k k K K K k _ _ dB B B B B B B dB _ _ _ c c c c x \n" +
-                " x k k k dK k _ _ b B B B B B B b _ _ _ _ _ _ _ 3 \n" +
+                " x k k k dK k _ _ b B B B B B B b _ _ _ _ _ _ _ 5 \n" +
                 " _ _ _ _ _ _ _ _ b dB b b b b dB b _ _ _ _ _ _ _ x \n" +
                 " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i \n" +
                 " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ dI I I I I i \n" +
@@ -57,14 +57,14 @@ public class Game {
                 " d D D D D D D d _ _ x x x x x _ _ _ l l dL l l x \n" +
                 " d d d d d d dD d _ _ x x x x x _ _ l l L L L l l \n" +
                 " x _ _ _ _ _ _ _ _ _ x x x x x _ _ dL L L L L L l \n" +
-                " 6 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l \n" +
+                " 2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l \n" +
                 " x _ _ _ _ _ _ _ _ h h dH dH h h _ _ _ l l l l l x \n" +
-                " o o o o o o dO _ _ h H H H H h _ _ _ _ _ _ _ _ 4 \n" +
+                " o o o o o o dO _ _ h H H H H h _ _ _ _ _ _ _ _ 6 \n" +
                 " o O O O O O o _ _ h H H H H dH _ _ _ _ _ _ _ _ x \n" +
                 " o O O O O O o _ _ h H H H H h _ _ dY y y y y y y \n" +
                 " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
                 " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
-                " o o o o o o x 5 x h h h h h h x _ x y y y y y y \n";
+                " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
 
                         /*
 
@@ -181,8 +181,8 @@ public class Game {
             deck.add(newRoomCard);
         }
 
-        String[] characterNames = {"Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum",
-                "Ms. Scarlett", "Col. Mustard"};
+        String[] characterNames = {
+                "Ms. Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
         characters = new ArrayList<>();
         for (String c : characterNames) {
             CharacterCard character = new CharacterCard(c);

@@ -26,22 +26,22 @@ public class CharacterCard implements Card {
 
         switch (characterName) {
             case "Mrs. White":
-                characterBoardChar = "1";
-                break;
-            case "Mr. Green":
-                characterBoardChar = "2";
-                break;
-            case "Mrs. Peacock":
                 characterBoardChar = "3";
                 break;
-            case "Prof. Plum":
+            case "Mr. Green":
                 characterBoardChar = "4";
                 break;
-            case "Ms. Scarlett":
+            case "Mrs. Peacock":
                 characterBoardChar = "5";
                 break;
-            case "Col. Mustard":
+            case "Prof. Plum":
                 characterBoardChar = "6";
+                break;
+            case "Ms. Scarlett":
+                characterBoardChar = "1";
+                break;
+            case "Col. Mustard":
+                characterBoardChar = "2";
                 break;
             default:
                 characterBoardChar = "-";
