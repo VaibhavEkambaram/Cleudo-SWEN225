@@ -27,6 +27,10 @@ public class Board {
         positions[y][x] = position; // Board is in (y, x) format
     }
 
+
+
+
+
     public String toString() {
         StringBuilder boardPrint = new StringBuilder();
         boardPrint.append("      a b c d e f g h i j k l m n o p q r s t u v w x\n\n");
@@ -38,6 +42,10 @@ public class Board {
             }
             boardPrint.append("|\n");
         }
+
+
+        //System.out.println("Alpha to numeric index test: "+("k".charAt(0) & 31));
+
         return boardPrint.toString();
     }
 }
