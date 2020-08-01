@@ -30,6 +30,8 @@ public class Game {
     private Player currentPlayer;
     private Scenario murderScenario;  // Random Murder Scenario that players must find
 
+    boolean gameRunning = true;
+
 
     //------------------------
     // CONSTRUCTOR
@@ -100,22 +102,26 @@ public class Game {
                          */
 
         initBoard(boardLayout);
-        System.out.println(this.board); // Initial Display
+        mainGameLoop();
+
     }
 
-    public static void main(String[] args){
-        System.out.println("--------------------------------\n" +
-                "\t\t\tCluedo!\n" +
-                "--------------------------------\n" +
-                "SWEN225 Assignment 1\n" +
-                "A group project by:\n" +
-                "* Vaibhav Ekambaram \n" +
-                "* Cameron Li\n" +
-                "* Baxter Kirikiri\n" +
-                "--------------------------------\n" +
-                "\n");
-        new Game();
+
+    public void mainGameLoop(){
+
+
+            for(Player p : players){
+
+                System.out.println("\n"+this.board+"\n");
+                System.out.println("Current Player: " + p.getCharacter().getCharacterName());
+            }
+
+
+
     }
+
+
+
 
     // Ask user for number of players
     public void initGame() {
@@ -176,7 +182,6 @@ public class Game {
                 "Ms. Scarlett", "Col. Mustard"};
         characters = new ArrayList<>();
         for (String c : characterNames) {
-            //TODO: add position here
             CharacterCard character = new CharacterCard(c);
             characters.add(character);
             deck.add(character);
@@ -189,6 +194,7 @@ public class Game {
                 characters.get(new Random().nextInt(characterNames.length - 1) + 1));
 
         murderScenario = newMurderScenario;
+        System.out.println("Generated Scenario");
     }
 
     private void initBoard(String boardLayout) {
@@ -316,7 +322,6 @@ public class Game {
 
     // line 61 "model.ump"
     public int rollDice() {
-
         // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
@@ -356,10 +361,19 @@ public class Game {
     }
 
 
-    public String toString() {
-        return super.toString() + "[" + "]" + System.getProperties().getProperty("line.separator") +
-                "  " + "board" + "=" + (getBoard() != null ? !getBoard().equals(this) ? getBoard().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-                "  " + "currentPlayer" + "=" + (getCurrentPlayer() != null ? !getCurrentPlayer().equals(this) ? getCurrentPlayer().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-                "  " + "murderScenario" + "=" + (getMurderScenario() != null ? !getMurderScenario().equals(this) ? getMurderScenario().toString().replaceAll("  ", "    ") : "this" : "null");
+    public static void main(String[] args){
+        System.out.println("--------------------------------\n" +
+                "\t\t\tCluedo!\n" +
+                "--------------------------------\n" +
+                "SWEN225 Assignment 1\n" +
+                "A group project by:\n" +
+                "* Vaibhav Ekambaram \n" +
+                "* Cameron Li\n" +
+                "* Baxter Kirikiri\n" +
+                "--------------------------------\n" +
+                "\n");
+        new Game();
     }
+
+
 }

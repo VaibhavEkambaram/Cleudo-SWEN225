@@ -12,19 +12,15 @@ public class Board {
     // MEMBER VARIABLES
     //------------------------
 
-    //Board Attributes
-    private List<Position> tiles;
 
     //Board Associations
-    private List<Scenario> scenarios;
     private Position[][] positions = new Position[25][24]; // Board is in (y, x) format
 
     //------------------------
     // CONSTRUCTOR
     //------------------------
 
-    public Board() {
-    }
+
 
     public void addPosition(int y, int x, Position position) {
         positions[y][x] = position; // Board is in (y, x) format
@@ -32,9 +28,10 @@ public class Board {
 
     public String toString() {
         StringBuilder boardPrint = new StringBuilder();
-        for (int i = 0; i < positions.length; i++) {
+
+        for (Position[] position : positions) {
             for (int j = 0; j < positions[0].length; j++) {
-                boardPrint.append("|" + positions[i][j].toString());
+                boardPrint.append("|").append(position[j].toString());
             }
             boardPrint.append("|\n");
         }
