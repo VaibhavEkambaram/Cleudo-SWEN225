@@ -27,8 +27,15 @@ public class Board {
         positions[y][x] = position; // Board is in (y, x) format
     }
 
+    // get board position from input location
+    public Position getBoardPosition(String inputTile){
+        return null;
+    }
 
-
+    // move a player
+    public boolean movePlayer(Player p,Position destination,int remainingMoves){
+        return false;
+    }
 
 
     public String toString() {
@@ -42,7 +49,6 @@ public class Board {
             }
             boardPrint.append("|\n");
         }
-
 
         //System.out.println("Alpha to numeric index test: "+("k".charAt(0) & 31));
 
