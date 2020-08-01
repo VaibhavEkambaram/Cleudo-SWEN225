@@ -118,6 +118,10 @@ public class Game {
             System.out.println("Result: " + rollDice());
 
             System.out.println("Select position to move to:");
+            System.out.println("Current Players Hand:");
+            for(Card c : p.getHand()){
+                System.out.println("\t"+c.toString());
+            }
 
             System.out.println("Enter command [accusation][suggestion]:");
 
