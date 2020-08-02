@@ -155,6 +155,7 @@ public class Game {
                     spaces = Integer.parseInt(command.substring(6));
                 }
             } catch (NumberFormatException e) {
+                System.out.println("Please enter a correct number of spaces");
             }
         }
 
