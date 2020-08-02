@@ -129,41 +129,49 @@ public class Game {
         //}
     }
 
-    public void input() {
+    public Move input() {
+        Move.Direction direction = null;
+        int spaces = 0;
         Scanner inputScan = new Scanner(System.in);
         boolean valid = false;
         while (!valid) {
             String command = inputScan.nextLine();
-            String direction = "";
-            int spaces = 0;
+
             try {
                 if (command.equals("accusation")) {
                     System.out.println("accusation");
                 } else if (command.equals("suggestion")) {
                     System.out.println("suggestion");
                 } else if (command.length() >= 4 && command.substring(0, 3).equals("up-")) {
-                    direction = "up";
+                    direction = Move.Direction.UP;
                     spaces = Integer.parseInt(command.substring(4));
                 } else if (command.length() >= 6 && command.substring(0, 5).equals("left-")) {
-                    direction = "left";
+                    direction = Move.Direction.LEFT;
                     spaces = Integer.parseInt(command.substring(6));
                 } else if (command.length() >= 7 && command.substring(0, 6).equals("right-")) {
-                    direction = "right";
+                    direction = Move.Direction.RIGHT;
                     spaces = Integer.parseInt(command.substring(7));
                 } else if (command.length() >= 6 && command.substring(0, 5).equals("down-")) {
-                    direction = "down";
+                    direction = Move.Direction.DOWN;
                     spaces = Integer.parseInt(command.substring(6));
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a correct number of spaces");
             }
+            if (direction != null && spaces != 0) {
+                valid = true;
+            }
+
+            if (!valid) {
+                System.out.println("Please enter a proper command");
+                System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
+            }
         }
 
-        if (!valid) {
-            System.out.println("Please enter a proper command");
-            System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
-        }
+        Move move = new Move(direction, spaces);
+        return move;
     }
+
 
     // Ask user for number of players
     public void initGame() {
