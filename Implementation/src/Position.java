@@ -135,6 +135,14 @@ public class Position {
         return isRoom;
     }
 
+    public int getxLoc() {
+        return xLoc;
+    }
+
+    public int getyLoc() {
+        return yLoc;
+    }
+
 
     public String toString() {
         return this.displayName;

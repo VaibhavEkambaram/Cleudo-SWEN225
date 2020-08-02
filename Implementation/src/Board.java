@@ -14,14 +14,12 @@ public class Board {
     // MEMBER VARIABLES
     //------------------------
 
-
     //Board Associations
     private Position[][] positions = new Position[25][24]; // Board is in (y, x) format
 
     //------------------------
     // CONSTRUCTOR
     //------------------------
-
 
     public void addPosition(int y, int x, Position position) {
         positions[y][x] = position; // Board is in (y, x) format
@@ -47,5 +45,15 @@ public class Board {
         //System.out.println("Alpha to numeric index test: "+("k".charAt(0) & 31));
 
         return boardPrint.toString();
+    }
+
+    public Board apply(Player player, Move move) {
+        Position playerPos = player.getCurrentPosition();
+        int xLoc = playerPos.getxLoc();
+        int yLoc = playerPos.getyLoc();
+        if (positions[yLoc][xLoc] != playerPos) {
+            throw new Error("Player position does not match with board position?");
+        }
+        return null;
     }
 }
