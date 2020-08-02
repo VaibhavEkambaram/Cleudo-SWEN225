@@ -124,11 +124,18 @@ public class Game {
             }
 
             System.out.println("Enter command [accusation][suggestion]:");
-            input();
+            Move move = input();
         }
         //}
     }
 
+    /**
+     * Asks current player to perform an action
+     * Returns a move to apply to the board
+     *
+     * @return
+     * @author Cameron Li
+     */
     public Move input() {
         Move.Direction direction = null;
         int spaces = 0;
@@ -142,16 +149,16 @@ public class Game {
                     System.out.println("accusation");
                 } else if (command.equals("suggestion")) {
                     System.out.println("suggestion");
-                } else if (command.length() >= 4 && command.substring(0, 3).equals("up-")) {
+                } else if (command.length() >= 4 && command.startsWith("up-")) {
                     direction = Move.Direction.UP;
                     spaces = Integer.parseInt(command.substring(4));
-                } else if (command.length() >= 6 && command.substring(0, 5).equals("left-")) {
+                } else if (command.length() >= 6 && command.startsWith("left-")) {
                     direction = Move.Direction.LEFT;
                     spaces = Integer.parseInt(command.substring(6));
-                } else if (command.length() >= 7 && command.substring(0, 6).equals("right-")) {
+                } else if (command.length() >= 7 && command.startsWith("right-")) {
                     direction = Move.Direction.RIGHT;
                     spaces = Integer.parseInt(command.substring(7));
-                } else if (command.length() >= 6 && command.substring(0, 5).equals("down-")) {
+                } else if (command.length() >= 6 && command.startsWith("down-")) {
                     direction = Move.Direction.DOWN;
                     spaces = Integer.parseInt(command.substring(6));
                 }
@@ -168,12 +175,16 @@ public class Game {
             }
         }
 
-        Move move = new Move(direction, spaces);
-        return move;
+        return new Move(direction, spaces);
     }
 
-
-    // Ask user for number of players
+    /**
+     * Initialise the game
+     * Ask user for number of players
+     * Initialise Deck
+     *
+     * @author Cameron Li
+     */
     public void initGame() {
         System.out.println("How many players wish to participate? (3 - 6)");
         int numPlayers = 0;
@@ -201,7 +212,12 @@ public class Game {
         this.dealCards();
     }
 
-    // Create the deck and murder scenario
+    /**
+     * Create the deck and then shuffle
+     * Generate initial murder scenario
+     *
+     * @author Cameron Li
+     */
     private void initDeck() {
         // Adding cards
         deck = new ArrayList<>();
@@ -241,14 +257,25 @@ public class Game {
 
         Collections.shuffle(deck);
         // Murder Scenario of Random Cards
-        Scenario newMurderScenario = new Scenario(weapons.get(new Random().nextInt(wepNames.length - 1) + 1),
+
+        murderScenario = new Scenario(weapons.get(new Random().nextInt(wepNames.length - 1) + 1),
                 roomCards.get(new Random().nextInt(roomNames.length - 1) + 1),
                 characters.get(new Random().nextInt(characterNames.length - 1) + 1));
-
-        murderScenario = newMurderScenario;
         System.out.println("Generated Scenario");
     }
 
+    /**
+     * Load and create the Cluedo board
+     * "x" = Forbidden Position
+     * "_" = Standard Position
+     * number = Player starting Position
+     * uppercase letter = Inner Room Position
+     * lowercase letter = Outter Room Position
+     * "d" + letter = Room Door Position
+     *
+     * @param boardLayout
+     * @author Cameron Li
+     */
     private void initBoard(String boardLayout) {
         Board board = new Board();
         Scanner layoutScan = new Scanner(boardLayout);

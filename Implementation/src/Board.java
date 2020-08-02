@@ -32,12 +32,6 @@ public class Board {
         return null;
     }
 
-    // move a player
-    public boolean movePlayer(Player p,Position destination,int remainingMoves){
-        return false;
-    }
-
-
     public String toString() {
         StringBuilder boardPrint = new StringBuilder();
         boardPrint.append("      a b c d e f g h i j k l m n o p q r s t u v w x\n\n");
