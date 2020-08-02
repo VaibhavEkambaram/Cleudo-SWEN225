@@ -420,7 +420,7 @@ public class Game {
 
         while (!toBeDealt.isEmpty()) {
             for (Player p : this.players) {
-                if (toBeDealt.isEmpty()) {
+                if (toBeDealt.isEmpty()) { // Make sure not null pointer exception
                     break;
                 }
                 p.addHand(toBeDealt.pop());
