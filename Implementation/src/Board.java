@@ -85,14 +85,19 @@ public class Board {
         if (positions[yLoc][xLoc] != playerPos) {
             throw new Error("Player position does not match with board position?");
         }
-        if (direction.equals(Move.Direction.UP)) { // Vertical Movement
-            yChange = -1;
-        } else if (direction.equals(Move.Direction.DOWN)) {
-            yChange = 1;
-        } else if (direction.equals(Move.Direction.LEFT)) { // Horizontal Movement
-            xChange = -1;
-        } else if (direction.equals(Move.Direction.RIGHT)) {
-            xChange = 1;
+        switch (direction) {
+            case UP:  // Vertical Movement
+                yChange = -1;
+                break;
+            case DOWN:
+                yChange = 1;
+                break;
+            case LEFT:  // Horizontal Movement
+                xChange = -1;
+                break;
+            case RIGHT:
+                xChange = 1;
+                break;
         }
         while (positions[yLoc + yChange][xLoc + xChange] != null) {
             Position nextPosition = positions[yLoc + yChange][xLoc + xChange];
