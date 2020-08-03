@@ -47,12 +47,38 @@ public class Board {
         return boardPrint.toString();
     }
 
+    /**
+     * Create a new board with applied Move action
+     *
+     * @param player
+     * @param move
+     * @return
+     * @author Cameron Li
+     */
     public Board apply(Player player, Move move) {
+        // Player Position
         Position playerPos = player.getCurrentPosition();
         int xLoc = playerPos.getxLoc();
         int yLoc = playerPos.getyLoc();
+
+        // Move information
+        int spaces = move.getSpaces();
+        Move.Direction direction = move.getDirection();
+
+        // Movement Adjustment
+        int xChange = 0;
+        int yChange = 0;
         if (positions[yLoc][xLoc] != playerPos) {
             throw new Error("Player position does not match with board position?");
+        }
+        if (direction.equals(Move.Direction.UP)) { // Vertical Movement
+            yChange = -1;
+        } else if (direction.equals(Move.Direction.DOWN)) {
+            yChange = 1;
+        } else if (direction.equals(Move.Direction.LEFT)) { // Horizontal Movement
+            xChange = -1;
+        } else if (direction.equals(Move.Direction.RIGHT)) {
+            xChange = 1;
         }
         return null;
     }

@@ -10,4 +10,12 @@ public class Move {
     public enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
+
+    public int getSpaces() {
+        return spaces;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
 }

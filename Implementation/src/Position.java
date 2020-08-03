@@ -51,8 +51,6 @@ public class Position {
         this.yLoc = y;
         this.canMove = canMove;
         this.character = character;
-
-        this.displayName = character.getCharacterBoardChar();
     }
 
     // Room Position Constructor
@@ -145,6 +143,9 @@ public class Position {
 
 
     public String toString() {
+        if (this.character != null) {
+            return this.character.getCharacterBoardChar();
+        }
         return this.displayName;
     }
 }
