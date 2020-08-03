@@ -1,7 +1,6 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
-
 import java.util.*;
 
 // line 50 "model.ump"
@@ -16,124 +15,128 @@ public class Game {
     private List<Card> deck;
     private List<Player> players;
 
-    // Identifiers
-    private List<WeaponCard> weapons;
     private List<Room> rooms;
-    private List<RoomCard> roomCards;
-    private List<CharacterCard> characters;
-    private Map<String, Position> boardPositions;
 
-    //Game Associations
-    private List<Scenario> scenarios;
+    private List<CharacterCard> characterCards;
+
     //Game Attributes
     private Board board;
     private Player currentPlayer;
     private Scenario murderScenario;  // Random Murder Scenario that players must find
 
+    // check if the game has been won yet
+    //        - still playing: true
+    //        - game has ended: false
     boolean gameRunning = true;
 
 
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-
-    public Game() {
-        initGame();
-
-        String boardLayout = " x x x x x x x x x 3 x x x x 4 x x x x x x x x x \n" +
-                " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
-                " k K K K K k _ _ b b b B B b b b _ _ c C C C C c \n" +
-                " k K K K K k _ _ b B B B B B B b _ _ c C C C C c \n" +
-                " k K K K K k _ _ b B B B B B B b _ _ dC c C C c c \n" +
-                " k k K K K k _ _ dB B B B B B B dB _ _ _ c c c c x \n" +
-                " x k k k dK k _ _ b B B B B B B b _ _ _ _ _ _ _ 5 \n" +
-                " _ _ _ _ _ _ _ _ b dB b b b b dB b _ _ _ _ _ _ _ x \n" +
-                " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i \n" +
-                " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ dI I I I I i \n" +
-                " d D D D d d d d _ _ x x x x x _ _ _ i I I I I i \n" +
-                " d D D D D D D d _ _ x x x x x _ _ _ i I I I I i \n" +
-                " d D D D D D D dD _ _ x x x x x _ _ _ i i i i dI i \n" +
-                " d D D D D D D d _ _ x x x x x _ _ _ _ _ _ _ _ x \n" +
-                " d D D D D D D d _ _ x x x x x _ _ _ l l dL l l x \n" +
-                " d d d d d d dD d _ _ x x x x x _ _ l l L L L l l \n" +
-                " x _ _ _ _ _ _ _ _ _ x x x x x _ _ dL L L L L L l \n" +
-                " 2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l \n" +
-                " x _ _ _ _ _ _ _ _ h h dH dH h h _ _ _ l l l l l x \n" +
-                " o o o o o o dO _ _ h H H H H h _ _ _ _ _ _ _ _ 6 \n" +
-                " o O O O O O o _ _ h H H H H dH _ _ _ _ _ _ _ _ x \n" +
-                " o O O O O O o _ _ h H H H H h _ _ dY y y y y y y \n" +
-                " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
-                " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
-                " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
-
-                        /*
-
-                        ** Players **
-                            1 - Mrs. White
-                            2 - Mr. Green
-                            3 - Mrs. Peacock
-                            4 - Prof. Plum
-                            5 - Ms. Scarlett
-                            6 - Col. Mustard
-
-                        ** Board **
-                        x - Null Area (Off limits)
-                        # - Room Wall
-
-                        ** Rooms **
-                        (lower case - only left/right movement, upper case - only up/down)
-                        C - Conservatory
-                        B - Ball Room
-                        K - Kitchen
-                        I - Billiard Room
-                        D - Dining Room
-                        L - Library
-                        O - Lounge
-                        H - Hall
-                        Y - Study
-
-                        ** Weapons **
-                        ? - Candlestick
-                        ! - Dagger
-                        $ - Lead Pipe
-                        % - Revolver
-                        @ - Rope
-                        & - Spanner
-                         */
-
-        initBoard(boardLayout);
-        mainGameLoop();
-
+    /**
+     * MAIN METHOD
+     * Method to initialise the rest of the program. Shows a welcome message then generates a new game object
+     *
+     * @param args arguments
+     */
+    public static void main(String[] args) {
+        System.out.println("--------------------------------\n" +
+                "\t\t\tCluedo!\n" +
+                "--------------------------------\n" +
+                "SWEN225 Assignment 1\n" +
+                "A group project by:\n" +
+                "* Vaibhav Ekambaram \n" +
+                "* Cameron Li\n" +
+                "* Baxter Kirikiri\n" +
+                "--------------------------------\n\n");
+        new Game();
     }
 
 
+    /**
+     * GAME OBJECT CONSTRUCTOR
+     * Primary game object springboard for all other methods of the game
+     *
+     * <p>
+     * ----------------------------------------------------------------------------------------------------
+     * Board Representation Guide
+     * ----------------------------------------------------------------------------------------------------
+     * ** Rooms **              ** Players **        ** Board **                    ** Weapons **
+     * C - Conservatory         1 - Mrs. White       x - Null Area (Off limits)     ? - Candlestick
+     * B - Ball Room            2 - Mr. Green        # - Room Wall                  ! - Dagger
+     * K - Kitchen              3 - Mrs. Peacock                                    $ - Lead Pipe
+     * I - Billiard Room        4 - Prof. Plum                                      % - Revolver
+     * D - Dining Room          5 - Ms. Scarlett                                    @ - Rope
+     * L - Library              6 - Col. Mustard                                    & - Spanner
+     * O - Lounge
+     * H - Hall
+     * Y - Study
+     * ----------------------------------------------------------------------------------------------------
+     */
+    public Game() {
+        String boardLayout =
+                " x x x x x x x x x 3 x x x x 4 x x x x x x x x x " + "\n" +
+                        " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c " + "\n" +
+                        " k K K K K k _ _ b b b B B b b b _ _ c C C C C c " + "\n" +
+                        " k K K K K k _ _ b B B B B B B b _ _ c C C C C c " + "\n" +
+                        " k K K K K k _ _ b B B B B B B b _ _ dC c C C c c " + "\n" +
+                        " k k K K K k _ _ dB B B B B B B dB _ _ _ c c c c x " + "\n" +
+                        " x k k k dK k _ _ b B B B B B B b _ _ _ _ _ _ _ 5 " + "\n" +
+                        " _ _ _ _ _ _ _ _ b dB b b b b dB b _ _ _ _ _ _ _ x " + "\n" +
+                        " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i " + "\n" +
+                        " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ dI I I I I i " + "\n" +
+                        " d D D D d d d d _ _ x x x x x _ _ _ i I I I I i " + "\n" +
+                        " d D D D D D D d _ _ x x x x x _ _ _ i I I I I i " + "\n" +
+                        " d D D D D D D dD _ _ x x x x x _ _ _ i i i i dI i " + "\n" +
+                        " d D D D D D D d _ _ x x x x x _ _ _ _ _ _ _ _ x " + "\n" +
+                        " d D D D D D D d _ _ x x x x x _ _ _ l l dL l l x " + "\n" +
+                        " d d d d d d dD d _ _ x x x x x _ _ l l L L L l l " + "\n" +
+                        " x _ _ _ _ _ _ _ _ _ x x x x x _ _ dL L L L L L l " + "\n" +
+                        " 2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l " + "\n" +
+                        " x _ _ _ _ _ _ _ _ h h dH dH h h _ _ _ l l l l l x " + "\n" +
+                        " o o o o o o dO _ _ h H H H H h _ _ _ _ _ _ _ _ 6 " + "\n" +
+                        " o O O O O O o _ _ h H H H H dH _ _ _ _ _ _ _ _ x " + "\n" +
+                        " o O O O O O o _ _ h H H H H h _ _ dY y y y y y y " + "\n" +
+                        " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y " + "\n" +
+                        " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y " + "\n" +
+                        " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
+
+        initGame(); // initialize cards and players
+        initBoard(boardLayout); // generate board
+        mainGameLoop(); // main game logic loop
+    }
+
+
+    /**
+     * MAIN GAME LOOP
+     * This method contains the main game logic. After the game as been setup in the game constructor, this method then
+     * loops through, carrying out the game functions
+     */
     public void mainGameLoop() {
         System.out.println("\nMurder Scenario: " + murderScenario.toString() + " (SECRET DO NOT LOOK!)");
 
-        // while(gameRunning) {
-        for (Player p : players) {
-            System.out.println("------------------------------------------------------------------------");
-            System.out.println("\n" + this.board + "\n");
-            System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
-            System.out.println("Result: " + rollDice());
+        while (gameRunning) {
+            players.forEach(p -> {
+                System.out.println("------------------------------------------------------------------------");
+                System.out.println("\n" + this.board + "\n");
+                System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
+                System.out.println("Result: " + rollDice());
+                System.out.println("Select position to move to:");
+                System.out.println("Current Players Hand:");
+                for (Card c : p.getHand()) {
+                    System.out.println("\t" + c.toString());
+                }
+                System.out.println("Please enter a move command: ");
+                Move move = input();
+            });
 
-            System.out.println("Select position to move to:");
-            System.out.println("Current Players Hand:");
-            for (Card c : p.getHand()) {
-                System.out.println("\t" + c.toString());
-            }
-
-            System.out.println("Enter command [accusation][suggestion]:");
-            Move move = input();
+            // TODO: Temporary break point for testing purposes
+            break;
         }
-        //}
     }
 
     /**
      * Asks current player to perform an action
      * Returns a move to apply to the board
      *
-     * @return
+     * @return Move
      * @author Cameron Li
      */
     public Move input() {
@@ -206,7 +209,7 @@ public class Game {
         initDeck();
         players = new ArrayList<>();
         for (int n = 0; n < numPlayers; n++) {
-            players.add(new Player(characters.get(n)));
+            players.add(new Player(characterCards.get(n)));
         }
         this.dealCards();
     }
@@ -223,10 +226,10 @@ public class Game {
 
         // Weapons
         String[] wepNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
-        weapons = new ArrayList<>();
+        List<WeaponCard> weaponCards = new ArrayList<>();
         for (String w : wepNames) {
             WeaponCard weapon = new WeaponCard(w);
-            weapons.add(weapon);
+            weaponCards.add(weapon);
             deck.add(weapon);
         }
 
@@ -234,7 +237,7 @@ public class Game {
         String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study",
                 "Library", "Billiard Room", "Conservatory", "Ball Room"};
         rooms = new ArrayList<>();
-        roomCards = new ArrayList<>();
+        List<RoomCard> roomCards = new ArrayList<>();
         for (String r : roomNames) {
             Room newRoom = new Room(r);
             rooms.add(newRoom);
@@ -245,20 +248,19 @@ public class Game {
 
         String[] characterNames = {
                 "Ms. Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
-        characters = new ArrayList<>();
+        characterCards = new ArrayList<>();
         for (String c : characterNames) {
             CharacterCard character = new CharacterCard(c);
-            characters.add(character);
+            characterCards.add(character);
             deck.add(character);
         }
 
-        //TODO: account for only active players?
 
         Collections.shuffle(deck);
         // Murder Scenario of Random Cards
-        murderScenario = new Scenario(weapons.get(new Random().nextInt(wepNames.length - 1) + 1),
+        murderScenario = new Scenario(weaponCards.get(new Random().nextInt(wepNames.length - 1) + 1),
                 roomCards.get(new Random().nextInt(roomNames.length - 1) + 1),
-                characters.get(new Random().nextInt(characterNames.length - 1) + 1));
+                characterCards.get(new Random().nextInt(characterNames.length - 1) + 1));
         System.out.println("Generated Scenario");
     }
 
@@ -268,10 +270,10 @@ public class Game {
      * "_" = Standard Position
      * number = Player starting Position
      * uppercase letter = Inner Room Position
-     * lowercase letter = Outter Room Position
+     * lowercase letter = Outer Room Position
      * "d" + letter = Room Door Position
      *
-     * @param boardLayout
+     * @param boardLayout layout of board defined in constructor
      * @author Cameron Li
      */
     private void initBoard(String boardLayout) {
@@ -311,7 +313,7 @@ public class Game {
                 }
 
                 if (newPosition == null) { // If still haven't found anything
-                    for (CharacterCard c : characters) {
+                    for (CharacterCard c : characterCards) {
                         if (positionName.equals(c.getCharacterBoardChar())) { // Check if position is a character
                             for (Player p : players) { // Make sure that a player is playing the character
                                 if (p.getCharacter().equals(c)) { // Case player for character exists, create Character position
@@ -338,10 +340,6 @@ public class Game {
     // INTERFACE
     //------------------------
 
-    /* Code from template association_MinimumNumberOfMethod */
-    public static int minimumNumberOfScenarios() {
-        return 0;
-    }
 
     public boolean setBoard(Board aBoard) {
         boolean wasSet = false;
@@ -397,6 +395,11 @@ public class Game {
     }
 
 
+    /**
+     * Roll two dice and then return the overall number
+     *
+     * @return cumulative dice throw result
+     */
     // line 61 "model.ump"
     public int rollDice() {
         // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
@@ -412,9 +415,7 @@ public class Game {
     public void dealCards() {
         //Add cards from the deck list to a stack, then deal them to each player until the stack is empty
         Stack<Card> toBeDealt = new Stack<>();
-        for (Card c : this.deck) {
-            toBeDealt.push(c);
-        }
+        this.deck.forEach(toBeDealt::push);
 
         while (!toBeDealt.isEmpty()) {
             for (Player p : this.players) {
@@ -436,21 +437,4 @@ public class Game {
     public boolean accusation() {
         return false;
     }
-
-
-    public static void main(String[] args) {
-        System.out.println("--------------------------------\n" +
-                "\t\t\tCluedo!\n" +
-                "--------------------------------\n" +
-                "SWEN225 Assignment 1\n" +
-                "A group project by:\n" +
-                "* Vaibhav Ekambaram \n" +
-                "* Cameron Li\n" +
-                "* Baxter Kirikiri\n" +
-                "--------------------------------\n" +
-                "\n");
-        new Game();
-    }
-
-
 }
