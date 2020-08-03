@@ -203,7 +203,6 @@ public class Game {
             }
         }
 
-
         initDeck();
         players = new ArrayList<>();
         for (int n = 0; n < numPlayers; n++) {
@@ -257,7 +256,6 @@ public class Game {
 
         Collections.shuffle(deck);
         // Murder Scenario of Random Cards
-
         murderScenario = new Scenario(weapons.get(new Random().nextInt(wepNames.length - 1) + 1),
                 roomCards.get(new Random().nextInt(roomNames.length - 1) + 1),
                 characters.get(new Random().nextInt(characterNames.length - 1) + 1));

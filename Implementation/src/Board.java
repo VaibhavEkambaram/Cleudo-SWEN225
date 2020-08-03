@@ -20,13 +20,25 @@ public class Board {
     //------------------------
     // CONSTRUCTOR
     //------------------------
+    public Board() {
+
+    }
+
+    // Clone Board Constructor with same positions
+    public Board(Board board) {
+        for (int i = 0; i < board.positions.length; i++) {
+            for (int j = 0; j < board.positions[0].length; j++) {
+                this.addPosition(i, j, board.positions[i][j]);
+            }
+        }
+    }
 
     public void addPosition(int y, int x, Position position) {
         positions[y][x] = position; // Board is in (y, x) format
     }
 
     // get board position from input location
-    public Position getBoardPosition(String inputTile){
+    public Position getBoardPosition(String inputTile) {
         return null;
     }
 
@@ -56,6 +68,8 @@ public class Board {
      * @author Cameron Li
      */
     public Board apply(Player player, Move move) {
+        // New Board
+        Board board = new Board(this);
         // Player Position
         Position playerPos = player.getCurrentPosition();
         int xLoc = playerPos.getxLoc();
@@ -79,6 +93,14 @@ public class Board {
             xChange = -1;
         } else if (direction.equals(Move.Direction.RIGHT)) {
             xChange = 1;
+        }
+        while (positions[yLoc + yChange][xLoc + xChange] != null) {
+            Position nextPosition = positions[yLoc + yChange][xLoc + xChange];
+            if (nextPosition.getIsRoom()) {
+                if (!player.checkInRoom()) {
+                    break;
+                }
+            }
         }
         return null;
     }
