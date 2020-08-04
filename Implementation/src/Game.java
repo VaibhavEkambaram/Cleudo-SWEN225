@@ -135,24 +135,24 @@ public class Game {
                 System.out.println("**************************************************");
 
 
-                //  System.out.println("Select position to move to:");
-                //System.out.println("Current Players Hand:");
-                // for (Card c : p.getHand()) {
-                //    System.out.println("\t" + c.toString());
-                //}
 
 
                 while (movesRemaining > 0) {
                     System.out.println("Please enter a move command (" + movesRemaining + " tiles remaining):");
-                    Move move = input(movesRemaining);
+                    Move move = movementInput(movesRemaining);
                     Board newBoard = this.board.apply(p, move);
                     if (newBoard != null) {
                         this.board = newBoard;
                         movesRemaining = movesRemaining - move.getSpaces();
                         System.out.println(board.toString());
                     }
-
                 }
+
+                System.out.println("Current Players Hand:");
+                 for (Card c : p.getHand()) {
+                    System.out.println("\t" + c.toString());
+                }
+
 
 
             });
@@ -169,7 +169,7 @@ public class Game {
      * @return Move
      * @author Cameron Li
      */
-    public Move input(int movesRemaining) {
+    public Move movementInput(int movesRemaining) {
         Move.Direction direction = null;
         int spaces = 0;
         Scanner inputScan = new Scanner(System.in);
