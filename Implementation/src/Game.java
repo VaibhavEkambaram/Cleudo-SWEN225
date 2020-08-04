@@ -144,12 +144,14 @@ public class Game {
 
                 while (movesRemaining > 0) {
                     System.out.println("Please enter a move command (" + movesRemaining + " tiles remaining):");
-                    Move move = input();
+                    Move move = input(movesRemaining);
                     Board newBoard = this.board.apply(p, move);
                     if (newBoard != null) {
                         this.board = newBoard;
+                        movesRemaining = movesRemaining - move.getSpaces();
+                        System.out.println(board.toString());
                     }
-                    System.out.println(board.toString());
+
                 }
 
 
@@ -167,7 +169,7 @@ public class Game {
      * @return Move
      * @author Cameron Li
      */
-    public Move input() {
+    public Move input(int movesRemaining) {
         Move.Direction direction = null;
         int spaces = 0;
         Scanner inputScan = new Scanner(System.in);
@@ -198,8 +200,7 @@ public class Game {
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a correct number of spaces");
             }
-            if (direction != null && spaces != 0) {
-                movesRemaining = movesRemaining - spaces;
+            if (direction != null && spaces != 0 && spaces <= movesRemaining) {
                 valid = true;
             }
 
