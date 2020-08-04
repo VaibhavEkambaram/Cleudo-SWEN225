@@ -174,6 +174,7 @@ public class Game {
         int spaces = 0;
         Scanner inputScan = new Scanner(System.in);
         boolean valid = false;
+        boolean tooFar = true;
         while (!valid) {
             String command = inputScan.nextLine();
 
@@ -201,12 +202,19 @@ public class Game {
                 System.out.println("Please enter a correct number of spaces");
             }
             if (direction != null && spaces != 0 && spaces <= movesRemaining) {
+                tooFar = false;
                 valid = true;
             }
 
+
             if (!valid) {
-                System.out.println("Please enter a proper command");
-                System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
+                if (tooFar) {
+                    System.out.println("Insufficient amount of moves left");
+                } else {
+
+                    System.out.println("Please enter a proper command");
+                    System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
+                }
             }
         }
 
