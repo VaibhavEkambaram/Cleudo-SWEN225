@@ -40,12 +40,12 @@ public class Game {
      */
     public static void main(String[] args) {
         System.out.println("------------------------------------------------------------------------\n" +
-                "\t\t\t\t\tCluedo!\n" +
+                "\t\t\t\t\t\t\tCluedo!\n" +
                 "------------------------------------------------------------------------\n" +
-                "SWEN225 Assignment 1\n" +
-                "A group project by:\n" +
-                "Cameron Li\tVaibhav Ekambaram\tBaxter Kirikiri\n" +
-                "------------------------------------------------------------------------\n\n");
+                "\tSWEN225 Assignment 1\n" +
+                "\tA group project by:\n" +
+                "\t\tCameron Li\tVaibhav Ekambaram\tBaxter Kirikiri\n" +
+                "------------------------------------------------------------------------\n");
         new Game();
     }
 
@@ -98,6 +98,7 @@ public class Game {
                         " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y " + "\n" +
                         " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
 
+
         initGame(); // initialize cards and players
         initBoard(boardLayout); // generate board
         try {
@@ -128,6 +129,7 @@ public class Game {
                 System.out.println("\n" + this.board + "\n");
                 System.out.println("**************************************************");
                 System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
+                System.out.println("**************************************************");
                 movesRemaining = rollDice();
                 System.out.println("Result: " + movesRemaining);
                 System.out.println("**************************************************");
@@ -218,7 +220,7 @@ public class Game {
      * @author Cameron Li
      */
     public void initGame() {
-        System.out.println("How many players wish to participate? (3 - 6)");
+        System.out.println("**Game Startup Parameters**\nHow many players wish to participate? (3 - 6):");
         int numPlayers = 0;
         Scanner sc = new Scanner(System.in);
         while (numPlayers < 3 || numPlayers > 6) {
@@ -230,7 +232,7 @@ public class Game {
                 System.out.println("Please enter a number");
                 isNumber = false;
             }
-            if (isNumber) {
+            if (isNumber && numPlayers < 3 || numPlayers > 6) {
                 System.out.println("Please enter a number between 3 and 6");
             }
         }
