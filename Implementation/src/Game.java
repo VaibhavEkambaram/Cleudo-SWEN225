@@ -39,15 +39,13 @@ public class Game {
      * @param args arguments
      */
     public static void main(String[] args) {
-        System.out.println("--------------------------------\n" +
-                "\t\t\tCluedo!\n" +
-                "--------------------------------\n" +
+        System.out.println("------------------------------------------------------------------------\n" +
+                "\t\t\t\t\tCluedo!\n" +
+                "------------------------------------------------------------------------\n" +
                 "SWEN225 Assignment 1\n" +
                 "A group project by:\n" +
-                "* Vaibhav Ekambaram \n" +
-                "* Cameron Li\n" +
-                "* Baxter Kirikiri\n" +
-                "--------------------------------\n\n");
+                "Cameron Li\tVaibhav Ekambaram\tBaxter Kirikiri\n" +
+                "------------------------------------------------------------------------\n\n");
         new Game();
     }
 
@@ -102,7 +100,11 @@ public class Game {
 
         initGame(); // initialize cards and players
         initBoard(boardLayout); // generate board
-        mainGameLoop(); // main game logic loop
+        try {
+            mainGameLoop(); // main game logic loop
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -111,28 +113,34 @@ public class Game {
      * This method contains the main game logic. After the game as been setup in the game constructor, this method then
      * loops through, carrying out the game functions
      */
-    public void mainGameLoop() {
+    public void mainGameLoop() throws InterruptedException {
         System.out.println("\nMurder Scenario: " + murderScenario.toString() + " (SECRET DO NOT LOOK!)");
+        System.out.println("Starting game...");
+        Thread.sleep(1000);
+
 
         while (gameRunning) {
             players.forEach(p -> {
 
                 movesRemaining = -1;
 
-                System.out.println("------------------------------------------------------------------------");
+                System.out.println("\n------------------------------------------------------------------------");
                 System.out.println("\n" + this.board + "\n");
+                System.out.println("**************************************************");
                 System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
                 movesRemaining = rollDice();
                 System.out.println("Result: " + movesRemaining);
-              //  System.out.println("Select position to move to:");
+                System.out.println("**************************************************");
+
+
+                //  System.out.println("Select position to move to:");
                 //System.out.println("Current Players Hand:");
-               // for (Card c : p.getHand()) {
+                // for (Card c : p.getHand()) {
                 //    System.out.println("\t" + c.toString());
                 //}
 
 
-
-                while(movesRemaining > 0) {
+                while (movesRemaining > 0) {
                     System.out.println("Please enter a move command (" + movesRemaining + " tiles remaining):");
                     Move move = input();
                     Board newBoard = this.board.apply(p, move);
@@ -141,6 +149,8 @@ public class Game {
                     }
                     System.out.println(board.toString());
                 }
+
+
             });
 
             // TODO: Temporary break point for testing purposes
