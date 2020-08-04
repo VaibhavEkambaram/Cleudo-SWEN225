@@ -125,8 +125,12 @@ public class Game {
                 }
                 System.out.println("Please enter a move command: ");
                 Move move = input();
+                Board newBoard = this.board.apply(p, move);
+                if (newBoard != null) {
+                    this.board = newBoard;
+                }
             });
-
+            System.out.println(board.toString());
             // TODO: Temporary break point for testing purposes
             break;
         }
@@ -154,16 +158,16 @@ public class Game {
                     System.out.println("suggestion");
                 } else if (command.length() >= 4 && command.startsWith("up-")) {
                     direction = Move.Direction.UP;
-                    spaces = Integer.parseInt(command.substring(4));
+                    spaces = Integer.parseInt(command.substring(3));
                 } else if (command.length() >= 6 && command.startsWith("left-")) {
                     direction = Move.Direction.LEFT;
-                    spaces = Integer.parseInt(command.substring(6));
+                    spaces = Integer.parseInt(command.substring(5));
                 } else if (command.length() >= 7 && command.startsWith("right-")) {
                     direction = Move.Direction.RIGHT;
-                    spaces = Integer.parseInt(command.substring(7));
+                    spaces = Integer.parseInt(command.substring(6));
                 } else if (command.length() >= 6 && command.startsWith("down-")) {
                     direction = Move.Direction.DOWN;
-                    spaces = Integer.parseInt(command.substring(6));
+                    spaces = Integer.parseInt(command.substring(5));
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a correct number of spaces");
@@ -317,8 +321,8 @@ public class Game {
                         if (positionName.equals(c.getCharacterBoardChar())) { // Check if position is a character
                             for (Player p : players) { // Make sure that a player is playing the character
                                 if (p.getCharacter().equals(c)) { // Case player for character exists, create Character position
-                                    p.setCurrentPosition(newPosition);
                                     newPosition = new Position(x, y, true, c);
+                                    p.setCurrentPosition(newPosition);
                                     break;
                                 } else { // Else, is a basic moveable position "_"
                                     newPosition = new Position(x, y, true);

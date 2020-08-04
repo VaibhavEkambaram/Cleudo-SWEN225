@@ -82,9 +82,11 @@ public class Board {
         // Movement Adjustment
         int xChange = 0;
         int yChange = 0;
-        if (positions[yLoc][xLoc] != playerPos) {
+        if (board.positions[yLoc][xLoc] != playerPos) {
             throw new Error("Player position does not match with board position?");
         }
+
+        // Check Direction
         switch (direction) {
             case UP:  // Vertical Movement
                 yChange = -1;
@@ -99,14 +101,28 @@ public class Board {
                 xChange = 1;
                 break;
         }
-        while (positions[yLoc + yChange][xLoc + xChange] != null) {
-            Position nextPosition = positions[yLoc + yChange][xLoc + xChange];
+
+        // Apply movement
+        while (board.positions[yLoc + yChange][xLoc + xChange] != null && spaces > 0) {
+            Position nextPosition = board.positions[yLoc + yChange][xLoc + xChange];
             if (nextPosition.getIsRoom()) {
                 if (!player.checkInRoom()) {
                     break;
                 }
             }
+            if (nextPosition.getCanMove()) {
+                player.setCurrentPosition(nextPosition);
+                nextPosition.setCharacter(player.getCharacter());
+                playerPos.removeCharacter();
+                yLoc = nextPosition.getyLoc();
+                xLoc = nextPosition.getxLoc();
+            } else {
+                System.out.println("Invalid move");
+                return null;
+            }
+            playerPos = player.getCurrentPosition();
+            spaces--;
         }
-        return null;
+        return board;
     }
 }

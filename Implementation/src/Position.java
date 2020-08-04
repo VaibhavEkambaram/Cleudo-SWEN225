@@ -69,64 +69,30 @@ public class Position {
         }
     }
 
+    public void setCharacter(CharacterCard character) {
+        this.character = character;
+    }
+
+    public void removeCharacter() {
+        this.character = null;
+    }
+
 
     //------------------------
     // INTERFACE
     //------------------------
 
-    /* Code from template association_MinimumNumberOfMethod */
-    public static int minimumNumberOfBoards() {
-        return 0;
-    }
-
-    public boolean setInRoom(Room aInRoom) {
-        boolean wasSet = false;
-        inRoom = aInRoom;
-        wasSet = true;
-        return wasSet;
-    }
-
-    public boolean setPassableTile(boolean aPassableTile) {
-        boolean wasSet = false;
-        passableTile = aPassableTile;
-        wasSet = true;
-        return wasSet;
-    }
-
-    public boolean setDisplayName(String aDisplayName) {
-        boolean wasSet = false;
-        displayName = aDisplayName;
-        wasSet = true;
-        return wasSet;
-    }
-
-    public boolean setIsRoom(boolean aIsRoom) {
-        boolean wasSet = false;
-        isRoom = aIsRoom;
-        wasSet = true;
-        return wasSet;
-    }
-
-    public Room getInRoom() {
-        return inRoom;
-    }
-
-    /**
-     * Not quite sure we will need this as the Room card should store this information for us, instead of individual tiles.
-     * CharacterCard hasCharacter;
-     * WeaponCard hasWeapon;
-     */
-    public boolean getPassableTile() {
-        return passableTile;
-    }
-
-    public String getDisplayName() {
-        return displayName;
+    public boolean getCanMove() {
+        if (this.character == null) { // If no character occupies position
+            return this.canMove;
+        }
+        return false;
     }
 
     public boolean getIsRoom() {
         return isRoom;
     }
+
 
     /* Code from template attribute_IsBoolean */
     public boolean isIsRoom() {
