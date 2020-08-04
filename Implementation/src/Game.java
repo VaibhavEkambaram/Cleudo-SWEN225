@@ -29,6 +29,8 @@ public class Game {
     //        - game has ended: false
     boolean gameRunning = true;
 
+    int movesRemaining = -1;
+
 
     /**
      * MAIN METHOD
@@ -114,23 +116,33 @@ public class Game {
 
         while (gameRunning) {
             players.forEach(p -> {
+
+                movesRemaining = -1;
+
                 System.out.println("------------------------------------------------------------------------");
                 System.out.println("\n" + this.board + "\n");
                 System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
-                System.out.println("Result: " + rollDice());
-                System.out.println("Select position to move to:");
-                System.out.println("Current Players Hand:");
-                for (Card c : p.getHand()) {
-                    System.out.println("\t" + c.toString());
-                }
-                System.out.println("Please enter a move command: ");
-                Move move = input();
-                Board newBoard = this.board.apply(p, move);
-                if (newBoard != null) {
-                    this.board = newBoard;
+                movesRemaining = rollDice();
+                System.out.println("Result: " + movesRemaining);
+              //  System.out.println("Select position to move to:");
+                //System.out.println("Current Players Hand:");
+               // for (Card c : p.getHand()) {
+                //    System.out.println("\t" + c.toString());
+                //}
+
+
+
+                while(movesRemaining > 0) {
+                    System.out.println("Please enter a move command (" + movesRemaining + " tiles remaining):");
+                    Move move = input();
+                    Board newBoard = this.board.apply(p, move);
+                    if (newBoard != null) {
+                        this.board = newBoard;
+                    }
+                    System.out.println(board.toString());
                 }
             });
-            System.out.println(board.toString());
+
             // TODO: Temporary break point for testing purposes
             break;
         }
@@ -152,11 +164,13 @@ public class Game {
             String command = inputScan.nextLine();
 
             try {
-                if (command.equals("accusation")) {
-                    System.out.println("accusation");
-                } else if (command.equals("suggestion")) {
-                    System.out.println("suggestion");
-                } else if (command.length() >= 4 && command.startsWith("up-")) {
+                //   if (command.equals("accusation")) {
+                //     System.out.println("accusation");
+                //  } else if (command.equals("suggestion")) {
+                //     System.out.println("suggestion");
+                //
+                // } else
+                if (command.length() >= 4 && command.startsWith("up-")) {
                     direction = Move.Direction.UP;
                     spaces = Integer.parseInt(command.substring(3));
                 } else if (command.length() >= 6 && command.startsWith("left-")) {
@@ -173,6 +187,7 @@ public class Game {
                 System.out.println("Please enter a correct number of spaces");
             }
             if (direction != null && spaces != 0) {
+                movesRemaining = movesRemaining - spaces;
                 valid = true;
             }
 
