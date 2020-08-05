@@ -93,6 +93,10 @@ public class Position {
         return isRoom;
     }
 
+    public Room getInRoom() {
+        return inRoom;
+    }
+
 
     /* Code from template attribute_IsBoolean */
     public boolean isIsRoom() {
