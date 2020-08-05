@@ -121,8 +121,7 @@ public class Game {
 
 
         while (gameRunning) {
-            players.forEach(p -> {
-
+            players.forEach(p -> { //TODO: implement this in a way so that the game doesnt keep going when someone wins. Also need to check for all players unable to accuse
                 movesRemaining = -1;
 
                 System.out.println("\n------------------------------------------------------------------------");
@@ -150,13 +149,12 @@ public class Game {
                     System.out.println("\t" + c.toString());
                 }
 
-
                 System.out.println("Would you like to accuse or suggest? (a/s/n): ");
-                String answer = accSuggIput();
-                if(answer.equals("a")){
-                    accusation(p);
-                } else if(answer.equals("s")){
-                    System.out.println("Suggestion");
+                String answer = accSuggInput();
+                if(answer.equals("a") || answer.equals("accusation")){
+                    gameRunning = accusation(p);
+                } else if(answer.equals("s") || answer.equals("suggestion")){
+                    suggestion(p);
                 }
 
             });
@@ -183,12 +181,6 @@ public class Game {
             String command = inputScan.nextLine();
 
             try {
-                //   if (command.equals("accusation")) {
-                //     System.out.println("accusation");
-                //  } else if (command.equals("suggestion")) {
-                //     System.out.println("suggestion");
-                //
-                // } else
                 if (command.length() >= 4 && command.startsWith("up-")) {
                     direction = Move.Direction.UP;
                     spaces = Integer.parseInt(command.substring(3));
@@ -210,7 +202,6 @@ public class Game {
                 valid = true;
             }
 
-
             if (!valid) {
                 if (tooFar) {
                     System.out.println("Insufficient amount of moves left");
@@ -224,16 +215,23 @@ public class Game {
         return new Move(direction, spaces);
     }
 
-    private void accusation(Player p){
+    /**
+     * Handles player accusations.
+     * Returns true if they are correct and false if they are incorrect
+     *
+     * @return Boolean
+     * @author Baxter Kirikiri
+     */
+    private boolean accusation(Player p){
         if(!p.getCanAccuse()){
             System.out.println("You've already made a failed accusation. You can no longer accuse this game");
-            return;
+            return true;
         }
         ArrayList<String> accusation = new ArrayList<>();
 
-        System.out.println("\t" + murderScenario.getRoomCard().toString()); // show the accusation for testing purposes
+        /**System.out.println("\t" + murderScenario.getRoomCard().toString()); // show the scenario for testing purposes
         System.out.println("\t" + murderScenario.getWeapon().toString());
-        System.out.println("\t" + murderScenario.getMurderer().toString());
+        System.out.println("\t" + murderScenario.getMurderer().toString());**/
 
         System.out.println("Please enter a room: ");
         accusation = addCardToPlay(accusation);
@@ -250,26 +248,90 @@ public class Game {
         }
 
         if(correct == 3){
-            System.out.println(p.character.toString() + " has won!!");
-            this.gameRunning = false;
+            System.out.println(p.getCharacter().getCharacterName() + " has won!!");
+            return false; //gamerunning
         } else {
-            System.out.println(p.character.toString() + " was incorrect in their accusation. They can now no longer accuse.");
+            System.out.println(p.getCharacter().getCharacterName() + " was incorrect in their accusation. They can now no longer accuse.");
             p.setCanAccuse(false);
+            return true; //gamerunning
         }
     }
 
-    private String accSuggIput(){
+    /**
+     * Handles player suggestions.
+     *
+     * @author Baxter Kirikiri
+     */
+    private void suggestion(Player p){
+        ArrayList<String> suggestion = new ArrayList<>();
+        System.out.println("Please enter a room: "); // TODO: make it so the player suggesting can only suggest from the room they are in
+        suggestion = addCardToPlay(suggestion);
+        System.out.println("Please enter a weapon: ");
+        suggestion = addCardToPlay(suggestion);
+        System.out.println("Please enter a character: ");
+        suggestion = addCardToPlay(suggestion);
+
+        System.out.println("Current Suggestion:"); // TODO: make it so the accused player is moved to the room the player is in
+        for (String s : suggestion) {
+            System.out.println("\t" + s);
+        }
+
+        Stack<Player> refuters = new Stack<>();
+        for(Player addToStack: players){
+            if(!addToStack.equals(p)){
+                refuters.add(addToStack);
+            }
+        }
+
+        boolean refuted = false;
+        while(!refuters.isEmpty()){
+            Player currentTurn = refuters.pop();
+            System.out.println(currentTurn.getCharacter().getCharacterName() + "'s turn to refute"); //TODO: Update these messages so they follow convention
+            System.out.println(currentTurn.getCharacter().getCharacterName() + "'s hand: ");
+            Card[] refuteCards = currentTurn.getHand();
+            for (Card c : refuteCards) {
+                System.out.println("\t" + c.toString());
+            }
+            System.out.println("Refute this suggestion with a card from your hand: ");
+            String refutation = accSuggInput();
+            boolean inHand = false;
+            for (Card c : refuteCards) {
+                if(c.toString().equals(refutation)){
+                    inHand = true;
+                }
+            }
+            if(suggestion.contains(refutation) && inHand){
+                System.out.println(p.getCharacter().getCharacterName()+"'s suggestion was refuted!");
+                refuted = true;
+                break;
+            } else {
+                System.out.println("Invalid refutation!");
+            }
+        }
+
+        if(!refuted){
+            System.out.println(p.getCharacter().getCharacterName() + "'s turn");
+            System.out.println("No one could refute your suggestion! Would you like to make an accusation? (y/n)");
+            if(accSuggInput().equals("y")){
+                this.gameRunning = accusation(p); //TODO: Allow this to win the game
+            }
+        }
+
+    }
+
+    /**
+     * Asks current player if they would like to accuse or suggest
+     * Returns their response
+     *
+     * @return String
+     * @author Baxter Kirikiri
+     */
+    private String accSuggInput(){
         String answer = "";
         Scanner inputScan = new Scanner(System.in);
         String input = inputScan.nextLine();
         try {
-            if (input.equals("a")) {
-                answer = "a";
-            } else if (input.equals("s")) {
-                answer = "s";
-            } else if (input.equals("n")) {
-                answer = "n";
-            }
+            answer = input;
         } catch (Exception e) {
             System.out.println("Please enter 'a', 's', or 'n'");
         }
@@ -277,6 +339,13 @@ public class Game {
         return answer;
     }
 
+    /**
+     * Asks a player to enter the name of a card (for their accusation or suggestion)
+     * Returns an list of card names
+     *
+     * @return ArrayList<String>
+     * @author Baxter Kirikiri
+     */
     private ArrayList<String> addCardToPlay(ArrayList<String> play){
         String cardName = "";
         Scanner inputScan = new Scanner(System.in);
