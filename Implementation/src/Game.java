@@ -134,9 +134,6 @@ public class Game {
                 System.out.println("Result: " + movesRemaining);
                 System.out.println("**************************************************");
 
-
-
-
                 while (movesRemaining > 0) {
                     System.out.println("Please enter a move command (" + movesRemaining + " tiles remaining):");
                     Move move = movementInput(movesRemaining);
@@ -149,11 +146,19 @@ public class Game {
                 }
 
                 System.out.println("Current Players Hand:");
-                 for (Card c : p.getHand()) {
+                for (Card c : p.getHand()) {
                     System.out.println("\t" + c.toString());
                 }
 
-
+                System.out.println("Would you like to accuse or suggest? (a/s/n): ");
+                String answer = accSuggIput();
+                if(answer.equals("a")){
+                    System.out.println("Please enter a room from your hand: ");
+                    System.out.println("Please enter a weapon from your hand: ");
+                    System.out.println("Please enter a character from your hand: ");
+                } else if(answer.equals("s")){
+                    System.out.println("Suggestion");
+                }
 
             });
 
@@ -219,6 +224,32 @@ public class Game {
         }
 
         return new Move(direction, spaces);
+    }
+
+    public String accSuggIput(){
+        String answer = "";
+        Scanner inputScan = new Scanner(System.in);
+        String input = inputScan.nextLine();
+        try {
+            if (input.equals("a")) {
+                answer = "a";
+            } else if (input.equals("s")) {
+                answer = "s";
+            } else if (input.equals("n")) {
+                answer = "n";
+            }
+        } catch (Exception e) {
+            System.out.println("Please enter 'a', 's', or 'n'");
+        }
+
+        return answer;
+    }
+
+    public Card getCardFromHand(String cardName){
+        Card cardFromHand = new CharacterCard("Ms. Scarlett");
+        
+
+        return cardFromHand;
     }
 
     /**
