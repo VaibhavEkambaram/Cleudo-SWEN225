@@ -16,6 +16,9 @@ public class Position {
     private Room inRoom;
     private String displayName = "_";
 
+    private Move.Direction doorDirection;
+    private boolean isDoor = false;
+
     private boolean isRoom = false;
     private boolean passableTile;
     private boolean canMove;
@@ -54,18 +57,40 @@ public class Position {
     }
 
     // Room Position Constructor
-    public Position(int x, int y, boolean canMove, boolean passableTile, boolean isShow, Room inRoom) {
+    public Position(int x, int y, boolean canMove, boolean passableTile, Move.Direction direction, Room inRoom) {
         this.xLoc = x;
         this.yLoc = y;
         this.canMove = canMove;
         this.inRoom = inRoom;
         this.isRoom = true;
         this.passableTile = passableTile;
+        this.doorDirection = direction;
+
+        if (this.doorDirection != null) {
+            this.isDoor = true;
+        }
         // Check for door or outer wall
         if (this.passableTile == false) {
             this.displayName = inRoom.getRoomChar().toLowerCase();
-        } else if (isShow) {
-            this.displayName = "z";
+        }
+        if (this.isDoor) {
+            switch (direction) {
+                case UP:
+                    this.displayName = "^";
+                    break;
+                case DOWN:
+                    this.displayName = "v";
+                    break;
+                case RIGHT:
+                    this.displayName = ">";
+                    break;
+                case LEFT:
+                    this.displayName = "<";
+                    break;
+                default:
+                    this.displayName = "Door has been assigned incorrect direction" + xLoc + " : " + yLoc;
+                    break;
+            }
         }
     }
 

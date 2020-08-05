@@ -90,7 +90,7 @@ public class Game {
                         " d d d d d d vD d _ _ x x x x x _ _ l l L L L l l " + "\n" +
                         " x _ _ _ _ _ _ _ _ _ x x x x x _ _ <L L L L L L l " + "\n" +
                         " 2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l " + "\n" +
-                        " x _ _ _ _ _ _ _ _ h h dH ^H h h _ _ _ l l l l l x " + "\n" +
+                        " x _ _ _ _ _ _ _ _ h h ^H ^H h h _ _ _ l l l l l x " + "\n" +
                         " o o o o o o ^O _ _ h H H H H h _ _ _ _ _ _ _ _ 6 " + "\n" +
                         " o O O O O O o _ _ h H H H H >H _ _ _ _ _ _ _ _ x " + "\n" +
                         " o O O O O O o _ _ h H H H H h _ _ ^Y y y y y y y " + "\n" +
@@ -479,13 +479,22 @@ public class Game {
                 if (newPosition == null) { // If still haven't found anything
                     for (Room r : rooms) { // Check for a room
                         if (positionName.equals(r.getRoomChar())) { // Is this an inner room position?
-                            newPosition = new Position(x, y, true, true, false, r);
+                            newPosition = new Position(x, y, true, true, null, r);
                             break;
-                        } else if (positionName.equals("d" + r.getRoomChar())) { // Is this a room door?
-                            newPosition = new Position(x, y, true, true, true, r);
+                        } else if (positionName.equals("^" + r.getRoomChar())) { // Up door
+                            newPosition = new Position(x, y, true, true, Move.Direction.UP, r);
+                            break;
+                        } else if (positionName.equals(">" + r.getRoomChar())) { // Right door
+                            newPosition = new Position(x, y, true, true, Move.Direction.RIGHT, r);
+                            break;
+                        } else if (positionName.equals("v" + r.getRoomChar())) { // Down door
+                            newPosition = new Position(x, y, true, true, Move.Direction.DOWN, r);
+                            break;
+                        } else if (positionName.equals("<" + r.getRoomChar())) {
+                            newPosition = new Position(x, y, true, true, Move.Direction.LEFT, r);
                             break;
                         } else if (positionName.equals(r.getRoomChar().toLowerCase())) { // Is this an outer room position?
-                            newPosition = new Position(x, y, true, false, false, r);
+                            newPosition = new Position(x, y, true, false, null, r);
                             break;
                         }
                     }
