@@ -150,12 +150,11 @@ public class Game {
                     System.out.println("\t" + c.toString());
                 }
 
+
                 System.out.println("Would you like to accuse or suggest? (a/s/n): ");
                 String answer = accSuggIput();
                 if(answer.equals("a")){
-                    System.out.println("Please enter a room from your hand: ");
-                    System.out.println("Please enter a weapon from your hand: ");
-                    System.out.println("Please enter a character from your hand: ");
+                    accusation(p);
                 } else if(answer.equals("s")){
                     System.out.println("Suggestion");
                 }
@@ -216,7 +215,6 @@ public class Game {
                 if (tooFar) {
                     System.out.println("Insufficient amount of moves left");
                 } else {
-
                     System.out.println("Please enter a proper command");
                     System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
                 }
@@ -226,7 +224,41 @@ public class Game {
         return new Move(direction, spaces);
     }
 
-    public String accSuggIput(){
+    private void accusation(Player p){
+        if(!p.getCanAccuse()){
+            System.out.println("You've already made a failed accusation. You can no longer accuse this game");
+            return;
+        }
+        ArrayList<String> accusation = new ArrayList<>();
+
+        System.out.println("\t" + murderScenario.getRoomCard().toString()); // show the accusation for testing purposes
+        System.out.println("\t" + murderScenario.getWeapon().toString());
+        System.out.println("\t" + murderScenario.getMurderer().toString());
+
+        System.out.println("Please enter a room: ");
+        accusation = addCardToPlay(accusation);
+        System.out.println("Please enter a weapon: ");
+        accusation = addCardToPlay(accusation);
+        System.out.println("Please enter a character: ");
+        accusation = addCardToPlay(accusation);
+
+        int correct = 0;
+        for(String s: accusation){
+            if(murderScenario.getRoomCard().toString().equals(s) || murderScenario.getWeapon().toString().equals(s) || murderScenario.getMurderer().toString().equals(s)){
+                correct++;
+            }
+        }
+
+        if(correct == 3){
+            System.out.println(p.character.toString() + " has won!!");
+            this.gameRunning = false;
+        } else {
+            System.out.println(p.character.toString() + " was incorrect in their accusation. They can now no longer accuse.");
+            p.setCanAccuse(false);
+        }
+    }
+
+    private String accSuggIput(){
         String answer = "";
         Scanner inputScan = new Scanner(System.in);
         String input = inputScan.nextLine();
@@ -245,11 +277,18 @@ public class Game {
         return answer;
     }
 
-    public Card getCardFromHand(String cardName){
-        Card cardFromHand = new CharacterCard("Ms. Scarlett");
-        
+    private ArrayList<String> addCardToPlay(ArrayList<String> play){
+        String cardName = "";
+        Scanner inputScan = new Scanner(System.in);
+        try {
+            cardName = inputScan.nextLine();
+        } catch (Exception e) {
+            System.out.println("Please enter a valid card name");
+        }
 
-        return cardFromHand;
+        play.add(cardName);
+
+        return play;
     }
 
     /**
@@ -504,8 +543,4 @@ public class Game {
 
     }
 
-    // line 70 "model.ump"
-    public boolean accusation() {
-        return false;
-    }
 }

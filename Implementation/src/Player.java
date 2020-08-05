@@ -15,7 +15,7 @@ public class Player {
 
     private final List<Card> hand;
     //Player Attributes
-    private CharacterCard character;
+    public CharacterCard character;
     private boolean canAccuse = true;
     private boolean canRefute = true;
     private Position currentPosition;
