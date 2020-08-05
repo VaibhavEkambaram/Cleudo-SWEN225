@@ -107,6 +107,31 @@ public class Board {
             Position nextPosition = board.positions[yLoc + yChange][xLoc + xChange];
             if (nextPosition.getIsRoom()) {
                 if (!player.checkInRoom()) {
+                    if (nextPosition.isIsDoor()) {
+                        switch (nextPosition.getDoorDirection()) {
+                            case UP:
+                                if (yChange != -1) { // if not moving DOWN towards door
+                                    return null;
+                                }
+                                break;
+                            case LEFT:
+                                if (xChange != 1) { // if not moving RIGHT towards door
+                                    return null;
+                                }
+                                break;
+                            case RIGHT:
+                                if (xChange != -1) { // if not moving LEFT towards door
+                                    return null;
+                                }
+                                break;
+                            case DOWN:
+                                if (yChange != 1) { // if not moving UP towards door
+                                    return null;
+                                }
+                                break;
+                        }
+                    }
+                } else if (!playerPos.getInRoom().equals(nextPosition.getInRoom())) {
                     break;
                 }
             }

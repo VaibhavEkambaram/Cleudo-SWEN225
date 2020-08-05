@@ -128,6 +128,17 @@ public class Position {
         return isRoom;
     }
 
+    public boolean isIsDoor() {
+        return isDoor;
+    }
+
+    public Move.Direction getDoorDirection() {
+        if (isDoor) {
+            return doorDirection;
+        }
+        return null;
+    }
+
     public int getxLoc() {
         return xLoc;
     }
