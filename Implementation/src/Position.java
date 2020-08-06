@@ -122,12 +122,6 @@ public class Position {
         return inRoom;
     }
 
-
-    /* Code from template attribute_IsBoolean */
-    public boolean isIsRoom() {
-        return isRoom;
-    }
-
     public boolean isIsDoor() {
         return isDoor;
     }

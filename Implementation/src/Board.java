@@ -106,33 +106,14 @@ public class Board {
         while (board.positions[yLoc + yChange][xLoc + xChange] != null && spaces > 0) {
             Position nextPosition = board.positions[yLoc + yChange][xLoc + xChange];
             if (nextPosition.getIsRoom()) {
-                if (!player.checkInRoom()) {
-                    if (nextPosition.isIsDoor()) {
-                        switch (nextPosition.getDoorDirection()) {
-                            case UP:
-                                if (yChange != -1) { // if not moving DOWN towards door
-                                    return null;
-                                }
-                                break;
-                            case LEFT:
-                                if (xChange != 1) { // if not moving RIGHT towards door
-                                    return null;
-                                }
-                                break;
-                            case RIGHT:
-                                if (xChange != -1) { // if not moving LEFT towards door
-                                    return null;
-                                }
-                                break;
-                            case DOWN:
-                                if (yChange != 1) { // if not moving UP towards door
-                                    return null;
-                                }
-                                break;
-                        }
+                if (!player.checkInRoom()) { // Entering room onto door
+                    if (!checkDoor(nextPosition, xChange, yChange, true)) {
+                        return null;
                     }
-                } else if (!playerPos.getInRoom().equals(nextPosition.getInRoom())) {
-                    break;
+                } else { // Exiting room onto door
+                    if (!checkDoor(nextPosition, xChange, yChange, false)) {
+                        return null;
+                    }
                 }
             }
             if (nextPosition.getCanMove()) {
@@ -142,12 +123,49 @@ public class Board {
                 yLoc = nextPosition.getyLoc();
                 xLoc = nextPosition.getxLoc();
             } else {
-                System.out.println("Invalid move");
                 return null;
             }
             playerPos = player.getCurrentPosition();
             spaces--;
         }
         return board;
+    }
+
+    private boolean checkDoor(Position nextPosition, int xChange, int yChange, boolean enter) {
+        if (nextPosition.isIsDoor()) {
+            switch (nextPosition.getDoorDirection()) {
+                case UP:
+                    if (enter == true && yChange == 1) { // if moving DOWN towards door
+                        return true;
+                    } else if (enter == false && yChange == -1) {
+                        return true;
+                    }
+                    break;
+                case LEFT:
+                    if (enter == true && xChange == 1) { // if moving DOWN towards door
+                        return true;
+                    } else if (enter == false && xChange == -1) {
+                        return true;
+                    }
+                    break;
+                case RIGHT:
+                    if (enter == true && xChange == -1) { // if moving DOWN towards door
+                        return true;
+                    } else if (enter == false && xChange == 1) {
+                        return true;
+                    }
+                    break;
+                case DOWN:
+                    if (enter == true && yChange == -1) { // if moving DOWN towards door
+                        return true;
+                    } else if (enter == false && yChange == 1) {
+                        return true;
+                    }
+                    break;
+            }
+        } else {
+            return false;
+        }
+        return false;
     }
 }

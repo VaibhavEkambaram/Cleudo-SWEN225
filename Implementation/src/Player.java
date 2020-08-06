@@ -27,14 +27,25 @@ public class Player {
     public Player(CharacterCard aCharacter) {
         character = aCharacter;
         hand = new ArrayList<>();
-        //canAccuse = aCanAccuse;
-        //canRefute = aCanRefute;
-        //currentPosition = aCurrentPosition;
     }
 
     //------------------------
     // INTERFACE
     //------------------------
+
+    public boolean isInRoom() {
+        if (currentPosition.getIsRoom()) {
+            return true;
+        }
+        return false;
+    }
+
+    public Room withinRoom() {
+        if (currentPosition.getIsRoom()) {
+            return currentPosition.getInRoom();
+        }
+        return null;
+    }
 
     public boolean setCharacter(CharacterCard aCharacter) {
         boolean wasSet = false;
@@ -130,9 +141,9 @@ public class Player {
     // line 83 "model.ump"
     public Boolean checkInRoom() {
         // Check if player is in a room
-        // if (currentPosition.isRoom) {
-        //   return true;
-        //}
+        if (currentPosition.getIsRoom()) {
+            return true;
+        }
         return false;
     }
 
