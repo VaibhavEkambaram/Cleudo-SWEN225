@@ -446,7 +446,7 @@ public class Game {
         // Murder Scenario of Random Cards
         murderScenario = new Scenario(weaponCards.get(new Random().nextInt(wepNames.length - 1) + 1),
                 roomCards.get(new Random().nextInt(roomNames.length - 1) + 1),
-                characterCards.get(new Random().nextInt(characterNames.length - 1) + 1));
+                characterCards.get(new Random().nextInt(numPlayers) + 1));
         System.out.println("Generated Scenario");
     }
 
