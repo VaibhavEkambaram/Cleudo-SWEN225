@@ -92,20 +92,25 @@ public class Board {
             playerPos = cloneBoard.positions[y][x];
             Position nextPosition = cloneBoard.positions[y + dy][x + dx];
 
-            if (playerPos.getRoom() == null) {
-                // Attempt to enter Room
-                if (nextPosition.getRoom() != null) {
-
-                }
-            } else {
-                // Player must be leaving door through proper direction
-                if (playerPos.isDoor()) {
-                    if (!checkDoorMovement(playerPos, dx, dy, false)) {
+            if (playerPos.getRoom() == null) { // Player is not in Room
+                if (nextPosition.getRoom() != null) { // Attempt to enter Room
+                    // Player is attempting to enter room but isn't going through the door
+                    if (!nextPosition.isDoor()) {
+                        return null;
+                    }
+                    // Player is entering through door, check matching direction
+                    if (!checkDoorMovement(nextPosition, dx, dy, true)) {
                         return null;
                     }
                 }
-                // Attempt to move out of room without going through door
-                if (!playerPos.getRoom().equals(nextPosition.getRoom())) {
+            } else { // Player is in Room
+                // Player must be leaving door through proper direction
+                if (playerPos.isDoor()) {
+                    if (nextPosition.getRoom() == null && !checkDoorMovement(playerPos, dx, dy, false)) {
+                        return null;
+                    }
+                    // Not leaving through Door
+                } else if (!playerPos.getRoom().equals(nextPosition.getRoom())) {
                     return null;
                 }
             }
@@ -153,8 +158,20 @@ public class Board {
                 default:
                     return false;
             }
+        } else {
+            switch (checkPosition.getDoorDirection()) {
+                case UP:
+                    return (dy == 1);
+                case DOWN:
+                    return (dy == -1);
+                case LEFT:
+                    return (dx == 1);
+                case RIGHT:
+                    return (dx == -1);
+                default:
+                    return false;
+            }
         }
-        return false;
     }
 
 

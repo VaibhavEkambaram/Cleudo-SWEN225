@@ -90,7 +90,7 @@ public class Position {
         clonePosition.inRoom = this.inRoom;
         clonePosition.displayName = this.displayName;
         clonePosition.doorDirection = this.doorDirection;
-        clonePosition.isDoor = false;
+        clonePosition.isDoor = this.isDoor;
         clonePosition.passableTile = this.passableTile;
         clonePosition.canMove = this.canMove;
         clonePosition.xLoc = this.xLoc;
