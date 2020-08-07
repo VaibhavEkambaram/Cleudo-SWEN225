@@ -28,6 +28,7 @@ public class Game {
     //        - still playing: true
     //        - game has ended: false
     boolean gameRunning = true;
+
     boolean gameWon = false;
 
     int movesRemaining = -1;
@@ -184,9 +185,6 @@ public class Game {
                 wait.nextLine();
 
             }
-
-            // TODO: Temporary break point for testing purposes
-            break;
         }
     }
 
@@ -303,9 +301,8 @@ public class Game {
         }
 
         System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is in room |" + p.getCurrentPosition().getRoom().toString() + "|]\n This room will be used in the suggestion");
-
         suggestion.add(p.getCurrentPosition().getRoom().toString());
-        //suggestion = addCardToPlay(suggestion);
+
         System.out.println("Please enter a weapon: ");
         suggestion = addCardToPlay(suggestion);
         System.out.println("Please enter a character: ");
@@ -353,7 +350,7 @@ public class Game {
             System.out.println(p.getCharacter().getCharacterName() + "'s turn");
             System.out.println("No one could refute your suggestion! Would you like to make an accusation? (y/n)");
             if (accSuggInput().equals("y")) {
-                this.gameRunning = accusation(p); //TODO: Allow this to win the game
+                this.gameWon = accusation(p); //TODO: Allow this to win the game
             }
         }
 
