@@ -121,13 +121,14 @@ public class Game {
 
 
         while (gameRunning) {
-            players.forEach(p -> { //TODO: implement this in a way so that the game doesnt keep going when someone wins. Also need to check for all players unable to accuse
+            for (Player p : players) {//TODO: implement this in a way so that the game doesnt keep going when someone wins. Also need to check for all players unable to accuse
                 movesRemaining = -1;
 
                 System.out.println("\n------------------------------------------------------------------------");
                 System.out.println("\n" + this.board + "\n");
                 System.out.println("**************************************************");
                 System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
+                currentPlayer = p;
                 System.out.println("**************************************************");
                 movesRemaining = rollDice();
                 System.out.println("Result: " + movesRemaining);
@@ -156,13 +157,13 @@ public class Game {
 
                 System.out.println("Would you like to accuse or suggest? (a/s/n): ");
                 String answer = accSuggInput();
-                if(answer.equals("a") || answer.equals("accusation")){
+                if (answer.equals("a") || answer.equals("accusation")) {
                     gameRunning = accusation(p);
-                } else if(answer.equals("s") || answer.equals("suggestion")){
+                } else if (answer.equals("s") || answer.equals("suggestion")) {
                     suggestion(p);
                 }
 
-            });
+            }
 
             // TODO: Temporary break point for testing purposes
             break;
@@ -208,7 +209,7 @@ public class Game {
             }
 
             if (!valid) {
-                if (tooFar) {
+                if (tooFar && spaces > movesRemaining) {
                     System.out.println("Insufficient amount of moves left");
                 } else {
                     System.out.println("Please enter a proper command");
@@ -266,11 +267,24 @@ public class Game {
     /**
      * Handles player suggestions.
      *
-     * @author Baxter Kirikiri
+     * @author Baxter Kirikiri, Vaibhav
      */
     private void suggestion(Player p){
         ArrayList<String> suggestion = new ArrayList<>();
-        System.out.println("Please enter a room: "); // TODO: make it so the player suggesting can only suggest from the room they are in
+        //System.out.println("Please enter a room: "); //
+
+        // TODO: make it so the player suggesting can only suggest from the room they are in
+        // TODO: WIP
+        // additions by Vaibhav
+        System.out.println("[Checking to see if player is currently in a room]");
+        if(p.getCurrentPosition().getRoom()==null){
+            System.out.println("[Current player "+ p.getCharacter().getCharacterName()+ "is not currently in a room, suggestion can NOT continue]");
+            return;
+        }
+
+        System.out.println("[Current player |"+p.getCharacter().getCharacterName() +"| is in room |"+p.getCurrentPosition().getRoom().toString()+"|]\n This room will be used in the suggestion");
+
+
         suggestion = addCardToPlay(suggestion);
         System.out.println("Please enter a weapon: ");
         suggestion = addCardToPlay(suggestion);
@@ -446,7 +460,7 @@ public class Game {
         // Murder Scenario of Random Cards
         murderScenario = new Scenario(weaponCards.get(new Random().nextInt(wepNames.length - 1) + 1),
                 roomCards.get(new Random().nextInt(roomNames.length - 1) + 1),
-                characterCards.get(new Random().nextInt(numPlayers) + 1));
+                characterCards.get(new Random().nextInt(numPlayers)));
         System.out.println("Generated Scenario");
     }
 
@@ -535,64 +549,6 @@ public class Game {
         this.board = board; // Set board
     }
 
-    //------------------------
-    // INTERFACE
-    //------------------------
-
-
-    public boolean setBoard(Board aBoard) {
-        boolean wasSet = false;
-        board = aBoard;
-        wasSet = true;
-        return wasSet;
-    }
-
-    public boolean setCurrentPlayer(Player aCurrentPlayer) {
-        boolean wasSet = false;
-        currentPlayer = aCurrentPlayer;
-        wasSet = true;
-        return wasSet;
-    }
-
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public Scenario getMurderScenario() {
-        return murderScenario;
-    }
-
-    /* Code from template attribute_GetMany */
-    public Player getPlayer(int index) {
-        Player aPlayer = players.get(index);
-        return aPlayer;
-    }
-
-    public Player[] getPlayers() {
-        Player[] newPlayers = players.toArray(new Player[players.size()]);
-        return newPlayers;
-    }
-
-    public int numberOfPlayers() {
-        int number = players.size();
-        return number;
-    }
-
-    public boolean hasPlayers() {
-        boolean has = players.size() > 0;
-        return has;
-    }
-
-    public int indexOfPlayer(Player aPlayer) {
-        int index = players.indexOf(aPlayer);
-        return index;
-    }
-
 
     /**
      * Roll two dice and then return the overall number
@@ -601,6 +557,14 @@ public class Game {
      */
     // line 61 "model.ump"
     public int rollDice() {
+        Scanner diceRollScanner = new Scanner(System.in);
+        String readString = "";
+        while(!readString.equalsIgnoreCase("roll")){
+            System.out.println("Type \"roll\" to roll dice for "+currentPlayer.getCharacter().toString());
+            readString = diceRollScanner.nextLine();
+        }
+
+
         // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
@@ -628,8 +592,6 @@ public class Game {
     }
 
     // line 67 "model.ump"
-    public void suggestion() {
 
-    }
 
 }
