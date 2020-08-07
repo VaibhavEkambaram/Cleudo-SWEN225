@@ -134,6 +134,10 @@ public class Game {
                 System.out.println("**************************************************");
 
                 while (movesRemaining > 0) {
+                    if (p.getCurrentPosition().getRoom() != null) {
+                        System.out.println("Currently in " + p.getCurrentPosition().getRoom());
+                        System.out.println("**************************************************");
+                    }
                     System.out.println("Please enter a move command (" + movesRemaining + " tiles remaining):");
                     Move move = movementInput(movesRemaining);
                     Board newBoard = this.board.apply(p, move);
@@ -148,6 +152,7 @@ public class Game {
                 for (Card c : p.getHand()) {
                     System.out.println("\t" + c.toString());
                 }
+
 
                 System.out.println("Would you like to accuse or suggest? (a/s/n): ");
                 String answer = accSuggInput();
@@ -386,7 +391,7 @@ public class Game {
             }
         }
 
-        initDeck();
+        initDeck(numPlayers);
         players = new ArrayList<>();
         for (int n = 0; n < numPlayers; n++) {
             players.add(new Player(characterCards.get(n)));
@@ -400,7 +405,7 @@ public class Game {
      *
      * @author Cameron Li
      */
-    private void initDeck() {
+    private void initDeck(int numPlayers) {
         // Adding cards
         deck = new ArrayList<>();
 
@@ -426,11 +431,12 @@ public class Game {
             deck.add(newRoomCard);
         }
 
+        // Characters
         String[] characterNames = {
                 "Ms. Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
         characterCards = new ArrayList<>();
-        for (String c : characterNames) {
-            CharacterCard character = new CharacterCard(c);
+        for (int c = 0; c <= numPlayers; c++) { // Only create cards where there are players
+            CharacterCard character = new CharacterCard(characterNames[c]);
             characterCards.add(character);
             deck.add(character);
         }
@@ -501,7 +507,7 @@ public class Game {
                     }
                 }
 
-                if (newPosition == null) { // If still haven't found anything
+                if (newPosition == null) { // Add in remaining Character Positions
                     for (CharacterCard c : characterCards) {
                         if (positionName.equals(c.getCharacterBoardChar())) { // Check if position is a character
                             for (Player p : players) { // Make sure that a player is playing the character
@@ -516,6 +522,10 @@ public class Game {
                             break;
                         }
                     }
+                }
+
+                if (newPosition == null) { // Position where player was not added due to numPlayers < maxPlayers
+                    newPosition = new Position(x, y, true);
                 }
                 board.addPosition(y, x, newPosition); // Add found position
             }

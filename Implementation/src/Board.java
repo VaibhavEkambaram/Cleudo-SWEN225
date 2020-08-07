@@ -24,7 +24,7 @@ public class Board {
 
     }
 
-    // Clone Board Constructor with same positions
+    // Clone Board with same positions
     public Board(Board board) {
         for (int i = 0; i < board.positions.length; i++) {
             for (int j = 0; j < board.positions[0].length; j++) {
@@ -35,11 +35,6 @@ public class Board {
 
     public void addPosition(int y, int x, Position position) {
         positions[y][x] = position; // Board is in (y, x) format
-    }
-
-    // get board position from input location
-    public Position getBoardPosition(String inputTile) {
-        return null;
     }
 
     public String toString() {
@@ -135,6 +130,13 @@ public class Board {
         return null;
     }
 
+    /**
+     * Check if co-ordinates are within game board
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     private boolean outOfBounds(int x, int y) {
         if (x < 0 || y < 0) {
             return true;
@@ -145,6 +147,16 @@ public class Board {
         return false;
     }
 
+    /**
+     * Check if movement on/towards Door Position is valid
+     * Must be moving towards the right direction depending on direction of door
+     *
+     * @param checkPosition
+     * @param dx
+     * @param dy
+     * @param enter
+     * @return
+     */
     private boolean checkDoorMovement(Position checkPosition, int dx, int dy, boolean enter) {
         if (!enter) {
             switch (checkPosition.getDoorDirection()) {
