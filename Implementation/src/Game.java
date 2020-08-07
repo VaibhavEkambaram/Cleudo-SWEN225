@@ -37,6 +37,7 @@ public class Game {
      * Method to initialise the rest of the program. Shows a welcome message then generates a new game object
      *
      * @param args arguments
+     * @author Vaibhav
      */
     public static void main(String[] args) {
         System.out.println("------------------------------------------------------------------------\n" +
@@ -53,6 +54,8 @@ public class Game {
     /**
      * GAME OBJECT CONSTRUCTOR
      * Primary game object springboard for all other methods of the game
+     *
+     * @author Cameron, Vaibhav
      *
      * <p>
      * ----------------------------------------------------------------------------------------------------
@@ -113,6 +116,8 @@ public class Game {
      * MAIN GAME LOOP
      * This method contains the main game logic. After the game as been setup in the game constructor, this method then
      * loops through, carrying out the game functions
+     *
+     * @author Vaibhav
      */
     public void mainGameLoop() throws InterruptedException {
         System.out.println("\nMurder Scenario: " + murderScenario.toString() + " (SECRET DO NOT LOOK!)");
@@ -162,6 +167,10 @@ public class Game {
                 } else if (answer.equals("s") || answer.equals("suggestion")) {
                     suggestion(p);
                 }
+
+                System.out.println("[Hit Enter to move to the next player]");
+                Scanner wait = new Scanner(System.in);
+                wait.nextLine();
 
             }
 
