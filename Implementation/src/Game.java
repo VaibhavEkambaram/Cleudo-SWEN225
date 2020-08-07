@@ -28,6 +28,7 @@ public class Game {
     //        - still playing: true
     //        - game has ended: false
     boolean gameRunning = true;
+    boolean gameWon = false;
 
     int movesRemaining = -1;
 
@@ -111,6 +112,10 @@ public class Game {
         }
     }
 
+    public void gameWon(){
+        System.out.println("game has been won!");
+    }
+
 
     /**
      * MAIN GAME LOOP
@@ -126,8 +131,14 @@ public class Game {
 
 
         while (gameRunning) {
-            for (Player p : players) {//TODO: implement this in a way so that the game doesnt keep going when someone wins. Also need to check for all players unable to accuse
+            for (Player p : players) {
                 movesRemaining = -1;
+
+                // TODO: set gameWon to true to end the game
+                if(gameWon){
+                    gameWon();
+                    return;
+                }
 
                 System.out.println("\n------------------------------------------------------------------------");
                 System.out.println("\n" + this.board + "\n");
@@ -165,7 +176,7 @@ public class Game {
                 if (answer.equals("a") || answer.equals("accusation")) {
                     gameRunning = accusation(p);
                 } else if (answer.equals("s") || answer.equals("suggestion")) {
-                    suggestion(p);
+                   suggestion(p);
                 }
 
                 System.out.println("[Hit Enter to move to the next player]");
