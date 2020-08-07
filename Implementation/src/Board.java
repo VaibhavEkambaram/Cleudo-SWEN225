@@ -28,7 +28,7 @@ public class Board {
     public Board(Board board) {
         for (int i = 0; i < board.positions.length; i++) {
             for (int j = 0; j < board.positions[0].length; j++) {
-                this.addPosition(i, j, board.positions[i][j]);
+                this.addPosition(i, j, board.positions[i][j].clone());
             }
         }
     }
@@ -68,104 +68,94 @@ public class Board {
      * @author Cameron Li
      */
     public Board apply(Player player, Move move) {
-        // New Board
-        Board board = new Board(this);
-        // Player Position
+        Board cloneBoard = new Board(this);
+
         Position playerPos = player.getCurrentPosition();
-        int xLoc = playerPos.getxLoc();
-        int yLoc = playerPos.getyLoc();
+        int x = playerPos.getxLoc();
+        int y = playerPos.getyLoc();
 
-        // Move information
-        int spaces = move.getSpaces();
+        // Check Player clone Position matches original Position
+        if (cloneBoard.positions[y][x].getCharacter() != player.getCharacter()) {
+            return null;
+        }
+
         Move.Direction direction = move.getDirection();
+        int spaces = move.getSpaces();
+        int dx = move.xChange();
+        int dy = move.yChange();
+        while (spaces > 0) {
+            if (outOfBounds(x + dx, y + dy)) { // Check boundary errors
+                System.out.println("Out of bounds");
+                return null;
+            }
 
-        // Movement Adjustment
-        int xChange = 0;
-        int yChange = 0;
-        if (board.positions[yLoc][xLoc] != playerPos) {
-            throw new Error("Player position does not match with board position?");
-        }
+            playerPos = cloneBoard.positions[y][x];
+            Position nextPosition = cloneBoard.positions[y + dy][x + dx];
 
-        // Check Direction
-        switch (direction) {
-            case UP:  // Vertical Movement
-                yChange = -1;
-                break;
-            case DOWN:
-                yChange = 1;
-                break;
-            case LEFT:  // Horizontal Movement
-                xChange = -1;
-                break;
-            case RIGHT:
-                xChange = 1;
-                break;
-        }
+            if (playerPos.getRoom() == null) {
+                // Attempt to enter Room
+                if (nextPosition.getRoom() != null) {
 
-        // Apply movement
-        while (board.positions[yLoc + yChange][xLoc + xChange] != null && spaces > 0) {
-            Position nextPosition = board.positions[yLoc + yChange][xLoc + xChange];
-            if (nextPosition.getIsRoom()) {
-                if (!player.checkInRoom()) { // Entering room onto door
-                    if (!checkDoor(nextPosition, xChange, yChange, true)) {
-                        return null;
-                    }
-                } else { // Exiting room onto door
-                    if (!checkDoor(nextPosition, xChange, yChange, false)) {
+                }
+            } else {
+                // Player must be leaving door through proper direction
+                if (playerPos.isDoor()) {
+                    if (!checkDoorMovement(playerPos, dx, dy, false)) {
                         return null;
                     }
                 }
+                // Attempt to move out of room without going through door
+                if (!playerPos.getRoom().equals(nextPosition.getRoom())) {
+                    return null;
+                }
             }
-            if (nextPosition.getCanMove()) {
-                player.setCurrentPosition(nextPosition);
-                nextPosition.setCharacter(player.getCharacter());
+
+            if (nextPosition.canMove()) {
                 playerPos.removeCharacter();
-                yLoc = nextPosition.getyLoc();
-                xLoc = nextPosition.getxLoc();
+                playerPos = nextPosition;
+                nextPosition.setCharacter(player.getCharacter());
+
+                spaces--;
+                x = playerPos.getxLoc();
+                y = playerPos.getyLoc();
             } else {
                 return null;
             }
-            playerPos = player.getCurrentPosition();
-            spaces--;
+            if (spaces == 0) {
+                player.setCurrentPosition(playerPos);
+                return cloneBoard;
+            }
         }
-        return board;
+        return null;
     }
 
-    private boolean checkDoor(Position nextPosition, int xChange, int yChange, boolean enter) {
-        if (nextPosition.isIsDoor()) {
-            switch (nextPosition.getDoorDirection()) {
-                case UP:
-                    if (enter == true && yChange == 1) { // if moving DOWN towards door
-                        return true;
-                    } else if (enter == false && yChange == -1) {
-                        return true;
-                    }
-                    break;
-                case LEFT:
-                    if (enter == true && xChange == 1) { // if moving DOWN towards door
-                        return true;
-                    } else if (enter == false && xChange == -1) {
-                        return true;
-                    }
-                    break;
-                case RIGHT:
-                    if (enter == true && xChange == -1) { // if moving DOWN towards door
-                        return true;
-                    } else if (enter == false && xChange == 1) {
-                        return true;
-                    }
-                    break;
-                case DOWN:
-                    if (enter == true && yChange == -1) { // if moving DOWN towards door
-                        return true;
-                    } else if (enter == false && yChange == 1) {
-                        return true;
-                    }
-                    break;
-            }
-        } else {
-            return false;
+    private boolean outOfBounds(int x, int y) {
+        if (x < 0 || y < 0) {
+            return true;
+        }
+        if (x > positions.length || y > positions[0].length) {
+            return true;
         }
         return false;
     }
+
+    private boolean checkDoorMovement(Position checkPosition, int dx, int dy, boolean enter) {
+        if (!enter) {
+            switch (checkPosition.getDoorDirection()) {
+                case UP:
+                    return (dy == -1);
+                case DOWN:
+                    return (dy == 1);
+                case LEFT:
+                    return (dx == -1);
+                case RIGHT:
+                    return (dx == 1);
+                default:
+                    return false;
+            }
+        }
+        return false;
+    }
+
+
 }

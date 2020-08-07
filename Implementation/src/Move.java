@@ -1,6 +1,6 @@
 public class Move {
-    public Direction direction;
-    public int spaces;
+    private Direction direction;
+    private int spaces;
 
     public Move(Direction direction, int spaces) {
         this.direction = direction;
@@ -17,5 +17,27 @@ public class Move {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public int xChange() {
+        switch (direction) {
+            case LEFT:
+                return -1;
+            case RIGHT:
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
+    public int yChange() {
+        switch (direction) {
+            case UP:
+                return -1;
+            case DOWN:
+                return 1;
+            default:
+                return 0;
+        }
     }
 }

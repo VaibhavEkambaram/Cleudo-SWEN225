@@ -197,7 +197,7 @@ public class Game {
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a correct number of spaces");
             }
-            if (direction != null && spaces != 0 && spaces <= movesRemaining) {
+            if (direction != null && spaces > 0 && spaces <= movesRemaining) {
                 tooFar = false;
                 valid = true;
             }
@@ -211,6 +211,7 @@ public class Game {
                 }
             }
         }
+
 
         return new Move(direction, spaces);
     }

@@ -18,8 +18,6 @@ public class Position {
 
     private Move.Direction doorDirection;
     private boolean isDoor = false;
-
-    private boolean isRoom = false;
     private boolean passableTile;
     private boolean canMove;
 
@@ -29,14 +27,6 @@ public class Position {
     //------------------------
     // CONSTRUCTOR
     //------------------------
-
-    public Position(Room aInRoom, boolean aPassableTile, int x, int y) {
-        inRoom = aInRoom;
-        passableTile = aPassableTile;
-        displayName = x + ", " + y;
-        xLoc = x;
-        yLoc = y;
-    }
 
     // Default Constructor
     public Position(int x, int y, boolean canMove) {
@@ -62,7 +52,6 @@ public class Position {
         this.yLoc = y;
         this.canMove = canMove;
         this.inRoom = inRoom;
-        this.isRoom = true;
         this.passableTile = passableTile;
         this.doorDirection = direction;
 
@@ -94,35 +83,63 @@ public class Position {
         }
     }
 
-    public void setCharacter(CharacterCard character) {
-        this.character = character;
+    // Clone Constructor
+    public Position clone() {
+        Position clonePosition = new Position(xLoc, yLoc, canMove);
+        clonePosition.character = this.character;
+        clonePosition.inRoom = this.inRoom;
+        clonePosition.displayName = this.displayName;
+        clonePosition.doorDirection = this.doorDirection;
+        clonePosition.isDoor = false;
+        clonePosition.passableTile = this.passableTile;
+        clonePosition.canMove = this.canMove;
+        clonePosition.xLoc = this.xLoc;
+        clonePosition.yLoc = this.yLoc;
+        return clonePosition;
     }
 
-    public void removeCharacter() {
-        this.character = null;
+    // Basic Location Information
+    public int getxLoc() {
+        return xLoc;
     }
 
+    public int getyLoc() {
+        return yLoc;
+    }
 
-    //------------------------
-    // INTERFACE
-    //------------------------
-
-    public boolean getCanMove() {
+    public boolean canMove() {
         if (this.character == null) { // If no character occupies position
             return this.canMove;
         }
         return false;
     }
 
-    public boolean getIsRoom() {
-        return isRoom;
+    public String toString() {
+        if (this.character != null) {
+            return this.character.getCharacterBoardChar();
+        }
+        return this.displayName;
     }
 
-    public Room getInRoom() {
+    public CharacterCard getCharacter() {
+        return this.character;
+    }
+
+    public void removeCharacter() {
+        this.character = null;
+    }
+
+    // Character
+    public void setCharacter(CharacterCard character) {
+        this.character = character;
+    }
+
+    // Room
+    public Room getRoom() {
         return inRoom;
     }
 
-    public boolean isIsDoor() {
+    public boolean isDoor() {
         return isDoor;
     }
 
@@ -133,19 +150,5 @@ public class Position {
         return null;
     }
 
-    public int getxLoc() {
-        return xLoc;
-    }
 
-    public int getyLoc() {
-        return yLoc;
-    }
-
-
-    public String toString() {
-        if (this.character != null) {
-            return this.character.getCharacterBoardChar();
-        }
-        return this.displayName;
-    }
 }

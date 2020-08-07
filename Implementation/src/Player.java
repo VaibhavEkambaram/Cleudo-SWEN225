@@ -33,20 +33,6 @@ public class Player {
     // INTERFACE
     //------------------------
 
-    public boolean isInRoom() {
-        if (currentPosition.getIsRoom()) {
-            return true;
-        }
-        return false;
-    }
-
-    public Room withinRoom() {
-        if (currentPosition.getIsRoom()) {
-            return currentPosition.getInRoom();
-        }
-        return null;
-    }
-
     public boolean setCharacter(CharacterCard aCharacter) {
         boolean wasSet = false;
         character = aCharacter;
@@ -137,16 +123,6 @@ public class Player {
     public void refutation(RoomCard arg0, CharacterCard arg1, WeaponCard arg2) {
 
     }
-
-    // line 83 "model.ump"
-    public Boolean checkInRoom() {
-        // Check if player is in a room
-        if (currentPosition.getIsRoom()) {
-            return true;
-        }
-        return false;
-    }
-
 
     public String toString() {
         return super.toString() + "[" +
