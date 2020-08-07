@@ -115,6 +115,7 @@ public class Board {
                 }
             }
 
+            // Apply Movement
             if (nextPosition.canMove()) {
                 playerPos.removeCharacter();
                 playerPos = nextPosition;
@@ -126,7 +127,7 @@ public class Board {
             } else {
                 return null;
             }
-            if (spaces == 0) {
+            if (spaces == 0) { // Movement has been fully applied
                 player.setCurrentPosition(playerPos);
                 return cloneBoard;
             }

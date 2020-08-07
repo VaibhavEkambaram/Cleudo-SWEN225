@@ -129,7 +129,7 @@ public class Game {
                 System.out.println("**************************************************");
                 System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
                 System.out.println("**************************************************");
-                movesRemaining = 20;//rollDice();
+                movesRemaining = rollDice();
                 System.out.println("Result: " + movesRemaining);
                 System.out.println("**************************************************");
 

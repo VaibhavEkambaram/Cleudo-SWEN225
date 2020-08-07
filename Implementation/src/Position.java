@@ -85,7 +85,7 @@ public class Position {
 
     // Clone Constructor
     public Position clone() {
-        Position clonePosition = new Position(xLoc, yLoc, canMove);
+        Position clonePosition = new Position(this.xLoc, this.yLoc, this.canMove);
         clonePosition.character = this.character;
         clonePosition.inRoom = this.inRoom;
         clonePosition.displayName = this.displayName;
@@ -121,17 +121,17 @@ public class Position {
         return this.displayName;
     }
 
+    // Character
     public CharacterCard getCharacter() {
         return this.character;
     }
 
-    public void removeCharacter() {
-        this.character = null;
-    }
-
-    // Character
     public void setCharacter(CharacterCard character) {
         this.character = character;
+    }
+
+    public void removeCharacter() {
+        this.character = null;
     }
 
     // Room
