@@ -229,16 +229,16 @@ public class Game {
      * @return Boolean
      * @author Baxter Kirikiri
      */
-    private boolean accusation(Player p){
-        if(!p.getCanAccuse()){
+    private boolean accusation(Player p) {
+        if (!p.getCanAccuse()) {
             System.out.println("You've already made a failed accusation. You can no longer accuse this game");
             return true;
         }
         ArrayList<String> accusation = new ArrayList<>();
 
         /**System.out.println("\t" + murderScenario.getRoomCard().toString()); // show the scenario for testing purposes
-        System.out.println("\t" + murderScenario.getWeapon().toString());
-        System.out.println("\t" + murderScenario.getMurderer().toString());**/
+         System.out.println("\t" + murderScenario.getWeapon().toString());
+         System.out.println("\t" + murderScenario.getMurderer().toString());**/
 
         System.out.println("Please enter a room: ");
         accusation = addCardToPlay(accusation);
@@ -248,13 +248,13 @@ public class Game {
         accusation = addCardToPlay(accusation);
 
         int correct = 0;
-        for(String s: accusation){
-            if(murderScenario.getRoomCard().toString().equals(s) || murderScenario.getWeapon().toString().equals(s) || murderScenario.getMurderer().toString().equals(s)){
+        for (String s : accusation) {
+            if (murderScenario.getRoomCard().toString().equals(s) || murderScenario.getWeapon().toString().equals(s) || murderScenario.getMurderer().toString().equals(s)) {
                 correct++;
             }
         }
 
-        if(correct == 3){
+        if (correct == 3) {
             System.out.println(p.getCharacter().getCharacterName() + " has won!!");
             return false; //gamerunning
         } else {
@@ -269,7 +269,7 @@ public class Game {
      *
      * @author Baxter Kirikiri, Vaibhav
      */
-    private void suggestion(Player p){
+    private void suggestion(Player p) {
         ArrayList<String> suggestion = new ArrayList<>();
         //System.out.println("Please enter a room: "); //
 
@@ -277,15 +277,15 @@ public class Game {
         // TODO: WIP
         // additions by Vaibhav
         System.out.println("[Checking to see if player is currently in a room]");
-        if(p.getCurrentPosition().getRoom()==null){
-            System.out.println("[Current player "+ p.getCharacter().getCharacterName()+ "is not currently in a room, suggestion can NOT continue]");
+        if (p.getCurrentPosition().getRoom() == null) {
+            System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is not currently in a room, suggestion can NOT continue]");
             return;
         }
 
-        System.out.println("[Current player |"+p.getCharacter().getCharacterName() +"| is in room |"+p.getCurrentPosition().getRoom().toString()+"|]\n This room will be used in the suggestion");
+        System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is in room |" + p.getCurrentPosition().getRoom().toString() + "|]\n This room will be used in the suggestion");
 
-
-        suggestion = addCardToPlay(suggestion);
+        suggestion.add(p.getCurrentPosition().getRoom().toString());
+        //suggestion = addCardToPlay(suggestion);
         System.out.println("Please enter a weapon: ");
         suggestion = addCardToPlay(suggestion);
         System.out.println("Please enter a character: ");
@@ -297,14 +297,14 @@ public class Game {
         }
 
         Stack<Player> refuters = new Stack<>();
-        for(Player addToStack: players){
-            if(!addToStack.equals(p)){
+        for (Player addToStack : players) {
+            if (!addToStack.equals(p)) {
                 refuters.add(addToStack);
             }
         }
 
         boolean refuted = false;
-        while(!refuters.isEmpty()){
+        while (!refuters.isEmpty()) {
             Player currentTurn = refuters.pop();
             System.out.println(currentTurn.getCharacter().getCharacterName() + "'s turn to refute"); //TODO: Update these messages so they follow convention
             System.out.println(currentTurn.getCharacter().getCharacterName() + "'s hand: ");
@@ -316,12 +316,12 @@ public class Game {
             String refutation = accSuggInput();
             boolean inHand = false;
             for (Card c : refuteCards) {
-                if(c.toString().equals(refutation)){
+                if (c.toString().equals(refutation)) {
                     inHand = true;
                 }
             }
-            if(suggestion.contains(refutation) && inHand){
-                System.out.println(p.getCharacter().getCharacterName()+"'s suggestion was refuted!");
+            if (suggestion.contains(refutation) && inHand) {
+                System.out.println(p.getCharacter().getCharacterName() + "'s suggestion was refuted!");
                 refuted = true;
                 break;
             } else {
@@ -329,10 +329,10 @@ public class Game {
             }
         }
 
-        if(!refuted){
+        if (!refuted) {
             System.out.println(p.getCharacter().getCharacterName() + "'s turn");
             System.out.println("No one could refute your suggestion! Would you like to make an accusation? (y/n)");
-            if(accSuggInput().equals("y")){
+            if (accSuggInput().equals("y")) {
                 this.gameRunning = accusation(p); //TODO: Allow this to win the game
             }
         }
@@ -346,7 +346,7 @@ public class Game {
      * @return String
      * @author Baxter Kirikiri
      */
-    private String accSuggInput(){
+    private String accSuggInput() {
         String answer = "";
         Scanner inputScan = new Scanner(System.in);
         String input = inputScan.nextLine();
@@ -366,7 +366,7 @@ public class Game {
      * @return ArrayList<String>
      * @author Baxter Kirikiri
      */
-    private ArrayList<String> addCardToPlay(ArrayList<String> play){
+    private ArrayList<String> addCardToPlay(ArrayList<String> play) {
         String cardName = "";
         Scanner inputScan = new Scanner(System.in);
         try {
@@ -559,8 +559,8 @@ public class Game {
     public int rollDice() {
         Scanner diceRollScanner = new Scanner(System.in);
         String readString = "";
-        while(!readString.equalsIgnoreCase("roll")){
-            System.out.println("Type \"roll\" to roll dice for "+currentPlayer.getCharacter().toString());
+        while (!readString.equalsIgnoreCase("roll")) {
+            System.out.println("Type \"roll\" to roll dice for " + currentPlayer.getCharacter().toString());
             readString = diceRollScanner.nextLine();
         }
 
