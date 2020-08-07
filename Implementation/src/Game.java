@@ -435,7 +435,7 @@ public class Game {
         String[] characterNames = {
                 "Ms. Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
         characterCards = new ArrayList<>();
-        for (int c = 0; c <= numPlayers; c++) { // Only create cards where there are players
+        for (int c = 0; c < numPlayers; c++) { // Only create cards where there are players
             CharacterCard character = new CharacterCard(characterNames[c]);
             characterCards.add(character);
             deck.add(character);
