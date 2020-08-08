@@ -202,7 +202,7 @@ public class Game {
                 String answer = accSuggInput();
                 if (answer.equalsIgnoreCase("a") || answer.equalsIgnoreCase("accusation")) {
                     //gameRunning = accusation(p);
-                    accusation(p);
+                    Accusation(p);
                 } else if (answer.equalsIgnoreCase("s") || answer.equalsIgnoreCase("suggestion")) {
                     suggestion(p);
                 }
@@ -276,7 +276,7 @@ public class Game {
      * @return Boolean
      * @author Baxter Kirikiri
      */
-    private int accusation(Player p) {
+    private int Accusation(Player p) {
         if (!p.getCanAccuse()) {
             System.out.println("You have already made a failed accusation! Therefore, you can no longer make accusations during this game.");
             return -1;
@@ -324,7 +324,15 @@ public class Game {
                 System.out.println("Weapon not found! Please enter a valid weapon name:");
         }
 
+        Scenario accusationScenario = new Scenario(accusationWeaponCard,accusationRoomCard,accusationCharacterCard);
+        System.out.println(accusationScenario.toString());
+        System.out.println(murderScenario.toString());
 
+        if(murderScenario.equals(accusationScenario)){
+            System.out.println("accusation successful");
+        } else {
+            System.out.println("fail");
+        }
 
 
 
