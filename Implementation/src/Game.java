@@ -601,9 +601,13 @@ public class Game {
 
         Collections.shuffle(deck);
         // Murder Scenario of Random Cards
-        murderScenario = new Scenario(weaponCards.get(new Random().nextInt(wepNames.length - 1) + 1),
-                roomCards.get(new Random().nextInt(roomNames.length - 1) + 1),
-                characterCards.get(new Random().nextInt(numPlayers)));
+        WeaponCard murderWeapon = weaponCards.get(new Random().nextInt(wepNames.length - 1) + 1);
+        RoomCard murderRoom = roomCards.get(new Random().nextInt(roomNames.length - 1) + 1);
+        CharacterCard murderer = characterCards.get(new Random().nextInt(numPlayers) + 1);
+        murderScenario = new Scenario(murderWeapon, murderRoom, murderer);
+        deck.remove(murderWeapon);
+        deck.remove(murderRoom);
+        deck.remove(murderer);
         System.out.println("Generated Scenario");
     }
 
