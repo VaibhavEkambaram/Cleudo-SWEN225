@@ -113,7 +113,9 @@ public class Game {
         }
     }
 
-    public void gameWon(){
+
+
+    public void gameWon() {
         System.out.println("game has been won!");
     }
 
@@ -126,7 +128,16 @@ public class Game {
      * @author Vaibhav
      */
     public void mainGameLoop() throws InterruptedException {
-        System.out.println("\nMurder Scenario: " + murderScenario.toString() + " (SECRET DO NOT LOOK!)");
+
+        System.out.println("\n\tMurder Scenario (SECRET, DO NOT LOOK!)");
+        System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() +
+                "\n\t\t[Room] " + murderScenario.getRoomCard().getRoomName() +
+                "\n\t\t[Weapon] " + murderScenario.getWeapon().getWeaponName());
+
+        System.out.println("\nPress ENTER to start game:");
+        Scanner start = new Scanner(System.in);
+        start.nextLine();
+
         System.out.println("Starting game...");
         Thread.sleep(1000);
 
@@ -136,7 +147,7 @@ public class Game {
                 movesRemaining = -1;
 
                 // TODO: set gameWon to true to end the game
-                if(gameWon){
+                if (gameWon) {
                     gameWon();
                     return;
                 }
@@ -166,18 +177,28 @@ public class Game {
                     }
                 }
 
-                System.out.println("Current Players Hand:");
+                System.out.println("\t\t________________________________");
+                System.out.println("\t\tCurrent Players Hand:");
+                System.out.println("\t\t________________________________");
                 for (Card c : p.getHand()) {
-                    System.out.println("\t" + c.toString());
+                    if (c instanceof CharacterCard) {
+                        System.out.println("\t\t[Character] " + c.toString());
+                    } else if (c instanceof WeaponCard) {
+                        System.out.println("\t\t[Weapon] " + c.toString());
+                    } else if (c instanceof RoomCard) {
+                        System.out.println("\t\t[Room] " + c.toString());
+                    }
                 }
+                System.out.println("\t\t________________________________");
 
 
-                System.out.println("Would you like to accuse or suggest? (a/s/n): ");
+                System.out.println("Would you like to make a suggestion, accusation or pass?");
+                System.out.println("Available commands - [suggestion][accusation][pass]:");
                 String answer = accSuggInput();
-                if (answer.equals("a") || answer.equals("accusation")) {
+                if (answer.equalsIgnoreCase("a") || answer.equalsIgnoreCase("accusation")) {
                     gameRunning = accusation(p);
-                } else if (answer.equals("s") || answer.equals("suggestion")) {
-                   suggestion(p);
+                } else if (answer.equalsIgnoreCase("s") || answer.equalsIgnoreCase("suggestion")) {
+                    suggestion(p);
                 }
 
                 System.out.println("[Hit Enter to move to the next player]");
@@ -291,7 +312,7 @@ public class Game {
         ArrayList<String> suggestion = new ArrayList<>();
         //System.out.println("Please enter a room: "); //
 
-        // TODO: make it so the player suggesting can only suggest from the room they are in
+        // TODO: make it so the player suggesting can only suggest from the room they are in (check resolved)
         // TODO: WIP
         // additions by Vaibhav
         System.out.println("[Checking to see if player is currently in a room]");
@@ -350,7 +371,7 @@ public class Game {
             System.out.println(p.getCharacter().getCharacterName() + "'s turn");
             System.out.println("No one could refute your suggestion! Would you like to make an accusation? (y/n)");
             if (accSuggInput().equals("y")) {
-                this.gameWon = accusation(p); //TODO: Allow this to win the game
+                this.gameWon = accusation(p); //TODO: Allow this to win the game (check resolved)
             }
         }
 

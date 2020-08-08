@@ -75,6 +75,6 @@ public class Scenario {
      * @return room + murderer + weapon string
      */
     public String toString() {
-        return getRoomCard().getRoomName() + " " + getMurderer().getCharacterName() + " " + getWeapon().getWeapon();
+        return getRoomCard().getRoomName() + " " + getMurderer().getCharacterName() + " " + getWeapon().getWeaponName();
     }
 }

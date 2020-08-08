@@ -46,7 +46,7 @@ public class WeaponCard implements Card {
      *
      * @return weapon name
      */
-    public String getWeapon() {
+    public String getWeaponName() {
         return weaponString;
     }
 
@@ -78,6 +78,6 @@ public class WeaponCard implements Card {
      */
     @Override
     public String toString() {
-        return getWeapon();
+        return getWeaponName();
     }
 }
