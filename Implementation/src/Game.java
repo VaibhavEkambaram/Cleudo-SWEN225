@@ -357,8 +357,8 @@ public class Game {
 
         room = p.getCurrentPosition().getRoom();
 
-        for(RoomCard r : roomCards){
-            if(p.getCurrentPosition().getRoom().toString().equals(r.getRoomName())){
+        for (RoomCard r : roomCards) {
+            if (p.getCurrentPosition().getRoom().toString().equals(r.getRoomName())) {
                 suggestionRoom = r;
             }
         }
@@ -389,30 +389,33 @@ public class Game {
                 System.out.println("Weapon not found! Please enter a valid weapon name:");
         }
 
+        System.out.println("Moving " + suggestionCharacter.getCharacterName() + " to " + room.toString() + "...");
 
-
-        System.out.println("Current Suggestion:");
         for (Player findP : players) {
-            if(findP.getCharacter().getCharacterName().equals(suggestionCharacter.getCharacterName())) {
+            if (findP.getCharacter().getCharacterName().equals(suggestionCharacter.getCharacterName())) {
 
                 Room otherPlayerRoom = findP.getCurrentPosition().getRoom();
 
-                if(otherPlayerRoom == null || !findP.getCurrentPosition().getRoom().equals(room)){
-                    // TODO: null pointer exception
+                if (otherPlayerRoom == null || !findP.getCurrentPosition().getRoom().equals(room)) {
                     System.out.println(findP.toString());
                     System.out.println(room.toString());
                     Board newBoard = board.teleportPlayer(findP, room);
                     if (newBoard != null) {
                         board = newBoard;
                     } else {
-                        System.out.println("An error occurred while teleporting the player");
+                        System.out.println("An error occurred while teleporting the suggested player");
                     }
                 }
             }
         }
 
+        System.out.println("\n" + this.board + "\n");
 
-/*
+        Scenario suggestion = new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter);
+        System.out.println(p.getCharacter().getCharacterName() + "'s suggestion: [" + suggestion.toString() + "]");
+
+
+        // TODO: update refutation to use scenario
         Stack<Player> refuters = new Stack<>();
         for (Player addToStack : players) {
             if (!addToStack.equals(p)) {
@@ -420,30 +423,48 @@ public class Game {
             }
         }
 
+
         boolean refuted = false;
         while (!refuters.isEmpty()) {
             Player currentTurn = refuters.pop();
             System.out.println(currentTurn.getCharacter().getCharacterName() + "'s turn to refute"); //TODO: Update these messages so they follow convention
             System.out.println(currentTurn.getCharacter().getCharacterName() + "'s hand: ");
-            Card[] refuteCards = currentTurn.getHand();
-            for (Card c : refuteCards) {
-                System.out.println("\t" + c.toString());
-            }
-            System.out.println("Refute this suggestion with a card from your hand: ");
-            String refutation = accSuggInput();
+
+            List<Card> refuteCards = currentTurn.getHand();
+
+            for (Card c : refuteCards) System.out.println("\t" + c.toString());
+
+            System.out.println("Refute this suggestion with a card from your hand or type pass to skip: ");
 
 
+            Card refutation = null;
+            boolean failedRefutation = false;
 
+            while (refutation == null && !failedRefutation) {
+                Scanner refutationScan = new Scanner(System.in);
+                String refutationInput = refutationScan.nextLine();
 
-            boolean inHand = false;
-            for (Card c : refuteCards) {
-                if (c.toString().equals(refutation)) {
-                    inHand = true;
+                if (refutationInput.equalsIgnoreCase("Pass")) {
+                    failedRefutation = true;
+                } else {
+                    for (Card c : refuteCards) {
+                        if (c.toString().equals(refutationInput)) {
+                            refutation = c;
+                        }
+                    }
+                }
+
+                if (refutation == null && !failedRefutation) {
+                    System.out.println("Card not found in players hand! Please try again: ");
                 }
             }
 
+            if (failedRefutation) {
+                continue;
+            }
 
-            if (suggestion.contains(refutation) && inHand) {
+
+            if (refutation.toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom != null ? suggestionRoom.toString() : null) || refutation.toString().equals(suggestionWeapon.toString())) {
                 System.out.println(p.getCharacter().getCharacterName() + "'s suggestion was refuted!");
                 refuted = true;
                 break;
@@ -463,8 +484,6 @@ public class Game {
                 }
             }
         }
-
- */
     }
 
     /**

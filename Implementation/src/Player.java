@@ -84,9 +84,8 @@ public class Player {
         return aHand;
     }
 
-    public Card[] getHand() {
-        Card[] newHand = hand.toArray(new Card[hand.size()]);
-        return newHand;
+    public List<Card> getHand() {
+        return hand;
     }
 
     public int numberOfHand() {
