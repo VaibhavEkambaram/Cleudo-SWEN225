@@ -13,7 +13,7 @@ public class CharacterCard implements Card {
     //------------------------
 
     //CharacterCard Attributes
-    private String characterName;
+    private final String characterName;
     private final String characterBoardChar;
 
     /**
@@ -50,8 +50,6 @@ public class CharacterCard implements Card {
     }
 
 
-
-
     public String getCharacterName() {
         return characterName;
     }
@@ -59,11 +57,6 @@ public class CharacterCard implements Card {
     public String getCharacterBoardChar() {
         return characterBoardChar;
     }
-
-    public void delete() {
-    }
-
-
 
     @Override
     public String toString() {

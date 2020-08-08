@@ -12,14 +12,12 @@ public class Room {
     //------------------------
 
     //Room Attributes
-    private String roomName;
+    private final String roomName;
     private String roomChar;
 
     private RoomCard roomCard;
     private WeaponCard weapon;
     private CharacterCard character;
-
-    private Scenario roomScenario;
 
     //------------------------
     // CONSTRUCTOR

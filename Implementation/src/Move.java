@@ -1,6 +1,6 @@
 public class Move {
-    private Direction direction;
-    private int spaces;
+    private final Direction direction;
+    private final int spaces;
 
     public Move(Direction direction, int spaces) {
         this.direction = direction;

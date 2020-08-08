@@ -59,7 +59,7 @@ public class Position {
             this.isDoor = true;
         }
         // Check for door or outer wall
-        if (this.passableTile == false) {
+        if (!this.passableTile) {
             this.displayName = inRoom.getRoomChar().toLowerCase();
         }
         if (this.isDoor) {

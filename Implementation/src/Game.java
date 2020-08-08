@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 // line 50 "model.ump"
 // line 166 "model.ump"
@@ -12,11 +13,13 @@ public class Game {
     // MEMBER VARIABLES
     //------------------------
 
+    private final String[] weaponNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
+    private final String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study", "Library", "Billiard Room", "Conservatory", "Ball Room"};
+    private final String[] characterNames = {"Ms. Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
+
     private List<Card> deck;
     private List<Player> players;
-
     private List<Room> rooms;
-
 
     private List<WeaponCard> weaponCards;
     private List<RoomCard> roomCards;
@@ -108,11 +111,8 @@ public class Game {
 
         initGame(); // initialize cards and players
         initBoard(boardLayout); // generate board
-        try {
-            mainGameLoop(); // main game logic loop
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        mainGameLoop(); // main game logic loop
+
     }
 
 
@@ -123,7 +123,7 @@ public class Game {
      *
      * @author Vaibhav
      */
-    public void mainGameLoop() throws InterruptedException {
+    public void mainGameLoop() {
 
         System.out.println("\n\tMurder Scenario (SECRET, DO NOT LOOK!)");
         System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() +
@@ -135,7 +135,6 @@ public class Game {
         start.nextLine();
 
         System.out.println("Starting game...");
-        Thread.sleep(1000);
 
 
         while (gameRunning) {
@@ -189,7 +188,7 @@ public class Game {
 
                 System.out.println("Would you like to make a suggestion, accusation or pass?");
                 System.out.println("Available commands - [suggestion][accusation][pass]:");
-                String answer = accSuggInput();
+                String answer = suggestionValidateInput();
                 if (answer.equalsIgnoreCase("a") || answer.equalsIgnoreCase("accusation")) {
                     int accuse = makeAccusation(p);
                     if (accuse == 1) {
@@ -220,7 +219,6 @@ public class Game {
         int spaces = 0;
         Scanner inputScan = new Scanner(System.in);
         boolean valid = false;
-        boolean tooFar = true;
         while (!valid) {
             String command = inputScan.nextLine();
 
@@ -244,7 +242,6 @@ public class Game {
                 System.out.println("Please enter a correct number of spaces");
             }
             if (direction != null && spaces > 0 && spaces <= movesRemaining) {
-                tooFar = false;
                 valid = true;
             }
 
@@ -340,7 +337,7 @@ public class Game {
      */
     private void makeSuggestion(Player p) {
 
-        Room room = null;
+        Room room;
         RoomCard suggestionRoom = null;
         WeaponCard suggestionWeapon = null;
         CharacterCard suggestionCharacter = null;
@@ -426,7 +423,7 @@ public class Game {
         boolean refuted = false;
         while (!refuters.isEmpty()) {
             Player currentTurn = refuters.pop();
-            System.out.println(currentTurn.getCharacter().getCharacterName() + "'s turn to refute"); //TODO: Update these messages so they follow convention
+            System.out.println(currentTurn.getCharacter().getCharacterName() + "'s turn to refute");
             System.out.println(currentTurn.getCharacter().getCharacterName() + "'s hand: ");
 
             List<Card> refuteCards = currentTurn.getHand();
@@ -475,7 +472,7 @@ public class Game {
         if (!refuted) {
             System.out.println(p.getCharacter().getCharacterName() + "'s turn");
             System.out.println("No one could refute your suggestion! Would you like to make an accusation? (y/n)");
-            if (accSuggInput().equals("y")) {
+            if (suggestionValidateInput().equals("y")) {
 
                 int accuse = makeAccusation(p);
                 if (accuse == 1) {
@@ -492,7 +489,7 @@ public class Game {
      * @return String
      * @author Baxter Kirikiri
      */
-    private String accSuggInput() {
+    private String suggestionValidateInput() {
         String answer = "";
         Scanner inputScan = new Scanner(System.in);
         String input = inputScan.nextLine();
@@ -505,41 +502,6 @@ public class Game {
         return answer;
     }
 
-
-    /**
-     * Finds and matches a String with a Card in player hand
-     * If not found, returns null - indicated not in hand or doesn't exist
-     *
-     * @param cards
-     * @return
-     * @author Cameron Li
-     */
-    private <C extends Card> C findCard(List<C> cards) {
-        boolean valid = false;
-        Card foundCard = null;
-        while (!valid) {
-            String cardName = "";
-            Scanner inputScan = new Scanner(System.in);
-            try {
-                cardName = inputScan.nextLine();
-            } catch (Exception e) {
-                System.out.println("Please enter a valid card name");
-            }
-
-            // Find Card
-            for (C card : cards) {
-                if (card.toString().equals(cardName)) {
-                    foundCard = card;
-                    valid = true;
-                }
-            }
-
-            if (!valid) {
-                System.out.println("Invalid Card Name, please try again");
-            }
-        }
-        return (C) foundCard;
-    }
 
     /**
      * Initialise the game
@@ -585,41 +547,34 @@ public class Game {
         deck = new ArrayList<>();
 
         // Weapons
-        String[] wepNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
         weaponCards = new ArrayList<>();
-        for (String w : wepNames) {
-            WeaponCard weapon = new WeaponCard(w);
+        Arrays.stream(weaponNames).map(WeaponCard::new).forEach(weapon -> {
             weaponCards.add(weapon);
             deck.add(weapon);
-        }
+        });
 
         // Rooms
-        String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study",
-                "Library", "Billiard Room", "Conservatory", "Ball Room"};
         rooms = new ArrayList<>();
         roomCards = new ArrayList<>();
-        for (String r : roomNames) {
+        Arrays.stream(roomNames).forEach(r -> {
             Room newRoom = new Room(r);
             rooms.add(newRoom);
             RoomCard newRoomCard = new RoomCard(r, newRoom);
             roomCards.add(newRoomCard);
             deck.add(newRoomCard);
-        }
+        });
 
         // Characters
-        String[] characterNames = {
-                "Ms. Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
         characterCards = new ArrayList<>();
-        for (int c = 0; c < numPlayers; c++) { // Only create cards where there are players
-            CharacterCard character = new CharacterCard(characterNames[c]);
+        // Only create cards where there are players
+        IntStream.range(0, numPlayers).mapToObj(c -> new CharacterCard(characterNames[c])).forEach(character -> {
             characterCards.add(character);
             deck.add(character);
-        }
-
+        });
 
         Collections.shuffle(deck);
         // Murder Scenario of Random Cards
-        WeaponCard murderWeapon = weaponCards.get(new Random().nextInt(wepNames.length - 1) + 1);
+        WeaponCard murderWeapon = weaponCards.get(new Random().nextInt(weaponNames.length - 1) + 1);
         RoomCard murderRoom = roomCards.get(new Random().nextInt(roomNames.length - 1) + 1);
         CharacterCard murderer = characterCards.get(new Random().nextInt(numPlayers));
         murderScenario = new Scenario(murderWeapon, murderRoom, murderer);
@@ -658,7 +613,7 @@ public class Game {
                 if (positionName.equals("x")) { // Check for "x", a forbidden position
                     newPosition = new Position(x, y, false);
                 }
-                if (positionName.equals("_")) { // Check for "_" the basic moveable position
+                if (positionName.equals("_")) { // Check for "_" the basic movable position
                     newPosition = new Position(x, y, true);
                 }
 
@@ -694,7 +649,7 @@ public class Game {
                                     newPosition = new Position(x, y, true, c);
                                     p.setCurrentPosition(newPosition);
                                     break;
-                                } else { // Else, is a basic moveable position "_"
+                                } else { // Else, is a basic movable position "_"
                                     newPosition = new Position(x, y, true);
                                 }
                             }
@@ -718,9 +673,9 @@ public class Game {
     /**
      * Roll two dice and then return the overall number
      *
-     * @return cumulative dice throw result
+     * @return Cumulative dice throw result
+     * @author Vaibhav
      */
-    // line 61 "model.ump"
     public int rollDice() {
         Scanner diceRollScanner = new Scanner(System.in);
         String readString = "";
@@ -738,26 +693,24 @@ public class Game {
         return firstResult + secondResult;
     }
 
-    // line 64 "model.ump"
+
+    /**
+     * Deal Cards
+     * Add cards from the deck list to a stack, then deal them to each player until the stack is empty
+     *
+     * @author Cameron
+     */
     public void dealCards() {
-        //Add cards from the deck list to a stack, then deal them to each player until the stack is empty
         Stack<Card> toBeDealt = new Stack<>();
-        for (Card card : this.deck) {
-            toBeDealt.push(card);
-        }
+        this.deck.forEach(toBeDealt::push);
 
         while (!toBeDealt.isEmpty()) {
             for (Player p : this.players) {
-                if (toBeDealt.isEmpty()) { // Make sure not null pointer exception
-                    break;
-                }
+                // Make sure not null pointer exception
+                if (toBeDealt.isEmpty()) break;
                 p.addHand(toBeDealt.pop());
             }
         }
         System.out.println("Cards Dealt");
     }
-
-    // line 67 "model.ump"
-
-
 }

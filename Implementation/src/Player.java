@@ -47,12 +47,6 @@ public class Player {
         return wasAdded;
     }
 
-    public boolean removeHand(Card aHand) {
-        boolean wasRemoved = false;
-        wasRemoved = hand.remove(aHand);
-        return wasRemoved;
-    }
-
     public boolean setCanAccuse(boolean aCanAccuse) {
         boolean wasSet = false;
         canAccuse = aCanAccuse;
@@ -68,40 +62,15 @@ public class Player {
     }
 
     public boolean setCurrentPosition(Position aCurrentPosition) {
-        boolean wasSet = false;
         currentPosition = aCurrentPosition;
-        wasSet = true;
-        return wasSet;
+        return true;
     }
 
     public CharacterCard getCharacter() {
         return character;
     }
 
-    /* Code from template attribute_GetMany */
-    public Card getHand(int index) {
-        Card aHand = hand.get(index);
-        return aHand;
-    }
-
-    public List<Card> getHand() {
-        return hand;
-    }
-
-    public int numberOfHand() {
-        int number = hand.size();
-        return number;
-    }
-
-    public boolean hasHand() {
-        boolean has = hand.size() > 0;
-        return has;
-    }
-
-    public int indexOfHand(Card aHand) {
-        int index = hand.indexOf(aHand);
-        return index;
-    }
+    public List<Card> getHand() { return hand; }
 
     public boolean getCanAccuse() {
         return canAccuse;
@@ -115,19 +84,11 @@ public class Player {
         return currentPosition;
     }
 
-    public void delete() {
-    }
-
-    // line 82 "model.ump"
-    public void refutation(RoomCard arg0, CharacterCard arg1, WeaponCard arg2) {
-
-    }
-
     public String toString() {
         return super.toString() + "[" +
                 "canAccuse" + ":" + getCanAccuse() + "," +
                 "canRefute" + ":" + getCanRefute() + "]" + System.getProperties().getProperty("line.separator") +
-                "  " + "character" + "=" + (getCharacter() != null ? !getCharacter().equals(this) ? getCharacter().toString().replaceAll("  ", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-                "  " + "currentPosition" + "=" + (getCurrentPosition() != null ? !getCurrentPosition().equals(this) ? getCurrentPosition().toString().replaceAll("  ", "    ") : "this" : "null");
+                "  " + "character" + "=" + (getCharacter() != null ? !getCharacter().equals(this) ? getCharacter().toString().replaceAll(" {2}", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+                "  " + "currentPosition" + "=" + (getCurrentPosition() != null ? !getCurrentPosition().equals(this) ? getCurrentPosition().toString().replaceAll(" {2}", "    ") : "this" : "null");
     }
 }

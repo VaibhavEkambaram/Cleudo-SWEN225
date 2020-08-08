@@ -15,7 +15,7 @@ public class Board {
     //------------------------
 
     //Board Associations
-    private Position[][] positions = new Position[25][24]; // Board is in (y, x) format
+    private final Position[][] positions = new Position[25][24]; // Board is in (y, x) format
 
     //------------------------
     // CONSTRUCTOR
@@ -57,9 +57,9 @@ public class Board {
     /**
      * Create a new board with applied Move action
      *
-     * @param player
-     * @param move
-     * @return
+     * @param player player
+     * @param move move
+     * @return Board
      * @author Cameron Li
      */
     public Board apply(Player player, Move move) {
@@ -74,7 +74,6 @@ public class Board {
             return null;
         }
 
-        Move.Direction direction = move.getDirection();
         int spaces = move.getSpaces();
         int dx = move.xChange();
         int dy = move.yChange();
@@ -170,10 +169,7 @@ public class Board {
         if (x < 0 || y < 0) {
             return true;
         }
-        if (x > positions.length || y > positions[0].length) {
-            return true;
-        }
-        return false;
+        return x > positions.length || y > positions[0].length;
     }
 
     /**
