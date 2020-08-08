@@ -146,7 +146,6 @@ public class Game {
             for (Player p : players) {
                 movesRemaining = -1;
 
-                // TODO: set gameWon to true to end the game
                 if (gameWon) {
                     gameWon();
                     return;
@@ -318,8 +317,7 @@ public class Game {
         ArrayList<String> suggestion = new ArrayList<>();
         //System.out.println("Please enter a room: "); //
 
-        // TODO: make it so the player suggesting can only suggest from the room they are in (check resolved)
-        // TODO: WIP
+
         // additions by Vaibhav
         System.out.println("[Checking to see if player is currently in a room]");
         if (p.getCurrentPosition().getRoom() == null) {
@@ -329,6 +327,8 @@ public class Game {
 
         System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is in room |" + p.getCurrentPosition().getRoom().toString() + "|]\n This room will be used in the suggestion");
         suggestion.add(p.getCurrentPosition().getRoom().toString());
+
+        // TODO: system to validate weapon and character are on players card?
 
         System.out.println("Please enter a weapon: ");
         suggestion = addCardToPlay(suggestion);
