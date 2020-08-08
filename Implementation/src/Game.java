@@ -357,8 +357,8 @@ public class Game {
 
         room = p.getCurrentPosition().getRoom();
 
-        for(RoomCard r : roomCards){
-            if(p.getCurrentPosition().getRoom().toString().equals(r.getRoomName())){
+        for (RoomCard r : roomCards) {
+            if (p.getCurrentPosition().getRoom().toString().equals(r.getRoomName())) {
                 suggestionRoom = r;
             }
         }
@@ -389,28 +389,34 @@ public class Game {
                 System.out.println("Weapon not found! Please enter a valid weapon name:");
         }
 
+        System.out.println("Moving "+ suggestionCharacter.getCharacterName() + " to "+room.toString()+"...");
 
-
-        System.out.println("Current Suggestion:");
         for (Player findP : players) {
-            if(findP.getCharacter().getCharacterName().equals(suggestionCharacter.getCharacterName())) {
+            if (findP.getCharacter().getCharacterName().equals(suggestionCharacter.getCharacterName())) {
 
                 Room otherPlayerRoom = findP.getCurrentPosition().getRoom();
 
-                if(otherPlayerRoom == null || !findP.getCurrentPosition().getRoom().equals(room)){
-                    // TODO: null pointer exception
+                if (otherPlayerRoom == null || !findP.getCurrentPosition().getRoom().equals(room)) {
                     System.out.println(findP.toString());
                     System.out.println(room.toString());
                     Board newBoard = board.teleportPlayer(findP, room);
                     if (newBoard != null) {
                         board = newBoard;
                     } else {
-                        System.out.println("An error occurred while teleporting the player");
+                        System.out.println("An error occurred while teleporting the suggested player");
                     }
                 }
             }
         }
 
+        System.out.println("\n" + this.board + "\n");
+
+        Scenario suggestion = new Scenario(suggestionWeapon,suggestionRoom,suggestionCharacter);
+        System.out.println(p.getCharacter().getCharacterName() + "'s suggestion: ["+ suggestion.toString()+"]");
+
+
+
+        // TODO: update refutation to use scenario
 
 /*
         Stack<Player> refuters = new Stack<>();
