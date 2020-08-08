@@ -13,10 +13,6 @@ public class Game {
     // MEMBER VARIABLES
     //------------------------
 
-    private final String[] weaponNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
-    private final String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study", "Library", "Billiard Room", "Conservatory", "Ball Room"};
-    private final String[] characterNames = {"Ms. Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
-
     private List<Card> deck;
     private List<Player> players;
     private List<Room> rooms;
@@ -25,18 +21,27 @@ public class Game {
     private List<RoomCard> roomCards;
     private List<CharacterCard> characterCards;
 
+    private Map<String,WeaponCard> weaponCardsMap = new HashMap<>();
+    private Map<String,RoomCard> roomCardsMap = new HashMap<>();
+    private Map<String,CharacterCard> characterCardMap = new HashMap<>();
+
+
     //Game Attributes
     private Board board;
     private Player currentPlayer;
-    private Scenario murderScenario;  // Random Murder Scenario that players must find
+    private Scenario murderScenario;  // Murder Scenario that players must find
 
     // check if the game has been won yet
     //        - still playing: true
     //        - game has ended: false
     boolean gameRunning = true;
 
-
+    // track number of moves for current player
     int movesRemaining = -1;
+
+    private final String[] weaponNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
+    private final String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study", "Library", "Billiard Room", "Conservatory", "Ball Room"};
+    private final String[] characterNames = {"Ms. Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
 
 
     /**
@@ -44,7 +49,7 @@ public class Game {
      * Method to initialise the rest of the program. Shows a welcome message then generates a new game object
      *
      * @param args arguments
-     * @author Vaibhav
+     * @author Vaibhav Ekambaram
      */
     public static void main(String[] args) {
         System.out.println("------------------------------------------------------------------------\n" +
@@ -57,12 +62,11 @@ public class Game {
         new Game();
     }
 
-
     /**
      * GAME OBJECT CONSTRUCTOR
      * Primary game object springboard for all other methods of the game
      *
-     * @author Cameron, Vaibhav
+     * @author Cameron Li, Vaibhav Ekambaram
      *
      * <p>
      * ----------------------------------------------------------------------------------------------------
@@ -82,37 +86,228 @@ public class Game {
      */
     public Game() {
         String boardLayout =
-                " x x x x x x x x x 3 x x x x 4 x x x x x x x x x " + "\n" +
-                        " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c " + "\n" +
-                        " k K K K K k _ _ b b b B B b b b _ _ c C C C C c " + "\n" +
-                        " k K K K K k _ _ b B B B B B B b _ _ c C C C C c " + "\n" +
-                        " k K K K K k _ _ b B B B B B B b _ _ <C c C C c c " + "\n" +
-                        " k k K K K k _ _ <B B B B B B B >B _ _ _ c c c c x " + "\n" +
-                        " x k k k vK k _ _ b B B B B B B b _ _ _ _ _ _ _ 5 " + "\n" +
-                        " _ _ _ _ _ _ _ _ b vB b b b b vB b _ _ _ _ _ _ _ x " + "\n" +
-                        " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i " + "\n" +
-                        " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ <I I I I I i " + "\n" +
-                        " d D D D d d d d _ _ x x x x x _ _ _ i I I I I i " + "\n" +
-                        " d D D D D D D d _ _ x x x x x _ _ _ i I I I I i " + "\n" +
-                        " d D D D D D D >D _ _ x x x x x _ _ _ i i i i vI i " + "\n" +
-                        " d D D D D D D d _ _ x x x x x _ _ _ _ _ _ _ _ x " + "\n" +
-                        " d D D D D D D d _ _ x x x x x _ _ _ l l ^L l l x " + "\n" +
-                        " d d d d d d vD d _ _ x x x x x _ _ l l L L L l l " + "\n" +
-                        " x _ _ _ _ _ _ _ _ _ x x x x x _ _ <L L L L L L l " + "\n" +
-                        " 2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l " + "\n" +
-                        " x _ _ _ _ _ _ _ _ h h ^H ^H h h _ _ _ l l l l l x " + "\n" +
-                        " o o o o o o ^O _ _ h H H H H h _ _ _ _ _ _ _ _ 6 " + "\n" +
-                        " o O O O O O o _ _ h H H H H >H _ _ _ _ _ _ _ _ x " + "\n" +
-                        " o O O O O O o _ _ h H H H H h _ _ ^Y y y y y y y " + "\n" +
-                        " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y " + "\n" +
-                        " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y " + "\n" +
+                " x x x x x x x x x 3 x x x x 4 x x x x x x x x x \n" +
+                        " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
+                        " k K K K K k _ _ b b b B B b b b _ _ c C C C C c \n" +
+                        " k K K K K k _ _ b B B B B B B b _ _ c C C C C c \n" +
+                        " k K K K K k _ _ b B B B B B B b _ _ <C c C C c c \n" +
+                        " k k K K K k _ _ <B B B B B B B >B _ _ _ c c c c x \n" +
+                        " x k k k vK k _ _ b B B B B B B b _ _ _ _ _ _ _ 5 \n" +
+                        " _ _ _ _ _ _ _ _ b vB b b b b vB b _ _ _ _ _ _ _ x \n" +
+                        " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i \n" +
+                        " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ <I I I I I i \n" +
+                        " d D D D d d d d _ _ x x x x x _ _ _ i I I I I i \n" +
+                        " d D D D D D D d _ _ x x x x x _ _ _ i I I I I i \n" +
+                        " d D D D D D D >D _ _ x x x x x _ _ _ i i i i vI i \n" +
+                        " d D D D D D D d _ _ x x x x x _ _ _ _ _ _ _ _ x \n" +
+                        " d D D D D D D d _ _ x x x x x _ _ _ l l ^L l l x \n" +
+                        " d d d d d d vD d _ _ x x x x x _ _ l l L L L l l \n" +
+                        " x _ _ _ _ _ _ _ _ _ x x x x x _ _ <L L L L L L l \n" +
+                        " 2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l \n" +
+                        " x _ _ _ _ _ _ _ _ h h ^H ^H h h _ _ _ l l l l l x \n" +
+                        " o o o o o o ^O _ _ h H H H H h _ _ _ _ _ _ _ _ 6 \n" +
+                        " o O O O O O o _ _ h H H H H >H _ _ _ _ _ _ _ _ x \n" +
+                        " o O O O O O o _ _ h H H H H h _ _ ^Y y y y y y y \n" +
+                        " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
+                        " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                         " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
-
 
         initGame(); // initialize cards and players
         initBoard(boardLayout); // generate board
         mainGameLoop(); // main game logic loop
+    }
 
+
+    /**
+     * Initialise the game
+     * Ask user for number of players
+     * Initialise Deck
+     *
+     * @author Cameron Li
+     */
+    public void initGame() {
+        System.out.println("**Game Startup Parameters**\nHow many players wish to participate? (3 - 6):");
+        int numPlayers = 0;
+        Scanner sc = new Scanner(System.in);
+        while (numPlayers < 3 || numPlayers > 6) {
+            boolean isNumber = true;
+            String number = sc.nextLine();
+            try {
+                numPlayers = Integer.parseInt(number);
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a number");
+                isNumber = false;
+            }
+            if (isNumber && numPlayers < 3 || numPlayers > 6) {
+                System.out.println("Please enter a number between 3 and 6");
+            }
+        }
+
+        initDeck(numPlayers);
+        players = new ArrayList<>();
+        IntStream.range(0, numPlayers).forEach(n -> players.add(new Player(characterCards.get(n))));
+        this.dealCards();
+    }
+
+
+    /**
+     * Deal Cards
+     * Add cards from the deck list to a stack, then deal them to each player until the stack is empty
+     *
+     * @author Cameron Li
+     */
+    public void dealCards() {
+        Stack<Card> toBeDealt = new Stack<>();
+        this.deck.forEach(toBeDealt::push);
+
+        while (!toBeDealt.isEmpty()) {
+            for (Player p : this.players) {
+                // Make sure not null pointer exception
+                if (toBeDealt.isEmpty()) break;
+                p.addHand(toBeDealt.pop());
+            }
+        }
+        System.out.println("Cards Dealt");
+    }
+
+
+    /**
+     * Create the deck and then shuffle
+     * Generate initial murder scenario
+     *
+     * @author Cameron Li
+     */
+    private void initDeck(int numPlayers) {
+        // Adding cards
+        deck = new ArrayList<>();
+
+        // Weapons
+        weaponCards = new ArrayList<>();
+        for (String weaponName : weaponNames) {
+            WeaponCard weapon = new WeaponCard(weaponName);
+            weaponCards.add(weapon);
+            weaponCardsMap.put(weaponName,weapon);
+            deck.add(weapon);
+        }
+
+        // Rooms
+        rooms = new ArrayList<>();
+        roomCards = new ArrayList<>();
+        for (String r : roomNames) {
+            Room newRoom = new Room(r);
+            rooms.add(newRoom);
+            RoomCard newRoomCard = new RoomCard(r, newRoom);
+            roomCards.add(newRoomCard);
+            roomCardsMap.put(r,newRoomCard);
+            deck.add(newRoomCard);
+        }
+
+        // Characters
+        characterCards = new ArrayList<>();
+        // Only create cards where there are players
+        for (int c = 0; c < numPlayers; c++) {
+            CharacterCard character = new CharacterCard(characterNames[c]);
+            characterCards.add(character);
+            characterCardMap.put(characterNames[c],character);
+            deck.add(character);
+        }
+
+        Collections.shuffle(deck);
+        // Murder Scenario of Random Cards
+        WeaponCard murderWeapon = weaponCards.get(new Random().nextInt(weaponNames.length - 1) + 1);
+        RoomCard murderRoom = roomCards.get(new Random().nextInt(roomNames.length - 1) + 1);
+        CharacterCard murderer = characterCards.get(new Random().nextInt(numPlayers));
+        murderScenario = new Scenario(murderWeapon, murderRoom, murderer);
+        deck.remove(murderWeapon);
+        deck.remove(murderRoom);
+        deck.remove(murderer);
+        System.out.println("Generated Scenario");
+    }
+
+
+    /**
+     * Load and create the Cluedo board
+     * "x" = Forbidden Position
+     * "_" = Standard Position
+     * number = Player starting Position
+     * uppercase letter = Inner Room Position
+     * lowercase letter = Outer Room Position
+     * "d" + letter = Room Door Position
+     *
+     * @param boardLayout layout of board defined in constructor
+     * @author Cameron Li
+     */
+    private void initBoard(String boardLayout) {
+        Board board = new Board();
+        Scanner layoutScan = new Scanner(boardLayout);
+        int y = -1;
+        // Scan row (y)
+        while (layoutScan.hasNextLine()) {
+            String scanLine = layoutScan.nextLine(); // Scanned row (y)
+            y++;
+            int x = -1;
+            Scanner positionScan = new Scanner(scanLine); // Scan Column (x)
+            while (positionScan.hasNext()) {
+                String positionName = positionScan.next(); // Scanned Column (x)
+                x++; // Increment row
+                Position newPosition = null;
+                if (positionName.equals("x")) { // Check for "x", a forbidden position
+                    newPosition = new Position(x, y, false);
+                }
+                if (positionName.equals("_")) { // Check for "_" the basic movable position
+                    newPosition = new Position(x, y, true);
+                }
+
+                if (newPosition == null) { // If still haven't found anything
+                    for (Room r : rooms) { // Check for a room
+                        if (positionName.equals(r.getRoomChar())) { // Is this an inner room position?
+                            newPosition = new Position(x, y, true, true, null, r);
+                            break;
+                        } else if (positionName.equals("^" + r.getRoomChar())) { // Up door
+                            newPosition = new Position(x, y, true, true, Move.Direction.UP, r);
+                            break;
+                        } else if (positionName.equals(">" + r.getRoomChar())) { // Right door
+                            newPosition = new Position(x, y, true, true, Move.Direction.RIGHT, r);
+                            break;
+                        } else if (positionName.equals("v" + r.getRoomChar())) { // Down door
+                            newPosition = new Position(x, y, true, true, Move.Direction.DOWN, r);
+                            break;
+                        } else if (positionName.equals("<" + r.getRoomChar())) {
+                            newPosition = new Position(x, y, true, true, Move.Direction.LEFT, r);
+                            break;
+                        } else if (positionName.equals(r.getRoomChar().toLowerCase())) { // Is this an outer room position?
+                            newPosition = new Position(x, y, true, false, null, r);
+                            break;
+                        }
+                    }
+                }
+
+                if (newPosition == null) { // Add in remaining Character Positions
+                    for (CharacterCard c : characterCards) {
+                        if (positionName.equals(c.getCharacterBoardChar())) { // Check if position is a character
+                            for (Player p : players) { // Make sure that a player is playing the character
+                                if (p.getCharacter().equals(c)) { // Case player for character exists, create Character position
+                                    newPosition = new Position(x, y, true, c);
+                                    p.setCurrentPosition(newPosition);
+                                    break;
+                                } else { // Else, is a basic movable position "_"
+                                    newPosition = new Position(x, y, true);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if (newPosition == null) { // Position where player was not added due to numPlayers < maxPlayers
+                    newPosition = new Position(x, y, true);
+                }
+                board.addPosition(y, x, newPosition); // Add found position
+            }
+            positionScan.close();
+        }
+        layoutScan.close();
+        this.board = board; // Set board
     }
 
 
@@ -121,29 +316,18 @@ public class Game {
      * This method contains the main game logic. After the game as been setup in the game constructor, this method then
      * loops through, carrying out the game functions
      *
-     * @author Vaibhav
+     * @author Vaibhav Ekambaram
      */
     public void mainGameLoop() {
-
         System.out.println("\n\tMurder Scenario (SECRET, DO NOT LOOK!)");
-        System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() +
-                "\n\t\t[Room] " + murderScenario.getRoomCard().getRoomName() +
-                "\n\t\t[Weapon] " + murderScenario.getWeapon().getWeaponName());
-
-        System.out.println("\nPress ENTER to start game:");
-        Scanner start = new Scanner(System.in);
-        start.nextLine();
-
+        System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() + "\n\t\t[Room] " + murderScenario.getRoomCard().getRoomName() + "\n\t\t[Weapon] " + murderScenario.getWeapon().getWeaponName());
         System.out.println("Starting game...");
-
 
         while (gameRunning) {
             for (Player p : players) {
                 movesRemaining = -1;
 
-
-                System.out.println("\n------------------------------------------------------------------------");
-                System.out.println("\n" + this.board + "\n");
+                System.out.println("\n------------------------------------------------------------------------\n" + this.board + "\n");
                 System.out.println("**************************************************");
                 System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
                 currentPlayer = p;
@@ -207,12 +391,37 @@ public class Game {
         }
     }
 
+
+    /**
+     * Roll two dice and then return the overall number
+     *
+     * @return Cumulative dice throw result
+     * @author Vaibhav Ekambaram
+     */
+    public int rollDice() {
+        Scanner diceRollScanner = new Scanner(System.in);
+        String readString = "";
+        while (!readString.equalsIgnoreCase("roll")) {
+            System.out.println("Type 'roll' to roll dice for " + currentPlayer.getCharacter().toString());
+            readString = diceRollScanner.nextLine();
+        }
+
+        // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
+        int firstResult = new Random().nextInt(6) + 1;
+        int secondResult = new Random().nextInt(6) + 1;
+
+        System.out.println("first dice throw: " + firstResult);
+        System.out.println("second dice throw: " + secondResult);
+        return firstResult + secondResult;
+    }
+
+
     /**
      * Asks current player to perform an action
      * Returns a move to apply to the board
      *
      * @return Move
-     * @author Cameron Li
+     * @author Cameron Li, Vaibhav Ekambaram
      */
     public Move movementInput(int movesRemaining) {
         Move.Direction direction = null;
@@ -283,9 +492,10 @@ public class Game {
             Scanner accusationRoomScan = new Scanner(System.in);
             String accusationRoomInput = accusationRoomScan.nextLine();
 
-            for (RoomCard r : roomCards) {
-                if (r.getRoomName().equals(accusationRoomInput)) accusationRoomCard = r;
+            if(roomCardsMap.containsKey(accusationRoomInput)){
+                accusationRoomCard = roomCardsMap.get(accusationRoomInput);
             }
+
             if (accusationRoomCard == null) System.out.println("Room not found! Please enter a valid room name:");
         }
 
@@ -295,9 +505,10 @@ public class Game {
             Scanner accusationCharacterScan = new Scanner(System.in);
             String accusationCharacterInput = accusationCharacterScan.nextLine();
 
-            for (CharacterCard c : characterCards) {
-                if (c.getCharacterName().equals(accusationCharacterInput)) accusationCharacterCard = c;
+            if(characterCardMap.containsKey(accusationCharacterInput)){
+                accusationCharacterCard = characterCardMap.get(accusationCharacterInput);
             }
+
             if (accusationCharacterCard == null)
                 System.out.println("Character not found! Please enter a valid character name:");
         }
@@ -308,9 +519,10 @@ public class Game {
             Scanner accusationWeaponScan = new Scanner(System.in);
             String accusationWeaponInput = accusationWeaponScan.nextLine();
 
-            for (WeaponCard w : weaponCards) {
-                if (w.getWeaponName().equals(accusationWeaponInput)) accusationWeaponCard = w;
+            if(weaponCardsMap.containsKey(accusationWeaponInput)){
+                accusationWeaponCard = weaponCardsMap.get(accusationWeaponInput);
             }
+
             if (accusationWeaponCard == null)
                 System.out.println("Weapon not found! Please enter a valid weapon name:");
         }
@@ -333,7 +545,7 @@ public class Game {
     /**
      * Handles player suggestions.
      *
-     * @author Baxter Kirikiri, Vaibhav
+     * @author Baxter Kirikiri, Vaibhav Ekambaram
      */
     private void makeSuggestion(Player p) {
 
@@ -444,9 +656,7 @@ public class Game {
                     failedRefutation = true;
                 } else {
                     for (Card c : refuteCards) {
-                        if (c.toString().equals(refutationInput)) {
-                            refutation = c;
-                        }
+                        if (c.toString().equals(refutationInput)) refutation = c;
                     }
                 }
 
@@ -455,10 +665,7 @@ public class Game {
                 }
             }
 
-            if (failedRefutation) {
-                continue;
-            }
-
+            if (failedRefutation) continue;
 
             if (refutation.toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom != null ? suggestionRoom.toString() : null) || refutation.toString().equals(suggestionWeapon.toString())) {
                 System.out.println(p.getCharacter().getCharacterName() + "'s suggestion was refuted!");
@@ -498,219 +705,6 @@ public class Game {
         } catch (Exception e) {
             System.out.println("Please enter 'a', 's', or 'n'");
         }
-
         return answer;
-    }
-
-
-    /**
-     * Initialise the game
-     * Ask user for number of players
-     * Initialise Deck
-     *
-     * @author Cameron Li
-     */
-    public void initGame() {
-        System.out.println("**Game Startup Parameters**\nHow many players wish to participate? (3 - 6):");
-        int numPlayers = 0;
-        Scanner sc = new Scanner(System.in);
-        while (numPlayers < 3 || numPlayers > 6) {
-            boolean isNumber = true;
-            String number = sc.nextLine();
-            try {
-                numPlayers = Integer.parseInt(number);
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a number");
-                isNumber = false;
-            }
-            if (isNumber && numPlayers < 3 || numPlayers > 6) {
-                System.out.println("Please enter a number between 3 and 6");
-            }
-        }
-
-        initDeck(numPlayers);
-        players = new ArrayList<>();
-        for (int n = 0; n < numPlayers; n++) {
-            players.add(new Player(characterCards.get(n)));
-        }
-        this.dealCards();
-    }
-
-    /**
-     * Create the deck and then shuffle
-     * Generate initial murder scenario
-     *
-     * @author Cameron Li
-     */
-    private void initDeck(int numPlayers) {
-        // Adding cards
-        deck = new ArrayList<>();
-
-        // Weapons
-        weaponCards = new ArrayList<>();
-        Arrays.stream(weaponNames).map(WeaponCard::new).forEach(weapon -> {
-            weaponCards.add(weapon);
-            deck.add(weapon);
-        });
-
-        // Rooms
-        rooms = new ArrayList<>();
-        roomCards = new ArrayList<>();
-        Arrays.stream(roomNames).forEach(r -> {
-            Room newRoom = new Room(r);
-            rooms.add(newRoom);
-            RoomCard newRoomCard = new RoomCard(r, newRoom);
-            roomCards.add(newRoomCard);
-            deck.add(newRoomCard);
-        });
-
-        // Characters
-        characterCards = new ArrayList<>();
-        // Only create cards where there are players
-        IntStream.range(0, numPlayers).mapToObj(c -> new CharacterCard(characterNames[c])).forEach(character -> {
-            characterCards.add(character);
-            deck.add(character);
-        });
-
-        Collections.shuffle(deck);
-        // Murder Scenario of Random Cards
-        WeaponCard murderWeapon = weaponCards.get(new Random().nextInt(weaponNames.length - 1) + 1);
-        RoomCard murderRoom = roomCards.get(new Random().nextInt(roomNames.length - 1) + 1);
-        CharacterCard murderer = characterCards.get(new Random().nextInt(numPlayers));
-        murderScenario = new Scenario(murderWeapon, murderRoom, murderer);
-        deck.remove(murderWeapon);
-        deck.remove(murderRoom);
-        deck.remove(murderer);
-        System.out.println("Generated Scenario");
-    }
-
-    /**
-     * Load and create the Cluedo board
-     * "x" = Forbidden Position
-     * "_" = Standard Position
-     * number = Player starting Position
-     * uppercase letter = Inner Room Position
-     * lowercase letter = Outer Room Position
-     * "d" + letter = Room Door Position
-     *
-     * @param boardLayout layout of board defined in constructor
-     * @author Cameron Li
-     */
-    private void initBoard(String boardLayout) {
-        Board board = new Board();
-        Scanner layoutScan = new Scanner(boardLayout);
-        int y = -1;
-        // Scan row (y)
-        while (layoutScan.hasNextLine()) {
-            String scanLine = layoutScan.nextLine(); // Scanned row (y)
-            y++;
-            int x = -1;
-            Scanner positionScan = new Scanner(scanLine); // Scan Column (x)
-            while (positionScan.hasNext()) {
-                String positionName = positionScan.next(); // Scanned Column (x)
-                x++; // Increment row
-                Position newPosition = null;
-                if (positionName.equals("x")) { // Check for "x", a forbidden position
-                    newPosition = new Position(x, y, false);
-                }
-                if (positionName.equals("_")) { // Check for "_" the basic movable position
-                    newPosition = new Position(x, y, true);
-                }
-
-                if (newPosition == null) { // If still haven't found anything
-                    for (Room r : rooms) { // Check for a room
-                        if (positionName.equals(r.getRoomChar())) { // Is this an inner room position?
-                            newPosition = new Position(x, y, true, true, null, r);
-                            break;
-                        } else if (positionName.equals("^" + r.getRoomChar())) { // Up door
-                            newPosition = new Position(x, y, true, true, Move.Direction.UP, r);
-                            break;
-                        } else if (positionName.equals(">" + r.getRoomChar())) { // Right door
-                            newPosition = new Position(x, y, true, true, Move.Direction.RIGHT, r);
-                            break;
-                        } else if (positionName.equals("v" + r.getRoomChar())) { // Down door
-                            newPosition = new Position(x, y, true, true, Move.Direction.DOWN, r);
-                            break;
-                        } else if (positionName.equals("<" + r.getRoomChar())) {
-                            newPosition = new Position(x, y, true, true, Move.Direction.LEFT, r);
-                            break;
-                        } else if (positionName.equals(r.getRoomChar().toLowerCase())) { // Is this an outer room position?
-                            newPosition = new Position(x, y, true, false, null, r);
-                            break;
-                        }
-                    }
-                }
-
-                if (newPosition == null) { // Add in remaining Character Positions
-                    for (CharacterCard c : characterCards) {
-                        if (positionName.equals(c.getCharacterBoardChar())) { // Check if position is a character
-                            for (Player p : players) { // Make sure that a player is playing the character
-                                if (p.getCharacter().equals(c)) { // Case player for character exists, create Character position
-                                    newPosition = new Position(x, y, true, c);
-                                    p.setCurrentPosition(newPosition);
-                                    break;
-                                } else { // Else, is a basic movable position "_"
-                                    newPosition = new Position(x, y, true);
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                if (newPosition == null) { // Position where player was not added due to numPlayers < maxPlayers
-                    newPosition = new Position(x, y, true);
-                }
-                board.addPosition(y, x, newPosition); // Add found position
-            }
-            positionScan.close();
-        }
-        layoutScan.close();
-        this.board = board; // Set board
-    }
-
-
-    /**
-     * Roll two dice and then return the overall number
-     *
-     * @return Cumulative dice throw result
-     * @author Vaibhav
-     */
-    public int rollDice() {
-        Scanner diceRollScanner = new Scanner(System.in);
-        String readString = "";
-        while (!readString.equalsIgnoreCase("roll")) {
-            System.out.println("Type \"roll\" to roll dice for " + currentPlayer.getCharacter().toString());
-            readString = diceRollScanner.nextLine();
-        }
-
-        // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
-        int firstResult = new Random().nextInt(6) + 1;
-        int secondResult = new Random().nextInt(6) + 1;
-
-        System.out.println("first dice throw: " + firstResult);
-        System.out.println("second dice throw: " + secondResult);
-        return firstResult + secondResult;
-    }
-
-
-    /**
-     * Deal Cards
-     * Add cards from the deck list to a stack, then deal them to each player until the stack is empty
-     *
-     * @author Cameron
-     */
-    public void dealCards() {
-        Stack<Card> toBeDealt = new Stack<>();
-        this.deck.forEach(toBeDealt::push);
-
-        while (!toBeDealt.isEmpty()) {
-            for (Player p : this.players) {
-                // Make sure not null pointer exception
-                if (toBeDealt.isEmpty()) break;
-                p.addHand(toBeDealt.pop());
-            }
-        }
-        System.out.println("Cards Dealt");
     }
 }

@@ -68,8 +68,6 @@ public class WeaponCard implements Card {
         return room;
     }
 
-    public void delete() {
-    }
 
     /**
      * Overridden toString method

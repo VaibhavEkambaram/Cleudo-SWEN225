@@ -48,9 +48,6 @@ public class Board {
             }
             boardPrint.append("|\n");
         }
-
-        //System.out.println("Alpha to numeric index test: "+("k".charAt(0) & 31));
-
         return boardPrint.toString();
     }
 
