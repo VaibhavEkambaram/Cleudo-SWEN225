@@ -327,9 +327,9 @@ public class Game {
         Room currentRoom = p.getCurrentPosition().getRoom();
         System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is in room |" + p.getCurrentPosition().getRoom().toString() + "|]\n This room will be used in the suggestion");
         System.out.println("Please enter a weapon: ");
-        WeaponCard weapon = findCard(WeaponCard.class, weaponCards);
+        WeaponCard weapon = findCard(weaponCards); // Check if suggested Weapon exists
         System.out.println("Please enter a character: ");
-        CharacterCard character = findCard(CharacterCard.class, characterCards);
+        CharacterCard character = findCard(characterCards); // Check if suggested Character exists
 
         System.out.println("Current Suggestion:");
         for (Player findP : players) {
@@ -436,31 +436,29 @@ public class Game {
      * @return
      * @author Cameron Li
      */
-    private <C extends Card> C findCard(Class cardType, List<C> cards) {
-        String cardName = "";
-
-        Scanner inputScan = new Scanner(System.in);
-        try {
-            cardName = inputScan.nextLine();
-        } catch (Exception e) {
-            System.out.println("Please enter a valid card name");
-        }
-
+    private <C extends Card> C findCard(List<C> cards) {
+        boolean valid = false;
         Card foundCard = null;
-
-        for (int c = 0; c < cards.size(); c++) {
-            if (cards.get(c).toString().equals(cardName)) {
-                foundCard = cards.get(c);
+        while (!valid) {
+            String cardName = "";
+            Scanner inputScan = new Scanner(System.in);
+            try {
+                cardName = inputScan.nextLine();
+            } catch (Exception e) {
+                System.out.println("Please enter a valid card name");
             }
-        }
 
-        if (!foundCard.getClass().equals(cardType)) {
-            System.out.println("Incorrect input, suggestion requires a: " + cardType.toString());
-            return null;
-        }
+            // Find Card
+            for (int c = 0; c < cards.size(); c++) {
+                if (cards.get(c).toString().equals(cardName)) {
+                    foundCard = cards.get(c);
+                    valid = true;
+                }
+            }
 
-        if (cardName.equals("")) {
-            System.out.println("Incorrect card name");
+            if (!valid) {
+                System.out.println("Invalid Card Name, please try again");
+            }
         }
         return (C) foundCard;
     }
