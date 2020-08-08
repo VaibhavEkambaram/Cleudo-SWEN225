@@ -143,6 +143,10 @@ public class Position {
         return isDoor;
     }
 
+    public boolean isPassableTile() {
+        return isPassableTile();
+    }
+
     public Move.Direction getDoorDirection() {
         if (isDoor) {
             return doorDirection;

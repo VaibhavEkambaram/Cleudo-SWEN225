@@ -328,11 +328,16 @@ public class Game {
         System.out.println("Please enter a character: ");
         CharacterCard character = findCard(p, CharacterCard.class);
 
-        System.out.println("Current Suggestion:"); // TODO: make it so the accused player is moved to the room the player is in
+        System.out.println("Current Suggestion:");
         for (Player findP : players) {
             if (findP.getCharacter().equals(character)) {
                 if (!findP.getCurrentPosition().getRoom().equals(currentRoom)) {
-                    // TODO: Implement teleport here
+                    Board newBoard = board.teleportPlayer(findP, currentRoom);
+                    if (newBoard != null) {
+                        board = newBoard;
+                    } else {
+                        System.out.println("An error occurred while teleporting the player");
+                    }
                 }
             }
         }
