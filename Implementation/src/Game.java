@@ -167,13 +167,17 @@ public class Game {
                         System.out.println("Currently in " + p.getCurrentPosition().getRoom());
                         System.out.println("**************************************************");
                     }
-                    System.out.println("Please enter a move command (" + movesRemaining + " tiles remaining):");
+                    System.out.println("Please enter a move command or type \"finish\" to complete move (" + movesRemaining + " tiles remaining):");
                     Move move = movementInput(movesRemaining);
-                    Board newBoard = this.board.apply(p, move);
-                    if (newBoard != null) {
-                        this.board = newBoard;
-                        movesRemaining = movesRemaining - move.getSpaces();
-                        System.out.println(board.toString());
+                    if(move!=null) {
+                        Board newBoard = this.board.apply(p, move);
+                        if (newBoard != null) {
+                            this.board = newBoard;
+                            movesRemaining = movesRemaining - move.getSpaces();
+                            System.out.println(board.toString());
+                        }
+                    } else {
+                        break;
                     }
                 }
 
@@ -238,6 +242,8 @@ public class Game {
                 } else if (command.length() >= 6 && command.startsWith("down-")) {
                     direction = Move.Direction.DOWN;
                     spaces = Integer.parseInt(command.substring(5));
+                } else if(command.equals("finish")){
+                    return null;
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a correct number of spaces");
