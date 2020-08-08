@@ -50,12 +50,7 @@ public class CharacterCard implements Card {
     }
 
 
-    public boolean setCharacterName(String aCharacterName) {
-        boolean wasSet;
-        characterName = aCharacterName;
-        wasSet = true;
-        return wasSet;
-    }
+
 
     public String getCharacterName() {
         return characterName;
