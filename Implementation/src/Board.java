@@ -144,13 +144,15 @@ public class Board {
         for (int i = 0; i < cloneBoard.positions.length; i++) {
             for (int j = 0; j < cloneBoard.positions[0].length; j++) {
                 Position found = cloneBoard.positions[i][j];
-                if (found.getRoom().equals(room) && found.isPassableTile() && !found.isDoor()) {
-                    int y = player.getCurrentPosition().getyLoc();
-                    int x = player.getCurrentPosition().getxLoc();
-                    cloneBoard.positions[y][x].removeCharacter();
-                    found.setCharacter(player.getCharacter());
-                    player.setCurrentPosition(found);
-                    return cloneBoard;
+                if (found.getRoom() != null) {
+                    if (found.getRoom().equals(room) && found.isPassableTile() && !found.isDoor()) {
+                        int y = player.getCurrentPosition().getyLoc();
+                        int x = player.getCurrentPosition().getxLoc();
+                        cloneBoard.positions[y][x].removeCharacter();
+                        found.setCharacter(player.getCharacter());
+                        player.setCurrentPosition(found);
+                        return cloneBoard;
+                    }
                 }
             }
         }
