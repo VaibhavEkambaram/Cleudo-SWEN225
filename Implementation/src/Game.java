@@ -201,7 +201,8 @@ public class Game {
                 System.out.println("Available commands - [suggestion][accusation][pass]:");
                 String answer = accSuggInput();
                 if (answer.equalsIgnoreCase("a") || answer.equalsIgnoreCase("accusation")) {
-                    gameRunning = accusation(p);
+                    //gameRunning = accusation(p);
+                    accusation(p);
                 } else if (answer.equalsIgnoreCase("s") || answer.equalsIgnoreCase("suggestion")) {
                     suggestion(p);
                 }
@@ -285,17 +286,42 @@ public class Game {
         CharacterCard accusationCharacterCard = null;
         WeaponCard accusationWeaponCard = null;
 
+        // get accusation room
         System.out.println("Please enter an accusation room: ");
         while (accusationRoomCard == null) {
             Scanner accusationRoomScan = new Scanner(System.in);
             String accusationRoomInput = accusationRoomScan.nextLine();
 
             for (RoomCard r : roomCards) {
-                if (r.getRoomName().equals(accusationRoomInput)) {
-                    accusationRoomCard = r;
-                }
+                if (r.getRoomName().equals(accusationRoomInput)) accusationRoomCard = r;
             }
             if (accusationRoomCard == null) System.out.println("Room not found! Please enter a valid room name:");
+        }
+
+        // get accusation character
+        System.out.println("Please enter a character to accuse: ");
+        while (accusationCharacterCard == null) {
+            Scanner accusationCharacterScan = new Scanner(System.in);
+            String accusationCharacterInput = accusationCharacterScan.nextLine();
+
+            for (CharacterCard c : characterCards) {
+                if (c.getCharacterName().equals(accusationCharacterInput)) accusationCharacterCard = c;
+            }
+            if (accusationCharacterCard == null)
+                System.out.println("Character not found! Please enter a valid character name:");
+        }
+
+        // get accusation character
+        System.out.println("Please enter an accusation murder weapon: ");
+        while (accusationWeaponCard == null) {
+            Scanner accusationWeaponScan = new Scanner(System.in);
+            String accusationWeaponInput = accusationWeaponScan.nextLine();
+
+            for (WeaponCard w : weaponCards) {
+                if (w.getWeaponName().equals(accusationWeaponInput)) accusationWeaponCard = w;
+            }
+            if (accusationWeaponCard == null)
+                System.out.println("Weapon not found! Please enter a valid weapon name:");
         }
 
 
@@ -327,7 +353,7 @@ public class Game {
         }
 
          */
-        return false;
+        return 0;
     }
 
     /**
@@ -411,7 +437,7 @@ public class Game {
             System.out.println(p.getCharacter().getCharacterName() + "'s turn");
             System.out.println("No one could refute your suggestion! Would you like to make an accusation? (y/n)");
             if (accSuggInput().equals("y")) {
-                this.gameWon = accusation(p); //TODO: Allow this to win the game (check resolved)
+               // this.gameWon = accusation(p); //TODO: Allow this to win the game (check resolved)
             }
         }
 
