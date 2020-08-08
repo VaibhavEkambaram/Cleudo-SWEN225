@@ -197,7 +197,7 @@ public class Game {
                         break;
                     }
                 } else if (answer.equalsIgnoreCase("s") || answer.equalsIgnoreCase("suggestion")) {
-                    suggestion(p);
+                    makeSuggestion(p);
                 }
 
                 System.out.println("[Hit Enter to move to the next player]");
@@ -338,8 +338,14 @@ public class Game {
      *
      * @author Baxter Kirikiri, Vaibhav
      */
-    private void suggestion(Player p) {
-        // TODO: rework
+    private void makeSuggestion(Player p) {
+
+        Room room = null;
+        RoomCard suggestionRoom = null;
+        WeaponCard suggestionWeapon = null;
+        CharacterCard suggestionCharacter = null;
+
+
         // check if player is currently in a room, can not suggest if not
         System.out.println("[Checking to see if player is currently in a room]");
         if (p.getCurrentPosition().getRoom() == null) {
@@ -347,20 +353,55 @@ public class Game {
             return;
         }
 
-        Room currentRoom = p.getCurrentPosition().getRoom();
         System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is in room |" + p.getCurrentPosition().getRoom().toString() + "|]\n This room will be used in the suggestion");
 
+        room = p.getCurrentPosition().getRoom();
 
-        System.out.println("Please enter a weapon: ");
-        WeaponCard weapon = findCard(weaponCards); // Check if suggested Weapon exists
-        System.out.println("Please enter a character: ");
-        CharacterCard character = findCard(characterCards); // Check if suggested Character exists
+        for(RoomCard r : roomCards){
+            if(p.getCurrentPosition().getRoom().toString().equals(r.getRoomName())){
+                suggestionRoom = r;
+            }
+        }
+
+        // get accusation character
+        System.out.println("Please suggest a character: ");
+        while (suggestionCharacter == null) {
+            Scanner suggestionCharacterScan = new Scanner(System.in);
+            String suggestionCharacterInput = suggestionCharacterScan.nextLine();
+
+            for (CharacterCard c : characterCards) {
+                if (c.getCharacterName().equals(suggestionCharacterInput)) suggestionCharacter = c;
+            }
+            if (suggestionCharacter == null)
+                System.out.println("Character not found! Please enter a valid character name:");
+        }
+
+        // get accusation character
+        System.out.println("Please suggest murder weapon: ");
+        while (suggestionWeapon == null) {
+            Scanner suggestionWeaponScan = new Scanner(System.in);
+            String suggestionWeaponInput = suggestionWeaponScan.nextLine();
+
+            for (WeaponCard w : weaponCards) {
+                if (w.getWeaponName().equals(suggestionWeaponInput)) suggestionWeapon = w;
+            }
+            if (suggestionWeapon == null)
+                System.out.println("Weapon not found! Please enter a valid weapon name:");
+        }
+
+
 
         System.out.println("Current Suggestion:");
         for (Player findP : players) {
-            if (findP.getCharacter().equals(character)) {
-                if (!findP.getCurrentPosition().getRoom().equals(currentRoom)) {
-                    Board newBoard = board.teleportPlayer(findP, currentRoom);
+            if(findP.getCharacter().getCharacterName().equals(suggestionCharacter.getCharacterName())) {
+
+                Room otherPlayerRoom = findP.getCurrentPosition().getRoom();
+
+                if(otherPlayerRoom == null || !findP.getCurrentPosition().getRoom().equals(room)){
+                    // TODO: null pointer exception
+                    System.out.println(findP.toString());
+                    System.out.println(room.toString());
+                    Board newBoard = board.teleportPlayer(findP, room);
                     if (newBoard != null) {
                         board = newBoard;
                     } else {
@@ -371,6 +412,7 @@ public class Game {
         }
 
 
+/*
         Stack<Player> refuters = new Stack<>();
         for (Player addToStack : players) {
             if (!addToStack.equals(p)) {
@@ -389,6 +431,10 @@ public class Game {
             }
             System.out.println("Refute this suggestion with a card from your hand: ");
             String refutation = accSuggInput();
+
+
+
+
             boolean inHand = false;
             for (Card c : refuteCards) {
                 if (c.toString().equals(refutation)) {
@@ -396,7 +442,7 @@ public class Game {
                 }
             }
 
-            /*
+
             if (suggestion.contains(refutation) && inHand) {
                 System.out.println(p.getCharacter().getCharacterName() + "'s suggestion was refuted!");
                 refuted = true;
@@ -404,10 +450,6 @@ public class Game {
             } else {
                 System.out.println("Invalid refutation!");
             }
-
-             */
-
-
         }
 
         if (!refuted) {
@@ -422,7 +464,7 @@ public class Game {
             }
         }
 
-
+ */
     }
 
     /**
@@ -445,25 +487,6 @@ public class Game {
         return answer;
     }
 
-    /**
-     * Asks a player to enter the name of a card (for their accusation or suggestion)
-     * Returns an list of card names
-     *
-     * @return ArrayList<String>
-     * @author Baxter Kirikiri
-     */
-    private ArrayList<String> addCardToPlay(ArrayList<String> play) {
-        String cardName = "";
-        Scanner inputScan = new Scanner(System.in);
-        try {
-            cardName = inputScan.nextLine();
-        } catch (Exception e) {
-            System.out.println("Please enter a valid card name");
-        }
-
-        play.add(cardName);
-        return play;
-    }
 
     /**
      * Finds and matches a String with a Card in player hand
