@@ -78,21 +78,6 @@ public class Game {
      * ----------------------------------------------------------------------------------------------------
      */
     public Game() {
-        // Testing Bench
-
-        for (int i = 0; i < 100; i++) {
-            initDeck(3);
-        }
-        for (int i = 0; i < 100; i++) {
-            initDeck(4);
-        }
-        for (int i = 0; i < 100; i++) {
-            initDeck(5);
-        }
-        for (int i = 0; i < 100; i++) {
-            initDeck(6);
-        }
-
         String boardLayout =
                 " x x x x x x x x x 3 x x x x 4 x x x x x x x x x " + "\n" +
                         " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c " + "\n" +
