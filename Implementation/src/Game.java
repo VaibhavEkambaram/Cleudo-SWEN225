@@ -249,7 +249,7 @@ public class Game {
             }
 
             if (!valid) {
-                if (tooFar && spaces > movesRemaining) {
+                if (spaces > movesRemaining) {
                     System.out.println("Insufficient amount of moves left");
                 } else {
                     System.out.println("Please enter a proper command");
@@ -415,7 +415,6 @@ public class Game {
         System.out.println(p.getCharacter().getCharacterName() + "'s suggestion: [" + suggestion.toString() + "]");
 
 
-        // TODO: update refutation to use scenario
         Stack<Player> refuters = new Stack<>();
         for (Player addToStack : players) {
             if (!addToStack.equals(p)) {
@@ -528,9 +527,9 @@ public class Game {
             }
 
             // Find Card
-            for (int c = 0; c < cards.size(); c++) {
-                if (cards.get(c).toString().equals(cardName)) {
-                    foundCard = cards.get(c);
+            for (C card : cards) {
+                if (card.toString().equals(cardName)) {
+                    foundCard = card;
                     valid = true;
                 }
             }
