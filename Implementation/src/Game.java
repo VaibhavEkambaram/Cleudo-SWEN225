@@ -17,6 +17,9 @@ public class Game {
 
     private List<Room> rooms;
 
+
+    private List<WeaponCard> weaponCards;
+    private List<RoomCard> roomCards;
     private List<CharacterCard> characterCards;
 
     //Game Attributes
@@ -324,9 +327,9 @@ public class Game {
         Room currentRoom = p.getCurrentPosition().getRoom();
         System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is in room |" + p.getCurrentPosition().getRoom().toString() + "|]\n This room will be used in the suggestion");
         System.out.println("Please enter a weapon: ");
-        WeaponCard weapon = findCard(p, WeaponCard.class);
+        WeaponCard weapon = findCard(WeaponCard.class, weaponCards);
         System.out.println("Please enter a character: ");
-        CharacterCard character = findCard(p, CharacterCard.class);
+        CharacterCard character = findCard(CharacterCard.class, characterCards);
 
         System.out.println("Current Suggestion:");
         for (Player findP : players) {
@@ -429,11 +432,11 @@ public class Game {
      * Finds and matches a String with a Card in player hand
      * If not found, returns null - indicated not in hand or doesn't exist
      *
-     * @param currentPlayer
+     * @param cards
      * @return
      * @author Cameron Li
      */
-    private <C extends Card> C findCard(Player currentPlayer, Class cardType) {
+    private <C extends Card> C findCard(Class cardType, List<C> cards) {
         String cardName = "";
 
         Scanner inputScan = new Scanner(System.in);
@@ -443,12 +446,11 @@ public class Game {
             System.out.println("Please enter a valid card name");
         }
 
-        Card[] playerHand = currentPlayer.getHand();
         Card foundCard = null;
 
-        for (int c = 0; c < playerHand.length; c++) {
-            if (playerHand[c].toString().equals(cardName)) {
-                foundCard = playerHand[c];
+        for (int c = 0; c < cards.size(); c++) {
+            if (cards.get(c).toString().equals(cardName)) {
+                foundCard = cards.get(c);
             }
         }
 
@@ -459,8 +461,6 @@ public class Game {
 
         if (cardName.equals("")) {
             System.out.println("Incorrect card name");
-        } else if (foundCard == null) {
-            System.out.println("Card is not in player's hand");
         }
         return (C) foundCard;
     }
@@ -510,7 +510,7 @@ public class Game {
 
         // Weapons
         String[] wepNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
-        List<WeaponCard> weaponCards = new ArrayList<>();
+        weaponCards = new ArrayList<>();
         for (String w : wepNames) {
             WeaponCard weapon = new WeaponCard(w);
             weaponCards.add(weapon);
@@ -521,7 +521,7 @@ public class Game {
         String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study",
                 "Library", "Billiard Room", "Conservatory", "Ball Room"};
         rooms = new ArrayList<>();
-        List<RoomCard> roomCards = new ArrayList<>();
+        roomCards = new ArrayList<>();
         for (String r : roomNames) {
             Room newRoom = new Room(r);
             rooms.add(newRoom);
