@@ -314,10 +314,6 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav
      */
     private void suggestion(Player p) {
-        ArrayList<String> suggestion = new ArrayList<>();
-        //System.out.println("Please enter a room: "); //
-
-
         // additions by Vaibhav
         System.out.println("[Checking to see if player is currently in a room]");
         if (p.getCurrentPosition().getRoom() == null) {
@@ -325,19 +321,20 @@ public class Game {
             return;
         }
 
+        Room currentRoom = p.getCurrentPosition().getRoom();
         System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is in room |" + p.getCurrentPosition().getRoom().toString() + "|]\n This room will be used in the suggestion");
-        suggestion.add(p.getCurrentPosition().getRoom().toString());
-
-        // TODO: system to validate weapon and character are on players card?
-
         System.out.println("Please enter a weapon: ");
-        suggestion = addCardToPlay(suggestion);
+        WeaponCard weapon = findCard(p, WeaponCard.class);
         System.out.println("Please enter a character: ");
-        suggestion = addCardToPlay(suggestion);
+        CharacterCard character = findCard(p, CharacterCard.class);
 
         System.out.println("Current Suggestion:"); // TODO: make it so the accused player is moved to the room the player is in
-        for (String s : suggestion) {
-            System.out.println("\t" + s);
+        for (Player findP : players) {
+            if (findP.getCharacter().equals(character)) {
+                if (!findP.getCurrentPosition().getRoom().equals(currentRoom)) {
+                    // TODO: Implement teleport here
+                }
+            }
         }
 
         Stack<Player> refuters = new Stack<>();
@@ -420,8 +417,46 @@ public class Game {
         }
 
         play.add(cardName);
-
         return play;
+    }
+
+    /**
+     * Finds and matches a String with a Card in player hand
+     * If not found, returns null - indicated not in hand or doesn't exist
+     *
+     * @param currentPlayer
+     * @return
+     */
+    private <C extends Card> C findCard(Player currentPlayer, Class cardType) {
+        String cardName = "";
+
+        Scanner inputScan = new Scanner(System.in);
+        try {
+            cardName = inputScan.nextLine();
+        } catch (Exception e) {
+            System.out.println("Please enter a valid card name");
+        }
+
+        Card[] playerHand = currentPlayer.getHand();
+        Card foundCard = null;
+
+        for (int c = 0; c < playerHand.length; c++) {
+            if (playerHand[c].toString().equals(cardName)) {
+                foundCard = playerHand[c];
+            }
+        }
+
+        if (!foundCard.getClass().equals(cardType)) {
+            System.out.println("Incorrect input, suggestion requires a: " + cardType.toString());
+            return null;
+        }
+
+        if (cardName.equals("")) {
+            System.out.println("Incorrect card name");
+        } else if (foundCard == null) {
+            System.out.println("Card is not in player's hand");
+        }
+        return (C) foundCard;
     }
 
     /**
