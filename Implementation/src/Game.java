@@ -32,7 +32,6 @@ public class Game {
     //        - game has ended: false
     boolean gameRunning = true;
 
-    boolean gameWon = false;
 
     int movesRemaining = -1;
 
@@ -117,11 +116,6 @@ public class Game {
     }
 
 
-    public void gameWon() {
-        System.out.println("game has been won!");
-    }
-
-
     /**
      * MAIN GAME LOOP
      * This method contains the main game logic. After the game as been setup in the game constructor, this method then
@@ -148,10 +142,6 @@ public class Game {
             for (Player p : players) {
                 movesRemaining = -1;
 
-                if (gameWon) {
-                    gameWon();
-                    return;
-                }
 
                 System.out.println("\n------------------------------------------------------------------------");
                 System.out.println("\n" + this.board + "\n");
@@ -201,8 +191,11 @@ public class Game {
                 System.out.println("Available commands - [suggestion][accusation][pass]:");
                 String answer = accSuggInput();
                 if (answer.equalsIgnoreCase("a") || answer.equalsIgnoreCase("accusation")) {
-                    //gameRunning = accusation(p);
-                    Accusation(p);
+                    int accuse = makeAccusation(p);
+                    if (accuse == 1) {
+                        gameRunning = false;
+                        break;
+                    }
                 } else if (answer.equalsIgnoreCase("s") || answer.equalsIgnoreCase("suggestion")) {
                     suggestion(p);
                 }
@@ -269,14 +262,15 @@ public class Game {
         return new Move(direction, spaces);
     }
 
+
     /**
-     * Handles player accusations.
-     * Returns true if they are correct and false if they are incorrect
+     * Handle Accusations
      *
-     * @return Boolean
-     * @author Baxter Kirikiri
+     * @param p player
+     * @return integer (-1 invalid, 0 failed, 1 successful)
+     * @author Baxter Kirikiri, Vaibhav Ekambaram
      */
-    private int Accusation(Player p) {
+    private int makeAccusation(Player p) {
         if (!p.getCanAccuse()) {
             System.out.println("You have already made a failed accusation! Therefore, you can no longer make accusations during this game.");
             return -1;
@@ -324,45 +318,20 @@ public class Game {
                 System.out.println("Weapon not found! Please enter a valid weapon name:");
         }
 
-        Scenario accusationScenario = new Scenario(accusationWeaponCard,accusationRoomCard,accusationCharacterCard);
-        System.out.println(accusationScenario.toString());
-        System.out.println(murderScenario.toString());
+        // create scenario and compare to the original murder scenario
+        System.out.println("\nChecking Scenario...\n");
+        Scenario accusationScenario = new Scenario(accusationWeaponCard, accusationRoomCard, accusationCharacterCard);
 
-        if(murderScenario.equals(accusationScenario)){
-            System.out.println("accusation successful");
+        if (murderScenario.equals(accusationScenario)) {
+            System.out.println(p.getCharacter().getCharacterName() + " was successful in their accusation. They have won the game!!!");
+            return 1;
         } else {
-            System.out.println("fail");
-        }
-
-
-
-        /*
-        System.out.println("Please enter a room: ");
-        accusation = addCardToPlay(accusation);
-        System.out.println("Please enter a weapon: ");
-        accusation = addCardToPlay(accusation);
-        System.out.println("Please enter a character: ");
-        accusation = addCardToPlay(accusation);
-
-        int correct = 0;
-        for (String s : accusation) {
-            if (murderScenario.getRoomCard().toString().equals(s) || murderScenario.getWeapon().toString().equals(s) || murderScenario.getMurderer().toString().equals(s)) {
-                correct++;
-            }
-        }
-
-        if (correct == 3) {
-            System.out.println(p.getCharacter().getCharacterName() + " has won!!");
-            return false; //gamerunning
-        } else {
-            System.out.println(p.getCharacter().getCharacterName() + " was incorrect in their accusation. They can now no longer accuse.");
+            System.out.println("You were incorrect in your accusation. You may remain playing the game and offering suggestions, but may no longer be able to make further accusations.");
             p.setCanAccuse(false);
-            return true; //gamerunning
+            return 0;
         }
-
-         */
-        return 0;
     }
+
 
     /**
      * Handles player suggestions.
@@ -370,7 +339,7 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav
      */
     private void suggestion(Player p) {
-
+        // TODO: rework
         // check if player is currently in a room, can not suggest if not
         System.out.println("[Checking to see if player is currently in a room]");
         if (p.getCurrentPosition().getRoom() == null) {
@@ -445,7 +414,11 @@ public class Game {
             System.out.println(p.getCharacter().getCharacterName() + "'s turn");
             System.out.println("No one could refute your suggestion! Would you like to make an accusation? (y/n)");
             if (accSuggInput().equals("y")) {
-               // this.gameWon = accusation(p); //TODO: Allow this to win the game (check resolved)
+
+                int accuse = makeAccusation(p);
+                if (accuse == 1) {
+                    gameRunning = false;
+                }
             }
         }
 
