@@ -117,7 +117,6 @@ public class Game {
     }
 
 
-
     public void gameWon() {
         System.out.println("game has been won!");
     }
@@ -171,7 +170,7 @@ public class Game {
                     }
                     System.out.println("Please enter a move command or type \"finish\" to complete move (" + movesRemaining + " tiles remaining):");
                     Move move = movementInput(movesRemaining);
-                    if(move!=null) {
+                    if (move != null) {
                         Board newBoard = this.board.apply(p, move);
                         if (newBoard != null) {
                             this.board = newBoard;
@@ -244,7 +243,7 @@ public class Game {
                 } else if (command.length() >= 6 && command.startsWith("down-")) {
                     direction = Move.Direction.DOWN;
                     spaces = Integer.parseInt(command.substring(5));
-                } else if(command.equals("finish")){
+                } else if (command.equals("finish")) {
                     return null;
                 }
             } catch (NumberFormatException e) {
@@ -276,17 +275,34 @@ public class Game {
      * @return Boolean
      * @author Baxter Kirikiri
      */
-    private boolean accusation(Player p) {
+    private int accusation(Player p) {
         if (!p.getCanAccuse()) {
-            System.out.println("You've already made a failed accusation. You can no longer accuse this game");
-            return true;
+            System.out.println("You have already made a failed accusation! Therefore, you can no longer make accusations during this game.");
+            return -1;
         }
-        ArrayList<String> accusation = new ArrayList<>();
 
-        /**System.out.println("\t" + murderScenario.getRoomCard().toString()); // show the scenario for testing purposes
-         System.out.println("\t" + murderScenario.getWeapon().toString());
-         System.out.println("\t" + murderScenario.getMurderer().toString());**/
+        RoomCard accusationRoomCard = null;
+        CharacterCard accusationCharacterCard = null;
+        WeaponCard accusationWeaponCard = null;
 
+        System.out.println("Please enter an accusation room: ");
+        while (accusationRoomCard == null) {
+            Scanner accusationRoomScan = new Scanner(System.in);
+            String accusationRoomInput = accusationRoomScan.nextLine();
+
+            for (RoomCard r : roomCards) {
+                if (r.getRoomName().equals(accusationRoomInput)) {
+                    accusationRoomCard = r;
+                }
+            }
+            if (accusationRoomCard == null) System.out.println("Room not found! Please enter a valid room name:");
+        }
+
+
+
+
+
+        /*
         System.out.println("Please enter a room: ");
         accusation = addCardToPlay(accusation);
         System.out.println("Please enter a weapon: ");
@@ -309,6 +325,9 @@ public class Game {
             p.setCanAccuse(false);
             return true; //gamerunning
         }
+
+         */
+        return false;
     }
 
     /**
@@ -317,7 +336,8 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav
      */
     private void suggestion(Player p) {
-        // additions by Vaibhav
+
+        // check if player is currently in a room, can not suggest if not
         System.out.println("[Checking to see if player is currently in a room]");
         if (p.getCurrentPosition().getRoom() == null) {
             System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is not currently in a room, suggestion can NOT continue]");
@@ -326,6 +346,8 @@ public class Game {
 
         Room currentRoom = p.getCurrentPosition().getRoom();
         System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is in room |" + p.getCurrentPosition().getRoom().toString() + "|]\n This room will be used in the suggestion");
+
+
         System.out.println("Please enter a weapon: ");
         WeaponCard weapon = findCard(weaponCards); // Check if suggested Weapon exists
         System.out.println("Please enter a character: ");
@@ -344,6 +366,7 @@ public class Game {
                 }
             }
         }
+
 
         Stack<Player> refuters = new Stack<>();
         for (Player addToStack : players) {
@@ -369,6 +392,8 @@ public class Game {
                     inHand = true;
                 }
             }
+
+            /*
             if (suggestion.contains(refutation) && inHand) {
                 System.out.println(p.getCharacter().getCharacterName() + "'s suggestion was refuted!");
                 refuted = true;
@@ -376,6 +401,10 @@ public class Game {
             } else {
                 System.out.println("Invalid refutation!");
             }
+
+             */
+
+
         }
 
         if (!refuted) {
@@ -385,6 +414,7 @@ public class Game {
                 this.gameWon = accusation(p); //TODO: Allow this to win the game (check resolved)
             }
         }
+
 
     }
 
@@ -647,7 +677,6 @@ public class Game {
             readString = diceRollScanner.nextLine();
         }
 
-
         // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
@@ -661,7 +690,9 @@ public class Game {
     public void dealCards() {
         //Add cards from the deck list to a stack, then deal them to each player until the stack is empty
         Stack<Card> toBeDealt = new Stack<>();
-        this.deck.forEach(toBeDealt::push);
+        for (Card card : this.deck) {
+            toBeDealt.push(card);
+        }
 
         while (!toBeDealt.isEmpty()) {
             for (Player p : this.players) {
