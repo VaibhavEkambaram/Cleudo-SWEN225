@@ -431,6 +431,7 @@ public class Game {
      *
      * @param currentPlayer
      * @return
+     * @author Cameron Li
      */
     private <C extends Card> C findCard(Player currentPlayer, Class cardType) {
         String cardName = "";
