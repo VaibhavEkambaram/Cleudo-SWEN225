@@ -78,6 +78,21 @@ public class Game {
      * ----------------------------------------------------------------------------------------------------
      */
     public Game() {
+        // Testing Bench
+
+        for (int i = 0; i < 100; i++) {
+            initDeck(3);
+        }
+        for (int i = 0; i < 100; i++) {
+            initDeck(4);
+        }
+        for (int i = 0; i < 100; i++) {
+            initDeck(5);
+        }
+        for (int i = 0; i < 100; i++) {
+            initDeck(6);
+        }
+
         String boardLayout =
                 " x x x x x x x x x 3 x x x x 4 x x x x x x x x x " + "\n" +
                         " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c " + "\n" +
@@ -622,7 +637,7 @@ public class Game {
         // Murder Scenario of Random Cards
         WeaponCard murderWeapon = weaponCards.get(new Random().nextInt(wepNames.length - 1) + 1);
         RoomCard murderRoom = roomCards.get(new Random().nextInt(roomNames.length - 1) + 1);
-        CharacterCard murderer = characterCards.get(new Random().nextInt(numPlayers) + 1);
+        CharacterCard murderer = characterCards.get(new Random().nextInt(numPlayers));
         murderScenario = new Scenario(murderWeapon, murderRoom, murderer);
         deck.remove(murderWeapon);
         deck.remove(murderRoom);
