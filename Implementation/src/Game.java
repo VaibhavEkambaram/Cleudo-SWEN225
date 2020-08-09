@@ -322,18 +322,6 @@ public class Game {
         System.out.println("Starting game...");
 
         while (gameRunning) {
-            int accuseCounter = 0;
-            for (Player p : players) {
-                if (!p.getCanAccuse()) {
-                    accuseCounter++;
-                }
-            }
-            if (accuseCounter >= players.size()) {
-                gameRunning = false;
-                System.out.println("No more accusations, nobody can win");
-                System.out.println("Game ends in a stalemate");
-                break;
-            }
             for (Player p : players) {
                 movesRemaining = -1;
 
