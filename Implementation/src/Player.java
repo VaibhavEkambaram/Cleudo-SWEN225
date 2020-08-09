@@ -1,82 +1,130 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 // line 73 "model.ump"
 // line 178 "model.ump"
+
+/**
+ * Player Class
+ */
 public class Player {
 
     private final List<Card> hand;
     // Player Gameplay Information
-    private CharacterCard character;
+    private final CharacterCard character;
     private Position currentPosition;
     // Player State
     private boolean canAccuse = true;
     private boolean canRefute = true;
 
-    // Constructor and Initialise Methods
+
+    /**
+     * Player Constructor and Initialise Methods
+     *
+     * @param aCharacter character associated with player
+     */
     public Player(CharacterCard aCharacter) {
         character = aCharacter;
         hand = new ArrayList<>();
     }
 
-    public boolean addHand(Card aHand) {
-        boolean wasAdded = false;
-        wasAdded = hand.add(aHand);
-        return wasAdded;
+
+    /**
+     * Add Card to player hand
+     *
+     * @param card card to add
+     */
+    public void addHand(Card card) {
+        hand.add(card);
     }
 
-    // Player Setters
 
-    public boolean setCanAccuse(boolean aCanAccuse) {
-        boolean wasSet = false;
+    /**
+     * Set ability to make accusations
+     *
+     * @param aCanAccuse accusation validator boolean
+     */
+    public void setCanAccuse(boolean aCanAccuse) {
         canAccuse = aCanAccuse;
-        wasSet = true;
-        return wasSet;
     }
 
-    public boolean setCanRefute(boolean aCanRefute) {
-        boolean wasSet = false;
+    /**
+     * Set ability to make refutations
+     *
+     * @param aCanRefute refutation validator boolean
+     */
+    public void setCanRefute(boolean aCanRefute) {
         canRefute = aCanRefute;
-        wasSet = true;
-        return wasSet;
     }
 
-    public boolean setCurrentPosition(Position aCurrentPosition) {
+    /**
+     * Set current Position of player
+     *
+     * @param aCurrentPosition position on board
+     */
+    public void setCurrentPosition(Position aCurrentPosition) {
         currentPosition = aCurrentPosition;
-        return true;
     }
 
     // Player Information Getters
 
+
+    /**
+     * Get Character associated with player
+     *
+     * @return character
+     */
     public CharacterCard getCharacter() {
         return character;
     }
 
+    /**
+     * Get an ArrayList of the player hand
+     *
+     * @return hand arrayList
+     */
     public List<Card> getHand() {
         return hand;
     }
 
+    /**
+     * Get current position of the player
+     *
+     * @return current position tile
+     */
     public Position getCurrentPosition() {
         return currentPosition;
     }
 
+    /**
+     * Player toString
+     *
+     * @return player board character
+     */
     public String toString() {
         return "Player " + this.character.getCharacterBoardChar() + this.character;
     }
 
     // Player State Getters
 
+    /**
+     * Check player ability to make accusation
+     *
+     * @return can accuse boolean validator
+     */
     public boolean getCanAccuse() {
         return canAccuse;
     }
 
+    /**
+     * Check player ability to make a refutation
+     *
+     * @return can refute boolean validator
+     */
     public boolean getCanRefute() {
         return canRefute;
     }
-
-
 }

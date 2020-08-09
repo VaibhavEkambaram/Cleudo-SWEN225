@@ -135,7 +135,7 @@ public class Position {
      *
      * @return int
      */
-    public int getxLoc() {
+    public int getLocationX() {
         return xLoc;
     }
 
@@ -144,7 +144,7 @@ public class Position {
      *
      * @return int
      */
-    public int getyLoc() {
+    public int getLocationY() {
         return yLoc;
     }
 

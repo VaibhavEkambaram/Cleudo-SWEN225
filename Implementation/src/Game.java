@@ -41,7 +41,7 @@ public class Game {
 
     private final String[] weaponNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
     private final String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study", "Library", "Billiard Room", "Conservatory", "Ball Room"};
-    private final String[] characterNames = {"Ms. Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
+    private final String[] characterNames = {"Miss Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
 
 
     /**
@@ -533,9 +533,11 @@ public class Game {
 
         if (murderScenario.equals(accusationScenario)) {
             System.out.println(p.getCharacter().getCharacterName() + " was successful in their accusation. They have won the game!!!");
+            System.out.println("The murder scenario was: " + murderScenario.toString());
+            System.out.println("\nThank you for playing Cluedo! To play a new game, please launch the program again.");
             return 1;
         } else {
-            System.out.println("You were incorrect in your accusation. You may remain playing the game and offering suggestions, but may no longer be able to make further accusations.");
+            System.out.println("You were incorrect in your accusation. You may remain playing the game and offering suggestions, but are no longer able to make further accusations.");
             p.setCanAccuse(false);
             return 0;
         }
