@@ -21,9 +21,9 @@ public class Game {
     private List<RoomCard> roomCards;
     private List<CharacterCard> characterCards;
 
-    private Map<String,WeaponCard> weaponCardsMap = new HashMap<>();
-    private Map<String,RoomCard> roomCardsMap = new HashMap<>();
-    private Map<String,CharacterCard> characterCardMap = new HashMap<>();
+    private final Map<String, WeaponCard> weaponCardsMap = new HashMap<>();
+    private final Map<String, RoomCard> roomCardsMap = new HashMap<>();
+    private final Map<String, CharacterCard> characterCardsMap = new HashMap<>();
 
 
     //Game Attributes
@@ -186,7 +186,7 @@ public class Game {
         for (String weaponName : weaponNames) {
             WeaponCard weapon = new WeaponCard(weaponName);
             weaponCards.add(weapon);
-            weaponCardsMap.put(weaponName,weapon);
+            weaponCardsMap.put(weaponName, weapon);
             deck.add(weapon);
         }
 
@@ -198,7 +198,7 @@ public class Game {
             rooms.add(newRoom);
             RoomCard newRoomCard = new RoomCard(r, newRoom);
             roomCards.add(newRoomCard);
-            roomCardsMap.put(r,newRoomCard);
+            roomCardsMap.put(r, newRoomCard);
             deck.add(newRoomCard);
         }
 
@@ -208,7 +208,7 @@ public class Game {
         for (int c = 0; c < numPlayers; c++) {
             CharacterCard character = new CharacterCard(characterNames[c]);
             characterCards.add(character);
-            characterCardMap.put(characterNames[c],character);
+            characterCardsMap.put(characterNames[c], character);
             deck.add(character);
         }
 
@@ -492,7 +492,7 @@ public class Game {
             Scanner accusationRoomScan = new Scanner(System.in);
             String accusationRoomInput = accusationRoomScan.nextLine();
 
-            if(roomCardsMap.containsKey(accusationRoomInput)){
+            if (roomCardsMap.containsKey(accusationRoomInput)) {
                 accusationRoomCard = roomCardsMap.get(accusationRoomInput);
             }
 
@@ -505,8 +505,8 @@ public class Game {
             Scanner accusationCharacterScan = new Scanner(System.in);
             String accusationCharacterInput = accusationCharacterScan.nextLine();
 
-            if(characterCardMap.containsKey(accusationCharacterInput)){
-                accusationCharacterCard = characterCardMap.get(accusationCharacterInput);
+            if (characterCardsMap.containsKey(accusationCharacterInput)) {
+                accusationCharacterCard = characterCardsMap.get(accusationCharacterInput);
             }
 
             if (accusationCharacterCard == null)
@@ -519,7 +519,7 @@ public class Game {
             Scanner accusationWeaponScan = new Scanner(System.in);
             String accusationWeaponInput = accusationWeaponScan.nextLine();
 
-            if(weaponCardsMap.containsKey(accusationWeaponInput)){
+            if (weaponCardsMap.containsKey(accusationWeaponInput)) {
                 accusationWeaponCard = weaponCardsMap.get(accusationWeaponInput);
             }
 
@@ -566,11 +566,10 @@ public class Game {
 
         room = p.getCurrentPosition().getRoom();
 
-        for (RoomCard r : roomCards) {
-            if (p.getCurrentPosition().getRoom().toString().equals(r.getRoomName())) {
-                suggestionRoom = r;
-            }
+        if (roomCardsMap.containsKey(p.getCurrentPosition().getRoom().toString())) {
+            suggestionRoom = roomCardsMap.get(p.getCurrentPosition().getRoom().toString());
         }
+
 
         // get accusation character
         System.out.println("Please suggest a character: ");
@@ -578,11 +577,14 @@ public class Game {
             Scanner suggestionCharacterScan = new Scanner(System.in);
             String suggestionCharacterInput = suggestionCharacterScan.nextLine();
 
-            for (CharacterCard c : characterCards) {
-                if (c.getCharacterName().equals(suggestionCharacterInput)) suggestionCharacter = c;
+
+            if (characterCardsMap.containsKey(suggestionCharacterInput)) {
+                suggestionCharacter = characterCardsMap.get(suggestionCharacterInput);
             }
-            if (suggestionCharacter == null)
+
+            if (suggestionCharacter == null) {
                 System.out.println("Character not found! Please enter a valid character name:");
+            }
         }
 
         // get accusation character
@@ -591,9 +593,10 @@ public class Game {
             Scanner suggestionWeaponScan = new Scanner(System.in);
             String suggestionWeaponInput = suggestionWeaponScan.nextLine();
 
-            for (WeaponCard w : weaponCards) {
-                if (w.getWeaponName().equals(suggestionWeaponInput)) suggestionWeapon = w;
+            if (weaponCardsMap.containsKey(suggestionWeaponInput)) {
+                suggestionWeapon = weaponCardsMap.get(suggestionWeaponInput);
             }
+
             if (suggestionWeapon == null)
                 System.out.println("Weapon not found! Please enter a valid weapon name:");
         }
