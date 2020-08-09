@@ -489,8 +489,7 @@ public class Game {
         // get accusation room
         System.out.println("Please enter an accusation room: ");
         while (accusationRoomCard == null) {
-            Scanner accusationRoomScan = new Scanner(System.in);
-            String accusationRoomInput = accusationRoomScan.nextLine();
+            String accusationRoomInput = new Scanner(System.in).nextLine();
 
             if (roomCardsMap.containsKey(accusationRoomInput)) {
                 accusationRoomCard = roomCardsMap.get(accusationRoomInput);
@@ -502,8 +501,7 @@ public class Game {
         // get accusation character
         System.out.println("Please enter a character to accuse: ");
         while (accusationCharacterCard == null) {
-            Scanner accusationCharacterScan = new Scanner(System.in);
-            String accusationCharacterInput = accusationCharacterScan.nextLine();
+            String accusationCharacterInput = new Scanner(System.in).nextLine();
 
             if (characterCardsMap.containsKey(accusationCharacterInput)) {
                 accusationCharacterCard = characterCardsMap.get(accusationCharacterInput);
@@ -516,8 +514,7 @@ public class Game {
         // get accusation character
         System.out.println("Please enter an accusation murder weapon: ");
         while (accusationWeaponCard == null) {
-            Scanner accusationWeaponScan = new Scanner(System.in);
-            String accusationWeaponInput = accusationWeaponScan.nextLine();
+            String accusationWeaponInput = new Scanner(System.in).nextLine();
 
             if (weaponCardsMap.containsKey(accusationWeaponInput)) {
                 accusationWeaponCard = weaponCardsMap.get(accusationWeaponInput);
@@ -574,8 +571,7 @@ public class Game {
         // get accusation character
         System.out.println("Please suggest a character: ");
         while (suggestionCharacter == null) {
-            Scanner suggestionCharacterScan = new Scanner(System.in);
-            String suggestionCharacterInput = suggestionCharacterScan.nextLine();
+            String suggestionCharacterInput = new Scanner(System.in).nextLine();
 
 
             if (characterCardsMap.containsKey(suggestionCharacterInput)) {
@@ -590,8 +586,7 @@ public class Game {
         // get accusation character
         System.out.println("Please suggest murder weapon: ");
         while (suggestionWeapon == null) {
-            Scanner suggestionWeaponScan = new Scanner(System.in);
-            String suggestionWeaponInput = suggestionWeaponScan.nextLine();
+            String suggestionWeaponInput = new Scanner(System.in).nextLine();
 
             if (weaponCardsMap.containsKey(suggestionWeaponInput)) {
                 suggestionWeapon = weaponCardsMap.get(suggestionWeaponInput);
@@ -652,8 +647,7 @@ public class Game {
             boolean failedRefutation = false;
 
             while (refutation == null && !failedRefutation) {
-                Scanner refutationScan = new Scanner(System.in);
-                String refutationInput = refutationScan.nextLine();
+                String refutationInput = new Scanner(System.in).nextLine();
 
                 if (refutationInput.equalsIgnoreCase("Pass")) {
                     failedRefutation = true;
@@ -701,8 +695,7 @@ public class Game {
      */
     private String suggestionValidateInput() {
         String answer = "";
-        Scanner inputScan = new Scanner(System.in);
-        String input = inputScan.nextLine();
+        String input = new Scanner(System.in).nextLine();
         try {
             answer = input;
         } catch (Exception e) {
