@@ -1,23 +1,36 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
-
 // line 43 "model.ump"
 // line 161 "model.ump"
 // line 219 "model.ump"
+
+/**
+ * Room Class
+ */
 public class Room {
 
     //Room Attributes
     private final String roomName;
-    private String roomChar;
+    private String roomChar; // room representation character for board
 
+
+    /**
+     * Room Constructor
+     *
+     * @param roomName full room name
+     */
     public Room(String roomName) {
         this.roomName = roomName;
         setRoomChar(this.roomName);
     }
 
-    // Basic Information Getters
 
+    /**
+     * Set Room Character based on assigned room name
+     *
+     * @param roomName room name
+     */
     private void setRoomChar(String roomName) {
         switch (roomName) {
             case "Conservatory":
@@ -53,10 +66,21 @@ public class Room {
         }
     }
 
+    /**
+     * Get Room Character
+     *
+     * @return room character string
+     */
     public String getRoomChar() {
         return roomChar;
     }
 
+
+    /**
+     * Room toString Method
+     *
+     * @return room name as toString
+     */
     public String toString() {
         return this.roomName;
     }

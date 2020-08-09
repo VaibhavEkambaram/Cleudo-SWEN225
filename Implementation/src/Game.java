@@ -41,7 +41,7 @@ public class Game {
 
     private final String[] weaponNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
     private final String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study", "Library", "Billiard Room", "Conservatory", "Ball Room"};
-    private final String[] characterNames = {"Ms. Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
+    private final String[] characterNames = {"Miss Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
 
 
     /**
@@ -528,9 +528,11 @@ public class Game {
 
         if (murderScenario.equals(accusationScenario)) {
             System.out.println(p.getCharacter().getCharacterName() + " was successful in their accusation. They have won the game!!!");
+            System.out.println("The murder scenario was: " + murderScenario.toString());
+            System.out.println("\nThank you for playing Cluedo! To play a new game, please launch the program again.");
             return 1;
         } else {
-            System.out.println("You were incorrect in your accusation. You may remain playing the game and offering suggestions, but may no longer be able to make further accusations.");
+            System.out.println("You were incorrect in your accusation. You may remain playing the game and offering suggestions, but are no longer able to make further accusations.");
             p.setCanAccuse(false);
             return 0;
         }
@@ -543,7 +545,7 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav Ekambaram, Cameron Li
      */
     private void makeSuggestion(Player p) {
-
+        //initialize required fields
         Room room;
         RoomCard suggestionRoom = null;
         WeaponCard suggestionWeapon = null;
@@ -566,22 +568,19 @@ public class Game {
         }
 
 
-        // get accusation character
+        // ask for a suggestion character
         System.out.println("Please suggest a character: ");
         while (suggestionCharacter == null) {
             String suggestionCharacterInput = new Scanner(System.in).nextLine();
-
-
             if (characterCardsMap.containsKey(suggestionCharacterInput)) {
                 suggestionCharacter = characterCardsMap.get(suggestionCharacterInput);
             }
-
             if (suggestionCharacter == null) {
                 System.out.println("Character not found! Please enter a valid character name:");
             }
         }
 
-        // get accusation character
+        // ask for a suggestion weapon
         System.out.println("Please suggest murder weapon: ");
         while (suggestionWeapon == null) {
             String suggestionWeaponInput = new Scanner(System.in).nextLine();
@@ -596,14 +595,13 @@ public class Game {
 
         System.out.println("Moving " + suggestionCharacter.getCharacterName() + " to " + room.toString() + "...");
 
+        // teleport the suggested player to the suggested room
         for (Player findP : players) {
             if (findP.getCharacter().getCharacterName().equals(suggestionCharacter.getCharacterName())) {
 
                 Room otherPlayerRoom = findP.getCurrentPosition().getRoom();
 
                 if (otherPlayerRoom == null || !findP.getCurrentPosition().getRoom().equals(room)) {
-                    System.out.println(findP.toString());
-                    System.out.println(room.toString());
                     Board newBoard = board.teleportPlayer(findP, room);
                     if (newBoard != null) {
                         board = newBoard;
@@ -619,6 +617,7 @@ public class Game {
         Scenario suggestion = new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter);
         System.out.println(p.getCharacter().getCharacterName() + "'s suggestion: [" + suggestion.toString() + "]");
 
+        // place all other players in a stack so that they can take turns at refuting
         Stack<Player> refuters = new Stack<>();
         for (Player addToStack : players) {
             if (!addToStack.equals(p)) {
@@ -626,6 +625,7 @@ public class Game {
             }
         }
 
+        // iterate through the stack, asking each player to produce a refutation.
         boolean refuted = false;
         while (!refuters.isEmpty()) {
             Player currentTurn = refuters.pop();
@@ -638,10 +638,10 @@ public class Game {
 
             System.out.println("Refute this suggestion with a card from your hand or type pass to skip: ");
 
-
             Card refutation = null;
             boolean failedRefutation = false;
 
+            // read the input from the player and match it to a card in their hand. If no matching card exists, the player is prompted to try again
             while (refutation == null && !failedRefutation) {
                 String refutationInput = new Scanner(System.in).nextLine();
 
@@ -658,33 +658,44 @@ public class Game {
                 }
             }
 
+            // if the previous player failed to refute, continue the loop
             if (failedRefutation) continue;
 
+            // if the player successfully refutes the suggestion, end the loop
             if (refutation.toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom != null ? suggestionRoom.toString() : null) || refutation.toString().equals(suggestionWeapon.toString())) {
                 System.out.println(p.getCharacter().getCharacterName() + "'s suggestion was refuted!");
                 refuted = true;
                 break;
-            } else {
+            } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
                 System.out.println("Invalid refutation!");
             }
         }
 
+        //if the stack is empty and no other player could refute, offer the option of making an Accusation to player who suggested
         if (!refuted) {
             System.out.println(p.getCharacter().getCharacterName() + "'s turn");
-            System.out.println("No one could refute your suggestion! Would you like to make an accusation? (y/n)");
-            if (suggestionValidateInput().equals("y")) {
+            System.out.println("No one could refute your suggestion! Type accuse to make an accusation or type pass to skip: ");
 
-                int accuse = makeAccusation(p);
-                if (accuse == 1) {
-                    gameRunning = false;
+            boolean answered = false;
+            while(!answered) {
+                String answer = suggestionValidateInput();
+                if (answer.equals("accuse")) {
+                    answered = true;
+                    int accuse = makeAccusation(p);
+                    if (accuse == 1) { //if the accusation was successful
+                        gameRunning = false;
+                    }
+                } else if (answer.equals("pass")) {
+                    answered = true;
+                } else {
+                    System.out.println("Please enter either accuse or pass to continue: ");
                 }
             }
         }
     }
 
     /**
-     * Asks current player if they would like to accuse or suggest
-     * Returns their response
+     * Reads user text input and returns it
      *
      * @return String
      * @author Baxter Kirikiri
@@ -695,7 +706,7 @@ public class Game {
         try {
             answer = input;
         } catch (Exception e) {
-            System.out.println("Please enter 'a', 's', or 'n'");
+            System.out.println("Please enter 'Accusation', 'Suggestion', or 'Pass'");
         }
         return answer;
     }

@@ -12,10 +12,8 @@ public class Board {
     //Board Positions
     private final Position[][] positions = new Position[25][24]; // Board is in (y, x) format
 
-
     // Constructors
     public Board() {
-
     }
 
     // Clone Board with same positions
@@ -31,14 +29,20 @@ public class Board {
      * Adds a Position to the Board Positions Array
      * Only used for the initial Board, not used in Cloned Boards
      *
-     * @param y
-     * @param x
-     * @param position
+     * @param y        y co-ordinate
+     * @param x        x co-ordinate
+     * @param position position
      */
     public void addPosition(int y, int x, Position position) {
         positions[y][x] = position; // Board is in (y, x) format
     }
 
+
+    /**
+     * Print out the game board
+     *
+     * @return board print
+     */
     public String toString() {
         StringBuilder boardPrint = new StringBuilder();
         boardPrint.append("      a b c d e f g h i j k l m n o p q r s t u v w x\n\n");
@@ -53,7 +57,6 @@ public class Board {
         return boardPrint.toString();
     }
 
-    // Board Movement
 
     /**
      * Create a new board with applied Move action
@@ -67,8 +70,8 @@ public class Board {
         Board cloneBoard = new Board(this);
 
         Position playerPos = player.getCurrentPosition();
-        int x = playerPos.getxLoc();
-        int y = playerPos.getyLoc();
+        int x = playerPos.getLocationX();
+        int y = playerPos.getLocationY();
 
         // Check Player clone Position matches original Position
         if (cloneBoard.positions[y][x].getCharacter() != player.getCharacter()) {
@@ -117,8 +120,8 @@ public class Board {
                 nextPosition.setCharacter(player.getCharacter());
 
                 spaces--;
-                x = playerPos.getxLoc();
-                y = playerPos.getyLoc();
+                x = playerPos.getLocationX();
+                y = playerPos.getLocationY();
             } else {
                 return null;
             }
@@ -134,9 +137,9 @@ public class Board {
      * Teleports a player to a Room
      * Used for Suggestions
      *
-     * @param player
-     * @param room
-     * @return
+     * @param player player
+     * @param room   room
+     * @return copy of board
      * @author Cameron Li
      */
     public Board teleportPlayer(Player player, Room room) {
@@ -146,8 +149,8 @@ public class Board {
                 Position found = cloneBoard.positions[i][j];
                 if (found.getRoom() != null) {
                     if (found.getRoom().equals(room) && found.isPassableTile() && !found.isDoor()) {
-                        int y = player.getCurrentPosition().getyLoc();
-                        int x = player.getCurrentPosition().getxLoc();
+                        int y = player.getCurrentPosition().getLocationY();
+                        int x = player.getCurrentPosition().getLocationX();
                         cloneBoard.positions[y][x].removeCharacter();
                         found.setCharacter(player.getCharacter());
                         player.setCurrentPosition(found);
@@ -164,9 +167,9 @@ public class Board {
     /**
      * Check if co-ordinates are within game board
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x x co-ordinate
+     * @param y y co-ordinate
+     * @return out of bounds boolean
      */
     private boolean outOfBounds(int x, int y) {
         if (x < 0 || y < 0) {
@@ -179,11 +182,11 @@ public class Board {
      * Check if movement on/towards Door Position is valid
      * Must be moving towards the right direction depending on direction of door
      *
-     * @param checkPosition
-     * @param dx
-     * @param dy
-     * @param enter
-     * @return
+     * @param checkPosition position
+     * @param dx            change by x
+     * @param dy            change by y
+     * @param enter         enter
+     * @return door validate boolean
      */
     private boolean checkDoorMovement(Position checkPosition, int dx, int dy, boolean enter) {
         if (!enter) {
@@ -214,6 +217,4 @@ public class Board {
             }
         }
     }
-
-
 }
