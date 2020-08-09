@@ -38,7 +38,9 @@ public class Scenario {
      *
      * @return room card
      */
-    public RoomCard getRoomCard() { return roomCard; }
+    public RoomCard getRoomCard() {
+        return roomCard;
+    }
 
     /**
      * Weapon Card Get Method
@@ -51,6 +53,7 @@ public class Scenario {
 
     /**
      * Character Card Get Method
+     *
      * @return murderer character card
      */
     public CharacterCard getMurderer() {
@@ -59,8 +62,10 @@ public class Scenario {
 
     /**
      * Equals Method - Compare scenario with another
+     *
      * @param o other object
      * @return boolean validator
+     * @author Vaibhav Ekambaram
      */
     @Override
     public boolean equals(Object o) {
@@ -72,7 +77,9 @@ public class Scenario {
 
     /**
      * Placeholder toString method
+     *
      * @return room + murderer + weapon string
+     * @author Vaibhav Ekambaram
      */
     public String toString() {
         return getRoomCard().getRoomName() + " " + getMurderer().getCharacterName() + " " + getWeapon().getWeaponName();

@@ -1,9 +1,15 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
-
 // line 100 "model.ump"
 // line 190 "model.ump"
+
+import java.util.Objects;
+
+/**
+ * Position Class
+ * Used as a "Tile" on the board
+ */
 public class Position {
 
     //------------------------
@@ -24,7 +30,14 @@ public class Position {
     private boolean isDoor = false;
     private boolean passableTile;
 
-    // Default Constructor
+
+    /**
+     * Default Constructor
+     *
+     * @param x       x
+     * @param y       y
+     * @param canMove ability for player to move to this position
+     */
     public Position(int x, int y, boolean canMove) {
         this.xLoc = x;
         this.yLoc = y;
@@ -34,7 +47,15 @@ public class Position {
         }
     }
 
-    // Character Position Constructor
+
+    /**
+     * Character Position Constructor
+     *
+     * @param x         x
+     * @param y         y
+     * @param canMove   ability for player to move to this position
+     * @param character character
+     */
     public Position(int x, int y, boolean canMove, CharacterCard character) {
         this.xLoc = x;
         this.yLoc = y;
@@ -42,7 +63,17 @@ public class Position {
         this.character = character;
     }
 
-    // Room Position Constructor
+
+    /**
+     * Room Position Constructor
+     *
+     * @param x            x
+     * @param y            y
+     * @param canMove      ability for player to move to this position
+     * @param passableTile is tile passable
+     * @param direction    direction
+     * @param inRoom       is the position located in a room
+     */
     public Position(int x, int y, boolean canMove, boolean passableTile, Move.Direction direction, Room inRoom) {
         this.xLoc = x;
         this.yLoc = y;
@@ -59,7 +90,7 @@ public class Position {
             this.displayName = inRoom.getRoomChar().toLowerCase();
         }
         if (this.isDoor) {
-            switch (direction) {
+            switch (Objects.requireNonNull(direction)) {
                 case UP:
                     this.displayName = "^";
                     break;
@@ -79,7 +110,11 @@ public class Position {
         }
     }
 
-    // Clone Constructor
+    /**
+     * Clone Position Constructor
+     *
+     * @return cloned position
+     */
     public Position clone() {
         Position clonePosition = new Position(this.xLoc, this.yLoc, this.canMove);
         clonePosition.character = this.character;
@@ -94,16 +129,31 @@ public class Position {
         return clonePosition;
     }
 
-    // Basic Location Information
 
+    /**
+     * x co-ordinate
+     *
+     * @return int
+     */
     public int getxLoc() {
         return xLoc;
     }
 
+    /**
+     * y co-ordinate
+     *
+     * @return int
+     */
     public int getyLoc() {
         return yLoc;
     }
 
+
+    /**
+     * Can this tile be moved
+     *
+     * @return boolean
+     */
     public boolean canMove() {
         if (this.character == null) { // If no character occupies position
             return this.canMove;
@@ -111,6 +161,11 @@ public class Position {
         return false;
     }
 
+    /**
+     * Position toString Method, return either character or displayName
+     *
+     * @return string
+     */
     public String toString() {
         if (this.character != null) {
             return this.character.getCharacterBoardChar();
@@ -118,41 +173,70 @@ public class Position {
         return this.displayName;
     }
 
-    // Character
 
+    /**
+     * Get Character
+     *
+     * @return CharacterCard
+     */
     public CharacterCard getCharacter() {
         return this.character;
     }
 
+    /**
+     * Set Character
+     *
+     * @param character CharacterCard
+     */
     public void setCharacter(CharacterCard character) {
         this.character = character;
     }
 
+    /**
+     * Remove Character
+     */
     public void removeCharacter() {
         this.character = null;
     }
 
-    // Room
 
+    /**
+     * Get Room associated with this position
+     *
+     * @return Room
+     */
     public Room getRoom() {
         return inRoom;
     }
 
+    /**
+     * Determine whether this position is a door
+     *
+     * @return boolean
+     */
     public boolean isDoor() {
         return isDoor;
     }
 
-    // Is this an Inner or an Outer Room Position
+
+    /**
+     * Determine whether this is an inner or outer room
+     *
+     * @return boolean
+     */
     public boolean isPassableTile() {
         return this.passableTile;
     }
 
+    /**
+     * Get direction orientation of a particular door
+     *
+     * @return Move direction
+     */
     public Move.Direction getDoorDirection() {
         if (isDoor) {
             return doorDirection;
         }
         return null;
     }
-
-
 }

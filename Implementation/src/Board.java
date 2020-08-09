@@ -12,7 +12,6 @@ public class Board {
     //Board Positions
     private final Position[][] positions = new Position[25][24]; // Board is in (y, x) format
 
-
     // Constructors
     public Board() {
 
@@ -31,14 +30,20 @@ public class Board {
      * Adds a Position to the Board Positions Array
      * Only used for the initial Board, not used in Cloned Boards
      *
-     * @param y
-     * @param x
-     * @param position
+     * @param y        y co-ordinate
+     * @param x        x co-ordinate
+     * @param position position
      */
     public void addPosition(int y, int x, Position position) {
         positions[y][x] = position; // Board is in (y, x) format
     }
 
+
+    /**
+     * Print out the game board
+     *
+     * @return board print
+     */
     public String toString() {
         StringBuilder boardPrint = new StringBuilder();
         boardPrint.append("      a b c d e f g h i j k l m n o p q r s t u v w x\n\n");
@@ -53,7 +58,6 @@ public class Board {
         return boardPrint.toString();
     }
 
-    // Board Movement
 
     /**
      * Create a new board with applied Move action
@@ -214,6 +218,4 @@ public class Board {
             }
         }
     }
-
-
 }

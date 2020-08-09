@@ -607,8 +607,6 @@ public class Game {
                 Room otherPlayerRoom = findP.getCurrentPosition().getRoom();
 
                 if (otherPlayerRoom == null || !findP.getCurrentPosition().getRoom().equals(room)) {
-                    System.out.println(findP.toString());
-                    System.out.println(room.toString());
                     Board newBoard = board.teleportPlayer(findP, room);
                     if (newBoard != null) {
                         board = newBoard;

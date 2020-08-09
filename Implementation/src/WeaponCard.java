@@ -16,7 +16,7 @@ public class WeaponCard implements Card {
     //------------------------
 
     //WeaponCard Attributes
-    private String weaponString; // name of the weapon
+    private final String weaponString; // name of the weapon
     private Room room; // room where the weapon is located
 
     /**
@@ -26,19 +26,6 @@ public class WeaponCard implements Card {
      */
     public WeaponCard(String weaponString) {
         this.weaponString = weaponString;
-    }
-
-    /**
-     * Update Weapon String
-     *
-     * @param weaponString String identifying the weapon
-     * @return boolean checking action was executed
-     */
-    public boolean setWeapon(String weaponString) {
-        boolean wasSet;
-        this.weaponString = weaponString;
-        wasSet = true;
-        return wasSet;
     }
 
     /**
