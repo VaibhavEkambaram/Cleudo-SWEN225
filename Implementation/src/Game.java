@@ -172,7 +172,6 @@ public class Game {
         System.out.println("Cards Dealt");
     }
 
-
     /**
      * Create the deck and then shuffle
      * Generate initial murder scenario
@@ -301,10 +300,6 @@ public class Game {
                     }
                 }
 
-                if (newPosition == null) { // Position where player was not added due to numPlayers < maxPlayers
-                    newPosition = new Position(x, y, true);
-                }
-                board.addPosition(y, x, newPosition); // Add found position
             }
             positionScan.close();
         }
