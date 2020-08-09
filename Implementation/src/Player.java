@@ -18,7 +18,6 @@ public class Player {
     private Position currentPosition;
     // Player State
     private boolean canAccuse = true;
-    private boolean canRefute = true;
 
 
     /**
@@ -51,14 +50,6 @@ public class Player {
         canAccuse = aCanAccuse;
     }
 
-    /**
-     * Set ability to make refutations
-     *
-     * @param aCanRefute refutation validator boolean
-     */
-    public void setCanRefute(boolean aCanRefute) {
-        canRefute = aCanRefute;
-    }
 
     /**
      * Set current Position of player
@@ -119,12 +110,4 @@ public class Player {
         return canAccuse;
     }
 
-    /**
-     * Check player ability to make a refutation
-     *
-     * @return can refute boolean validator
-     */
-    public boolean getCanRefute() {
-        return canRefute;
-    }
 }
