@@ -145,7 +145,7 @@ public class Game {
             }
         }
 
-        initDeck(numPlayers);
+        initDeck();
         players = new ArrayList<>();
         IntStream.range(0, numPlayers).forEach(n -> players.add(new Player(characterCards.get(n))));
         this.dealCards();
@@ -179,7 +179,7 @@ public class Game {
      *
      * @author Cameron Li
      */
-    private void initDeck(int numPlayers) {
+    private void initDeck() {
         // Adding cards
         deck = new ArrayList<>();
 
@@ -207,10 +207,10 @@ public class Game {
         // Characters
         characterCards = new ArrayList<>();
         // Only create cards where there are players
-        for (int c = 0; c < numPlayers; c++) {
-            CharacterCard character = new CharacterCard(characterNames[c]);
+        for (String c : characterNames) {
+            CharacterCard character = new CharacterCard(c);
             characterCards.add(character);
-            characterCardsMap.put(characterNames[c], character);
+            characterCardsMap.put(c, character);
             deck.add(character);
         }
 
@@ -218,7 +218,7 @@ public class Game {
         // Murder Scenario of Random Cards
         WeaponCard murderWeapon = weaponCards.get(new Random().nextInt(weaponNames.length - 1) + 1);
         RoomCard murderRoom = roomCards.get(new Random().nextInt(roomNames.length - 1) + 1);
-        CharacterCard murderer = characterCards.get(new Random().nextInt(numPlayers));
+        CharacterCard murderer = characterCards.get(new Random().nextInt(characterNames.length - 1) + 1);
         murderScenario = new Scenario(murderWeapon, murderRoom, murderer);
         deck.remove(murderWeapon);
         deck.remove(murderRoom);
