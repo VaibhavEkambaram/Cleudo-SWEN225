@@ -17,7 +17,6 @@ public class WeaponCard implements Card {
 
     //WeaponCard Attributes
     private final String weaponString; // name of the weapon
-    private Room room; // room where the weapon is located
 
     /**
      * Constructor Method for WeaponCard
@@ -36,25 +35,6 @@ public class WeaponCard implements Card {
     public String getWeaponName() {
         return weaponString;
     }
-
-    /**
-     * Update Weapon Room Location
-     *
-     * @param r room to replace with
-     */
-    public void setRoom(Room r) {
-        room = r;
-    }
-
-    /**
-     * Get Weapon Room Location
-     *
-     * @return room
-     */
-    public Room getRoom() {
-        return room;
-    }
-
 
     /**
      * Overridden toString method
