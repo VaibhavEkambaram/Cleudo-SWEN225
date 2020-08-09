@@ -5,14 +5,4 @@ A group project with 3 members
 - Baxter Kirikiri
 - Vaibhav Ekambaram
 
-### Current Tasks ###
-- Initial modelling and design 
-- Basic text based design
-
-### CRC Cards Documentation ###
-
-https://app.creately.com/diagram/KbzTnaN6Nyr/view
-	
-
-
 
