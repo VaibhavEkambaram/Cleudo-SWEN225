@@ -9,17 +9,11 @@
 // line 90 "model.ump"
 // line 183 "model.ump"
 public class Board {
-
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-
-    //Board Associations
+    //Board Positions
     private final Position[][] positions = new Position[25][24]; // Board is in (y, x) format
 
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
+
+    // Constructors
     public Board() {
 
     }
@@ -33,6 +27,14 @@ public class Board {
         }
     }
 
+    /**
+     * Adds a Position to the Board Positions Array
+     * Only used for the initial Board, not used in Cloned Boards
+     *
+     * @param y
+     * @param x
+     * @param position
+     */
     public void addPosition(int y, int x, Position position) {
         positions[y][x] = position; // Board is in (y, x) format
     }
@@ -41,7 +43,7 @@ public class Board {
         StringBuilder boardPrint = new StringBuilder();
         boardPrint.append("      a b c d e f g h i j k l m n o p q r s t u v w x\n\n");
         for (int i = 0; i < positions.length; i++) {
-            boardPrint.append(i+1).append(i + 1 < 10 ? "    " : "   ");
+            boardPrint.append(i + 1).append(i + 1 < 10 ? "    " : "   ");
             Position[] position = positions[i];
             for (int j = 0; j < positions[0].length; j++) {
                 boardPrint.append("|").append(position[j].toString());
@@ -51,11 +53,13 @@ public class Board {
         return boardPrint.toString();
     }
 
+    // Board Movement
+
     /**
      * Create a new board with applied Move action
      *
      * @param player player
-     * @param move move
+     * @param move   move
      * @return Board
      * @author Cameron Li
      */
@@ -154,6 +158,8 @@ public class Board {
         }
         return null;
     }
+
+    // Board Valid Movement Checks
 
     /**
      * Check if co-ordinates are within game board

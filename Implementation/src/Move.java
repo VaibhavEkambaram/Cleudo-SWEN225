@@ -1,6 +1,6 @@
 public class Move {
-    private final Direction direction;
-    private final int spaces;
+    private final Direction direction; // Direction of travel
+    private final int spaces; // Number of spaces to travel
 
     public Move(Direction direction, int spaces) {
         this.direction = direction;
@@ -11,14 +11,22 @@ public class Move {
         UP, DOWN, LEFT, RIGHT
     }
 
+    // Move Getters
+
+    /**
+     * Return the number of times to travel on the axis given by direction
+     *
+     * @return
+     */
     public int getSpaces() {
         return spaces;
     }
 
-    public Direction getDirection() {
-        return direction;
-    }
-
+    /**
+     * Returns the number of spaces to travel on the x-axis
+     *
+     * @return
+     */
     public int xChange() {
         switch (direction) {
             case LEFT:
@@ -30,6 +38,11 @@ public class Move {
         }
     }
 
+    /**
+     * Returns the number of spaces to travel on the y-axis
+     *
+     * @return
+     */
     public int yChange() {
         switch (direction) {
             case UP:

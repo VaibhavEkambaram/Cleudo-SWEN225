@@ -11,22 +11,18 @@ public class Position {
     //------------------------
 
 
-    //Position Attributes
+    // Basic Position Attributes
     private CharacterCard character;
-    private Room inRoom;
     private String displayName = "_";
-
-    private Move.Direction doorDirection;
-    private boolean isDoor = false;
-    private boolean passableTile;
     private boolean canMove;
-
     private int xLoc;
     private int yLoc;
 
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
+    // Room Attributes
+    private Room inRoom;
+    private Move.Direction doorDirection;
+    private boolean isDoor = false;
+    private boolean passableTile;
 
     // Default Constructor
     public Position(int x, int y, boolean canMove) {
@@ -99,6 +95,7 @@ public class Position {
     }
 
     // Basic Location Information
+
     public int getxLoc() {
         return xLoc;
     }
@@ -122,6 +119,7 @@ public class Position {
     }
 
     // Character
+
     public CharacterCard getCharacter() {
         return this.character;
     }
@@ -135,6 +133,7 @@ public class Position {
     }
 
     // Room
+
     public Room getRoom() {
         return inRoom;
     }
@@ -143,6 +142,7 @@ public class Position {
         return isDoor;
     }
 
+    // Is this an Inner or an Outer Room Position
     public boolean isPassableTile() {
         return this.passableTile;
     }

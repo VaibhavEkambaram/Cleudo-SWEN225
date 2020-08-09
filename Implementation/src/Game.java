@@ -118,6 +118,8 @@ public class Game {
     }
 
 
+    // Initial Game Instance Creation
+
     /**
      * Initialise the game
      * Ask user for number of players
@@ -310,6 +312,7 @@ public class Game {
         this.board = board; // Set board
     }
 
+    // Gameplay
 
     /**
      * MAIN GAME LOOP
@@ -542,7 +545,7 @@ public class Game {
     /**
      * Handles player suggestions.
      *
-     * @author Baxter Kirikiri, Vaibhav Ekambaram
+     * @author Baxter Kirikiri, Vaibhav Ekambaram, Cameron Li
      */
     private void makeSuggestion(Player p) {
 
@@ -621,14 +624,12 @@ public class Game {
         Scenario suggestion = new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter);
         System.out.println(p.getCharacter().getCharacterName() + "'s suggestion: [" + suggestion.toString() + "]");
 
-
         Stack<Player> refuters = new Stack<>();
         for (Player addToStack : players) {
             if (!addToStack.equals(p)) {
                 refuters.add(addToStack);
             }
         }
-
 
         boolean refuted = false;
         while (!refuters.isEmpty()) {

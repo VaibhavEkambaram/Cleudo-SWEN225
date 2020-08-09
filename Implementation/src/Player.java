@@ -9,43 +9,27 @@ import java.util.List;
 // line 178 "model.ump"
 public class Player {
 
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-
     private final List<Card> hand;
-    //Player Attributes
+    // Player Gameplay Information
     private CharacterCard character;
+    private Position currentPosition;
+    // Player State
     private boolean canAccuse = true;
     private boolean canRefute = true;
-    private Position currentPosition;
 
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-
+    // Constructor and Initialise Methods
     public Player(CharacterCard aCharacter) {
         character = aCharacter;
         hand = new ArrayList<>();
     }
 
-    //------------------------
-    // INTERFACE
-    //------------------------
-
-    public boolean setCharacter(CharacterCard aCharacter) {
-        boolean wasSet = false;
-        character = aCharacter;
-        wasSet = true;
-        return wasSet;
-    }
-
-    /* Code from template attribute_SetMany */
     public boolean addHand(Card aHand) {
         boolean wasAdded = false;
         wasAdded = hand.add(aHand);
         return wasAdded;
     }
+
+    // Player Setters
 
     public boolean setCanAccuse(boolean aCanAccuse) {
         boolean wasSet = false;
@@ -66,11 +50,25 @@ public class Player {
         return true;
     }
 
+    // Player Information Getters
+
     public CharacterCard getCharacter() {
         return character;
     }
 
-    public List<Card> getHand() { return hand; }
+    public List<Card> getHand() {
+        return hand;
+    }
+
+    public Position getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public String toString() {
+        return "Player " + this.character.getCharacterBoardChar() + this.character;
+    }
+
+    // Player State Getters
 
     public boolean getCanAccuse() {
         return canAccuse;
@@ -80,15 +78,5 @@ public class Player {
         return canRefute;
     }
 
-    public Position getCurrentPosition() {
-        return currentPosition;
-    }
 
-    public String toString() {
-        return super.toString() + "[" +
-                "canAccuse" + ":" + getCanAccuse() + "," +
-                "canRefute" + ":" + getCanRefute() + "]" + System.getProperties().getProperty("line.separator") +
-                "  " + "character" + "=" + (getCharacter() != null ? !getCharacter().equals(this) ? getCharacter().toString().replaceAll(" {2}", "    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-                "  " + "currentPosition" + "=" + (getCurrentPosition() != null ? !getCurrentPosition().equals(this) ? getCurrentPosition().toString().replaceAll(" {2}", "    ") : "this" : "null");
-    }
 }
