@@ -299,7 +299,7 @@ public class Game {
                         }
                     }
                 }
-
+                board.addPosition(y, x, newPosition); // Add found position
             }
             positionScan.close();
         }
