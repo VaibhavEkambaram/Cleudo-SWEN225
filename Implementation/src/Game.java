@@ -53,7 +53,7 @@ public class Game {
      */
     public static void main(String[] args) {
         System.out.println("------------------------------------------------------------------------\n" +
-                "\t\t\t\t\t\t\tCluedo!\n" +
+                "\tCluedo!\n" +
                 "------------------------------------------------------------------------\n" +
                 "\tSWEN225 Assignment 1\n" +
                 "\tA group project by:\n" +
