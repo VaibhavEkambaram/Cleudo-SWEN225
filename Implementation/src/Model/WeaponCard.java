@@ -1,4 +1,4 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
+package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 // line 11 "model.ump"
@@ -7,7 +7,7 @@
 // line 199 "model.ump"
 
 /**
- * WeaponCard Class - Implements Card Interface
+ * Model.WeaponCard Class - Implements Model.Card Interface
  */
 public class WeaponCard implements Card {
 
@@ -15,11 +15,11 @@ public class WeaponCard implements Card {
     // MEMBER VARIABLES
     //------------------------
 
-    //WeaponCard Attributes
+    //Model.WeaponCard Attributes
     private final String weaponString; // name of the weapon
 
     /**
-     * Constructor Method for WeaponCard
+     * Constructor Method for Model.WeaponCard
      *
      * @param weaponString String identifying the weapon
      */

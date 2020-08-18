@@ -1,4 +1,4 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
+package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import java.util.ArrayList;
@@ -8,20 +8,20 @@ import java.util.List;
 // line 178 "model.ump"
 
 /**
- * Player Class
+ * Model.Player Class
  */
 public class Player {
 
     private final List<Card> hand;
-    // Player Gameplay Information
+    // Model.Player Gameplay Information
     private final CharacterCard character;
     private Position currentPosition;
-    // Player State
+    // Model.Player State
     private boolean canAccuse = true;
 
 
     /**
-     * Player Constructor and Initialise Methods
+     * Model.Player Constructor and Initialise Methods
      *
      * @param aCharacter character associated with player
      */
@@ -32,7 +32,7 @@ public class Player {
 
 
     /**
-     * Add Card to player hand
+     * Add Model.Card to player hand
      *
      * @param card card to add
      */
@@ -52,7 +52,7 @@ public class Player {
 
 
     /**
-     * Set current Position of player
+     * Set current Model.Position of player
      *
      * @param aCurrentPosition position on board
      */
@@ -60,7 +60,7 @@ public class Player {
         currentPosition = aCurrentPosition;
     }
 
-    // Player Information Getters
+    // Model.Player Information Getters
 
 
     /**
@@ -91,15 +91,15 @@ public class Player {
     }
 
     /**
-     * Player toString
+     * Model.Player toString
      *
      * @return player board character
      */
     public String toString() {
-        return "Player " + this.character.getCharacterBoardChar() + this.character;
+        return "Model.Player " + this.character.getCharacterBoardChar() + this.character;
     }
 
-    // Player State Getters
+    // Model.Player State Getters
 
     /**
      * Check player ability to make accusation

@@ -1,4 +1,4 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
+package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 // line 100 "model.ump"
@@ -7,7 +7,7 @@
 import java.util.Objects;
 
 /**
- * Position Class
+ * Model.Position Class
  * Used as a "Tile" on the board
  */
 public class Position {
@@ -17,14 +17,14 @@ public class Position {
     //------------------------
 
 
-    // Basic Position Attributes
+    // Basic Model.Position Attributes
     private CharacterCard character;
     private String displayName = "_";
     private boolean canMove;
     private int xLoc;
     private int yLoc;
 
-    // Room Attributes
+    // Model.Room Attributes
     private Room inRoom;
     private Move.Direction doorDirection;
     private boolean isDoor = false;
@@ -49,7 +49,7 @@ public class Position {
 
 
     /**
-     * Character Position Constructor
+     * Character Model.Position Constructor
      *
      * @param x         x
      * @param y         y
@@ -65,7 +65,7 @@ public class Position {
 
 
     /**
-     * Room Position Constructor
+     * Model.Room Model.Position Constructor
      *
      * @param x            x
      * @param y            y
@@ -111,7 +111,7 @@ public class Position {
     }
 
     /**
-     * Clone Position Constructor
+     * Clone Model.Position Constructor
      *
      * @return cloned position
      */
@@ -162,7 +162,7 @@ public class Position {
     }
 
     /**
-     * Position toString Method, return either character or displayName
+     * Model.Position toString Method, return either character or displayName
      *
      * @return string
      */
@@ -177,7 +177,7 @@ public class Position {
     /**
      * Get Character
      *
-     * @return CharacterCard
+     * @return Model.CharacterCard
      */
     public CharacterCard getCharacter() {
         return this.character;
@@ -186,7 +186,7 @@ public class Position {
     /**
      * Set Character
      *
-     * @param character CharacterCard
+     * @param character Model.CharacterCard
      */
     public void setCharacter(CharacterCard character) {
         this.character = character;
@@ -201,9 +201,9 @@ public class Position {
 
 
     /**
-     * Get Room associated with this position
+     * Get Model.Room associated with this position
      *
-     * @return Room
+     * @return Model.Room
      */
     public Room getRoom() {
         return inRoom;
@@ -231,7 +231,7 @@ public class Position {
     /**
      * Get direction orientation of a particular door
      *
-     * @return Move direction
+     * @return Model.Move direction
      */
     public Move.Direction getDoorDirection() {
         if (isDoor) {

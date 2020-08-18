@@ -1,22 +1,22 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
+package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 
 /**
- * Board Class
+ * Model.Board Class
  * A board is made up of position classes, which are then all stored in this class
  */
 // line 90 "model.ump"
 // line 183 "model.ump"
 public class Board {
-    //Board Positions
-    private final Position[][] positions = new Position[25][24]; // Board is in (y, x) format
+    //Model.Board Positions
+    private final Position[][] positions = new Position[25][24]; // Model.Board is in (y, x) format
 
     // Constructors
     public Board() {
     }
 
-    // Clone Board with same positions
+    // Clone Model.Board with same positions
     public Board(Board board) {
         for (int i = 0; i < board.positions.length; i++) {
             for (int j = 0; j < board.positions[0].length; j++) {
@@ -26,15 +26,15 @@ public class Board {
     }
 
     /**
-     * Adds a Position to the Board Positions Array
-     * Only used for the initial Board, not used in Cloned Boards
+     * Adds a Model.Position to the Model.Board Positions Array
+     * Only used for the initial Model.Board, not used in Cloned Boards
      *
      * @param y        y co-ordinate
      * @param x        x co-ordinate
      * @param position position
      */
     public void addPosition(int y, int x, Position position) {
-        positions[y][x] = position; // Board is in (y, x) format
+        positions[y][x] = position; // Model.Board is in (y, x) format
     }
 
 
@@ -59,11 +59,11 @@ public class Board {
 
 
     /**
-     * Create a new board with applied Move action
+     * Create a new board with applied Model.Move action
      *
      * @param player player
      * @param move   move
-     * @return Board
+     * @return Model.Board
      * @author Cameron Li
      */
     public Board apply(Player player, Move move) {
@@ -73,7 +73,7 @@ public class Board {
         int x = playerPos.getLocationX();
         int y = playerPos.getLocationY();
 
-        // Check Player clone Position matches original Position
+        // Check Model.Player clone Model.Position matches original Model.Position
         if (cloneBoard.positions[y][x].getCharacter() != player.getCharacter()) {
             return null;
         }
@@ -90,19 +90,19 @@ public class Board {
             playerPos = cloneBoard.positions[y][x];
             Position nextPosition = cloneBoard.positions[y + dy][x + dx];
 
-            if (playerPos.getRoom() == null) { // Player is not in Room
-                if (nextPosition.getRoom() != null) { // Attempt to enter Room
-                    // Player is attempting to enter room but isn't going through the door
+            if (playerPos.getRoom() == null) { // Model.Player is not in Model.Room
+                if (nextPosition.getRoom() != null) { // Attempt to enter Model.Room
+                    // Model.Player is attempting to enter room but isn't going through the door
                     if (!nextPosition.isDoor()) {
                         return null;
                     }
-                    // Player is entering through door, check matching direction
+                    // Model.Player is entering through door, check matching direction
                     if (!checkDoorMovement(nextPosition, dx, dy, true)) {
                         return null;
                     }
                 }
-            } else { // Player is in Room
-                // Player must be leaving door through proper direction
+            } else { // Model.Player is in Model.Room
+                // Model.Player must be leaving door through proper direction
                 if (playerPos.isDoor()) {
                     if (nextPosition.getRoom() == null && !checkDoorMovement(playerPos, dx, dy, false)) {
                         return null;
@@ -134,7 +134,7 @@ public class Board {
     }
 
     /**
-     * Teleports a player to a Room
+     * Teleports a player to a Model.Room
      * Used for Suggestions
      *
      * @param player player
@@ -162,7 +162,7 @@ public class Board {
         return null;
     }
 
-    // Board Valid Movement Checks
+    // Model.Board Valid Movement Checks
 
     /**
      * Check if co-ordinates are within game board
@@ -179,7 +179,7 @@ public class Board {
     }
 
     /**
-     * Check if movement on/towards Door Position is valid
+     * Check if movement on/towards Door Model.Position is valid
      * Must be moving towards the right direction depending on direction of door
      *
      * @param checkPosition position

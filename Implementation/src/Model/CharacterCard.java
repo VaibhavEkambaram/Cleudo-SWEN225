@@ -1,4 +1,4 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
+package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 // line 25 "model.ump"
@@ -7,7 +7,7 @@
 // line 209 "model.ump"
 
 /**
- * CharacterCard - Implements Card Interface
+ * Model.CharacterCard - Implements Model.Card Interface
  */
 public class CharacterCard implements Card {
 
@@ -15,12 +15,12 @@ public class CharacterCard implements Card {
     // MEMBER VARIABLES
     //------------------------
 
-    //CharacterCard Attributes
+    //Model.CharacterCard Attributes
     private final String characterName;
     private final String characterBoardChar;
 
     /**
-     * CharacterCard Constructor
+     * Model.CharacterCard Constructor
      *
      * @param c name of the character
      * @author Vaibhav Ekambaram

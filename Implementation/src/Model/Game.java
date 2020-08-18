@@ -1,4 +1,4 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
+package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import java.util.*;
@@ -26,10 +26,10 @@ public class Game {
     private final Map<String, CharacterCard> characterCardsMap = new HashMap<>();
 
 
-    //Game Attributes
+    //Model.Game Attributes
     private Board board;
     private Player currentPlayer;
-    private Scenario murderScenario;  // Murder Scenario that players must find
+    private Scenario murderScenario;  // Murder Model.Scenario that players must find
 
     // check if the game has been won yet
     //        - still playing: true
@@ -40,27 +40,9 @@ public class Game {
     int movesRemaining = -1;
 
     private final String[] weaponNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
-    private final String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study", "Library", "Billiard Room", "Conservatory", "Ball Room"};
+    private final String[] roomNames = {"Kitchen", "Dining Model.Room", "Lounge", "Hall", "Study", "Library", "Billiard Model.Room", "Conservatory", "Ball Model.Room"};
     private final String[] characterNames = {"Miss Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
 
-
-    /**
-     * MAIN METHOD
-     * Method to initialise the rest of the program. Shows a welcome message then generates a new game object
-     *
-     * @param args arguments
-     * @author Vaibhav Ekambaram
-     */
-    public static void main(String[] args) {
-        System.out.println("------------------------------------------------------------------------\n" +
-                "\tCluedo!\n" +
-                "------------------------------------------------------------------------\n" +
-                "\tSWEN225 Assignment 1\n" +
-                "\tA group project by:\n" +
-                "\t\tCameron Li\tVaibhav Ekambaram\tBaxter Kirikiri\n" +
-                "------------------------------------------------------------------------\n");
-        new Game();
-    }
 
     /**
      * GAME OBJECT CONSTRUCTOR
@@ -70,14 +52,14 @@ public class Game {
      *
      * <p>
      * ----------------------------------------------------------------------------------------------------
-     * Board Representation Guide
+     * Model.Board Representation Guide
      * ----------------------------------------------------------------------------------------------------
-     * ** Rooms **              ** Players **        ** Board **                    ** Weapons **
+     * ** Rooms **              ** Players **        ** Model.Board **                    ** Weapons **
      * C - Conservatory         1 - Mrs. White       x - Null Area (Off limits)     ? - Candlestick
-     * B - Ball Room            2 - Mr. Green        # - Room Wall                  ! - Dagger
+     * B - Ball Model.Room            2 - Mr. Green        # - Model.Room Wall                  ! - Dagger
      * K - Kitchen              3 - Mrs. Peacock                                    $ - Lead Pipe
-     * I - Billiard Room        4 - Prof. Plum                                      % - Revolver
-     * D - Dining Room          5 - Ms. Scarlett                                    @ - Rope
+     * I - Billiard Model.Room        4 - Prof. Plum                                      % - Revolver
+     * D - Dining Model.Room          5 - Ms. Scarlett                                    @ - Rope
      * L - Library              6 - Col. Mustard                                    & - Spanner
      * O - Lounge
      * H - Hall
@@ -118,7 +100,7 @@ public class Game {
     }
 
 
-    // Initial Game Instance Creation
+    // Initial Model.Game Instance Creation
 
     /**
      * Initialise the game
@@ -128,7 +110,7 @@ public class Game {
      * @author Cameron Li
      */
     public void initGame() {
-        System.out.println("**Game Startup Parameters**\nHow many players wish to participate? (3 - 6):");
+        System.out.println("**Model.Game Startup Parameters**\nHow many players wish to participate? (3 - 6):");
         int numPlayers = 0;
         Scanner sc = new Scanner(System.in);
         while (numPlayers < 3 || numPlayers > 6) {
@@ -214,7 +196,7 @@ public class Game {
         }
 
         Collections.shuffle(deck);
-        // Murder Scenario of Random Cards
+        // Murder Model.Scenario of Random Cards
         WeaponCard murderWeapon = weaponCards.get(new Random().nextInt(weaponNames.length - 1) + 1);
         RoomCard murderRoom = roomCards.get(new Random().nextInt(roomNames.length - 1) + 1);
         CharacterCard murderer = characterCards.get(new Random().nextInt(characterNames.length - 1) + 1);
@@ -222,18 +204,18 @@ public class Game {
         deck.remove(murderWeapon);
         deck.remove(murderRoom);
         deck.remove(murderer);
-        System.out.println("Generated Scenario");
+        System.out.println("Generated Model.Scenario");
     }
 
 
     /**
      * Load and create the Cluedo board
-     * "x" = Forbidden Position
-     * "_" = Standard Position
-     * number = Player starting Position
-     * uppercase letter = Inner Room Position
-     * lowercase letter = Outer Room Position
-     * "d" + letter = Room Door Position
+     * "x" = Forbidden Model.Position
+     * "_" = Standard Model.Position
+     * number = Model.Player starting Model.Position
+     * uppercase letter = Inner Model.Room Model.Position
+     * lowercase letter = Outer Model.Room Model.Position
+     * "d" + letter = Model.Room Door Model.Position
      *
      * @param boardLayout layout of board defined in constructor
      * @author Cameron Li
@@ -317,8 +299,8 @@ public class Game {
      * @author Vaibhav Ekambaram
      */
     public void mainGameLoop() {
-        System.out.println("\n\tMurder Scenario (SECRET, DO NOT LOOK!)");
-        System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() + "\n\t\t[Room] " + murderScenario.getRoomCard().getRoomName() + "\n\t\t[Weapon] " + murderScenario.getWeapon().getWeaponName());
+        System.out.println("\n\tMurder Model.Scenario (SECRET, DO NOT LOOK!)");
+        System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() + "\n\t\t[Model.Room] " + murderScenario.getRoomCard().getRoomName() + "\n\t\t[Weapon] " + murderScenario.getWeapon().getWeaponName());
         System.out.println("Starting game...");
 
         while (gameRunning) {
@@ -327,7 +309,7 @@ public class Game {
 
                 System.out.println("\n------------------------------------------------------------------------\n" + this.board + "\n");
                 System.out.println("**************************************************");
-                System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
+                System.out.println("Current Model.Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
                 currentPlayer = p;
                 System.out.println("**************************************************");
                 movesRemaining = rollDice();
@@ -362,7 +344,7 @@ public class Game {
                     } else if (c instanceof WeaponCard) {
                         System.out.println("\t\t[Weapon] " + c.toString());
                     } else if (c instanceof RoomCard) {
-                        System.out.println("\t\t[Room] " + c.toString());
+                        System.out.println("\t\t[Model.Room] " + c.toString());
                     }
                 }
                 System.out.println("\t\t________________________________");
@@ -418,7 +400,7 @@ public class Game {
      * Asks current player to perform an action
      * Returns a move to apply to the board
      *
-     * @return Move
+     * @return Model.Move
      * @author Cameron Li, Vaibhav Ekambaram
      */
     public Move movementInput(int movesRemaining) {
@@ -493,7 +475,7 @@ public class Game {
                 accusationRoomCard = roomCardsMap.get(accusationRoomInput);
             }
 
-            if (accusationRoomCard == null) System.out.println("Room not found! Please enter a valid room name:");
+            if (accusationRoomCard == null) System.out.println("Model.Room not found! Please enter a valid room name:");
         }
 
         // get accusation character
@@ -523,7 +505,7 @@ public class Game {
         }
 
         // create scenario and compare to the original murder scenario
-        System.out.println("\nChecking Scenario...\n");
+        System.out.println("\nChecking Model.Scenario...\n");
         Scenario accusationScenario = new Scenario(accusationWeaponCard, accusationRoomCard, accusationCharacterCard);
 
         if (murderScenario.equals(accusationScenario)) {
@@ -654,7 +636,7 @@ public class Game {
                 }
 
                 if (refutation == null && !failedRefutation) {
-                    System.out.println("Card not found in players hand! Please try again: ");
+                    System.out.println("Model.Card not found in players hand! Please try again: ");
                 }
             }
 

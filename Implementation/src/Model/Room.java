@@ -1,4 +1,4 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
+package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 // line 43 "model.ump"
@@ -6,17 +6,17 @@
 // line 219 "model.ump"
 
 /**
- * Room Class
+ * Model.Room Class
  */
 public class Room {
 
-    //Room Attributes
+    //Model.Room Attributes
     private final String roomName;
     private String roomChar; // room representation character for board
 
 
     /**
-     * Room Constructor
+     * Model.Room Constructor
      *
      * @param roomName full room name
      */
@@ -27,7 +27,7 @@ public class Room {
 
 
     /**
-     * Set Room Character based on assigned room name
+     * Set Model.Room Character based on assigned room name
      *
      * @param roomName room name
      */
@@ -36,16 +36,16 @@ public class Room {
             case "Conservatory":
                 this.roomChar = "C";
                 break;
-            case "Ball Room":
+            case "Ball Model.Room":
                 this.roomChar = "B";
                 break;
             case "Kitchen":
                 this.roomChar = "K";
                 break;
-            case "Billiard Room":
+            case "Billiard Model.Room":
                 this.roomChar = "I";
                 break;
-            case "Dining Room":
+            case "Dining Model.Room":
                 this.roomChar = "D";
                 break;
             case "Library":
@@ -67,7 +67,7 @@ public class Room {
     }
 
     /**
-     * Get Room Character
+     * Get Model.Room Character
      *
      * @return room character string
      */
@@ -77,7 +77,7 @@ public class Room {
 
 
     /**
-     * Room toString Method
+     * Model.Room toString Method
      *
      * @return room name as toString
      */

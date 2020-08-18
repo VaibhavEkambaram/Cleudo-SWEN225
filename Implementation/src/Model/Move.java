@@ -1,12 +1,14 @@
+package Model;
+
 /**
- * Move Class - Used in determining player movement around a board
+ * Model.Move Class - Used in determining player movement around a board
  */
 public class Move {
     private final Direction direction; // Direction of travel
     private final int spaces; // Number of spaces to travel
 
     /**
-     * Move Constructor
+     * Model.Move Constructor
      *
      * @param direction direction of movement
      * @param spaces    number of spaces to move
@@ -18,7 +20,7 @@ public class Move {
 
     /**
      * Direction Enumerator
-     * Player is able to move:
+     * Model.Player is able to move:
      * - Up
      * - Down
      * - Left
@@ -28,7 +30,7 @@ public class Move {
         UP, DOWN, LEFT, RIGHT
     }
 
-    // Move Getters
+    // Model.Move Getters
 
     /**
      * Return the number of times to travel on the axis given by direction

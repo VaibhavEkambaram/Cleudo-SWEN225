@@ -1,4 +1,4 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
+package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 // line 32 "model.ump"
@@ -7,7 +7,7 @@
 // line 214 "model.ump"
 
 /**
- * Scenario Class
+ * Model.Scenario Class
  * Stores a randomly generated murder scenario consisting of a room, character and weapon
  */
 public class Scenario {
@@ -15,13 +15,13 @@ public class Scenario {
     // MEMBER VARIABLES
     //------------------------
 
-    //Scenario Attributes
+    //Model.Scenario Attributes
     private final RoomCard roomCard;
     private final WeaponCard weapon;
     private final CharacterCard murderer;
 
     /**
-     * Scenario Constructor
+     * Model.Scenario Constructor
      *
      * @param weapon   murder weapon
      * @param room     room where murder took place
@@ -34,7 +34,7 @@ public class Scenario {
     }
 
     /**
-     * Room Card Get Method
+     * Model.Room Model.Card Get Method
      *
      * @return room card
      */
@@ -43,7 +43,7 @@ public class Scenario {
     }
 
     /**
-     * Weapon Card Get Method
+     * Weapon Model.Card Get Method
      *
      * @return weapon card
      */
@@ -52,7 +52,7 @@ public class Scenario {
     }
 
     /**
-     * Character Card Get Method
+     * Character Model.Card Get Method
      *
      * @return murderer character card
      */
