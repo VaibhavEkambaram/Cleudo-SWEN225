@@ -1,5 +1,3 @@
-package View;
-
 public class Main {
     /**
      * MAIN METHOD
