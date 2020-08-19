@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Implementation1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Implementation/out/artifacts/Implementation/code.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Implementation/out/artifacts/Implementation/Implementation.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

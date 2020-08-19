@@ -1,0 +1,310 @@
+interface Model.Card {
+  String toString();
+}
+
+
+
+
+class Model.CharacterCard {
+  isA Model.Card;
+  
+  String characterName;
+  String characterBoardChar;
+}
+
+
+
+
+class Model.RoomCard {
+  isA Model.Card;
+  
+  String roomName;
+  Model.Room room;
+  
+  
+}
+
+
+
+
+class Model.WeaponCard {
+  isA Model.Card;
+  
+  String weaponString;
+  Model.Room room;
+}
+
+
+
+class Model.Scenario {
+  Model.RoomCard roomCard;
+  Model.WeaponCard weaponCard;
+  Model.CharacterCard murdererCard;
+  
+  
+
+  
+  public boolean equals(Object o){
+  }
+}
+
+class Model.Room {
+  String roomName;
+  String roomChar;
+}
+
+class Model.Position {
+  Model.CharacterCard character;
+  String displayName;
+  boolean canMove;
+  int xLoc;
+  int yLoc;
+  
+  Model.Room inRoom;
+  MoveDirection doorDirection;
+  boolean isDoor;
+  boolean passableTile;
+  
+  public Model.Position clone(){
+  }
+  
+  public boolean canMove(){
+  }
+  
+  public boolean isDoor(){
+  }
+  
+  public boolean isPassableTile(){
+  }
+}
+
+
+class Model.Player {
+   Model.Card[] hand;
+   Model.CharacterCard character;
+   Model.Position currentPosition;
+  
+   boolean canAccuse;
+   boolean canRefute;
+}
+
+
+class Model.Move {
+  Direction direction;
+  int spaces;
+  
+  public int xChange(){
+  }
+  
+  public int yChange(){
+  }
+}
+
+class Model.Board {
+  Model.Position[] positions;
+  
+  public Model.Board apply(Model.Player player, Model.Move move){
+  }
+  
+  public Model.Board teleportPlayer(Model.Player player, Model.Room room){
+  }
+  
+  public boolean outOfBounds(int x,int y){
+  }
+  
+  public boolean checkDoorMovement(Model.Position checkPosition, int dx,int dy,boolean enter){
+  }
+}
+
+
+class Model.Game {
+  Model.Card[] deck;
+  Model.Player[] players;
+  Model.Room[] rooms;
+  
+  Model.WeaponCard[] weaponCards;
+  Model.RoomCard[] roomCards;
+  Model.CharacterCard[] characterCards;
+  
+  Map weaponCardsMap;
+  Map roomCardsMap;
+  Map characterCardsMap;
+  
+  Model.Board board;
+  Model.Player currentPlayer;
+  Model.Scenario murderScenario;
+  
+  int movesRemaining;
+  
+  String[] weaponNames;
+  String[] roomNames;
+  String[] characterNames;
+  
+  public static void main(String[] args){
+  }
+  
+  public void initGame() {
+  }
+  
+  public void dealCards() {
+  }
+  
+  private void initDeck(int numPlayers) {
+  }
+  
+  private void initBoard(String boardLayout) {
+  }
+  
+  public void mainGameLoop() {
+  }
+  
+  public int rollDice() {
+  }
+  
+  public Model.Move movementInput(int movesRemaining) {
+  }
+  
+  private int makeAccusation(Model.Player p) {
+  }
+  
+  private void makeSuggestion(Model.Player p) {
+  }
+  
+  private String suggestionValidateInput() {
+  }
+  
+}
+//$?[End_of_model]$?
+
+namespace -;
+
+
+class Model.CharacterCard
+{
+  position 56 192 109 61;
+}
+
+class Model.RoomCard
+{
+  position 315 191 157 112;
+}
+
+class Model.WeaponCard
+{
+  position 536 209 109 61;
+}
+
+class Model.Scenario
+{
+  position 50 330 225 112;
+}
+
+class Model.Room
+{
+  position 304 333 149 95;
+}
+
+class Model.Position
+{
+  position 808 168 109 61;
+}
+
+class Model.Player
+{
+  position 88 503 109 78;
+}
+
+class Model.CharacterCard
+{
+  position 56 192 109 61;
+}
+
+class Model.RoomCard
+{
+  position 315 191 157 112;
+}
+
+class Model.WeaponCard
+{
+  position 536 209 109 61;
+}
+
+class Model.Scenario
+{
+  position 50 330 225 112;
+}
+
+class Model.Room
+{
+  position 304 333 149 95;
+}
+
+class Model.Position
+{
+  position 808 168 109 61;
+}
+
+class Model.Player
+{
+  position 88 503 109 78;
+}
+
+class Model.Move
+{
+  position 324 505 153 129;
+}
+
+class Model.Board
+{
+  position 569 499 408 146;
+}
+
+class Model.CharacterCard
+{
+  position 56 192 109 61;
+}
+
+class Model.RoomCard
+{
+  position 315 191 157 112;
+}
+
+class Model.WeaponCard
+{
+  position 536 209 109 61;
+}
+
+class Model.Scenario
+{
+  position 50 330 225 112;
+}
+
+class Model.Room
+{
+  position 304 333 149 95;
+}
+
+class Model.Position
+{
+  position 808 168 109 61;
+}
+
+class Model.Player
+{
+  position 88 503 109 78;
+}
+
+class Model.Move
+{
+  position 324 505 153 129;
+}
+
+class Model.Board
+{
+  position 569 499 408 146;
+}
+
+class Model.Game
+{
+  position 82 672 244 333;
+}
