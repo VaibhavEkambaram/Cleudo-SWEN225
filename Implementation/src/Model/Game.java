@@ -29,6 +29,10 @@ public class Game {
             if (!subState.equals(subStates.INIT)) {
                 throw new Error(gameState.ordinal() + " State but incorrect subState: " + subState.ordinal());
             }
+        } else if (gameState.equals(States.RUNNING)) {
+            if (subState.equals(subStates.INIT)) {
+                throw new Error(gameState.ordinal() + " State but incorrect subState: " + subState.ordinal());
+            }
         }
     }
 
@@ -722,6 +726,6 @@ public class Game {
     }
 
     private enum subStates {
-        INIT
+        INIT, MOVEMENT, ACTION
     }
 }
