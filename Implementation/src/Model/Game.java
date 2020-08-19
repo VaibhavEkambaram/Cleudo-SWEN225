@@ -13,6 +13,25 @@ public class Game {
     // MEMBER VARIABLES
     //------------------------
 
+    private States gameState;
+    private subStates subState;
+
+    private void initGameState() {
+        this.gameState = States.IDLE;
+    }
+
+    /**
+     * Check if States are matching within their appropiate substates
+     * If incorrect, throw an error with respective states
+     */
+    private void checkGameState() {
+        if (gameState.equals(States.IDLE)) {
+            if (!subState.equals(subStates.INIT)) {
+                throw new Error(gameState.ordinal() + " State but incorrect subState: " + subState.ordinal());
+            }
+        }
+    }
+
     private List<Card> deck;
     private List<Player> players;
     private List<Room> rooms;
@@ -132,7 +151,6 @@ public class Game {
         IntStream.range(0, numPlayers).forEach(n -> players.add(new Player(characterCards.get(n))));
         this.dealCards();
     }
-
 
     /**
      * Deal Cards
@@ -691,5 +709,19 @@ public class Game {
             System.out.println("Please enter 'Accusation', 'Suggestion', or 'Pass'");
         }
         return answer;
+    }
+
+    private void transitionGameState() {
+        checkGameState();
+        if (gameState.equals(States.IDLE)) {
+        }
+    }
+
+    private enum States {
+        IDLE, RUNNING, FINISHED
+    }
+
+    private enum subStates {
+        INIT
     }
 }
