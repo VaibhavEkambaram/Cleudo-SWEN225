@@ -16,26 +16,6 @@ public class Game {
     private States gameState;
     private subStates subState;
 
-    private void initGameState() {
-        this.gameState = States.IDLE;
-    }
-
-    /**
-     * Check if States are matching within their appropiate substates
-     * If incorrect, throw an error with respective states
-     */
-    private void checkGameState() {
-        if (gameState.equals(States.IDLE)) {
-            if (!subState.equals(subStates.INIT)) {
-                throw new Error(gameState.ordinal() + " State but incorrect subState: " + subState.ordinal());
-            }
-        } else if (gameState.equals(States.RUNNING)) {
-            if (subState.equals(subStates.INIT)) {
-                throw new Error(gameState.ordinal() + " State but incorrect subState: " + subState.ordinal());
-            }
-        }
-    }
-
     private List<Card> deck;
     private List<Player> players;
     private List<Room> rooms;
@@ -117,6 +97,7 @@ public class Game {
                         " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                         " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
 
+        initState();
         initGame(); // initialize cards and players
         initBoard(boardLayout); // generate board
         mainGameLoop(); // main game logic loop
@@ -124,6 +105,11 @@ public class Game {
 
 
     // Initial Model.Game Instance Creation
+
+    public void initState() {
+        this.gameState = States.IDLE;
+        this.subState = subStates.INIT;
+    }
 
     /**
      * Initialise the game
@@ -133,10 +119,11 @@ public class Game {
      * @author Cameron Li
      */
     public void initGame() {
+        transitionGameState();
         System.out.println("**Model.Game Startup Parameters**\nHow many players wish to participate? (3 - 6):");
         int numPlayers = 0;
         Scanner sc = new Scanner(System.in);
-        while (numPlayers < 3 || numPlayers > 6) {
+        while (gameState.equals(States.IDLE)) {
             boolean isNumber = true;
             String number = sc.nextLine();
             try {
@@ -715,9 +702,36 @@ public class Game {
         return answer;
     }
 
+    /**
+     * Check if States are matching within their appropiate substates
+     * If incorrect, throw an error with respective states
+     */
+    private void checkGameState() {
+        if (gameState.equals(States.IDLE)) {
+            if (!subState.equals(subStates.INIT)) {
+                throw new Error(gameState.ordinal() + " State but incorrect subState: " + subState.ordinal());
+            }
+        } else if (gameState.equals(States.RUNNING)) {
+            if (subState.equals(subStates.INIT)) {
+                throw new Error(gameState.ordinal() + " State but incorrect subState: " + subState.ordinal());
+            }
+        }
+    }
+
     private void transitionGameState() {
         checkGameState();
         if (gameState.equals(States.IDLE)) {
+            if (subState.equals(subStates.INIT)) {
+                subState = subStates.START;
+            } else {
+                subState = subStates.INIT;
+            }
+        } else if (gameState.equals(States.RUNNING)) {
+            if (subState.equals(subStates.ACTION)) {
+                subState = subStates.ACTION;
+            } else {
+                subState = subStates.MOVEMENT;
+            }
         }
     }
 
@@ -726,6 +740,6 @@ public class Game {
     }
 
     private enum subStates {
-        INIT, MOVEMENT, ACTION
+        INIT, START, MOVEMENT, ACTION
     }
 }
