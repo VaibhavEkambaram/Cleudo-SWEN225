@@ -15,6 +15,6 @@ public class Main {
                 "\t\tCameron Li\tVaibhav Ekambaram\tBaxter Kirikiri\n" +
                 "------------------------------------------------------------------------\n");
         new View.Table();
-        new Model.Game();
+        //new Model.Game();
     }
 }
