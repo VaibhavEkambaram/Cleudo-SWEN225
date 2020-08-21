@@ -1,19 +1,16 @@
 package View;
 
-import Model.Game;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Objects;
 import java.util.Observable;
 
 
 public class Table extends Observable {
     final JFrame gameFrame;
+    public int numPlayers = -1;
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
 
     public Table() {
@@ -36,6 +33,8 @@ public class Table extends Observable {
                 }
             }
         });
+
+
     }
 
 
@@ -49,18 +48,19 @@ public class Table extends Observable {
     private JMenu createGameMenu() {
         final JMenu gameMenu = new JMenu("Game");
         final JMenuItem setupGameMenuItem = new JMenuItem("Setup Game");
-
+        gameMenu.add(setupGameMenuItem);
         setupGameMenuItem.addActionListener(e -> {
             JPanel fields = new JPanel(new GridLayout(2, 1));
             JLabel label = new JLabel("How many players wish to play?");
             JComboBox<String> comboBox = new JComboBox<>(new String[]{"3", "4", "5","6"});
             fields.add(label);
             fields.add(comboBox);
-            JOptionPane.showConfirmDialog(null, fields, "Game Startup Parameters", JOptionPane.DEFAULT_OPTION);
+            JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.DEFAULT_OPTION);
             System.out.println(comboBox.getSelectedItem());
-            new Model.Game(Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString()));
+            numPlayers = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
+            Model.Game game = new Model.Game(numPlayers);
         });
-        gameMenu.add(setupGameMenuItem);
+
 
         final JMenuItem exitMenuItem = new JMenuItem("Exit");
         exitMenuItem.addActionListener(e -> {
@@ -71,4 +71,6 @@ public class Table extends Observable {
         gameMenu.add(exitMenuItem);
         return gameMenu;
     }
+
+
 }

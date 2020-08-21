@@ -117,10 +117,7 @@ public class Game {
                         " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
                         " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                         " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
-
-
         this.numPlayers = numPlayers;
-
         initGame(); // initialize cards and players
         initBoard(boardLayout); // generate board
         mainGameLoop(); // main game logic loop
