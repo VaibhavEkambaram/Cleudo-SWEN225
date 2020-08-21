@@ -50,15 +50,8 @@ public class Table extends Observable {
         final JMenuItem setupGameMenuItem = new JMenuItem("Setup Game");
         gameMenu.add(setupGameMenuItem);
         setupGameMenuItem.addActionListener(e -> {
-            JPanel fields = new JPanel(new GridLayout(2, 1));
-            JLabel label = new JLabel("How many players wish to play?");
-            JComboBox<String> comboBox = new JComboBox<>(new String[]{"3", "4", "5","6"});
-            fields.add(label);
-            fields.add(comboBox);
-            JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.DEFAULT_OPTION);
-            System.out.println(comboBox.getSelectedItem());
-            numPlayers = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
-            Model.Game game = new Model.Game(numPlayers);
+
+          setPlayerCount();
         });
 
 
@@ -73,4 +66,15 @@ public class Table extends Observable {
     }
 
 
+
+    public void setPlayerCount(){
+        JPanel fields = new JPanel(new GridLayout(2, 1));
+        JLabel label = new JLabel("How many players wish to play?");
+        JComboBox<String> comboBox = new JComboBox<>(new String[]{"3", "4", "5","6"});
+        fields.add(label);
+        fields.add(comboBox);
+        JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.DEFAULT_OPTION);
+        System.out.println(comboBox.getSelectedItem());
+        numPlayers = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
+    }
 }

@@ -62,6 +62,7 @@ public class Game {
     // track number of moves for current player
     int movesRemaining = -1;
     int numPlayers;
+    View.Table gui;
 
     private final String[] weaponNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
     private final String[] roomNames = {"Kitchen", "Dining Model.Room", "Lounge", "Hall", "Study", "Library", "Billiard Model.Room", "Conservatory", "Ball Model.Room"};
@@ -90,7 +91,7 @@ public class Game {
      * Y - Study
      * ----------------------------------------------------------------------------------------------------
      */
-    public Game(int numPlayers) {
+    public Game() {
         String boardLayout =
                 " x x x x x x x x x 3 x x x x 4 x x x x x x x x x \n" +
                         " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
@@ -117,9 +118,19 @@ public class Game {
                         " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
                         " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                         " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
-        this.numPlayers = numPlayers;
+        //this.numPlayers = numPlayers;
+
+
         initGame(); // initialize cards and players
         initBoard(boardLayout); // generate board
+
+        View.Table gui = new View.Table();
+        gui.setPlayerCount();
+        new View.SetupPlayers().setPlayers(characterNames);
+
+
+
+
         mainGameLoop(); // main game logic loop
     }
 
@@ -135,7 +146,7 @@ public class Game {
      */
     public void initGame() {
         System.out.println("**Model.Game Startup Parameters**\nHow many players wish to participate? (3 - 6):");
-        /*int numPlayers = 0;
+        int numPlayers = 0;
         Scanner sc = new Scanner(System.in);
         while (numPlayers < 3 || numPlayers > 6) {
             boolean isNumber = true;
@@ -151,11 +162,16 @@ public class Game {
             }
         }
 
-         */
 
         initDeck();
+
+
         players = new ArrayList<>();
-        IntStream.range(0, numPlayers).forEach(n -> players.add(new Player(characterCards.get(n))));
+        int bound = numPlayers;
+        for (int n = 0; n < bound; n++) {
+            players.add(new Player(characterCards.get(n)));
+        }
+
         this.dealCards();
     }
 

@@ -1,3 +1,5 @@
+import Model.Game;
+
 import java.util.Objects;
 
 public class Main {
@@ -16,7 +18,6 @@ public class Main {
                 "\tA group project by:\n" +
                 "\t\tCameron Li\tVaibhav Ekambaram\tBaxter Kirikiri\n" +
                 "------------------------------------------------------------------------\n");
-        View.Table view = new View.Table();
-
+        Model.Game game = new Game();
     }
 }
