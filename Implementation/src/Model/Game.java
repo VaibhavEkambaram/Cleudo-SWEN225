@@ -1,6 +1,8 @@
 package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
+import View.AccusationMenu;
+
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -498,6 +500,7 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav Ekambaram
      */
     private int makeAccusation(Player p) {
+        new AccusationMenu().makeAccusation(characterNames,weaponNames,roomNames);
         if (!p.getCanAccuse()) {
             System.out.println("You have already made a failed accusation! Therefore, you can no longer make accusations during this game.");
             return -1;
