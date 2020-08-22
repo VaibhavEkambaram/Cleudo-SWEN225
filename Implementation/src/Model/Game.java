@@ -107,7 +107,7 @@ public class Game {
         //this.numPlayers = numPlayers;
         transitionGameState();
         View.Table gui = new View.Table();
-        numPlayers = gui.setPlayerCount();
+        this.numPlayers = gui.setPlayerCount();
         new View.SetupPlayers().setPlayers(characterNames);
         transitionSubState();
 
@@ -359,6 +359,7 @@ public class Game {
                             System.out.println(board.toString());
                         }
                     } else {
+                        transitionSubState(); // Transition from Movement to Action
                         break;
                     }
                     if (movesRemaining < 1) {
