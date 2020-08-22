@@ -12,7 +12,6 @@ public class AccusationMenu {
         JComboBox<String> charBox = new JComboBox<>(characters);
         JComboBox<String> weaponBox = new JComboBox<>(weapons);
         JComboBox<String> roomBox = new JComboBox<>(rooms);
-
         fields.add(new JLabel("Characters"));
         fields.add(charBox);
         fields.add(new JLabel("Weapons"));
