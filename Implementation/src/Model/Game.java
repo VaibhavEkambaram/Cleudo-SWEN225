@@ -4,7 +4,6 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 import View.AccusationMenu;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 // line 50 "model.ump"
 // line 166 "model.ump"
@@ -15,28 +14,13 @@ public class Game {
     // MEMBER VARIABLES
     //------------------------
 
-    private States gameState;
+    private States gameState = States.IDLE;
     private subStates subState;
-
-    private void initGameState() {
-        this.gameState = States.IDLE;
-    }
 
     /**
      * Check if States are matching within their appropiate substates
      * If incorrect, throw an error with respective states
      */
-    private void checkGameState() {
-        if (gameState.equals(States.IDLE)) {
-            if (!subState.equals(subStates.INIT)) {
-                throw new Error(gameState.ordinal() + " State but incorrect subState: " + subState.ordinal());
-            }
-        } else if (gameState.equals(States.RUNNING)) {
-            if (subState.equals(subStates.INIT)) {
-                throw new Error(gameState.ordinal() + " State but incorrect subState: " + subState.ordinal());
-            }
-        }
-    }
 
     private List<Card> deck;
     private List<Player> players;
@@ -121,18 +105,15 @@ public class Game {
                         " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                         " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
         //this.numPlayers = numPlayers;
-
-
-        initGame(); // initialize cards and players
-        initBoard(boardLayout); // generate board
-
+        transitionGameState();
         View.Table gui = new View.Table();
-        gui.setPlayerCount();
+        numPlayers = gui.setPlayerCount();
         new View.SetupPlayers().setPlayers(characterNames);
+        transitionSubState();
 
-
-
-
+        //initGame(); // initialize cards and players
+        initDeck();
+        initBoard(boardLayout); // generate board
         mainGameLoop(); // main game logic loop
     }
 
@@ -147,54 +128,29 @@ public class Game {
      * @author Cameron Li
      */
     public void initGame() {
+        transitionGameState(); // Transition IDLE to INIT
         System.out.println("**Model.Game Startup Parameters**\nHow many players wish to participate? (3 - 6):");
         int numPlayers = 0;
-        Scanner sc = new Scanner(System.in);
-        while (numPlayers < 3 || numPlayers > 6) {
-            boolean isNumber = true;
+        //Scanner sc = new Scanner(System.in);
+        while (subState.equals(subStates.PLAYERS)) {
+            /*
             String number = sc.nextLine();
             try {
                 numPlayers = Integer.parseInt(number);
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a number");
-                isNumber = false;
             }
-            if (isNumber && numPlayers < 3 || numPlayers > 6) {
+
+             */
+            numPlayers = gui.setPlayerCount();
+
+            if (numPlayers < 3 || numPlayers > 6) {
                 System.out.println("Please enter a number between 3 and 6");
+            } else {
+                transitionSubState(); // Transition from PLAYERS to DECK
+                this.numPlayers = numPlayers;
             }
         }
-
-
-        initDeck();
-
-
-        players = new ArrayList<>();
-        int bound = numPlayers;
-        for (int n = 0; n < bound; n++) {
-            players.add(new Player(characterCards.get(n)));
-        }
-
-        this.dealCards();
-    }
-
-    /**
-     * Deal Cards
-     * Add cards from the deck list to a stack, then deal them to each player until the stack is empty
-     *
-     * @author Cameron Li
-     */
-    public void dealCards() {
-        Stack<Card> toBeDealt = new Stack<>();
-        this.deck.forEach(toBeDealt::push);
-
-        while (!toBeDealt.isEmpty()) {
-            for (Player p : this.players) {
-                // Make sure not null pointer exception
-                if (toBeDealt.isEmpty()) break;
-                p.addHand(toBeDealt.pop());
-            }
-        }
-        System.out.println("Cards Dealt");
     }
 
     /**
@@ -248,8 +204,36 @@ public class Game {
         deck.remove(murderRoom);
         deck.remove(murderer);
         System.out.println("Generated Model.Scenario");
+
+        // Create Players, then deal Cards to them
+        players = new ArrayList<>();
+        for (int n = 0; n < numPlayers; n++) {
+            players.add(new Player(characterCards.get(n)));
+        }
+        dealCards();
+
+        transitionSubState(); // Transition from DECK to BOARD
     }
 
+    /**
+     * Deal Cards
+     * Add cards from the deck list to a stack, then deal them to each player until the stack is empty
+     *
+     * @author Cameron Li
+     */
+    public void dealCards() {
+        Stack<Card> toBeDealt = new Stack<>();
+        this.deck.forEach(toBeDealt::push);
+
+        while (!toBeDealt.isEmpty()) {
+            for (Player p : this.players) {
+                // Make sure not null pointer exception
+                if (toBeDealt.isEmpty()) break;
+                p.addHand(toBeDealt.pop());
+            }
+        }
+        System.out.println("Cards Dealt");
+    }
 
     /**
      * Load and create the Cluedo board
@@ -346,7 +330,8 @@ public class Game {
         System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() + "\n\t\t[Model.Room] " + murderScenario.getRoomCard().getRoomName() + "\n\t\t[Weapon] " + murderScenario.getWeapon().getWeaponName());
         System.out.println("Starting game...");
 
-        while (gameRunning) {
+        transitionGameState(); // Transition from INIT to RUNNING
+        while (gameState.equals(States.RUNNING)) {
             for (Player p : players) {
                 movesRemaining = -1;
 
@@ -359,7 +344,7 @@ public class Game {
                 System.out.println("Result: " + movesRemaining);
                 System.out.println("**************************************************");
 
-                while (movesRemaining > 0) {
+                while (subState.equals(subStates.MOVEMENT)) {
                     if (p.getCurrentPosition().getRoom() != null) {
                         System.out.println("Currently in " + p.getCurrentPosition().getRoom());
                         System.out.println("**************************************************");
@@ -375,6 +360,9 @@ public class Game {
                         }
                     } else {
                         break;
+                    }
+                    if (movesRemaining < 1) {
+                        transitionSubState(); // Transition from Movement to Action
                     }
                 }
 
@@ -399,7 +387,7 @@ public class Game {
                 if (answer.equalsIgnoreCase("a") || answer.equalsIgnoreCase("accusation")) {
                     int accuse = makeAccusation(p);
                     if (accuse == 1) {
-                        gameRunning = false;
+                        gameState = States.FINISHED;
                         break;
                     }
                 } else if (answer.equalsIgnoreCase("s") || answer.equalsIgnoreCase("suggestion")) {
@@ -409,11 +397,10 @@ public class Game {
                 System.out.println("[Hit Enter to move to the next player]");
                 Scanner wait = new Scanner(System.in);
                 wait.nextLine();
-
+                transitionSubState(); // Transition Action to Movement
             }
         }
     }
-
 
     /**
      * Roll two dice and then return the overall number
@@ -438,7 +425,6 @@ public class Game {
         return firstResult + secondResult;
     }
 
-
     /**
      * Asks current player to perform an action
      * Returns a move to apply to the board
@@ -453,7 +439,6 @@ public class Game {
         boolean valid = false;
         while (!valid) {
             String command = inputScan.nextLine();
-
             try {
                 if (command.length() >= 4 && command.startsWith("up-")) {
                     direction = Move.Direction.UP;
@@ -473,7 +458,8 @@ public class Game {
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a correct number of spaces");
             }
-            if (direction != null && spaces > 0 && spaces <= movesRemaining) {
+
+            if (direction != null && spaces <= movesRemaining) {
                 valid = true;
             }
 
@@ -485,12 +471,11 @@ public class Game {
                     System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
                 }
             }
-        }
 
+        }
 
         return new Move(direction, spaces);
     }
-
 
     /**
      * Handle Accusations
@@ -563,7 +548,6 @@ public class Game {
             return 0;
         }
     }
-
 
     /**
      * Handles player suggestions.
@@ -737,17 +721,69 @@ public class Game {
         return answer;
     }
 
+    private void checkGameState() {
+        if (gameState.equals(States.IDLE) && subState == null) {
+            return;
+        }
+
+        if (gameState.equals(States.RUNNING)) { // Check Sub state matches RUNNING game state
+            if (!subState.equals(subStates.MOVEMENT) && !subState.equals(subStates.ACTION)) {
+                throw new Error(gameState + " game state with " + subState + " sub state");
+            }
+        } else if (gameState.equals(States.INIT)) { // Check Sub state matches INIT game state
+            if (!subState.equals(subStates.PLAYERS) && !subState.equals(subStates.DECK) && !subState.equals(subStates.BOARD)) {
+                throw new Error(gameState + " game state with " + subState + " sub state");
+            }
+        }
+
+        // Check game state matches relevant sub states
+        if (subState.equals(subStates.MOVEMENT) || subState.equals(subStates.ACTION)) {
+            if (!gameState.equals(States.RUNNING)) {
+                throw new Error(gameState + " game state with " + subState + " sub state");
+            }
+        } else if (subState.equals(subStates.PLAYERS) || subState.equals(subStates.DECK) || subState.equals(subStates.BOARD)) {
+            if (!gameState.equals(States.INIT)) {
+                throw new Error(gameState + " game state with " + subState + " sub state");
+            }
+        }
+
+    }
+
     private void transitionGameState() {
         checkGameState();
         if (gameState.equals(States.IDLE)) {
+            gameState = States.INIT;
+            subState = subStates.PLAYERS;
+        } else if (gameState.equals(States.INIT)) {
+            gameState = States.RUNNING;
+            subState = subStates.MOVEMENT;
+        } else if (gameState.equals(States.RUNNING)) {
+            gameState = States.FINISHED;
+        }
+    }
+
+    private void transitionSubState() {
+        checkGameState();
+        if (gameState.equals(States.RUNNING)) {
+            if (subState.equals(subStates.MOVEMENT)) {
+                subState = subStates.ACTION;
+            } else {
+                subState = subStates.MOVEMENT;
+            }
+        } else if (gameState.equals(States.INIT)) {
+            if (subState.equals(subStates.PLAYERS)) {
+                subState = subStates.DECK;
+            } else {
+                subState = subStates.BOARD;
+            }
         }
     }
 
     private enum States {
-        IDLE, RUNNING, FINISHED
+        IDLE, INIT, RUNNING, FINISHED
     }
 
     private enum subStates {
-        INIT, MOVEMENT, ACTION
+        PLAYERS, DECK, BOARD, MOVEMENT, ACTION
     }
 }
