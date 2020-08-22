@@ -485,12 +485,16 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav Ekambaram
      */
     private int makeAccusation(Player p) {
-        new AccusationMenu().makeAccusation(characterNames,weaponNames,roomNames);
+
         if (!p.getCanAccuse()) {
             System.out.println("You have already made a failed accusation! Therefore, you can no longer make accusations during this game.");
             return -1;
         }
 
+        String accusationString = new AccusationMenu().makeAccusation(characterNames, weaponNames, roomNames);
+        String[] accusationStringSplit = accusationString.split("\t");
+
+        /*
         RoomCard accusationRoomCard = null;
         CharacterCard accusationCharacterCard = null;
         WeaponCard accusationWeaponCard = null;
@@ -532,10 +536,11 @@ public class Game {
             if (accusationWeaponCard == null)
                 System.out.println("Weapon not found! Please enter a valid weapon name:");
         }
+         */
 
         // create scenario and compare to the original murder scenario
-        System.out.println("\nChecking Model.Scenario...\n");
-        Scenario accusationScenario = new Scenario(accusationWeaponCard, accusationRoomCard, accusationCharacterCard);
+        System.out.println("\nChecking Scenario...\n");
+        Scenario accusationScenario = new Scenario(weaponCardsMap.get(accusationStringSplit[1]), roomCardsMap.get(accusationStringSplit[2]), characterCardsMap.get(accusationStringSplit[0]));
 
         if (murderScenario.equals(accusationScenario)) {
             System.out.println(p.getCharacter().getCharacterName() + " was successful in their accusation. They have won the game!!!");
@@ -687,7 +692,7 @@ public class Game {
             System.out.println("No one could refute your suggestion! Type accuse to make an accusation or type pass to skip: ");
 
             boolean answered = false;
-            while(!answered) {
+            while (!answered) {
                 String answer = suggestionValidateInput();
                 if (answer.equals("accuse")) {
                     answered = true;

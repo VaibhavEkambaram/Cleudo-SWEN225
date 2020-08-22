@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AccusationMenu {
-    public void makeAccusation(String[] characters,String[] weapons, String[] rooms){
+    public String makeAccusation(String[] characters,String[] weapons, String[] rooms){
         JPanel fields = new JPanel(new GridLayout(0, 1));
         JLabel label = new JLabel("Pick out an accusation scenario, then click okay when ready ");
         fields.add(label);
@@ -20,7 +20,8 @@ public class AccusationMenu {
         fields.add(new JLabel("Rooms"));
         fields.add(roomBox);
 
-        JOptionPane.showMessageDialog(null, fields, "Make an Accusation", JOptionPane.DEFAULT_OPTION);
+        JOptionPane.showMessageDialog(null, fields, "Make an Accusation", JOptionPane.PLAIN_MESSAGE);
+        return (charBox.getSelectedItem() + "\t" + weaponBox.getSelectedItem() + "\t" + roomBox.getSelectedItem());
     }
 
 }
