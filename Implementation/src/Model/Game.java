@@ -23,7 +23,7 @@ public class Game {
      */
 
     private List<Card> deck;
-    private List<Player> players;
+    private List<Player> players = new ArrayList<>();
     private List<Room> rooms;
 
     private List<WeaponCard> weaponCards;
@@ -108,7 +108,8 @@ public class Game {
         transitionGameState();
         View.Table gui = new View.Table();
         numPlayers = gui.setPlayerCount();
-        new View.SetupPlayers().setPlayers(characterNames);
+        players = new View.SetupPlayers().setPlayers(characterNames,numPlayers,players, characterCardsMap);
+        dealCards();
         transitionSubState();
 
         //initGame(); // initialize cards and players
@@ -205,6 +206,7 @@ public class Game {
         deck.remove(murderer);
         System.out.println("Generated Model.Scenario");
 
+        /*
         // Create Players, then deal Cards to them
         players = new ArrayList<>();
         for (int n = 0; n < numPlayers; n++) {
@@ -212,7 +214,9 @@ public class Game {
         }
         dealCards();
 
-        transitionSubState(); // Transition from DECK to BOARD
+         */
+
+        //transitionSubState(); // Transition from DECK to BOARD
     }
 
     /**
