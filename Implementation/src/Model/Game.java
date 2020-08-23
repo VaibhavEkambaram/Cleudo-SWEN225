@@ -3,6 +3,7 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 
 import View.AccusationMenu;
 
+import javax.swing.*;
 import java.util.*;
 
 // line 50 "model.ump"
@@ -490,70 +491,25 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav Ekambaram
      */
     private int makeAccusation(Player p) {
-
+        AccusationMenu a = new AccusationMenu();
         if (!p.getCanAccuse()) {
-            System.out.println("You have already made a failed accusation! Therefore, you can no longer make accusations during this game.");
+            a.unableToAccuse(currentPlayer);
             return -1;
         }
 
-        String accusationString = new AccusationMenu().makeAccusation(characterNames, weaponNames, roomNames);
+        String accusationString = a.makeAccusation(characterNames, weaponNames, roomNames);
         String[] accusationStringSplit = accusationString.split("\t");
 
-        /*
-        RoomCard accusationRoomCard = null;
-        CharacterCard accusationCharacterCard = null;
-        WeaponCard accusationWeaponCard = null;
-
-        // get accusation room
-        System.out.println("Please enter an accusation room: ");
-        while (accusationRoomCard == null) {
-            String accusationRoomInput = new Scanner(System.in).nextLine();
-
-            if (roomCardsMap.containsKey(accusationRoomInput)) {
-                accusationRoomCard = roomCardsMap.get(accusationRoomInput);
-            }
-
-            if (accusationRoomCard == null) System.out.println("Model.Room not found! Please enter a valid room name:");
-        }
-
-        // get accusation character
-        System.out.println("Please enter a character to accuse: ");
-        while (accusationCharacterCard == null) {
-            String accusationCharacterInput = new Scanner(System.in).nextLine();
-
-            if (characterCardsMap.containsKey(accusationCharacterInput)) {
-                accusationCharacterCard = characterCardsMap.get(accusationCharacterInput);
-            }
-
-            if (accusationCharacterCard == null)
-                System.out.println("Character not found! Please enter a valid character name:");
-        }
-
-        // get accusation character
-        System.out.println("Please enter an accusation murder weapon: ");
-        while (accusationWeaponCard == null) {
-            String accusationWeaponInput = new Scanner(System.in).nextLine();
-
-            if (weaponCardsMap.containsKey(accusationWeaponInput)) {
-                accusationWeaponCard = weaponCardsMap.get(accusationWeaponInput);
-            }
-
-            if (accusationWeaponCard == null)
-                System.out.println("Weapon not found! Please enter a valid weapon name:");
-        }
-         */
 
         // create scenario and compare to the original murder scenario
         System.out.println("\nChecking Scenario...\n");
         Scenario accusationScenario = new Scenario(weaponCardsMap.get(accusationStringSplit[1]), roomCardsMap.get(accusationStringSplit[2]), characterCardsMap.get(accusationStringSplit[0]));
 
         if (murderScenario.equals(accusationScenario)) {
-            System.out.println(p.getCharacter().getCharacterName() + " was successful in their accusation. They have won the game!!!");
-            System.out.println("The murder scenario was: " + murderScenario.toString());
-            System.out.println("\nThank you for playing Cluedo! To play a new game, please launch the program again.");
+            a.successfulAccusation(currentPlayer,murderScenario);
             return 1;
         } else {
-            System.out.println("You were incorrect in your accusation. You may remain playing the game and offering suggestions, but are no longer able to make further accusations.");
+            a.incorrectAccusation(currentPlayer);
             p.setCanAccuse(false);
             return 0;
         }

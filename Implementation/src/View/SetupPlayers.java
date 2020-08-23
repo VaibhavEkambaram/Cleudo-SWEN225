@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class SetupPlayers {
     public List<Player> setPlayers(String[] characterNames, int numPlayers, List<Player> players, Map<String, CharacterCard> characterCardsMap) {
@@ -35,8 +34,8 @@ public class SetupPlayers {
                 b.add(radButton);
                 fields.add(radButton);
             });
-            JOptionPane.showMessageDialog(null, fields, "Set Player Preferences", JOptionPane.OK_OPTION);
-            if (b.getSelection() != null || nameField.getText().length()==0) {
+            JOptionPane.showMessageDialog(null, fields, "Set Player Preferences", JOptionPane.PLAIN_MESSAGE);
+            if (b.getSelection() != null || nameField.getText().length() == 0) {
                 used.add(b.getSelection().getActionCommand());
                 players.add(new Player(characterCardsMap.get(b.getSelection().getActionCommand()), nameField.getText()));
             } else {
@@ -45,4 +44,6 @@ public class SetupPlayers {
         }
         return players;
     }
+
+
 }
