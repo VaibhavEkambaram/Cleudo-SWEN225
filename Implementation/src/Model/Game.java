@@ -104,16 +104,17 @@ public class Game {
                         " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
                         " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                         " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
-        //this.numPlayers = numPlayers;
         transitionGameState();
         View.Table gui = new View.Table();
         numPlayers = gui.setPlayerCount();
-        players = new View.SetupPlayers().setPlayers(characterNames,numPlayers,players, characterCardsMap);
+        initDeck();
+        players = new View.SetupPlayers().setPlayers(characterNames,numPlayers,players,characterCardsMap);
         dealCards();
+
+
         transitionSubState();
 
-        //initGame(); // initialize cards and players
-        initDeck();
+
         initBoard(boardLayout); // generate board
         mainGameLoop(); // main game logic loop
     }
@@ -206,8 +207,7 @@ public class Game {
         deck.remove(murderer);
         System.out.println("Generated Model.Scenario");
 
-        /*
-        // Create Players, then deal Cards to them
+        /*// Create Players, then deal Cards to them
         players = new ArrayList<>();
         for (int n = 0; n < numPlayers; n++) {
             players.add(new Player(characterCards.get(n)));
@@ -216,7 +216,7 @@ public class Game {
 
          */
 
-        //transitionSubState(); // Transition from DECK to BOARD
+        transitionSubState(); // Transition from DECK to BOARD
     }
 
     /**
@@ -363,6 +363,7 @@ public class Game {
                             System.out.println(board.toString());
                         }
                     } else {
+                        transitionSubState();
                         break;
                     }
                     if (movesRemaining < 1) {
