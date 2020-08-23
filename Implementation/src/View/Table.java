@@ -12,6 +12,7 @@ public class Table extends Observable {
     final JFrame gameFrame;
     public int numPlayers = -1;
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
+    private Canvas display;
 
     public Table() {
         gameFrame = new JFrame("Cluedo");
@@ -20,7 +21,8 @@ public class Table extends Observable {
         gameFrame.setJMenuBar(tableMenuBar);
         gameFrame.setSize(OUTER_FRAME_DIMENSION);
         gameFrame.setVisible(true);
-
+        display = new Canvas();
+        gameFrame.add(display);
 
         gameFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
@@ -74,6 +76,9 @@ public class Table extends Observable {
 
     }
 
+    public void updateDisplay(String text) {
+
+    }
 
 
     public int setPlayerCount() {

@@ -82,13 +82,11 @@ public class Game {
     public Game() {
 
         transitionGameState();
-        View.Table gui = new View.Table();
+        gui = new View.Table();
         numPlayers = gui.setPlayerCount();
         initDeck();
         players = new PlayerSetupMenu().setPlayers(characterNames, numPlayers, players, characterCardsMap);
         dealCards();
-
-        transitionSubState();
 
         initBoard(); // generate board
         mainGameLoop(); // main game logic loop
@@ -102,6 +100,11 @@ public class Game {
      * @author Cameron Li
      */
     private void initDeck() {
+        transitionSubState();
+        if (!subState.equals(subStates.DECK)) {
+            throw new Error("Expecting DECK Sub State but " + subState);
+        }
+
         // Adding cards
         deck = new ArrayList<>();
 
@@ -145,8 +148,6 @@ public class Game {
         deck.remove(murderWeapon);
         deck.remove(murderRoom);
         deck.remove(murderer);
-
-        transitionSubState(); // Transition from DECK to BOARD
     }
 
     /**
@@ -180,7 +181,11 @@ public class Game {
      * @author Cameron Li
      */
     private void initBoard() {
+        transitionSubState(); // Transition from DECK to BOARD
 
+        if (!subState.equals(subStates.BOARD)) {
+            throw new Error("Expecting BOARD Sub State but " + subState);
+        }
 
         String boardLayout =
                 " x x x x x x x x x 3 x x x x 4 x x x x x x x x x \n" +
@@ -294,8 +299,8 @@ public class Game {
         while (gameState.equals(States.RUNNING)) {
             for (Player p : players) {
                 movesRemaining = -1;
-
                 System.out.println("\n------------------------------------------------------------------------\n" + this.board + "\n");
+                gui.updateDisplay("\n------------------------------------------------------------------------\n" + this.board + "\n");
                 System.out.println("**************************************************");
                 System.out.println("Current Model.Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
                 currentPlayer = p;
@@ -317,6 +322,7 @@ public class Game {
                             this.board = newBoard;
                             movesRemaining = movesRemaining - move.getSpaces();
                             System.out.println(board.toString());
+                            gui.updateDisplay(board.toString());
                         }
                     } else {
                         transitionSubState();
