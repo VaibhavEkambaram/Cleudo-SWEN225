@@ -49,10 +49,7 @@ public class Table extends Observable {
         final JMenu gameMenu = new JMenu("Game");
         final JMenuItem setupGameMenuItem = new JMenuItem("Setup Game");
         gameMenu.add(setupGameMenuItem);
-        setupGameMenuItem.addActionListener(e -> {
-
-          setPlayerCount();
-        });
+        setupGameMenuItem.addActionListener(e -> setPlayerCount());
 
 
         final JMenuItem exitMenuItem = new JMenuItem("Exit");
@@ -73,7 +70,7 @@ public class Table extends Observable {
         JComboBox<String> comboBox = new JComboBox<>(new String[]{"3", "4", "5", "6"});
         fields.add(label);
         fields.add(comboBox);
-        JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.DEFAULT_OPTION);
+        JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.PLAIN_MESSAGE);
         System.out.println(comboBox.getSelectedItem());
         numPlayers = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
         return numPlayers;

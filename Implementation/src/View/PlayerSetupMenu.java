@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class SetupPlayers {
+public class PlayerSetupMenu {
     public List<Player> setPlayers(String[] characterNames, int numPlayers, List<Player> players, Map<String, CharacterCard> characterCardsMap) {
         ArrayList<String> used = new ArrayList<>();
 

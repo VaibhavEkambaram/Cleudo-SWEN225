@@ -36,16 +36,16 @@ public class Room {
             case "Conservatory":
                 this.roomChar = "C";
                 break;
-            case "Ball Model.Room":
+            case "Ball Room":
                 this.roomChar = "B";
                 break;
             case "Kitchen":
                 this.roomChar = "K";
                 break;
-            case "Billiard Model.Room":
+            case "Billiard Room":
                 this.roomChar = "I";
                 break;
-            case "Dining Model.Room":
+            case "Dining Room":
                 this.roomChar = "D";
                 break;
             case "Library":

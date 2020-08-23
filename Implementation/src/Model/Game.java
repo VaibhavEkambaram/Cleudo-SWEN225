@@ -2,8 +2,9 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import View.AccusationMenu;
+import View.PlayerSetupMenu;
+import View.SuggestionMenu;
 
-import javax.swing.*;
 import java.util.*;
 
 // line 50 "model.ump"
@@ -52,7 +53,7 @@ public class Game {
     View.Table gui;
 
     private final String[] weaponNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
-    private final String[] roomNames = {"Kitchen", "Dining Model.Room", "Lounge", "Hall", "Study", "Library", "Billiard Model.Room", "Conservatory", "Ball Model.Room"};
+    private final String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study", "Library", "Billiard Room", "Conservatory", "Ball Room"};
     private final String[] characterNames = {"Miss Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
 
 
@@ -68,10 +69,10 @@ public class Game {
      * ----------------------------------------------------------------------------------------------------
      * ** Rooms **              ** Players **        ** Model.Board **                    ** Weapons **
      * C - Conservatory         1 - Mrs. White       x - Null Area (Off limits)     ? - Candlestick
-     * B - Ball Model.Room            2 - Mr. Green        # - Model.Room Wall                  ! - Dagger
+     * B - Ball Room            2 - Mr. Green        # - Room Wall                  ! - Dagger
      * K - Kitchen              3 - Mrs. Peacock                                    $ - Lead Pipe
-     * I - Billiard Model.Room        4 - Prof. Plum                                      % - Revolver
-     * D - Dining Model.Room          5 - Ms. Scarlett                                    @ - Rope
+     * I - Billiard Room        4 - Prof. Plum                                      % - Revolver
+     * D - Dining Room          5 - Ms. Scarlett                                    @ - Rope
      * L - Library              6 - Col. Mustard                                    & - Spanner
      * O - Lounge
      * H - Hall
@@ -79,82 +80,20 @@ public class Game {
      * ----------------------------------------------------------------------------------------------------
      */
     public Game() {
-        String boardLayout =
-                " x x x x x x x x x 3 x x x x 4 x x x x x x x x x \n" +
-                        " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
-                        " k K K K K k _ _ b b b B B b b b _ _ c C C C C c \n" +
-                        " k K K K K k _ _ b B B B B B B b _ _ c C C C C c \n" +
-                        " k K K K K k _ _ b B B B B B B b _ _ <C c C C c c \n" +
-                        " k k K K K k _ _ <B B B B B B B >B _ _ _ c c c c x \n" +
-                        " x k k k vK k _ _ b B B B B B B b _ _ _ _ _ _ _ 5 \n" +
-                        " _ _ _ _ _ _ _ _ b vB b b b b vB b _ _ _ _ _ _ _ x \n" +
-                        " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i \n" +
-                        " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ <I I I I I i \n" +
-                        " d D D D d d d d _ _ x x x x x _ _ _ i I I I I i \n" +
-                        " d D D D D D D d _ _ x x x x x _ _ _ i I I I I i \n" +
-                        " d D D D D D D >D _ _ x x x x x _ _ _ i i i i vI i \n" +
-                        " d D D D D D D d _ _ x x x x x _ _ _ _ _ _ _ _ x \n" +
-                        " d D D D D D D d _ _ x x x x x _ _ _ l l ^L l l x \n" +
-                        " d d d d d d vD d _ _ x x x x x _ _ l l L L L l l \n" +
-                        " x _ _ _ _ _ _ _ _ _ x x x x x _ _ <L L L L L L l \n" +
-                        " 2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l \n" +
-                        " x _ _ _ _ _ _ _ _ h h ^H ^H h h _ _ _ l l l l l x \n" +
-                        " o o o o o o ^O _ _ h H H H H h _ _ _ _ _ _ _ _ 6 \n" +
-                        " o O O O O O o _ _ h H H H H >H _ _ _ _ _ _ _ _ x \n" +
-                        " o O O O O O o _ _ h H H H H h _ _ ^Y y y y y y y \n" +
-                        " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
-                        " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
-                        " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
+
         transitionGameState();
         View.Table gui = new View.Table();
         numPlayers = gui.setPlayerCount();
         initDeck();
-        players = new View.SetupPlayers().setPlayers(characterNames,numPlayers,players,characterCardsMap);
+        players = new PlayerSetupMenu().setPlayers(characterNames, numPlayers, players, characterCardsMap);
         dealCards();
-
 
         transitionSubState();
 
-
-        initBoard(boardLayout); // generate board
+        initBoard(); // generate board
         mainGameLoop(); // main game logic loop
     }
 
-
-    // Initial Model.Game Instance Creation
-
-    /**
-     * Initialise the game
-     * Ask user for number of players
-     * Initialise Deck
-     *
-     * @author Cameron Li
-     */
-    public void initGame() {
-        transitionGameState(); // Transition IDLE to INIT
-        System.out.println("**Model.Game Startup Parameters**\nHow many players wish to participate? (3 - 6):");
-        int numPlayers = 0;
-        //Scanner sc = new Scanner(System.in);
-        while (subState.equals(subStates.PLAYERS)) {
-            /*
-            String number = sc.nextLine();
-            try {
-                numPlayers = Integer.parseInt(number);
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a number");
-            }
-
-             */
-            numPlayers = gui.setPlayerCount();
-
-            if (numPlayers < 3 || numPlayers > 6) {
-                System.out.println("Please enter a number between 3 and 6");
-            } else {
-                transitionSubState(); // Transition from PLAYERS to DECK
-                this.numPlayers = numPlayers;
-            }
-        }
-    }
 
     /**
      * Create the deck and then shuffle
@@ -206,16 +145,7 @@ public class Game {
         deck.remove(murderWeapon);
         deck.remove(murderRoom);
         deck.remove(murderer);
-        System.out.println("Generated Model.Scenario");
-
-        /*// Create Players, then deal Cards to them
-        players = new ArrayList<>();
-        for (int n = 0; n < numPlayers; n++) {
-            players.add(new Player(characterCards.get(n)));
-        }
-        dealCards();
-
-         */
+        System.out.println("Generated Scenario");
 
         transitionSubState(); // Transition from DECK to BOARD
     }
@@ -245,14 +175,42 @@ public class Game {
      * "x" = Forbidden Model.Position
      * "_" = Standard Model.Position
      * number = Model.Player starting Model.Position
-     * uppercase letter = Inner Model.Room Model.Position
-     * lowercase letter = Outer Model.Room Model.Position
-     * "d" + letter = Model.Room Door Model.Position
+     * uppercase letter = Inner Room Position
+     * lowercase letter = Outer Room Position
+     * "d" + letter = Model.Room Door Position
      *
-     * @param boardLayout layout of board defined in constructor
      * @author Cameron Li
      */
-    private void initBoard(String boardLayout) {
+    private void initBoard() {
+
+
+        String boardLayout =
+                " x x x x x x x x x 3 x x x x 4 x x x x x x x x x \n" +
+                        " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
+                        " k K K K K k _ _ b b b B B b b b _ _ c C C C C c \n" +
+                        " k K K K K k _ _ b B B B B B B b _ _ c C C C C c \n" +
+                        " k K K K K k _ _ b B B B B B B b _ _ <C c C C c c \n" +
+                        " k k K K K k _ _ <B B B B B B B >B _ _ _ c c c c x \n" +
+                        " x k k k vK k _ _ b B B B B B B b _ _ _ _ _ _ _ 5 \n" +
+                        " _ _ _ _ _ _ _ _ b vB b b b b vB b _ _ _ _ _ _ _ x \n" +
+                        " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i \n" +
+                        " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ <I I I I I i \n" +
+                        " d D D D d d d d _ _ x x x x x _ _ _ i I I I I i \n" +
+                        " d D D D D D D d _ _ x x x x x _ _ _ i I I I I i \n" +
+                        " d D D D D D D >D _ _ x x x x x _ _ _ i i i i vI i \n" +
+                        " d D D D D D D d _ _ x x x x x _ _ _ _ _ _ _ _ x \n" +
+                        " d D D D D D D d _ _ x x x x x _ _ _ l l ^L l l x \n" +
+                        " d d d d d d vD d _ _ x x x x x _ _ l l L L L l l \n" +
+                        " x _ _ _ _ _ _ _ _ _ x x x x x _ _ <L L L L L L l \n" +
+                        " 2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l \n" +
+                        " x _ _ _ _ _ _ _ _ h h ^H ^H h h _ _ _ l l l l l x \n" +
+                        " o o o o o o ^O _ _ h H H H H h _ _ _ _ _ _ _ _ 6 \n" +
+                        " o O O O O O o _ _ h H H H H >H _ _ _ _ _ _ _ _ x \n" +
+                        " o O O O O O o _ _ h H H H H h _ _ ^Y y y y y y y \n" +
+                        " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
+                        " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
+                        " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
+
         Board board = new Board();
         Scanner layoutScan = new Scanner(boardLayout);
         int y = -1;
@@ -493,7 +451,7 @@ public class Game {
     private int makeAccusation(Player p) {
         AccusationMenu a = new AccusationMenu();
         if (!p.getCanAccuse()) {
-            a.unableToAccuse(currentPlayer);
+            a.unableToAccuse(p);
             return -1;
         }
 
@@ -506,10 +464,10 @@ public class Game {
         Scenario accusationScenario = new Scenario(weaponCardsMap.get(accusationStringSplit[1]), roomCardsMap.get(accusationStringSplit[2]), characterCardsMap.get(accusationStringSplit[0]));
 
         if (murderScenario.equals(accusationScenario)) {
-            a.successfulAccusation(currentPlayer,murderScenario);
+            a.successfulAccusation(p, murderScenario);
             return 1;
         } else {
-            a.incorrectAccusation(currentPlayer);
+            a.incorrectAccusation(p);
             p.setCanAccuse(false);
             return 0;
         }
@@ -521,6 +479,9 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav Ekambaram, Cameron Li
      */
     private void makeSuggestion(Player p) {
+        SuggestionMenu s = new SuggestionMenu();
+
+
         //initialize required fields
         Room room;
         RoomCard suggestionRoom = null;
@@ -529,9 +490,8 @@ public class Game {
 
 
         // check if player is currently in a room, can not suggest if not
-        System.out.println("[Checking to see if player is currently in a room]");
         if (p.getCurrentPosition().getRoom() == null) {
-            System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is not currently in a room, suggestion can NOT continue]");
+            s.unableToSuggest(p);
             return;
         }
 
