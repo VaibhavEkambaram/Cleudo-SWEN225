@@ -19,14 +19,17 @@ public class Player {
     // Model.Player State
     private boolean canAccuse = true;
 
+    private String playerVanityName;
+
 
     /**
      * Model.Player Constructor and Initialise Methods
      *
      * @param aCharacter character associated with player
      */
-    public Player(CharacterCard aCharacter) {
+    public Player(CharacterCard aCharacter,String playerVanityName) {
         character = aCharacter;
+        this.playerVanityName = playerVanityName;
         hand = new ArrayList<>();
     }
 
@@ -108,6 +111,10 @@ public class Player {
      */
     public boolean getCanAccuse() {
         return canAccuse;
+    }
+
+    public String getPlayerVanityName(){
+        return playerVanityName;
     }
 
 }
