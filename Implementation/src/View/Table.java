@@ -41,6 +41,7 @@ public class Table extends Observable {
     private JMenuBar createTableMenuBar() {
         final JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createGameMenu());
+        tableMenuBar.add(createHelpMenu());
         return tableMenuBar;
     }
 
@@ -62,6 +63,17 @@ public class Table extends Observable {
         return gameMenu;
     }
 
+    private JMenu createHelpMenu(){
+        final JMenu helpMenu = new JMenu("Help");
+        final JMenuItem about = new JMenuItem("About");
+        about.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Cluedo!\nSWEN225 Assignment 2\nA group project by:\nCameron Li Vaibhav Ekambaram Baxter Kirikiri", "About", JOptionPane.PLAIN_MESSAGE);
+        });
+        helpMenu.add(about);
+        return helpMenu;
+
+    }
+
 
 
     public int setPlayerCount() {
@@ -71,7 +83,6 @@ public class Table extends Observable {
         fields.add(label);
         fields.add(comboBox);
         JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.PLAIN_MESSAGE);
-        System.out.println(comboBox.getSelectedItem());
         numPlayers = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
         return numPlayers;
     }

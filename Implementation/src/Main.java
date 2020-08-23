@@ -9,13 +9,6 @@ public class Main {
      * @author Vaibhav Ekambaram
      */
     public static void main(String[] args) {
-        System.out.println("------------------------------------------------------------------------\n" +
-                "\tCluedo!\n" +
-                "------------------------------------------------------------------------\n" +
-                "\tSWEN225 Assignment 1\n" +
-                "\tA group project by:\n" +
-                "\t\tCameron Li\tVaibhav Ekambaram\tBaxter Kirikiri\n" +
-                "------------------------------------------------------------------------\n");
         Game game = new Game();
     }
 }

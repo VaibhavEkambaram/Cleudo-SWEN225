@@ -40,7 +40,7 @@ public class Game {
     //Model.Game Attributes
     private Board board;
     private Player currentPlayer;
-    private Scenario murderScenario;  // Murder Model.Scenario that players must find
+    private Scenario murderScenario;  // Murder Scenario that players must find
 
     // check if the game has been won yet
     //        - still playing: true
@@ -137,7 +137,7 @@ public class Game {
         }
 
         Collections.shuffle(deck);
-        // Murder Model.Scenario of Random Cards
+        // Murder Scenario of Random Cards
         WeaponCard murderWeapon = weaponCards.get(new Random().nextInt(weaponNames.length - 1) + 1);
         RoomCard murderRoom = roomCards.get(new Random().nextInt(roomNames.length - 1) + 1);
         CharacterCard murderer = characterCards.get(new Random().nextInt(characterNames.length - 1) + 1);
@@ -145,7 +145,6 @@ public class Game {
         deck.remove(murderWeapon);
         deck.remove(murderRoom);
         deck.remove(murderer);
-        System.out.println("Generated Scenario");
 
         transitionSubState(); // Transition from DECK to BOARD
     }
@@ -167,7 +166,6 @@ public class Game {
                 p.addHand(toBeDealt.pop());
             }
         }
-        System.out.println("Cards Dealt");
     }
 
     /**
@@ -289,9 +287,8 @@ public class Game {
      * @author Vaibhav Ekambaram
      */
     public void mainGameLoop() {
-        System.out.println("\n\tMurder Model.Scenario (SECRET, DO NOT LOOK!)");
+        System.out.println("\n\tMurder Scenario (SECRET, DO NOT LOOK!)");
         System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() + "\n\t\t[Model.Room] " + murderScenario.getRoomCard().getRoomName() + "\n\t\t[Weapon] " + murderScenario.getWeapon().getWeaponName());
-        System.out.println("Starting game...");
 
         transitionGameState(); // Transition from INIT to RUNNING
         while (gameState.equals(States.RUNNING)) {
