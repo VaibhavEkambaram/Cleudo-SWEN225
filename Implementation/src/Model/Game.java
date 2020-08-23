@@ -23,7 +23,7 @@ public class Game {
      */
 
     private List<Card> deck;
-    private List<Player> players = new ArrayList<>();
+    private List<Player> players;
     private List<Room> rooms;
 
     private List<WeaponCard> weaponCards;
@@ -104,17 +104,15 @@ public class Game {
                         " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
                         " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                         " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
+        //this.numPlayers = numPlayers;
         transitionGameState();
         View.Table gui = new View.Table();
         numPlayers = gui.setPlayerCount();
-        initDeck();
-        players = new View.SetupPlayers().setPlayers(characterNames,numPlayers,players,characterCardsMap);
-        dealCards();
-
-
+        new View.SetupPlayers().setPlayers(characterNames);
         transitionSubState();
 
-
+        //initGame(); // initialize cards and players
+        initDeck();
         initBoard(boardLayout); // generate board
         mainGameLoop(); // main game logic loop
     }
@@ -207,14 +205,12 @@ public class Game {
         deck.remove(murderer);
         System.out.println("Generated Model.Scenario");
 
-        /*// Create Players, then deal Cards to them
+        // Create Players, then deal Cards to them
         players = new ArrayList<>();
         for (int n = 0; n < numPlayers; n++) {
             players.add(new Player(characterCards.get(n)));
         }
         dealCards();
-
-         */
 
         transitionSubState(); // Transition from DECK to BOARD
     }
@@ -341,7 +337,7 @@ public class Game {
 
                 System.out.println("\n------------------------------------------------------------------------\n" + this.board + "\n");
                 System.out.println("**************************************************");
-                System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
+                System.out.println("Current Model.Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
                 currentPlayer = p;
                 System.out.println("**************************************************");
                 movesRemaining = rollDice();
