@@ -81,17 +81,25 @@ public class Game {
      */
     public Game() {
 
-        transitionGameState();
-        gui = new View.Table();
-        numPlayers = gui.setPlayerCount();
         initDeck();
-        players = new PlayerSetupMenu().setPlayers(characterNames, numPlayers, players, characterCardsMap);
-        dealCards();
-
+        initGame();
         initBoard(); // generate board
+        dealCards();
         mainGameLoop(); // main game logic loop
     }
 
+
+    private void initGame() {
+        transitionSubState(); // Transition from DECK to PLAYERS
+
+        if (!subState.equals(subStates.PLAYERS)) {
+            throw new Error("Expecting PLAYERS Sub State but " + subState);
+        }
+
+        gui = new View.Table();
+        numPlayers = gui.setPlayerCount();
+        players = new PlayerSetupMenu().setPlayers(characterNames, numPlayers, players, characterCardsMap);
+    }
 
     /**
      * Create the deck and then shuffle
@@ -100,7 +108,7 @@ public class Game {
      * @author Cameron Li
      */
     private void initDeck() {
-        transitionSubState();
+        transitionGameState(); // Transition from IDLE to INIT
         if (!subState.equals(subStates.DECK)) {
             throw new Error("Expecting DECK Sub State but " + subState);
         }
@@ -653,7 +661,7 @@ public class Game {
         checkGameState();
         if (gameState.equals(States.IDLE)) {
             gameState = States.INIT;
-            subState = subStates.PLAYERS;
+            subState = subStates.DECK;
         } else if (gameState.equals(States.INIT)) {
             gameState = States.RUNNING;
             subState = subStates.MOVEMENT;
@@ -671,8 +679,8 @@ public class Game {
                 subState = subStates.MOVEMENT;
             }
         } else if (gameState.equals(States.INIT)) {
-            if (subState.equals(subStates.PLAYERS)) {
-                subState = subStates.DECK;
+            if (subState.equals(subStates.DECK)) {
+                subState = subStates.PLAYERS;
             } else {
                 subState = subStates.BOARD;
             }

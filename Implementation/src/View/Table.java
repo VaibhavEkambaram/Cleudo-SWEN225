@@ -28,18 +28,16 @@ public class Table extends Observable {
         display = new Canvas();
 
         GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
 
-
         mainPanel = new JPanel(new GridBagLayout());
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = .8;
         constraints.weighty = .8;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.anchor = GridBagConstraints.CENTER;
 
         displayPanel = new JPanel();
         displayPanel.add(display);
@@ -55,7 +53,6 @@ public class Table extends Observable {
         constraints.weighty = .2;
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.PAGE_END;
         mainPanel.add(actionPanel, constraints);
 
         gameFrame.add(mainPanel);
@@ -108,12 +105,11 @@ public class Table extends Observable {
         });
         helpMenu.add(about);
         return helpMenu;
-
     }
 
     public void updateDisplay(String text) {
         Rectangle half = new Rectangle(0, 0, 50, 50);
-        paint(display.getGraphics());
+        paint(displayPanel.getGraphics());
     }
 
     public void paint(Graphics g) {
