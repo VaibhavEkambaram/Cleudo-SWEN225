@@ -183,8 +183,25 @@ public class Position {
             g.setColor(new Color(1, 50, 32));
         } else if(displayName.equals("_") && inRoom==null) {
             g.setColor(Color.YELLOW);
-        } else if(displayName.equals("k") || (displayName.equals("K"))){
+        } else if(inRoom.getRoomChar().equals("K")) {
+            if ((xLoc % 2 == 0)) {
+                if ((yLoc % 2 == 0)) {
+                    g.setColor(Color.BLACK);
+                } else {
+                    g.setColor(Color.WHITE);
+                }
+            } else {
+                if ((yLoc % 2 == 0)) {
+                    g.setColor(Color.WHITE);
+                } else {
+                    g.setColor(Color.BLACK);
+                }
+            }
 
+        } else if(inRoom.getRoomChar().equals("Y")) {
+            g.setColor(new Color(130, 0, 0));
+        } else if(inRoom.getRoomChar().equals("O")) {
+            g.setColor(new Color(1, 122, 122));
         } else{
             g.setColor(Color.WHITE);
         }

@@ -227,10 +227,8 @@ public class Table extends Observable {
             for (int j = 0; j < 25; j++) {
 
                 game.getBoard().getPositions()[j][i].draw(g);
-
-
-
                 g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+
                 g.setColor(Color.BLACK);
                 g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
             }
