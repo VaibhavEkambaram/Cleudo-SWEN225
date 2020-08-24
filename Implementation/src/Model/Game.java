@@ -100,7 +100,7 @@ public class Game {
         players = new PlayerSetupMenu().setPlayers(characterNames, numPlayers, players, characterCardsMap);
     }
 
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
@@ -310,7 +310,6 @@ public class Game {
         transitionGameState(); // Transition from INIT to RUNNING
 
 
-
         while (gameState.equals(States.RUNNING)) {
             for (Player p : players) {
                 movesRemaining = -1;
@@ -470,6 +469,7 @@ public class Game {
         return new Move(direction, spaces);
     }
 
+
     /**
      * Handle Accusations
      *
@@ -571,6 +571,10 @@ public class Game {
         boolean refuted = false;
         while (!refuters.isEmpty()) {
             Player currentTurn = refuters.pop();
+
+            s.makeRefutation(currentTurn, currentPlayer, suggestion);
+
+
             System.out.println(currentTurn.getCharacter().getCharacterName() + "'s turn to refute");
             System.out.println(currentTurn.getCharacter().getCharacterName() + "'s hand: ");
 
@@ -605,7 +609,7 @@ public class Game {
 
             // if the player successfully refutes the suggestion, end the loop
             if (refutation.toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom != null ? suggestionRoom.toString() : null) || refutation.toString().equals(suggestionWeapon.toString())) {
-                System.out.println(p.getCharacter().getCharacterName() + "'s suggestion was refuted!");
+                s.refuted(p.getCharacter().getCharacterName());
                 refuted = true;
                 break;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards

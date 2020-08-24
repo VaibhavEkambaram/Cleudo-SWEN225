@@ -1,10 +1,15 @@
 package View;
 
+import Model.Card;
 import Model.Player;
 import Model.RoomCard;
+import Model.Scenario;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class SuggestionMenu {
 
@@ -30,6 +35,29 @@ public class SuggestionMenu {
         return (charBox.getSelectedItem() + "\t" + weaponBox.getSelectedItem());
     }
 
+    public String makeRefutation(Player refutePlayer, Player currentPlayer, Scenario suggestion){
+        JPanel fields = new JPanel(new GridLayout(0, 1));
+        fields.add(new JLabel("Refute "+currentPlayer.getPlayerVanityName()+ "'s Suggestion by making a refutation using a card from your hand."));
+
+        fields.add(new JLabel("Suggestion:  "+suggestion.toString()));
+
+        fields.add(new JLabel("Your Hand"));
+        List<Card> refuteCards = refutePlayer.getHand();
+        String[] refuteCardsStrings = new String[refuteCards.size()];
+        for(int i=0; i < refuteCards.size(); i++){
+            refuteCardsStrings[i] = refuteCards.get(i).toString();
+        }
+
+        JComboBox<String> hand = new JComboBox<>(refuteCardsStrings);
+        fields.add(hand);
+
+
+        Object[] options = {"OK", "Pass"};
+        int n = JOptionPane.showOptionDialog(null, fields, refutePlayer.getPlayerVanityName()+ " - Make a Refutation", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
+
+        return n == 0 ? Objects.requireNonNull(hand.getSelectedItem()).toString() : "-1";
+    }
+
 
     public void unableToSuggest(Player currentPlayer) {
         JOptionPane.showMessageDialog(null, "You (" + currentPlayer.getPlayerVanityName() + ") are not able to make a suggestion as you are not in a room.", "Suggestion Failed", JOptionPane.ERROR_MESSAGE);
@@ -46,6 +74,10 @@ public class SuggestionMenu {
                 options,//the titles of buttons
                 options[1]);//default button title
         return n;
+    }
+
+    public void refuted(String characterName){
+        JOptionPane.showMessageDialog(null,characterName + "'s suggestion was refuted!", "Suggestion Refuted", JOptionPane.PLAIN_MESSAGE);
     }
 
 
