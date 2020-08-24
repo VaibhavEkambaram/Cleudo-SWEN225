@@ -48,6 +48,7 @@ public class Table extends Observable {
 
         // Action Panel
         actionPanel = new JPanel();
+        actionPanel.setBackground(Color.WHITE);
         constraints.weighty = .8;
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -64,22 +65,24 @@ public class Table extends Observable {
         constraints.gridheight = 1;
         displayPanel = new JPanel();
         displayPanel.add(display);
+        displayPanel.setBackground(Color.WHITE);
         displayPanel.setPreferredSize(new Dimension(500, 500));
         mainPanel.add(displayPanel, constraints);
 
         // Info Panel
         infoPanel = new JPanel(new BorderLayout());
+        infoPanel.setBackground(Color.WHITE);
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.weighty = .1;
         mainPanel.add(infoPanel, constraints);
         info = new JTextArea();
         infoPanel.add(info, BorderLayout.LINE_START);
-        info.setText("hello text test");
         infoFont = info.getFont();
 
         // Hand Panel
         handPanel = new JPanel();
+        handPanel.setBackground(Color.WHITE);
         handPanel.setPreferredSize(new Dimension(500, 100));
         constraints.weightx = 1;
         constraints.weighty = .2;
@@ -89,11 +92,11 @@ public class Table extends Observable {
         mainPanel.add(handPanel, constraints);
 
         // Borders
-        mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        displayPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
-        handPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-        actionPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-        infoPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+        mainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        displayPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        handPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        actionPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        infoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         actionPanel.setLayout(new GridLayout(12, 1));
 
 
@@ -126,7 +129,7 @@ public class Table extends Observable {
             }
         });
 
-        gameFrame.setMinimumSize(new Dimension(800, 750));
+        gameFrame.setMinimumSize(new Dimension(750, 750));
         gameFrame.pack();
     }
 
