@@ -2,6 +2,7 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import View.AccusationMenu;
+import View.Table;
 import View.PlayerSetupMenu;
 import View.SuggestionMenu;
 
@@ -18,7 +19,7 @@ public class Game {
 
     private States gameState = States.IDLE;
     private subStates subState;
-    View.Table gui;
+    Table table;
 
     /**
      * Check if States are matching within their appropiate substates
@@ -26,7 +27,7 @@ public class Game {
      */
 
     private List<Card> deck;
-    private List<Player> players = new ArrayList<>();
+    public List<Player> players = new ArrayList<>();
     private List<Room> rooms;
 
     private List<CharacterCard> characterCards;
@@ -94,10 +95,15 @@ public class Game {
             throw new Error("Expecting PLAYERS Sub State but " + subState);
         }
 
-        gui = new View.Table();
-        numPlayers = gui.setPlayerCount();
+        table = new Table(this);
+        numPlayers = table.setPlayerCount();
         players = new PlayerSetupMenu().setPlayers(characterNames, numPlayers, players, characterCardsMap);
     }
+
+    public Player getCurrentPlayer(){
+        return currentPlayer;
+    }
+
 
     /**
      * Create the deck and then shuffle
@@ -302,11 +308,14 @@ public class Game {
         System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() + "\n\t\t[Model.Room] " + murderScenario.getRoomCard().getRoomName() + "\n\t\t[Weapon] " + murderScenario.getWeapon().getWeaponName());
 
         transitionGameState(); // Transition from INIT to RUNNING
+
+
+
         while (gameState.equals(States.RUNNING)) {
             for (Player p : players) {
                 movesRemaining = -1;
                 System.out.println("\n------------------------------------------------------------------------\n" + this.board + "\n");
-                gui.updateDisplay("\n------------------------------------------------------------------------\n" + this.board + "\n");
+                table.updateDisplay("\n------------------------------------------------------------------------\n" + this.board + "\n");
                 System.out.println("**************************************************");
                 System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
                 currentPlayer = p;
@@ -328,7 +337,7 @@ public class Game {
                             this.board = newBoard;
                             movesRemaining = movesRemaining - move.getSpaces();
                             System.out.println(board.toString());
-                            gui.updateDisplay(board.toString());
+                            table.updateDisplay(board.toString());
                         }
                     } else {
                         transitionSubState();
@@ -356,6 +365,9 @@ public class Game {
 
                 System.out.println("Would you like to make a suggestion, accusation or pass?");
                 System.out.println("Available commands - [suggestion][accusation][pass]:");
+
+                table.setSuggestionAccusationVisibility(true);
+
 
                 String answer = "";
                 String input = new Scanner(System.in).nextLine();
@@ -465,7 +477,7 @@ public class Game {
      * @return integer (-1 invalid, 0 failed, 1 successful)
      * @author Baxter Kirikiri, Vaibhav Ekambaram
      */
-    private int makeAccusation(Player p) {
+    public int makeAccusation(Player p) {
         AccusationMenu a = new AccusationMenu();
         if (!p.getCanAccuse()) {
             a.unableToAccuse(p);

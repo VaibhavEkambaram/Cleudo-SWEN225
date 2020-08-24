@@ -1,7 +1,12 @@
 package View;
 
+import Model.Game;
+import Model.Player;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Objects;
@@ -17,8 +22,13 @@ public class Table extends Observable {
     private JPanel displayPanel;
     private JPanel handPanel;
     private JPanel actionPanel;
+    private Game game;
 
-    public Table() {
+    JButton suggestionButton;
+    JButton accusationButton;
+    JButton passButton;
+
+    public Table(Game game) {
         gameFrame = new JFrame("Cluedo");
         gameFrame.setLayout(new BorderLayout());
         final JMenuBar tableMenuBar = createTableMenuBar();
@@ -63,6 +73,7 @@ public class Table extends Observable {
         displayPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
         handPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
         actionPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+        actionPanel.setLayout(new GridLayout(12, 1));
 
         constraints.weightx = 1;
         constraints.weighty = .2;
@@ -71,6 +82,20 @@ public class Table extends Observable {
         constraints.gridwidth = 2;
         mainPanel.add(handPanel, constraints);
         gameFrame.add(mainPanel);
+
+
+        suggestionButton = new JButton("Make Suggestion");
+        actionPanel.add(suggestionButton);
+        suggestionButton.setVisible(false);
+
+        accusationButton = new JButton("Make Accusation");
+        actionPanel.add(accusationButton);
+        accusationButton.setVisible(false);
+
+        passButton = new JButton("Pass");
+        actionPanel.add(passButton);
+        passButton.setVisible(false);
+
 
         gameFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
@@ -86,6 +111,18 @@ public class Table extends Observable {
 
         gameFrame.setMinimumSize(new Dimension(800, 750));
         gameFrame.pack();
+    }
+
+    public void setSuggestionAccusationVisibility(boolean value) {
+        if (value) {
+            suggestionButton.setVisible(true);
+            accusationButton.setVisible(true);
+            passButton.setVisible(true);
+        } else {
+            suggestionButton.setVisible(false);
+            accusationButton.setVisible(false);
+            passButton.setVisible(false);
+        }
     }
 
 
