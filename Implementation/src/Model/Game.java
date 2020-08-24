@@ -294,6 +294,10 @@ public class Game {
         this.board = board; // Set board
     }
 
+    public Board getBoard(){
+        return this.board;
+    }
+
     // Gameplay
 
     /**

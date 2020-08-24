@@ -2,6 +2,8 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 
+import java.lang.reflect.Array;
+
 /**
  * Model.Board Class
  * A board is made up of position classes, which are then all stored in this class
@@ -55,6 +57,10 @@ public class Board {
             boardPrint.append("|\n");
         }
         return boardPrint.toString();
+    }
+
+    public Position[][] getPositions(){
+        return this.positions;
     }
 
 

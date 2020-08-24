@@ -7,7 +7,6 @@ import Model.Scenario;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,16 +34,16 @@ public class SuggestionMenu {
         return (charBox.getSelectedItem() + "\t" + weaponBox.getSelectedItem());
     }
 
-    public String makeRefutation(Player refutePlayer, Player currentPlayer, Scenario suggestion){
+    public String makeRefutation(Player refutePlayer, Player currentPlayer, Scenario suggestion) {
         JPanel fields = new JPanel(new GridLayout(0, 1));
-        fields.add(new JLabel("Refute "+currentPlayer.getPlayerVanityName()+ "'s Suggestion by making a refutation using a card from your hand."));
+        fields.add(new JLabel("Refute " + currentPlayer.getPlayerVanityName() + "'s Suggestion by making a refutation using a card from your hand."));
 
-        fields.add(new JLabel("Suggestion:  "+suggestion.toString()));
+        fields.add(new JLabel("Suggestion:  " + suggestion.toString()));
 
         fields.add(new JLabel("Your Hand"));
         List<Card> refuteCards = refutePlayer.getHand();
         String[] refuteCardsStrings = new String[refuteCards.size()];
-        for(int i=0; i < refuteCards.size(); i++){
+        for (int i = 0; i < refuteCards.size(); i++) {
             refuteCardsStrings[i] = refuteCards.get(i).toString();
         }
 
@@ -53,7 +52,7 @@ public class SuggestionMenu {
 
 
         Object[] options = {"OK", "Pass"};
-        int n = JOptionPane.showOptionDialog(null, fields, refutePlayer.getPlayerVanityName()+ " - Make a Refutation", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
+        int n = JOptionPane.showOptionDialog(null, fields, refutePlayer.getPlayerVanityName() + " - Make a Refutation", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
 
         return n == 0 ? Objects.requireNonNull(hand.getSelectedItem()).toString() : "-1";
     }
@@ -67,7 +66,7 @@ public class SuggestionMenu {
         JOptionPane.showMessageDialog(null, "An error occured while attempting to teleport the suggested player", "Suggestion Failed", JOptionPane.ERROR_MESSAGE);
     }
 
-    public int nobodyCouldRefute(){
+    public int nobodyCouldRefute() {
         Object[] options = {"Make Accusation", "Pass"};
         int n = JOptionPane.showOptionDialog(null, "No one could refute your suggestion. What would you like to do?", "Suggestion not Refuted",
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,//do not use a custom Icon
@@ -76,11 +75,9 @@ public class SuggestionMenu {
         return n;
     }
 
-    public void refuted(String characterName){
-        JOptionPane.showMessageDialog(null,characterName + "'s suggestion was refuted!", "Suggestion Refuted", JOptionPane.PLAIN_MESSAGE);
+    public void refuted(String characterName) {
+        JOptionPane.showMessageDialog(null, characterName + "'s suggestion was refuted!", "Suggestion Refuted", JOptionPane.PLAIN_MESSAGE);
     }
-
-
 }
 
 

@@ -31,8 +31,10 @@ public class Table extends Observable {
     private Font infoFont;
     JButton accusationButton;
     JButton passButton;
+    Game game;
 
     public Table(Game game) {
+        this.game = game;
         gameFrame = new JFrame("Cluedo");
         gameFrame.setLayout(new BorderLayout());
         final JMenuBar tableMenuBar = createTableMenuBar();
@@ -205,8 +207,20 @@ public class Table extends Observable {
 
     public void paint(Graphics g, int rectSize) {
         int border = BORDER_SIZE / 2;
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 24; i++) {
             for (int j = 0; j < 25; j++) {
+
+                String s = game.getBoard().getPositions()[j][i].toString();
+                if (s.equals("x")) {
+                    g.setColor(new Color(1,50,32));
+                } else if(s.equals("_") && game.getBoard().getPositions()[j][i].getRoom()==null){
+                        g.setColor(Color.YELLOW);
+                } else{
+                    g.setColor(Color.WHITE);
+                }
+
+                g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                g.setColor(Color.BLACK);
                 g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
             }
         }
