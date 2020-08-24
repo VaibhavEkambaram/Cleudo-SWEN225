@@ -63,7 +63,7 @@ public class Table extends Observable {
         return gameMenu;
     }
 
-    private JMenu createHelpMenu(){
+    private JMenu createHelpMenu() {
         final JMenu helpMenu = new JMenu("Help");
         final JMenuItem about = new JMenuItem("About");
         about.addActionListener(e -> {
@@ -73,7 +73,6 @@ public class Table extends Observable {
         return helpMenu;
 
     }
-
 
 
     public int setPlayerCount() {

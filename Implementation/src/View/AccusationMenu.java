@@ -15,12 +15,14 @@ public class AccusationMenu {
         JComboBox<String> charBox = new JComboBox<>(characters);
         JComboBox<String> weaponBox = new JComboBox<>(weapons);
         JComboBox<String> roomBox = new JComboBox<>(rooms);
+
+        fields.add(new JLabel("Rooms"));
+        fields.add(roomBox);
         fields.add(new JLabel("Characters"));
         fields.add(charBox);
         fields.add(new JLabel("Weapons"));
         fields.add(weaponBox);
-        fields.add(new JLabel("Rooms"));
-        fields.add(roomBox);
+
 
         JOptionPane.showMessageDialog(null, fields, "Make an Accusation", JOptionPane.PLAIN_MESSAGE);
         return (charBox.getSelectedItem() + "\t" + weaponBox.getSelectedItem() + "\t" + roomBox.getSelectedItem());
@@ -34,7 +36,7 @@ public class AccusationMenu {
         JOptionPane.showMessageDialog(null, "You (" + currentPlayer.getPlayerVanityName() + ") were incorrect in your accusation.\nYou may remain playing the game and offering suggestions, but are no longer able to make further accusations.", "Incorrect Accusation", JOptionPane.ERROR_MESSAGE);
     }
 
-    public void successfulAccusation(Player currentPlayer, Scenario murderScenario){
-        JOptionPane.showMessageDialog(null, currentPlayer.getPlayerVanityName() + " was successful in their accusation. They have won the game!!!\nThe murder scenario was: " + murderScenario.toString()+"\nThank you for playing Cluedo!", "Successful Accusation - Game Over!", JOptionPane.PLAIN_MESSAGE);
+    public void successfulAccusation(Player currentPlayer, Scenario murderScenario) {
+        JOptionPane.showMessageDialog(null, currentPlayer.getPlayerVanityName() + " was successful in their accusation. They have won the game!!!\nThe murder scenario was: " + murderScenario.toString() + "\nThank you for playing Cluedo!", "Successful Accusation - Game Over!", JOptionPane.PLAIN_MESSAGE);
     }
 }

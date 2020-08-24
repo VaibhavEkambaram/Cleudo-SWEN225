@@ -50,7 +50,6 @@ public class Game {
     // track number of moves for current player
     int movesRemaining = -1;
     int numPlayers;
-    View.Table gui;
 
     private final String[] weaponNames = {"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
     private final String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study", "Library", "Billiard Room", "Conservatory", "Ball Room"};
@@ -297,7 +296,7 @@ public class Game {
 
                 System.out.println("\n------------------------------------------------------------------------\n" + this.board + "\n");
                 System.out.println("**************************************************");
-                System.out.println("Current Model.Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
+                System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
                 currentPlayer = p;
                 System.out.println("**************************************************");
                 movesRemaining = rollDice();
@@ -336,7 +335,7 @@ public class Game {
                     } else if (c instanceof WeaponCard) {
                         System.out.println("\t\t[Weapon] " + c.toString());
                     } else if (c instanceof RoomCard) {
-                        System.out.println("\t\t[Model.Room] " + c.toString());
+                        System.out.println("\t\t[Room] " + c.toString());
                     }
                 }
                 System.out.println("\t\t________________________________");
@@ -455,9 +454,7 @@ public class Game {
         String accusationString = a.makeAccusation(characterNames, weaponNames, roomNames);
         String[] accusationStringSplit = accusationString.split("\t");
 
-
         // create scenario and compare to the original murder scenario
-        System.out.println("\nChecking Scenario...\n");
         Scenario accusationScenario = new Scenario(weaponCardsMap.get(accusationStringSplit[1]), roomCardsMap.get(accusationStringSplit[2]), characterCardsMap.get(accusationStringSplit[0]));
 
         if (murderScenario.equals(accusationScenario)) {
@@ -482,8 +479,8 @@ public class Game {
         //initialize required fields
         Room room;
         RoomCard suggestionRoom = null;
-        WeaponCard suggestionWeapon = null;
-        CharacterCard suggestionCharacter = null;
+        WeaponCard suggestionWeapon;
+        CharacterCard suggestionCharacter;
 
 
         // check if player is currently in a room, can not suggest if not
@@ -492,39 +489,18 @@ public class Game {
             return;
         }
 
-        System.out.println("[Current player |" + p.getCharacter().getCharacterName() + "| is in room |" + p.getCurrentPosition().getRoom().toString() + "|]\n This room will be used in the suggestion");
-
         room = p.getCurrentPosition().getRoom();
 
         if (roomCardsMap.containsKey(p.getCurrentPosition().getRoom().toString())) {
             suggestionRoom = roomCardsMap.get(p.getCurrentPosition().getRoom().toString());
         }
 
+        String suggestionString = s.makeSuggestion(characterNames, weaponNames, roomNames, suggestionRoom);
+        String[] suggestionStringSplit = suggestionString.split("\t");
 
-        // ask for a suggestion character
-        System.out.println("Please suggest a character: ");
-        while (suggestionCharacter == null) {
-            String suggestionCharacterInput = new Scanner(System.in).nextLine();
-            if (characterCardsMap.containsKey(suggestionCharacterInput)) {
-                suggestionCharacter = characterCardsMap.get(suggestionCharacterInput);
-            }
-            if (suggestionCharacter == null) {
-                System.out.println("Character not found! Please enter a valid character name:");
-            }
-        }
+        suggestionWeapon = weaponCardsMap.get(suggestionStringSplit[1]);
+        suggestionCharacter = characterCardsMap.get(suggestionStringSplit[0]);
 
-        // ask for a suggestion weapon
-        System.out.println("Please suggest murder weapon: ");
-        while (suggestionWeapon == null) {
-            String suggestionWeaponInput = new Scanner(System.in).nextLine();
-
-            if (weaponCardsMap.containsKey(suggestionWeaponInput)) {
-                suggestionWeapon = weaponCardsMap.get(suggestionWeaponInput);
-            }
-
-            if (suggestionWeapon == null)
-                System.out.println("Weapon not found! Please enter a valid weapon name:");
-        }
 
         System.out.println("Moving " + suggestionCharacter.getCharacterName() + " to " + room.toString() + "...");
 
@@ -539,7 +515,7 @@ public class Game {
                     if (newBoard != null) {
                         board = newBoard;
                     } else {
-                        System.out.println("An error occurred while teleporting the suggested player");
+                        s.teleportFailed();
                     }
                 }
             }
@@ -587,7 +563,7 @@ public class Game {
                 }
 
                 if (refutation == null && !failedRefutation) {
-                    System.out.println("Model.Card not found in players hand! Please try again: ");
+                    System.out.println("Card not found in players hand! Please try again: ");
                 }
             }
 
@@ -607,22 +583,16 @@ public class Game {
         //if the stack is empty and no other player could refute, offer the option of making an Accusation to player who suggested
         if (!refuted) {
             System.out.println(p.getCharacter().getCharacterName() + "'s turn");
-            System.out.println("No one could refute your suggestion! Type accuse to make an accusation or type pass to skip: ");
 
-            boolean answered = false;
-            while (!answered) {
-                String answer = suggestionValidateInput();
-                if (answer.equals("accuse")) {
-                    answered = true;
-                    int accuse = makeAccusation(p);
-                    if (accuse == 1) { //if the accusation was successful
-                        gameRunning = false;
-                    }
-                } else if (answer.equals("pass")) {
-                    answered = true;
-                } else {
-                    System.out.println("Please enter either accuse or pass to continue: ");
+            int i = s.nobodyCouldRefute();
+            System.out.println(i);
+            if (i == 0) {
+                int accuse = makeAccusation(p);
+                if (accuse == 1) { //if the accusation was successful
+                    gameRunning = false;
                 }
+            } else {
+                System.out.println("next players turn");
             }
         }
     }
