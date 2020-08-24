@@ -482,6 +482,22 @@ public class Game {
         return new Move(direction, spaces);
     }
 
+    public boolean movementInput(Move move, int movesRemaining) {
+        if (!subState.equals(subStates.MOVEMENT)) {
+            throw new Error("Expected MOVEMENT sub state but : " + subState);
+        }
+
+        if (move.getSpaces() > movesRemaining) {
+            return false;
+        }
+
+        if (movesRemaining < 1) {
+            transitionSubState();
+        }
+
+        return true;
+    }
+
 
     /**
      * Handle Accusations
