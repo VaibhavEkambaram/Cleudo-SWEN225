@@ -15,6 +15,7 @@ public class Table extends Observable {
     private Canvas display;
     private JPanel mainPanel;
     private JPanel displayPanel;
+    private JPanel handPanel;
     private JPanel actionPanel;
 
     public Table() {
@@ -26,18 +27,27 @@ public class Table extends Observable {
         gameFrame.setVisible(true);
         //gameFrame.setPreferredSize(new Dimension(600, 750));
 
-        display = new Canvas();
-
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
 
         mainPanel = new JPanel(new GridBagLayout());
-        constraints.weightx = .8;
+
+        actionPanel = new JPanel();
         constraints.weighty = .8;
         constraints.gridx = 0;
+        constraints.gridy = 0;
+        actionPanel.setPreferredSize(new Dimension(200, 500));
+
+        mainPanel.add(actionPanel, constraints);
+
+        display = new Canvas();
+
+
+        constraints.weightx = .8;
+        constraints.weighty = .8;
+        constraints.gridx = 1;
         constraints.gridy = 0;
 
         displayPanel = new JPanel();
@@ -47,17 +57,18 @@ public class Table extends Observable {
         //mainPanel.add(display, constraints);
         mainPanel.add(displayPanel, constraints);
 
-        actionPanel = new JPanel();
-        actionPanel.setPreferredSize(new Dimension(500, 100));
+        handPanel = new JPanel();
+        handPanel.setPreferredSize(new Dimension(500, 100));
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         displayPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
-        actionPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+        handPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+        actionPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 
         constraints.weightx = 1;
         constraints.weighty = .2;
-        constraints.gridx = 0;
+        constraints.gridx = 1;
         constraints.gridy = 1;
-        mainPanel.add(actionPanel, constraints);
+        mainPanel.add(handPanel, constraints);
         gameFrame.add(mainPanel);
 
         gameFrame.addWindowListener(new WindowAdapter() {
@@ -72,7 +83,7 @@ public class Table extends Observable {
             }
         });
 
-        gameFrame.setMinimumSize(new Dimension(540, 690));
+        gameFrame.setMinimumSize(new Dimension(800, 750));
         gameFrame.pack();
     }
 
@@ -121,9 +132,9 @@ public class Table extends Observable {
         int columns = 24;
         int rectSize = 20;
         if (displayPanel.getWidth() > displayPanel.getHeight()) {
-            rectSize = displayPanel.getWidth() / 25;
-        } else {
             rectSize = displayPanel.getHeight() / 25;
+        } else {
+            rectSize = displayPanel.getWidth() / 25;
         }
 
         //displayPanel.setPreferredSize(new Dimension(rows));
