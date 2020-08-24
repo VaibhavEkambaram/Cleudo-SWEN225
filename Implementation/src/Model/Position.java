@@ -174,6 +174,11 @@ public class Position {
     }
 
 
+    public void draw(){
+        System.out.println("hello");
+    }
+
+
     /**
      * Get Character
      *

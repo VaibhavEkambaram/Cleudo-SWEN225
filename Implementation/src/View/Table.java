@@ -210,6 +210,8 @@ public class Table extends Observable {
         for (int i = 0; i < 24; i++) {
             for (int j = 0; j < 25; j++) {
 
+                game.getBoard().getPositions()[j][i].draw();
+
                 String s = game.getBoard().getPositions()[j][i].toString();
                 if (s.equals("x")) {
                     g.setColor(new Color(1,50,32));
