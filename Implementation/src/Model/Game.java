@@ -734,6 +734,13 @@ public class Game {
         return firstResult + secondResult;
     }
 
+    private void actionTransition() {
+        if (!gameState.equals(States.RUNNING)) {
+            throw new Error("Expected RUNNING game state but : " + gameState);
+        }
+        subState = subStates.ACTION;
+    }
+
     private enum States {
         IDLE, INIT, RUNNING, FINISHED
     }
