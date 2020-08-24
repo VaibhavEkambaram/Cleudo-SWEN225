@@ -66,8 +66,9 @@ public class Table extends Observable {
 
         constraints.weightx = 1;
         constraints.weighty = .2;
-        constraints.gridx = 1;
+        constraints.gridx = 0;
         constraints.gridy = 1;
+        constraints.gridwidth = 2;
         mainPanel.add(handPanel, constraints);
         gameFrame.add(mainPanel);
 
