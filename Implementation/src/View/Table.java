@@ -24,6 +24,7 @@ public class Table extends Observable {
         gameFrame.setJMenuBar(tableMenuBar);
         gameFrame.setSize(OUTER_FRAME_DIMENSION);
         gameFrame.setVisible(true);
+        //gameFrame.setPreferredSize(new Dimension(600, 750));
 
         display = new Canvas();
 
@@ -41,10 +42,13 @@ public class Table extends Observable {
 
         displayPanel = new JPanel();
         displayPanel.add(display);
+        displayPanel.setPreferredSize(new Dimension(500, 500));
 
+        //mainPanel.add(display, constraints);
         mainPanel.add(displayPanel, constraints);
 
         actionPanel = new JPanel();
+        actionPanel.setPreferredSize(new Dimension(500, 100));
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         displayPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
         actionPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
@@ -54,7 +58,6 @@ public class Table extends Observable {
         constraints.gridx = 0;
         constraints.gridy = 1;
         mainPanel.add(actionPanel, constraints);
-
         gameFrame.add(mainPanel);
 
         gameFrame.addWindowListener(new WindowAdapter() {
@@ -69,6 +72,8 @@ public class Table extends Observable {
             }
         });
 
+        gameFrame.setMinimumSize(new Dimension(540, 690));
+        gameFrame.pack();
     }
 
 
@@ -108,12 +113,23 @@ public class Table extends Observable {
     }
 
     public void updateDisplay(String text) {
+        int rows = 25;
+        int columns = 24;
+        int rectSize = gameFrame.getWidth();
+
+        //displayPanel.setPreferredSize(new Dimension(rows));
         Rectangle half = new Rectangle(0, 0, 50, 50);
-        paint(displayPanel.getGraphics());
+        //paint(display.getGraphics());
+        paint(displayPanel.getGraphics(), 20);
     }
 
-    public void paint(Graphics g) {
-        g.fillOval(100, 100, 200, 200);
+    public void paint(Graphics g, int rectSize) {
+        int border = 10;
+        for (int i = 0; i < 25; i++) {
+            for (int j = 0; j < 25; j++) {
+                g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+            }
+        }
     }
 
     public int setPlayerCount() {
