@@ -1,7 +1,5 @@
 package View;
 
-import Model.Game;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -86,7 +84,6 @@ public class Table extends Observable {
         return tableMenuBar;
     }
 
-
     private JMenu createGameMenu() {
         final JMenu gameMenu = new JMenu("Game");
         final JMenuItem setupGameMenuItem = new JMenuItem("Setup Game");
@@ -122,12 +119,17 @@ public class Table extends Observable {
     public void updateDisplay(String text) {
         int rows = 25;
         int columns = 24;
-        int rectSize = gameFrame.getWidth();
+        int rectSize = 20;
+        if (displayPanel.getWidth() > displayPanel.getHeight()) {
+            rectSize = displayPanel.getWidth() / 25;
+        } else {
+            rectSize = displayPanel.getHeight() / 25;
+        }
 
         //displayPanel.setPreferredSize(new Dimension(rows));
         Rectangle half = new Rectangle(0, 0, 50, 50);
         //paint(display.getGraphics());
-        paint(displayPanel.getGraphics(), 20);
+        paint(displayPanel.getGraphics(), rectSize);
     }
 
     public void paint(Graphics g, int rectSize) {
