@@ -482,6 +482,22 @@ public class Game {
         return new Move(direction, spaces);
     }
 
+    public boolean movementInput(Move move, int movesRemaining) {
+        if (!subState.equals(subStates.MOVEMENT)) {
+            throw new Error("Expected MOVEMENT sub state but : " + subState);
+        }
+
+        if (move.getSpaces() > movesRemaining) {
+            return false;
+        }
+
+        if (movesRemaining < 1) {
+            transitionSubState();
+        }
+
+        return true;
+    }
+
 
     /**
      * Handle Accusations
@@ -704,6 +720,25 @@ public class Game {
                 subState = subStates.BOARD;
             }
         }
+    }
+
+    private int movementTransition() {
+        if (!gameState.equals(States.RUNNING)) {
+            throw new Error("Expected RUNNING game state but : " + gameState);
+        }
+        subState = subStates.MOVEMENT;
+
+        int firstResult = new Random().nextInt(6) + 1;
+        int secondResult = new Random().nextInt(6) + 1;
+
+        return firstResult + secondResult;
+    }
+
+    private void actionTransition() {
+        if (!gameState.equals(States.RUNNING)) {
+            throw new Error("Expected RUNNING game state but : " + gameState);
+        }
+        subState = subStates.ACTION;
     }
 
     private enum States {

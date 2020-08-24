@@ -17,20 +17,29 @@ public class Table extends Observable {
     final JFrame gameFrame;
     public int numPlayers = -1;
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
+
     // Buttons
     JButton suggestionButton;
-    private JPanel displayPanel;
-    private JPanel handPanel;
-    private JPanel actionPanel;
+    JButton accusationButton;
+    JButton passButton;
+    JButton upButton;
+    JButton downButton;
+    JButton leftButton;
+    JButton rightButton;
+
     // Panels
     private JPanel mainPanel;
     private JPanel infoPanel;
+    private JPanel displayPanel;
+    private JPanel handPanel;
+    private JPanel actionPanel;
+    private JPanel movementPanel;
+
     // Display
     private Canvas display;
-    private JTextArea info;
+    private JTextField info;
     private Font infoFont;
-    JButton accusationButton;
-    JButton passButton;
+
     Game game;
 
     public Table(Game game) {
@@ -54,7 +63,6 @@ public class Table extends Observable {
         constraints.weighty = .8;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridheight = 2;
         actionPanel.setPreferredSize(new Dimension(200, 500));
         mainPanel.add(actionPanel, constraints);
 
@@ -78,8 +86,10 @@ public class Table extends Observable {
         constraints.gridy = 1;
         constraints.weighty = .1;
         mainPanel.add(infoPanel, constraints);
-        info = new JTextArea();
-        infoPanel.add(info, BorderLayout.LINE_START);
+        info = new JTextField();
+        info.setText("Hello, there");
+        info.setEditable(false);
+        infoPanel.add(info, BorderLayout.CENTER);
         infoFont = info.getFont();
 
         // Hand Panel
@@ -93,12 +103,22 @@ public class Table extends Observable {
         constraints.gridwidth = 2;
         mainPanel.add(handPanel, constraints);
 
+        // Movement Panel
+        movementPanel = new JPanel(new GridBagLayout());
+        movementPanel.setBackground(Color.WHITE);
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridheight = 1;
+        constraints.gridwidth = 1;
+        mainPanel.add(movementPanel, constraints);
+
         // Borders
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         displayPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         handPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         actionPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        movementPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         actionPanel.setLayout(new GridLayout(12, 1));
 
 
@@ -108,31 +128,35 @@ public class Table extends Observable {
         // Buttons
         suggestionButton = new JButton("Make Suggestion");
         actionPanel.add(suggestionButton);
-        suggestionButton.setVisible(true);
 
         accusationButton = new JButton("Make Accusation");
         actionPanel.add(accusationButton);
-        accusationButton.setVisible(true);
 
         passButton = new JButton("Pass");
         actionPanel.add(passButton);
-        passButton.setVisible(true);
 
-        passButton = new JButton("Up");
-        actionPanel.add(passButton);
-        passButton.setVisible(true);
 
-        passButton = new JButton("Down");
-        actionPanel.add(passButton);
-        passButton.setVisible(true);
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = .3;
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        upButton = new JButton("Up");
+        movementPanel.add(upButton, constraints);
 
-        passButton = new JButton("Left");
-        actionPanel.add(passButton);
-        passButton.setVisible(true);
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        downButton = new JButton("Down");
+        movementPanel.add(downButton, constraints);
 
-        passButton = new JButton("Right");
-        actionPanel.add(passButton);
-        passButton.setVisible(true);
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        leftButton = new JButton("Left");
+        movementPanel.add(leftButton, constraints);
+
+        constraints.gridx = 2;
+        constraints.gridy = 1;
+        rightButton = new JButton("Right");
+        movementPanel.add(rightButton, constraints);
 
 
         gameFrame.addWindowListener(new WindowAdapter() {
