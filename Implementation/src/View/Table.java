@@ -1,12 +1,9 @@
 package View;
 
 import Model.Game;
-import Model.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Objects;
@@ -14,17 +11,24 @@ import java.util.Observable;
 
 
 public class Table extends Observable {
+    private final int BORDER_SIZE = 20;
+
+
     final JFrame gameFrame;
     public int numPlayers = -1;
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
-    private Canvas display;
-    private JPanel mainPanel;
+    // Buttons
+    JButton suggestionButton;
     private JPanel displayPanel;
     private JPanel handPanel;
     private JPanel actionPanel;
-    private Game game;
-
-    JButton suggestionButton;
+    // Panels
+    private JPanel mainPanel;
+    private JPanel infoPanel;
+    // Display
+    private Canvas display;
+    private JTextArea info;
+    private Font infoFont;
     JButton accusationButton;
     JButton passButton;
 
@@ -39,62 +43,75 @@ public class Table extends Observable {
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
 
         mainPanel = new JPanel(new GridBagLayout());
 
+        // Action Panel
         actionPanel = new JPanel();
         constraints.weighty = .8;
         constraints.gridx = 0;
         constraints.gridy = 0;
+        constraints.gridheight = 2;
         actionPanel.setPreferredSize(new Dimension(200, 500));
-
         mainPanel.add(actionPanel, constraints);
 
+        // Display Panel
         display = new Canvas();
-
-
         constraints.weightx = .8;
-        constraints.weighty = .8;
+        constraints.weighty = .9;
         constraints.gridx = 1;
         constraints.gridy = 0;
-
+        constraints.gridheight = 1;
         displayPanel = new JPanel();
         displayPanel.add(display);
         displayPanel.setPreferredSize(new Dimension(500, 500));
-
-        //mainPanel.add(display, constraints);
         mainPanel.add(displayPanel, constraints);
 
+        // Info Panel
+        infoPanel = new JPanel(new BorderLayout());
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.weighty = .1;
+        mainPanel.add(infoPanel, constraints);
+        info = new JTextArea();
+        infoPanel.add(info, BorderLayout.LINE_START);
+        info.setText("hello text test");
+        infoFont = info.getFont();
+
+        // Hand Panel
         handPanel = new JPanel();
         handPanel.setPreferredSize(new Dimension(500, 100));
+        constraints.weightx = 1;
+        constraints.weighty = .2;
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 2;
+        mainPanel.add(handPanel, constraints);
+
+        // Borders
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         displayPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
         handPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
         actionPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+        infoPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
         actionPanel.setLayout(new GridLayout(12, 1));
 
-        constraints.weightx = 1;
-        constraints.weighty = .2;
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.gridwidth = 2;
-        mainPanel.add(handPanel, constraints);
+
         gameFrame.add(mainPanel);
 
 
+        // Buttons
         suggestionButton = new JButton("Make Suggestion");
         actionPanel.add(suggestionButton);
-        suggestionButton.setVisible(false);
+        suggestionButton.setVisible(true);
 
         accusationButton = new JButton("Make Accusation");
         actionPanel.add(accusationButton);
-        accusationButton.setVisible(false);
+        accusationButton.setVisible(true);
 
         passButton = new JButton("Pass");
         actionPanel.add(passButton);
-        passButton.setVisible(false);
+        passButton.setVisible(true);
 
 
         gameFrame.addWindowListener(new WindowAdapter() {
@@ -165,14 +182,15 @@ public class Table extends Observable {
         return helpMenu;
     }
 
-    public void updateDisplay(String text) {
+    public void updateDisplay() {
+
         int rows = 25;
         int columns = 24;
         int rectSize = 20;
         if (displayPanel.getWidth() > displayPanel.getHeight()) {
-            rectSize = displayPanel.getHeight() / 25;
+            rectSize = (displayPanel.getHeight() - BORDER_SIZE) / 25;
         } else {
-            rectSize = displayPanel.getWidth() / 25;
+            rectSize = (displayPanel.getWidth() - BORDER_SIZE) / 25;
         }
 
         //displayPanel.setPreferredSize(new Dimension(rows));
@@ -182,7 +200,7 @@ public class Table extends Observable {
     }
 
     public void paint(Graphics g, int rectSize) {
-        int border = 10;
+        int border = BORDER_SIZE / 2;
         for (int i = 0; i < 25; i++) {
             for (int j = 0; j < 25; j++) {
                 g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
