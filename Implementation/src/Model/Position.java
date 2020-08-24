@@ -4,6 +4,7 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 // line 100 "model.ump"
 // line 190 "model.ump"
 
+import java.awt.*;
 import java.util.Objects;
 
 /**
@@ -174,8 +175,19 @@ public class Position {
     }
 
 
-    public void draw(){
-        System.out.println("hello");
+    public void draw(Graphics g){
+
+
+
+        if (displayName.equals("x")) {
+            g.setColor(new Color(1, 50, 32));
+        } else if(displayName.equals("_") && inRoom==null) {
+            g.setColor(Color.YELLOW);
+        } else if(displayName.equals("k") || (displayName.equals("K"))){
+
+        } else{
+            g.setColor(Color.WHITE);
+        }
     }
 
 

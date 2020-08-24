@@ -118,6 +118,22 @@ public class Table extends Observable {
         actionPanel.add(passButton);
         passButton.setVisible(true);
 
+        passButton = new JButton("Up");
+        actionPanel.add(passButton);
+        passButton.setVisible(true);
+
+        passButton = new JButton("Down");
+        actionPanel.add(passButton);
+        passButton.setVisible(true);
+
+        passButton = new JButton("Left");
+        actionPanel.add(passButton);
+        passButton.setVisible(true);
+
+        passButton = new JButton("Right");
+        actionPanel.add(passButton);
+        passButton.setVisible(true);
+
 
         gameFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
@@ -210,16 +226,9 @@ public class Table extends Observable {
         for (int i = 0; i < 24; i++) {
             for (int j = 0; j < 25; j++) {
 
-                game.getBoard().getPositions()[j][i].draw();
+                game.getBoard().getPositions()[j][i].draw(g);
 
-                String s = game.getBoard().getPositions()[j][i].toString();
-                if (s.equals("x")) {
-                    g.setColor(new Color(1,50,32));
-                } else if(s.equals("_") && game.getBoard().getPositions()[j][i].getRoom()==null){
-                        g.setColor(Color.YELLOW);
-                } else{
-                    g.setColor(Color.WHITE);
-                }
+
 
                 g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
                 g.setColor(Color.BLACK);
