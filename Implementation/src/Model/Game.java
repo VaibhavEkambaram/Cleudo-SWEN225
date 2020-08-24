@@ -722,6 +722,18 @@ public class Game {
         }
     }
 
+    private int movementTransition() {
+        if (!gameState.equals(States.RUNNING)) {
+            throw new Error("Expected RUNNING game state but : " + gameState);
+        }
+        subState = subStates.MOVEMENT;
+
+        int firstResult = new Random().nextInt(6) + 1;
+        int secondResult = new Random().nextInt(6) + 1;
+
+        return firstResult + secondResult;
+    }
+
     private enum States {
         IDLE, INIT, RUNNING, FINISHED
     }

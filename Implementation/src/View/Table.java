@@ -17,20 +17,28 @@ public class Table extends Observable {
     final JFrame gameFrame;
     public int numPlayers = -1;
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
+
     // Buttons
     JButton suggestionButton;
-    private JPanel displayPanel;
-    private JPanel handPanel;
-    private JPanel actionPanel;
+    JButton accusationButton;
+    JButton passButton;
+    JButton upButton;
+    JButton downButton;
+    JButton leftButton;
+    JButton rightButton;
+
     // Panels
     private JPanel mainPanel;
     private JPanel infoPanel;
+    private JPanel displayPanel;
+    private JPanel handPanel;
+    private JPanel actionPanel;
+
     // Display
     private Canvas display;
     private JTextArea info;
     private Font infoFont;
-    JButton accusationButton;
-    JButton passButton;
+
     Game game;
 
     public Table(Game game) {
@@ -118,21 +126,21 @@ public class Table extends Observable {
         actionPanel.add(passButton);
         passButton.setVisible(true);
 
-        passButton = new JButton("Up");
-        actionPanel.add(passButton);
-        passButton.setVisible(true);
+        upButton = new JButton("Up");
+        actionPanel.add(upButton);
+        upButton.setVisible(true);
 
-        passButton = new JButton("Down");
-        actionPanel.add(passButton);
-        passButton.setVisible(true);
+        downButton = new JButton("Down");
+        actionPanel.add(downButton);
+        downButton.setVisible(true);
 
-        passButton = new JButton("Left");
-        actionPanel.add(passButton);
-        passButton.setVisible(true);
+        leftButton = new JButton("Left");
+        actionPanel.add(leftButton);
+        leftButton.setVisible(true);
 
-        passButton = new JButton("Right");
-        actionPanel.add(passButton);
-        passButton.setVisible(true);
+        rightButton = new JButton("Right");
+        actionPanel.add(rightButton);
+        rightButton.setVisible(true);
 
 
         gameFrame.addWindowListener(new WindowAdapter() {
