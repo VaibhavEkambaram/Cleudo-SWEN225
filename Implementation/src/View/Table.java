@@ -13,6 +13,9 @@ public class Table extends Observable {
     public int numPlayers = -1;
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private Canvas display;
+    private JPanel mainPanel;
+    private JPanel displayPanel;
+    private JPanel actionPanel;
 
     public Table() {
         gameFrame = new JFrame("Cluedo");
@@ -21,8 +24,41 @@ public class Table extends Observable {
         gameFrame.setJMenuBar(tableMenuBar);
         gameFrame.setSize(OUTER_FRAME_DIMENSION);
         gameFrame.setVisible(true);
+
         display = new Canvas();
-        gameFrame.add(display);
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+
+
+        mainPanel = new JPanel(new GridBagLayout());
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = .8;
+        constraints.weighty = .8;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.CENTER;
+
+        displayPanel = new JPanel();
+        displayPanel.add(display);
+
+        mainPanel.add(displayPanel, constraints);
+
+        actionPanel = new JPanel();
+        mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        displayPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
+        actionPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+
+        constraints.weightx = 1;
+        constraints.weighty = .2;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.PAGE_END;
+        mainPanel.add(actionPanel, constraints);
+
+        gameFrame.add(mainPanel);
 
         gameFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
@@ -35,7 +71,6 @@ public class Table extends Observable {
                 }
             }
         });
-
 
     }
 
@@ -77,7 +112,12 @@ public class Table extends Observable {
     }
 
     public void updateDisplay(String text) {
+        Rectangle half = new Rectangle(0, 0, 50, 50);
+        paint(display.getGraphics());
+    }
 
+    public void paint(Graphics g) {
+        g.fillOval(100, 100, 200, 200);
     }
 
     public int setPlayerCount() {

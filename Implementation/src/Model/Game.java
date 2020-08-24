@@ -18,6 +18,7 @@ public class Game {
 
     private States gameState = States.IDLE;
     private subStates subState;
+    View.Table gui;
 
     /**
      * Check if States are matching within their appropiate substates
