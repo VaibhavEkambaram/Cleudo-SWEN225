@@ -2,9 +2,9 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import View.AccusationMenu;
-import View.Table;
 import View.PlayerSetupMenu;
 import View.SuggestionMenu;
+import View.Table;
 
 import java.util.*;
 
@@ -303,6 +303,7 @@ public class Game {
      *
      * @author Vaibhav Ekambaram
      */
+    /*
     public void mainGameLoop() {
         System.out.println("\n\tMurder Scenario (SECRET, DO NOT LOOK!)");
         System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() + "\n\t\t[Model.Room] " + murderScenario.getRoomCard().getRoomName() + "\n\t\t[Weapon] " + murderScenario.getWeapon().getWeaponName());
@@ -391,6 +392,14 @@ public class Game {
                 wait.nextLine();
                 transitionSubState(); // Transition Action to Movement
             }
+        }
+    }
+
+     */
+    public void mainGameLoop() {
+        transitionGameState();
+        while (gameState.equals(States.RUNNING)) {
+            table.updateDisplay();
         }
     }
 
