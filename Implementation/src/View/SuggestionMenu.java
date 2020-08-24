@@ -41,12 +41,8 @@ public class SuggestionMenu {
 
     public int nobodyCouldRefute(){
         Object[] options = {"Make Accusation", "Pass"};
-        int n = JOptionPane.showOptionDialog(null,//parent container of JOptionPane
-                "No one could refute your suggestion. What would you like to do?",
-                "Suggestion not Refuted",
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE,
-                null,//do not use a custom Icon
+        int n = JOptionPane.showOptionDialog(null, "No one could refute your suggestion. What would you like to do?", "Suggestion not Refuted",
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,//do not use a custom Icon
                 options,//the titles of buttons
                 options[1]);//default button title
         return n;

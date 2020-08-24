@@ -1,5 +1,7 @@
 package View;
 
+import Model.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -84,7 +86,12 @@ public class Table extends Observable {
         final JMenu gameMenu = new JMenu("Game");
         final JMenuItem setupGameMenuItem = new JMenuItem("Setup Game");
         gameMenu.add(setupGameMenuItem);
-        setupGameMenuItem.addActionListener(e -> setPlayerCount());
+
+        setupGameMenuItem.addActionListener(e -> {
+            //setPlayerCount();
+            //new Game();
+
+        });
 
 
         final JMenuItem exitMenuItem = new JMenuItem("Exit");

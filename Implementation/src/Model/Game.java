@@ -29,8 +29,6 @@ public class Game {
     private List<Player> players = new ArrayList<>();
     private List<Room> rooms;
 
-    private List<WeaponCard> weaponCards;
-    private List<RoomCard> roomCards;
     private List<CharacterCard> characterCards;
 
     private final Map<String, WeaponCard> weaponCardsMap = new HashMap<>();
@@ -117,7 +115,7 @@ public class Game {
         deck = new ArrayList<>();
 
         // Weapons
-        weaponCards = new ArrayList<>();
+        List<WeaponCard> weaponCards = new ArrayList<>();
         for (String weaponName : weaponNames) {
             WeaponCard weapon = new WeaponCard(weaponName);
             weaponCards.add(weapon);
@@ -127,7 +125,7 @@ public class Game {
 
         // Rooms
         rooms = new ArrayList<>();
-        roomCards = new ArrayList<>();
+        List<RoomCard> roomCards = new ArrayList<>();
         for (String r : roomNames) {
             Room newRoom = new Room(r);
             rooms.add(newRoom);
@@ -358,7 +356,15 @@ public class Game {
 
                 System.out.println("Would you like to make a suggestion, accusation or pass?");
                 System.out.println("Available commands - [suggestion][accusation][pass]:");
-                String answer = suggestionValidateInput();
+
+                String answer = "";
+                String input = new Scanner(System.in).nextLine();
+                try {
+                    answer = input;
+                } catch (Exception e) {
+                    System.out.println("Please enter 'Accusation', 'Suggestion', or 'Pass'");
+                }
+
                 if (answer.equalsIgnoreCase("a") || answer.equalsIgnoreCase("accusation")) {
                     int accuse = makeAccusation(p);
                     if (accuse == 1) {
@@ -510,7 +516,7 @@ public class Game {
             suggestionRoom = roomCardsMap.get(p.getCurrentPosition().getRoom().toString());
         }
 
-        String suggestionString = s.makeSuggestion(characterNames, weaponNames, roomNames, suggestionRoom);
+        String suggestionString = s.makeSuggestion(characterNames, weaponNames, roomNames, Objects.requireNonNull(suggestionRoom));
         String[] suggestionStringSplit = suggestionString.split("\t");
 
         suggestionWeapon = weaponCardsMap.get(suggestionStringSplit[1]);
@@ -612,22 +618,6 @@ public class Game {
         }
     }
 
-    /**
-     * Reads user text input and returns it
-     *
-     * @return String
-     * @author Baxter Kirikiri
-     */
-    private String suggestionValidateInput() {
-        String answer = "";
-        String input = new Scanner(System.in).nextLine();
-        try {
-            answer = input;
-        } catch (Exception e) {
-            System.out.println("Please enter 'Accusation', 'Suggestion', or 'Pass'");
-        }
-        return answer;
-    }
 
     private void checkGameState() {
         if (gameState.equals(States.IDLE) && subState == null) {
