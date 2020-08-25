@@ -48,6 +48,7 @@ public class Game {
     boolean gameRunning = true;
 
     // track number of moves for current player
+    int currentPlayerIndex = 0;
     int movesRemaining = -1;
     int numPlayers;
 
@@ -388,8 +389,8 @@ public class Game {
     }
      */
     public void mainGameLoop() {
-        transitionGameState();
-        currentPlayer = players.get(0);
+        initToRunning();
+        movementTransition();
         table.updateDisplay();
         while (gameState.equals(States.RUNNING)) {
             table.updateDisplay();
@@ -721,7 +722,7 @@ public class Game {
     }
 
     private void initToRunning() {
-        if (gameState.equals(States.INIT)) {
+        if (!gameState.equals(States.INIT)) {
             throw new Error("Expected INIT game state but " + gameState);
         }
         gameState = States.RUNNING;
@@ -731,7 +732,17 @@ public class Game {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
         }
+        if (subState.equals(subStates.ACTION)) {
+            if (currentPlayerIndex + 1 >= numPlayers) {
+                currentPlayerIndex = 0;
+            } else {
+                currentPlayerIndex++;
+            }
+            currentPlayer = players.get(currentPlayerIndex);
+        }
+
         subState = subStates.MOVEMENT;
+        currentPlayer = players.get(currentPlayerIndex);
 
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;

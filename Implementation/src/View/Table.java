@@ -61,6 +61,7 @@ public class Table extends Observable {
         // Action Panel
         actionPanel = new JPanel();
         actionPanel.setBackground(Color.WHITE);
+        constraints.weightx = .2;
         constraints.weighty = .8;
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -304,7 +305,6 @@ public class Table extends Observable {
             currentPlayer = game.getCurrentPlayer();
         }
 
-
         Rectangle half = new Rectangle(0, 0, 50, 50);
         paint(displayPanel.getGraphics(), rectSize);
     }
@@ -337,6 +337,7 @@ public class Table extends Observable {
     }
 
     public void makeMovement(Move.Direction direction) {
+        currentPlayer = game.getCurrentPlayer();
         Move move = new Move(direction, 1);
     }
 }
