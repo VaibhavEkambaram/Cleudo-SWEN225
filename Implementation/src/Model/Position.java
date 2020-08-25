@@ -182,7 +182,7 @@ public class Position {
         if (displayName.equals("x")) {
             g.setColor(new Color(1, 50, 32));
         } else if(displayName.equals("_") && inRoom==null) {
-            g.setColor(Color.YELLOW);
+            g.setColor(new Color(250,218,94));
         } else if(inRoom.getRoomChar().equals("K")) {
             if ((xLoc % 2 == 0)) {
                 if ((yLoc % 2 == 0)) {
@@ -199,9 +199,17 @@ public class Position {
             }
 
         } else if(inRoom.getRoomChar().equals("Y")) {
-            g.setColor(new Color(130, 0, 0));
+            g.setColor(new Color(190, 60, 60));
+        } else if(inRoom.getRoomChar().equals("L")){
+            g.setColor(new Color(157, 127, 97));
         } else if(inRoom.getRoomChar().equals("O")) {
-            g.setColor(new Color(1, 122, 122));
+            g.setColor(new Color(0, 180, 180));
+        } else if(inRoom.getRoomChar().equals("B")) {
+            if ((xLoc % 2 == 0)) {
+                g.setColor(new Color(215,202,193));
+            } else {
+                g.setColor(new Color(223,213,205));
+            }
         } else{
             g.setColor(Color.WHITE);
         }

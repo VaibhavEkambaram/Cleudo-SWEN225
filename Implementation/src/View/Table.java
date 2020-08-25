@@ -75,7 +75,7 @@ public class Table extends Observable {
         constraints.gridheight = 1;
         displayPanel = new JPanel();
         displayPanel.add(display);
-        displayPanel.setBackground(Color.WHITE);
+        displayPanel.setBackground(Color.BLACK);
         displayPanel.setPreferredSize(new Dimension(500, 500));
         mainPanel.add(displayPanel, constraints);
 
