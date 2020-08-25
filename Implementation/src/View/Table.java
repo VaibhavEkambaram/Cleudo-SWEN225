@@ -184,7 +184,9 @@ public class Table extends Observable {
         gameFrame.setMinimumSize(new Dimension(750, 750));
         gameFrame.pack();
 
-
+        setSuggestionAccusationVisibility(false);
+        showMovement(false);
+        //updateDisplay();
     }
 
     public void setSuggestionAccusationVisibility(boolean value) {
@@ -263,6 +265,7 @@ public class Table extends Observable {
         }
 
         if (game.getGameState().equals(Game.States.RUNNING)) {
+            infoPanel.setVisible(true);
             if (game.getSubState().equals(Game.subStates.MOVEMENT)) {
                 showMovement(true);
                 setSuggestionAccusationVisibility(false);
@@ -273,6 +276,7 @@ public class Table extends Observable {
         } else {
             showMovement(false);
             setSuggestionAccusationVisibility(false);
+            infoPanel.setVisible(false);
         }
 
         Rectangle half = new Rectangle(0, 0, 50, 50);
