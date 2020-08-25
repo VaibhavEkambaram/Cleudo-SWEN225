@@ -321,6 +321,8 @@ public class Table extends Observable {
                 g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
             }
         }
+        g.setFont(new Font("Arial", Font.BOLD,16));
+        g.drawString(" BALL ROOM",(border + rectSize) * 10,(border + rectSize) * 6);
     }
 
     public int setPlayerCount() {
