@@ -389,8 +389,8 @@ public class Game {
      */
     public void mainGameLoop() {
         transitionGameState();
-        table.updateDisplay();
         currentPlayer = players.get(0);
+        table.updateDisplay();
         while (gameState.equals(States.RUNNING)) {
             table.updateDisplay();
         }

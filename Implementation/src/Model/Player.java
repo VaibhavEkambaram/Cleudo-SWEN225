@@ -99,7 +99,7 @@ public class Player {
      * @return player board character
      */
     public String toString() {
-        return "Model.Player " + this.character.getCharacterBoardChar() + this.character;
+        return playerVanityName + " - " + this.character;
     }
 
     // Model.Player State Getters

@@ -2,6 +2,7 @@ package View;
 
 import Model.Game;
 import Model.Move;
+import Model.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,11 +36,12 @@ public class Table extends Observable {
     private JPanel actionPanel;
     private JPanel movementPanel;
 
-    // Display
-    private JTextField info;
+    Player currentPlayer;
     private Font infoFont;
 
     Game game;
+    // Display
+    private JTextArea info;
 
     public Table(Game game) {
         this.game = game;
@@ -83,8 +85,8 @@ public class Table extends Observable {
         constraints.gridy = 1;
         constraints.weighty = .1;
         mainPanel.add(infoPanel, constraints);
-        info = new JTextField();
-        info.setText("Hello, there");
+        info = new JTextArea();
+        info.setText("Hello and welcome to Cluedo\nMade by:\nCameron Li, Vaibhav Ekambaram and Baxter Kirikiri");
         info.setEditable(false);
         infoPanel.add(info, BorderLayout.CENTER);
         infoFont = info.getFont();
@@ -295,8 +297,13 @@ public class Table extends Observable {
             setSuggestionAccusationVisibility(false);
             infoPanel.setVisible(false);
         }
+        if (game.getCurrentPlayer() != currentPlayer) {
+            info.setText(game.getGameState().toString() + "\n");
+            info.append(game.getSubState().toString() + "\n");
+            info.append(game.getCurrentPlayer().toString());
+            currentPlayer = game.getCurrentPlayer();
+        }
 
-        //gameFrame.repaint();
 
         Rectangle half = new Rectangle(0, 0, 50, 50);
         paint(displayPanel.getGraphics(), rectSize);
