@@ -310,6 +310,7 @@ public class Table extends Observable {
     }
 
     public void paint(Graphics g, int rectSize) {
+        Graphics2D g2 = (Graphics2D) g;
         int border = BORDER_SIZE / 2;
         for (int i = 0; i < 24; i++) {
             for (int j = 0; j < 25; j++) {
@@ -317,12 +318,46 @@ public class Table extends Observable {
                 game.getBoard().getPositions()[j][i].draw(g);
                 g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
 
+                if(game.getBoard().getPositions()[j][i].getCharacter()!=null){
+                    switch (game.getBoard().getPositions()[j][i].getCharacter().toString()) {
+                        case "Miss Scarlett":
+                            g.setColor(Color.RED);
+                            break;
+                        case "Col. Mustard":
+                            g.setColor(Color.YELLOW);
+                            break;
+                        case "Mrs. White":
+                            g.setColor(Color.WHITE);
+                            break;
+                        case "Mr. Green":
+                            g.setColor(Color.GREEN);
+                            break;
+                        case "Mrs. Peacock":
+                            g.setColor(Color.BLUE);
+                            break;
+                        case "Prof. Plum":
+                            g.setColor(new Color(128, 0, 128));
+                            break;
+                    }
+
+                    g.fillOval(border+rectSize*i,border+rectSize*j,rectSize,rectSize);
+                }
+
+
                 g.setColor(Color.BLACK);
+
                 g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                /*
+                if(game.getBoard().getPositions()[j][i].getDisplayName().equals("o") || game.getBoard().getPositions()[j][i].getDisplayName().equals("o")){
+                    g2.setStroke(new BasicStroke(5));
+                    if((!game.getBoard().getPositions()[j][i+1].getDisplayName().equals("O") || !game.getBoard().getPositions()[j][i+1].getDisplayName().equals("O"))) {
+                        g2.drawLine(border + rectSize * i + rectSize, border + rectSize * j, border + rectSize * i + rectSize, border + rectSize * j + rectSize);
+                    }
+                }
+
+                 */
             }
         }
-        g.setFont(new Font("Arial", Font.BOLD,16));
-        g.drawString(" BALL ROOM",(border + rectSize) * 10,(border + rectSize) * 6);
     }
 
     public int setPlayerCount() {

@@ -49,6 +49,11 @@ public class Position {
     }
 
 
+    public String getDisplayName(){
+        return this.displayName;
+    }
+
+
     /**
      * Character Model.Position Constructor
      *
@@ -188,11 +193,11 @@ public class Position {
                 if ((yLoc % 2 == 0)) {
                     g.setColor(Color.BLACK);
                 } else {
-                    g.setColor(Color.WHITE);
+                    g.setColor(new Color(223,213,205));
                 }
             } else {
                 if ((yLoc % 2 == 0)) {
-                    g.setColor(Color.WHITE);
+                    g.setColor(new Color(223,213,205));
                 } else {
                     g.setColor(Color.BLACK);
                 }
@@ -216,11 +221,11 @@ public class Position {
                 if ((yLoc % 2 == 0)) {
                     g.setColor(new Color(255,155,0));
                 } else {
-                    g.setColor(Color.WHITE);
+                    g.setColor(new Color(223,213,205));
                 }
             } else {
                 if ((yLoc % 2 == 0)) {
-                    g.setColor(Color.WHITE);
+                    g.setColor(new Color(223,213,205));
                 } else {
                     g.setColor(new Color(255,155,0));
                 }
