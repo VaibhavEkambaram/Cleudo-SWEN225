@@ -390,8 +390,9 @@ public class Game {
     public void mainGameLoop() {
         transitionGameState();
         table.updateDisplay();
+        currentPlayer = players.get(0);
         while (gameState.equals(States.RUNNING)) {
-            //table.updateDisplay();
+            table.updateDisplay();
         }
     }
 
@@ -425,6 +426,7 @@ public class Game {
      * @return Model.Move
      * @author Cameron Li, Vaibhav Ekambaram
      */
+    /*
     public Move movementInput(int movesRemaining) {
         Move.Direction direction = null;
         int spaces = 0;
@@ -469,6 +471,7 @@ public class Game {
 
         return new Move(direction, spaces);
     }
+     */
 
     public boolean movementInput(Move move, int movesRemaining) {
         if (!subState.equals(subStates.MOVEMENT)) {
@@ -739,6 +742,9 @@ public class Game {
     private void actionTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
+        }
+        if (!subState.equals(subStates.MOVEMENT)) {
+            throw new Error("Expected Movement sub state but : " + subState);
         }
         subState = subStates.ACTION;
     }

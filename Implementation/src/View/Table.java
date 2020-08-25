@@ -1,13 +1,11 @@
 package View;
 
 import Model.Game;
+import Model.Move;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.Objects;
 import java.util.Observable;
 
@@ -38,7 +36,6 @@ public class Table extends Observable {
     private JPanel movementPanel;
 
     // Display
-    private Canvas display;
     private JTextField info;
     private Font infoFont;
 
@@ -69,14 +66,12 @@ public class Table extends Observable {
         mainPanel.add(actionPanel, constraints);
 
         // Display Panel
-        display = new Canvas();
         constraints.weightx = .8;
         constraints.weighty = .9;
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.gridheight = 1;
         displayPanel = new JPanel();
-        displayPanel.add(display);
         displayPanel.setBackground(Color.BLACK);
         displayPanel.setPreferredSize(new Dimension(500, 500));
         mainPanel.add(displayPanel, constraints);
@@ -144,22 +139,45 @@ public class Table extends Observable {
         constraints.gridy = 0;
         upButton = new JButton("Up");
         movementPanel.add(upButton, constraints);
+        upButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                makeMovement(Move.Direction.UP);
+            }
+        });
 
         constraints.gridx = 1;
         constraints.gridy = 1;
         downButton = new JButton("Down");
         movementPanel.add(downButton, constraints);
+        downButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                makeMovement(Move.Direction.DOWN);
+            }
+        });
 
         constraints.gridx = 0;
         constraints.gridy = 1;
         leftButton = new JButton("Left");
         movementPanel.add(leftButton, constraints);
+        leftButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                makeMovement(Move.Direction.LEFT);
+            }
+        });
 
         constraints.gridx = 2;
         constraints.gridy = 1;
         rightButton = new JButton("Right");
         movementPanel.add(rightButton, constraints);
-
+        rightButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                makeMovement(Move.Direction.RIGHT);
+            }
+        });
 
         gameFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
@@ -245,7 +263,6 @@ public class Table extends Observable {
         return gameMenu;
     }
 
-
     private JMenu createHelpMenu() {
         final JMenu helpMenu = new JMenu("Help");
         final JMenuItem about = new JMenuItem("About");
@@ -279,6 +296,8 @@ public class Table extends Observable {
             infoPanel.setVisible(false);
         }
 
+        //gameFrame.repaint();
+
         Rectangle half = new Rectangle(0, 0, 50, 50);
         paint(displayPanel.getGraphics(), rectSize);
     }
@@ -306,5 +325,9 @@ public class Table extends Observable {
         JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.PLAIN_MESSAGE);
         numPlayers = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
         return numPlayers;
+    }
+
+    public void makeMovement(Move.Direction direction) {
+        Move move = new Move(direction, 1);
     }
 }
