@@ -311,10 +311,7 @@ public class Game {
     public void mainGameLoop() {
         System.out.println("\n\tMurder Scenario (SECRET, DO NOT LOOK!)");
         System.out.println("\t\t[Character] " + murderScenario.getMurderer().getCharacterName() + "\n\t\t[Model.Room] " + murderScenario.getRoomCard().getRoomName() + "\n\t\t[Weapon] " + murderScenario.getWeapon().getWeaponName());
-
         transitionGameState(); // Transition from INIT to RUNNING
-
-
         while (gameState.equals(States.RUNNING)) {
             for (Player p : players) {
                 movesRemaining = -1;
@@ -327,7 +324,6 @@ public class Game {
                 movesRemaining = rollDice();
                 System.out.println("Result: " + movesRemaining);
                 System.out.println("**************************************************");
-
                 while (subState.equals(subStates.MOVEMENT)) {
                     if (p.getCurrentPosition().getRoom() != null) {
                         System.out.println("Currently in " + p.getCurrentPosition().getRoom());
@@ -351,7 +347,6 @@ public class Game {
                         transitionSubState(); // Transition from Movement to Action
                     }
                 }
-
                 System.out.println("\t\t________________________________");
                 System.out.println("\t\tCurrent Players Hand:");
                 System.out.println("\t\t________________________________");
@@ -365,14 +360,9 @@ public class Game {
                     }
                 }
                 System.out.println("\t\t________________________________");
-
-
                 System.out.println("Would you like to make a suggestion, accusation or pass?");
                 System.out.println("Available commands - [suggestion][accusation][pass]:");
-
                 table.setSuggestionAccusationVisibility(true);
-
-
                 String answer = "";
                 String input = new Scanner(System.in).nextLine();
                 try {
@@ -380,7 +370,6 @@ public class Game {
                 } catch (Exception e) {
                     System.out.println("Please enter 'Accusation', 'Suggestion', or 'Pass'");
                 }
-
                 if (answer.equalsIgnoreCase("a") || answer.equalsIgnoreCase("accusation")) {
                     int accuse = makeAccusation(p);
                     if (accuse == 1) {
@@ -390,7 +379,6 @@ public class Game {
                 } else if (answer.equalsIgnoreCase("s") || answer.equalsIgnoreCase("suggestion")) {
                     makeSuggestion(p);
                 }
-
                 System.out.println("[Hit Enter to move to the next player]");
                 Scanner wait = new Scanner(System.in);
                 wait.nextLine();
@@ -398,11 +386,9 @@ public class Game {
             }
         }
     }
-
      */
     public void mainGameLoop() {
         transitionGameState();
-        table.updateDisplay();
         while (gameState.equals(States.RUNNING)) {
             //table.updateDisplay();
         }
