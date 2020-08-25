@@ -4,6 +4,8 @@ import Model.Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Objects;
@@ -171,8 +173,18 @@ public class Table extends Observable {
             }
         });
 
+        gameFrame.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent componentEvent) {
+                if (game.getBoard() != null) {
+                    updateDisplay();
+                }
+            }
+        });
+
         gameFrame.setMinimumSize(new Dimension(750, 750));
         gameFrame.pack();
+
+
     }
 
     public void setSuggestionAccusationVisibility(boolean value) {
@@ -184,6 +196,20 @@ public class Table extends Observable {
             suggestionButton.setVisible(false);
             accusationButton.setVisible(false);
             passButton.setVisible(false);
+        }
+    }
+
+    public void showMovement(boolean value) {
+        if (value) {
+            upButton.setVisible(true);
+            downButton.setVisible(true);
+            leftButton.setVisible(true);
+            rightButton.setVisible(true);
+        } else {
+            upButton.setVisible(false);
+            downButton.setVisible(false);
+            leftButton.setVisible(false);
+            rightButton.setVisible(false);
         }
     }
 
@@ -229,19 +255,27 @@ public class Table extends Observable {
     }
 
     public void updateDisplay() {
-
-        int rows = 25;
-        int columns = 24;
-        int rectSize = 20;
+        int rectSize;
         if (displayPanel.getWidth() > displayPanel.getHeight()) {
             rectSize = (displayPanel.getHeight() - BORDER_SIZE) / 25;
         } else {
             rectSize = (displayPanel.getWidth() - BORDER_SIZE) / 25;
         }
 
-        //displayPanel.setPreferredSize(new Dimension(rows));
+        if (game.getGameState().equals(Game.States.RUNNING)) {
+            if (game.getSubState().equals(Game.subStates.MOVEMENT)) {
+                showMovement(true);
+                setSuggestionAccusationVisibility(false);
+            } else {
+                showMovement(false);
+                setSuggestionAccusationVisibility(true);
+            }
+        } else {
+            showMovement(false);
+            setSuggestionAccusationVisibility(false);
+        }
+
         Rectangle half = new Rectangle(0, 0, 50, 50);
-        //paint(display.getGraphics());
         paint(displayPanel.getGraphics(), rectSize);
     }
 

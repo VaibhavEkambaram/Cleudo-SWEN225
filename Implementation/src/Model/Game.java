@@ -403,7 +403,7 @@ public class Game {
     public void mainGameLoop() {
         transitionGameState();
         while (gameState.equals(States.RUNNING)) {
-            table.updateDisplay();
+            //table.updateDisplay();
         }
     }
 
@@ -722,6 +722,20 @@ public class Game {
         }
     }
 
+    private void idleToInit() {
+        if (gameState.equals(States.IDLE)) {
+            throw new Error("Expected IDLE game state but " + gameState);
+        }
+        gameState = States.INIT;
+    }
+
+    private void initToRunning() {
+        if (gameState.equals(States.INIT)) {
+            throw new Error("Expected INIT game state but " + gameState);
+        }
+        gameState = States.RUNNING;
+    }
+
     private int movementTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
@@ -741,11 +755,20 @@ public class Game {
         subState = subStates.ACTION;
     }
 
-    private enum States {
-        IDLE, INIT, RUNNING, FINISHED
+    public States getGameState() {
+        return gameState;
     }
 
-    private enum subStates {
+    public subStates getSubState() {
+        return subState;
+    }
+
+    public enum States {
+        IDLE, INIT, RUNNING, FINISHED;
+
+    }
+
+    public enum subStates {
         PLAYERS, DECK, BOARD, MOVEMENT, ACTION
     }
 }
