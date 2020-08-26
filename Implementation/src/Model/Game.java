@@ -88,6 +88,10 @@ public class Game {
         mainGameLoop(); // main game logic loop
     }
 
+    public void setMovesRemaining(int value){
+        this.movesRemaining = value;
+    }
+
 
     private void initGame() {
         transitionSubState(); // Transition from DECK to PLAYERS
@@ -394,6 +398,10 @@ public class Game {
         table.updateDisplay();
         while (gameState.equals(States.RUNNING)) {
             table.updateDisplay();
+            System.out.println(movesRemaining);
+            if(movesRemaining!=-1){
+                //TODO: transition to movement or suggest/accuse/pass
+            }
         }
     }
 
@@ -404,13 +412,6 @@ public class Game {
      * @author Vaibhav Ekambaram
      */
     public int rollDice() {
-        Scanner diceRollScanner = new Scanner(System.in);
-        String readString = "";
-        while (!readString.equalsIgnoreCase("roll")) {
-            System.out.println("Type 'roll' to roll dice for " + currentPlayer.getCharacter().toString());
-            readString = diceRollScanner.nextLine();
-        }
-
         // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
@@ -427,7 +428,7 @@ public class Game {
      * @return Model.Move
      * @author Cameron Li, Vaibhav Ekambaram
      */
-    /*
+
     public Move movementInput(int movesRemaining) {
         Move.Direction direction = null;
         int spaces = 0;
@@ -472,7 +473,7 @@ public class Game {
 
         return new Move(direction, spaces);
     }
-     */
+
 
     public boolean movementInput(Move move, int movesRemaining) {
         if (!subState.equals(subStates.MOVEMENT)) {

@@ -27,6 +27,7 @@ public class Table extends Observable {
     JButton downButton;
     JButton leftButton;
     JButton rightButton;
+    JButton rollDiceButton;
 
     // Panels
     private JPanel mainPanel;
@@ -123,6 +124,17 @@ public class Table extends Observable {
 
 
         gameFrame.add(mainPanel);
+
+        rollDiceButton = new JButton("Roll Dice");
+        actionPanel.add(rollDiceButton);
+        rollDiceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.setMovesRemaining(-1);
+                game.setMovesRemaining(game.rollDice());
+                rollDiceButton.setVisible(false);
+            }
+        });
 
 
         // Buttons
