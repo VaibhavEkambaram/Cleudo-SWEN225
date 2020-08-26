@@ -4,9 +4,13 @@ import Model.Game;
 import Model.Move;
 import Model.Player;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Observable;
 
@@ -95,11 +99,11 @@ public class Table extends Observable {
         infoPanel.setPreferredSize(new Dimension(500, 50));
 
         // Hand Panel
-        handPanel = new JPanel();
+        handPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         handPanel.setBackground(Color.WHITE);
-        handPanel.setPreferredSize(new Dimension(500, 100));
+        handPanel.setPreferredSize(new Dimension(500, 183));
         constraints.weightx = 1;
-        constraints.weighty = .2;
+        constraints.weighty = 0.2;
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 2;
