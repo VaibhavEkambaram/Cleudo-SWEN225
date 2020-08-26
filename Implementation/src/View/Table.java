@@ -92,6 +92,7 @@ public class Table extends Observable {
         info.setEditable(false);
         infoPanel.add(info, BorderLayout.CENTER);
         infoFont = info.getFont();
+        infoPanel.setPreferredSize(new Dimension(500, 50));
 
         // Hand Panel
         handPanel = new JPanel();
@@ -299,7 +300,9 @@ public class Table extends Observable {
         if (game.getGameState().equals(Game.States.RUNNING)) {
             infoPanel.setVisible(true);
             if (game.getSubState().equals(Game.subStates.MOVEMENT)) {
-                showMovement(true);
+                if (game.getMovesRemaining() > 0) {
+                    showMovement(true);
+                }
                 setSuggestionAccusationVisibility(false);
             } else {
                 showMovement(false);
@@ -310,12 +313,12 @@ public class Table extends Observable {
             setSuggestionAccusationVisibility(false);
             infoPanel.setVisible(false);
         }
-        if (game.getCurrentPlayer() != currentPlayer) {
+        //if (game.getCurrentPlayer() != currentPlayer) {
             info.setText(game.getGameState().toString() + "\n");
             info.append(game.getSubState().toString() + "\n");
             info.append(game.getCurrentPlayer().toString());
             currentPlayer = game.getCurrentPlayer();
-        }
+        //}
 
         Rectangle half = new Rectangle(0, 0, 50, 50);
         paint(displayPanel.getGraphics(), rectSize);
@@ -386,5 +389,6 @@ public class Table extends Observable {
     public void makeMovement(Move.Direction direction) {
         currentPlayer = game.getCurrentPlayer();
         Move move = new Move(direction, 1);
+        game.movementInput(move);
     }
 }

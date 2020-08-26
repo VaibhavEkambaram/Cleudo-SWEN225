@@ -398,7 +398,7 @@ public class Game {
         table.updateDisplay();
         while (gameState.equals(States.RUNNING)) {
             table.updateDisplay();
-            System.out.println(movesRemaining);
+            //System.out.println(movesRemaining);
             if(movesRemaining!=-1){
                 //TODO: transition to movement or suggest/accuse/pass
             }
@@ -475,7 +475,7 @@ public class Game {
     }
 
 
-    public boolean movementInput(Move move, int movesRemaining) {
+    public boolean movementInput(Move move) {
         if (!subState.equals(subStates.MOVEMENT)) {
             throw new Error("Expected MOVEMENT sub state but : " + subState);
         }
@@ -488,7 +488,14 @@ public class Game {
             transitionSubState();
         }
 
-        return true;
+        movesRemaining = movesRemaining - move.getSpaces();
+        Board newBoard = board.apply(currentPlayer, move);
+        if (newBoard != null) {
+            board = newBoard;
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -767,6 +774,10 @@ public class Game {
 
     public subStates getSubState() {
         return subState;
+    }
+
+    public int getMovesRemaining() {
+        return movesRemaining;
     }
 
     public enum States {
