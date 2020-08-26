@@ -39,7 +39,11 @@ public class Table extends Observable {
     private JPanel actionPanel;
     private JPanel movementPanel;
 
+    // Scroll Pane
+    private JScrollPane scrollHandPane;
+
     Player currentPlayer;
+    Player previousPlayer;
     private Font infoFont;
 
     Game game;
@@ -100,11 +104,15 @@ public class Table extends Observable {
         handPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         handPanel.setBackground(Color.WHITE);
         handPanel.setPreferredSize(new Dimension(500, 183));
+        //scrollHandPane = new JScrollPane(handPanel);
+        //scrollHandPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        //scrollHandPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         constraints.weightx = 1;
         constraints.weighty = 0.2;
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 2;
+
         mainPanel.add(handPanel, constraints);
 
         // Movement Panel
@@ -120,6 +128,7 @@ public class Table extends Observable {
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         displayPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         handPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        //scrollHandPane.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         actionPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         movementPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -329,22 +338,26 @@ public class Table extends Observable {
     }
 
     private void createHand(Game game) {
-        //TODO: make it so the hand updates to match current players
-
-        Player currentPlayer = game.getCurrentPlayer();
+        // TODO: make the hand panel scrollable so the player can actually see all of their cards
         if (currentPlayer == null) {
             return;
         }
 
-        for (Card c : currentPlayer.getHand()) {
-            BufferedImage card = null;
-            try {
-                card = ImageIO.read(new File("assets/cards/card_" + c.toString() + ".png"));
-            } catch (IOException e) {
+        if(previousPlayer != currentPlayer){
+            handPanel.removeAll();
+            for (Card c : currentPlayer.getHand()) {
+                //System.out.println(c.toString());
+                BufferedImage card = null;
+                try {
+                    card = ImageIO.read(new File("assets/cards/card_" + c.toString() + ".png"));
+                } catch (IOException e) {
 
+                }
+                JLabel picLabel = new JLabel(new ImageIcon(card));
+                handPanel.add(picLabel);
             }
-            JLabel picLabel = new JLabel(new ImageIcon(card));
-            handPanel.add(picLabel);
+            //scrollHandPane = new JScrollPane(handPanel);
+            previousPlayer = currentPlayer;
         }
     }
 
@@ -359,7 +372,6 @@ public class Table extends Observable {
         if (game.getGameState().equals(Game.States.RUNNING)) {
             infoPanel.setVisible(true);
             if (game.getSubState().equals(Game.subStates.MOVEMENT)) {
-                //createHand(game);
                 if (game.getMovesRemaining() > 0) {
                     showMovement(true);
                 }
@@ -367,6 +379,9 @@ public class Table extends Observable {
             } else {
                 showMovement(false);
                 setSuggestionAccusationVisibility(true);
+            }
+            if(game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)){
+                createHand(game);
             }
         } else {
             showMovement(false);
