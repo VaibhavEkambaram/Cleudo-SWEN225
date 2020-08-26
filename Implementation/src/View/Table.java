@@ -147,6 +147,13 @@ public class Table extends Observable {
 
         passButton = new JButton("Pass");
         actionPanel.add(passButton);
+        passButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.movementTransition();
+                rollDiceButton.setVisible(true);
+            }
+        });
 
 
         constraints.fill = GridBagConstraints.BOTH;

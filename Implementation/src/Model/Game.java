@@ -398,7 +398,7 @@ public class Game {
         table.updateDisplay();
         while (gameState.equals(States.RUNNING)) {
             table.updateDisplay();
-            //System.out.println(movesRemaining);
+            System.out.println(movesRemaining);
             if(movesRemaining!=-1){
                 //TODO: transition to movement or suggest/accuse/pass
             }
@@ -483,12 +483,12 @@ public class Game {
         if (move.getSpaces() > movesRemaining) {
             return false;
         }
+        movesRemaining = movesRemaining - move.getSpaces();
 
         if (movesRemaining < 1) {
-            transitionSubState();
+            actionTransition();
         }
 
-        movesRemaining = movesRemaining - move.getSpaces();
         Board newBoard = board.apply(currentPlayer, move);
         if (newBoard != null) {
             board = newBoard;
@@ -736,26 +736,16 @@ public class Game {
         gameState = States.RUNNING;
     }
 
-    private int movementTransition() {
+    public void movementTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
         }
         if (subState.equals(subStates.ACTION)) {
-            if (currentPlayerIndex + 1 >= numPlayers) {
-                currentPlayerIndex = 0;
-            } else {
-                currentPlayerIndex++;
-            }
-            currentPlayer = players.get(currentPlayerIndex);
+            changePlayer();
         }
 
         subState = subStates.MOVEMENT;
         currentPlayer = players.get(currentPlayerIndex);
-
-        int firstResult = new Random().nextInt(6) + 1;
-        int secondResult = new Random().nextInt(6) + 1;
-
-        return firstResult + secondResult;
     }
 
     private void actionTransition() {
@@ -778,6 +768,15 @@ public class Game {
 
     public int getMovesRemaining() {
         return movesRemaining;
+    }
+
+    public void changePlayer() {
+        if (currentPlayerIndex + 1 >= numPlayers) {
+            currentPlayerIndex = 0;
+        } else {
+            currentPlayerIndex++;
+        }
+        currentPlayer = players.get(currentPlayerIndex);
     }
 
     public enum States {
