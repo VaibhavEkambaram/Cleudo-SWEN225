@@ -2,7 +2,6 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import View.AccusationMenu;
-import View.PlayerSetupMenu;
 import View.SuggestionMenu;
 import View.Table;
 
@@ -60,9 +59,10 @@ public class Game {
     }
 
 
-    // ----------------------------------------------------------------
-    //                      Game Initialisation
-    // ----------------------------------------------------------------
+    /**
+     * Game Initialisation
+     */
+
 
     /**
      * Create deck of cards and shuffle
@@ -121,7 +121,6 @@ public class Game {
         deck.remove(murderRoom);
         deck.remove(murderer);
     }
-
 
     /**
      * Ask how many people want to play the game, then display character preferences menu
@@ -255,7 +254,6 @@ public class Game {
         this.board = board; // Set board
     }
 
-
     /**
      * Deal Cards
      * Add cards from the deck list to a stack, then deal them to each player until the stack is empty
@@ -279,6 +277,11 @@ public class Game {
 
 
     /**
+     * Core Gameplay
+     */
+
+
+    /**
      * Main Game Loop
      *
      * @author Cameron Li, Vaibhav Ekambaram
@@ -291,7 +294,6 @@ public class Game {
             table.updateDisplay();
         }
     }
-
 
     /**
      * Roll two dice and then return the overall number
@@ -310,59 +312,14 @@ public class Game {
     }
 
     /**
-     * Asks current player to perform an action
-     * Returns a move to apply to the board
+     * Handle Movement
+     * Check validity
+     * Transition states if no more moves
      *
-     * @return Model.Move
-     * @author Cameron Li, Vaibhav Ekambaram
+     * @param move
+     * @return
+     * @author Cameron Li
      */
-
-    public Move movementInput(int movesRemaining) {
-        Move.Direction direction = null;
-        int spaces = 0;
-        Scanner inputScan = new Scanner(System.in);
-        boolean valid = false;
-        while (!valid) {
-            String command = inputScan.nextLine();
-            try {
-                if (command.length() >= 4 && command.startsWith("up-")) {
-                    direction = Move.Direction.UP;
-                    spaces = Integer.parseInt(command.substring(3));
-                } else if (command.length() >= 6 && command.startsWith("left-")) {
-                    direction = Move.Direction.LEFT;
-                    spaces = Integer.parseInt(command.substring(5));
-                } else if (command.length() >= 7 && command.startsWith("right-")) {
-                    direction = Move.Direction.RIGHT;
-                    spaces = Integer.parseInt(command.substring(6));
-                } else if (command.length() >= 6 && command.startsWith("down-")) {
-                    direction = Move.Direction.DOWN;
-                    spaces = Integer.parseInt(command.substring(5));
-                } else if (command.equals("finish")) {
-                    return null;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a correct number of spaces");
-            }
-
-            if (direction != null && spaces <= movesRemaining) {
-                valid = true;
-            }
-
-            if (!valid) {
-                if (spaces > movesRemaining) {
-                    System.out.println("Insufficient amount of moves left");
-                } else {
-                    System.out.println("Please enter a proper command");
-                    System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
-                }
-            }
-
-        }
-
-        return new Move(direction, spaces);
-    }
-
-
     public boolean movementInput(Move move) {
         if (!subState.equals(subStates.MOVEMENT)) {
             throw new Error("Expected MOVEMENT sub state but : " + subState);
@@ -383,7 +340,6 @@ public class Game {
 
         return false;
     }
-
 
     /**
      * Handle Accusations
@@ -555,18 +511,17 @@ public class Game {
         return 0;
     }
 
-    public Board getBoard() {
-        return this.board;
+    /**
+     * Switch current player to the next player
+     */
+    public void changePlayer() {
+        if (currentPlayerIndex + 1 >= numPlayers) {
+            currentPlayerIndex = 0;
+        } else {
+            currentPlayerIndex++;
+        }
+        currentPlayer = players.get(currentPlayerIndex);
     }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public void setMovesRemaining(int value) {
-        this.movesRemaining = value;
-    }
-
 
     private void checkGameState() {
         if (gameState.equals(States.IDLE) && subState == null) {
@@ -662,6 +617,11 @@ public class Game {
         subState = subStates.ACTION;
     }
 
+    /**
+     * Getters
+     */
+
+
     public States getGameState() {
         return gameState;
     }
@@ -670,26 +630,47 @@ public class Game {
         return subState;
     }
 
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
     public int getMovesRemaining() {
         return movesRemaining;
     }
 
-    public void changePlayer() {
-        if (currentPlayerIndex + 1 >= numPlayers) {
-            currentPlayerIndex = 0;
-        } else {
-            currentPlayerIndex++;
-        }
-        currentPlayer = players.get(currentPlayerIndex);
+    /**
+     * Setters
+     */
+
+
+    public void setMovesRemaining(int value) {
+        this.movesRemaining = value;
     }
 
+    /**
+     * State Methods
+     */
+
+
+    // Main Game States
     public enum States {
         IDLE, INIT, RUNNING, FINISHED
     }
 
+
+    // Sub States for Main Game States
     public enum subStates {
         PLAYERS, DECK, BOARD, MOVEMENT, ACTION
     }
+
+
+    /**
+     * System.out Core Methods
+     */
 
 
     /**
@@ -774,6 +755,60 @@ public class Game {
                 transitionSubState(); // Transition Action to Movement
             }
         }
+    }
+     */
+
+    /**
+     * Asks current player to perform an action
+     * Returns a move to apply to the board
+     *
+     * @return Model.Move
+     * @author Cameron Li, Vaibhav Ekambaram
+     */
+    /*
+    public Move movementInput(int movesRemaining) {
+        Move.Direction direction = null;
+        int spaces = 0;
+        Scanner inputScan = new Scanner(System.in);
+        boolean valid = false;
+        while (!valid) {
+            String command = inputScan.nextLine();
+            try {
+                if (command.length() >= 4 && command.startsWith("up-")) {
+                    direction = Move.Direction.UP;
+                    spaces = Integer.parseInt(command.substring(3));
+                } else if (command.length() >= 6 && command.startsWith("left-")) {
+                    direction = Move.Direction.LEFT;
+                    spaces = Integer.parseInt(command.substring(5));
+                } else if (command.length() >= 7 && command.startsWith("right-")) {
+                    direction = Move.Direction.RIGHT;
+                    spaces = Integer.parseInt(command.substring(6));
+                } else if (command.length() >= 6 && command.startsWith("down-")) {
+                    direction = Move.Direction.DOWN;
+                    spaces = Integer.parseInt(command.substring(5));
+                } else if (command.equals("finish")) {
+                    return null;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a correct number of spaces");
+            }
+
+            if (direction != null && spaces <= movesRemaining) {
+                valid = true;
+            }
+
+            if (!valid) {
+                if (spaces > movesRemaining) {
+                    System.out.println("Insufficient amount of moves left");
+                } else {
+                    System.out.println("Please enter a proper command");
+                    System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
+                }
+            }
+
+        }
+
+        return new Move(direction, spaces);
     }
      */
 

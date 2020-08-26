@@ -9,8 +9,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 
 public class Table extends Observable {
@@ -44,7 +44,7 @@ public class Table extends Observable {
 
     Player currentPlayer;
     Player previousPlayer;
-    private Font infoFont;
+    int movesRemaining;
 
     Game game;
     // Display
@@ -97,7 +97,6 @@ public class Table extends Observable {
         info.setText("Hello and welcome to Cluedo\nMade by:\nCameron Li, Vaibhav Ekambaram and Baxter Kirikiri");
         info.setEditable(false);
         infoPanel.add(info, BorderLayout.CENTER);
-        infoFont = info.getFont();
         infoPanel.setPreferredSize(new Dimension(500, 50));
 
         // Hand Panel
@@ -361,6 +360,11 @@ public class Table extends Observable {
         }
     }
 
+    /**
+     * Update all visual elements on the GUI
+     *
+     * @author Cameron Li
+     */
     public void updateDisplay() {
         int rectSize;
         if (displayPanel.getWidth() > displayPanel.getHeight()) {
@@ -380,7 +384,7 @@ public class Table extends Observable {
                 showMovement(false);
                 setSuggestionAccusationVisibility(true);
             }
-            if(game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)){
+            if (game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
                 createHand(game);
             }
         } else {
@@ -388,12 +392,20 @@ public class Table extends Observable {
             setSuggestionAccusationVisibility(false);
             infoPanel.setVisible(false);
         }
-        //if (game.getCurrentPlayer() != currentPlayer) {
-        info.setText(game.getGameState().toString() + "\n");
-        info.append(game.getSubState().toString() + "\n");
-        info.append(game.getCurrentPlayer().toString());
-        currentPlayer = game.getCurrentPlayer();
-        //}
+        if (game.getCurrentPlayer() != currentPlayer) {
+            info.setText(game.getCurrentPlayer().toString() + "\n");
+            currentPlayer = game.getCurrentPlayer();
+        }
+
+        if (game.getCurrentPlayer() == currentPlayer) {
+            if (game.getMovesRemaining() != this.movesRemaining && game.getMovesRemaining() > 0) {
+                this.movesRemaining = game.getMovesRemaining();
+                info.setText(game.getCurrentPlayer().toString() + "\n");
+                info.append(this.movesRemaining + " moves remaining");
+            } else if (game.getMovesRemaining() < 1) {
+                info.setText(game.getCurrentPlayer().toString() + "\n");
+            }
+        }
 
         paint(displayPanel.getGraphics(), rectSize);
     }
@@ -408,50 +420,15 @@ public class Table extends Observable {
                 g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
 
                 if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
-                    switch (game.getBoard().getPositions()[j][i].getCharacter().toString()) {
-                        case "Miss Scarlett":
-                            g.setColor(Color.RED);
-                            break;
-                        case "Col. Mustard":
-                            g.setColor(Color.YELLOW);
-                            break;
-                        case "Mrs. White":
-                            g.setColor(Color.WHITE);
-                            break;
-                        case "Mr. Green":
-                            g.setColor(Color.GREEN);
-                            break;
-                        case "Mrs. Peacock":
-                            g.setColor(Color.BLUE);
-                            break;
-                        case "Prof. Plum":
-                            g.setColor(new Color(128, 0, 128));
-                            break;
+                    g.setColor(game.getBoard().getPositions()[j][i].getCharacter().getCharacterBoardColor());
                     }
-
-                    g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
-                }
-
+                g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
 
                 g.setColor(Color.BLACK);
-
                 g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
-                /*
-                if(game.getBoard().getPositions()[j][i].getDisplayName().equals("o") || game.getBoard().getPositions()[j][i].getDisplayName().equals("o")){
-                    g2.setStroke(new BasicStroke(5));
-                    if((!game.getBoard().getPositions()[j][i+1].getDisplayName().equals("O") || !game.getBoard().getPositions()[j][i+1].getDisplayName().equals("O"))) {
-                        g2.drawLine(border + rectSize * i + rectSize, border + rectSize * j, border + rectSize * i + rectSize, border + rectSize * j + rectSize);
-                    }
-                }
-
-                 */
             }
         }
     }
-
-
-
-
 
     public int setPlayerCount() {
         JPanel fields = new JPanel(new GridLayout(2, 1));
@@ -502,15 +479,6 @@ public class Table extends Observable {
         }
         return players;
     }
-
-
-
-
-
-
-
-
-
 
     public void makeMovement(Move.Direction direction) {
         currentPlayer = game.getCurrentPlayer();

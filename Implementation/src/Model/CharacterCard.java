@@ -6,6 +6,8 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 // line 151 "model.ump"
 // line 209 "model.ump"
 
+import java.awt.*;
+
 /**
  * Model.CharacterCard - Implements Model.Card Interface
  */
@@ -18,6 +20,8 @@ public class CharacterCard implements Card {
     //Model.CharacterCard Attributes
     private final String characterName;
     private final String characterBoardChar;
+    private final Color characterBoardColor;
+    private final String characterColorName;
 
     /**
      * Model.CharacterCard Constructor
@@ -27,28 +31,41 @@ public class CharacterCard implements Card {
      */
     public CharacterCard(String c) {
         this.characterName = c;
-
         switch (characterName) {
             case "Mrs. White":
                 characterBoardChar = "3";
+                characterBoardColor = Color.WHITE;
+                characterColorName = "WHITE";
                 break;
             case "Mr. Green":
                 characterBoardChar = "4";
+                characterBoardColor = Color.GREEN;
+                characterColorName = "GREEN";
                 break;
             case "Mrs. Peacock":
                 characterBoardChar = "5";
+                characterBoardColor = Color.BLUE;
+                characterColorName = "BLUE";
                 break;
             case "Prof. Plum":
                 characterBoardChar = "6";
+                characterBoardColor = new Color(128, 0, 128);
+                characterColorName = "PURPlE";
                 break;
             case "Miss Scarlett":
                 characterBoardChar = "1";
+                characterBoardColor = Color.RED;
+                characterColorName = "RED";
                 break;
             case "Col. Mustard":
                 characterBoardChar = "2";
+                characterBoardColor = Color.YELLOW;
+                characterColorName = "YELLOW";
                 break;
             default:
                 characterBoardChar = "-";
+                characterBoardColor = Color.BLACK; // There should be no character with this color
+                characterColorName = "BLACK";
                 break;
         }
     }
@@ -70,6 +87,10 @@ public class CharacterCard implements Card {
      */
     public String getCharacterBoardChar() {
         return characterBoardChar;
+    }
+
+    public Color getCharacterBoardColor() {
+        return characterBoardColor;
     }
 
     /**
