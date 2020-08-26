@@ -483,14 +483,12 @@ public class Game {
         if (move.getSpaces() > movesRemaining) {
             return false;
         }
-        movesRemaining = movesRemaining - move.getSpaces();
-
-        if (movesRemaining < 1) {
-            actionTransition();
-        }
-
         Board newBoard = board.apply(currentPlayer, move);
         if (newBoard != null) {
+            movesRemaining = movesRemaining - move.getSpaces();
+            if (movesRemaining < 1) {
+                actionTransition();
+            }
             board = newBoard;
             return true;
         }

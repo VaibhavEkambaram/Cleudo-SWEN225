@@ -187,7 +187,7 @@ public class Position {
         if (displayName.equals("x")) {
             g.setColor(new Color(1, 50, 32));
         } else if(displayName.equals("_") && inRoom==null) {
-            g.setColor(new Color(250,218,94));
+            g.setColor(new Color(219, 211, 150));
         } else if(inRoom.getRoomChar().equals("K")) {
             if ((xLoc % 2 == 0)) {
                 if ((yLoc % 2 == 0)) {
