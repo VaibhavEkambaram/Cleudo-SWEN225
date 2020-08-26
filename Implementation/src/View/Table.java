@@ -1,5 +1,6 @@
 package View;
 
+import Model.Card;
 import Model.Game;
 import Model.Move;
 import Model.Player;
@@ -300,6 +301,26 @@ public class Table extends Observable {
         return helpMenu;
     }
 
+    private void createHand(Game game){
+        //TODO: make it so the hand updates to match current players
+
+        Player currentPlayer = game.getCurrentPlayer();
+        if(currentPlayer == null){
+            return;
+        }
+
+        for(Card c : currentPlayer.getHand()){
+            BufferedImage card = null;
+            try {
+                card = ImageIO.read(new File("assets/cards/card_"+c.toString()+".png"));
+            } catch (IOException e) {
+
+            }
+            JLabel picLabel = new JLabel(new ImageIcon(card));
+            handPanel.add(picLabel);
+        }
+    }
+
     public void updateDisplay() {
         int rectSize;
         if (displayPanel.getWidth() > displayPanel.getHeight()) {
@@ -330,6 +351,7 @@ public class Table extends Observable {
             info.append(game.getCurrentPlayer().toString());
             currentPlayer = game.getCurrentPlayer();
         //}
+        createHand(game);
 
         Rectangle half = new Rectangle(0, 0, 50, 50);
         paint(displayPanel.getGraphics(), rectSize);
