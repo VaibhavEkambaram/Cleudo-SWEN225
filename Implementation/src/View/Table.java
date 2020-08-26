@@ -1,9 +1,6 @@
 package View;
 
-import Model.Card;
-import Model.Game;
-import Model.Move;
-import Model.Player;
+import Model.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,8 +9,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Observable;
+import java.util.*;
+import java.util.List;
 
 
 public class Table extends Observable {
@@ -146,9 +143,35 @@ public class Table extends Observable {
         // Buttons
         suggestionButton = new JButton("Make Suggestion");
         actionPanel.add(suggestionButton);
+        suggestionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int suggest = game.makeSuggestion(game.getCurrentPlayer());
+                if(suggest == -1){
+                    game.movementTransition();
+                    rollDiceButton.setVisible(true);
+                }
+            }
+        });
+
+
 
         accusationButton = new JButton("Make Accusation");
         actionPanel.add(accusationButton);
+        accusationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int accuse = game.makeAccusation(game.getCurrentPlayer());
+                if (accuse == 1) {
+                    game.transitionGameState();
+                } else {
+                    game.movementTransition();
+                    rollDiceButton.setVisible(true);
+                }
+            }
+        });
+
+
 
         passButton = new JButton("Pass");
         actionPanel.add(passButton);
@@ -235,6 +258,10 @@ public class Table extends Observable {
         //updateDisplay();
     }
 
+    public void setRollDiceButton(boolean value){
+        rollDiceButton.setVisible(value);
+    }
+
     public void setSuggestionAccusationVisibility(boolean value) {
         if (value) {
             suggestionButton.setVisible(true);
@@ -301,18 +328,18 @@ public class Table extends Observable {
         return helpMenu;
     }
 
-    private void createHand(Game game){
+    private void createHand(Game game) {
         //TODO: make it so the hand updates to match current players
 
         Player currentPlayer = game.getCurrentPlayer();
-        if(currentPlayer == null){
+        if (currentPlayer == null) {
             return;
         }
 
-        for(Card c : currentPlayer.getHand()){
+        for (Card c : currentPlayer.getHand()) {
             BufferedImage card = null;
             try {
-                card = ImageIO.read(new File("assets/cards/card_"+c.toString()+".png"));
+                card = ImageIO.read(new File("assets/cards/card_" + c.toString() + ".png"));
             } catch (IOException e) {
 
             }
@@ -332,7 +359,7 @@ public class Table extends Observable {
         if (game.getGameState().equals(Game.States.RUNNING)) {
             infoPanel.setVisible(true);
             if (game.getSubState().equals(Game.subStates.MOVEMENT)) {
-                createHand(game);
+                //createHand(game);
                 if (game.getMovesRemaining() > 0) {
                     showMovement(true);
                 }
@@ -347,13 +374,12 @@ public class Table extends Observable {
             infoPanel.setVisible(false);
         }
         //if (game.getCurrentPlayer() != currentPlayer) {
-            info.setText(game.getGameState().toString() + "\n");
-            info.append(game.getSubState().toString() + "\n");
-            info.append(game.getCurrentPlayer().toString());
-            currentPlayer = game.getCurrentPlayer();
+        info.setText(game.getGameState().toString() + "\n");
+        info.append(game.getSubState().toString() + "\n");
+        info.append(game.getCurrentPlayer().toString());
+        currentPlayer = game.getCurrentPlayer();
         //}
 
-        Rectangle half = new Rectangle(0, 0, 50, 50);
         paint(displayPanel.getGraphics(), rectSize);
     }
 
@@ -366,7 +392,7 @@ public class Table extends Observable {
                 game.getBoard().getPositions()[j][i].draw(g);
                 g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
 
-                if(game.getBoard().getPositions()[j][i].getCharacter()!=null){
+                if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
                     switch (game.getBoard().getPositions()[j][i].getCharacter().toString()) {
                         case "Miss Scarlett":
                             g.setColor(Color.RED);
@@ -388,7 +414,7 @@ public class Table extends Observable {
                             break;
                     }
 
-                    g.fillOval(border+rectSize*i,border+rectSize*j,rectSize,rectSize);
+                    g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
                 }
 
 
@@ -408,6 +434,10 @@ public class Table extends Observable {
         }
     }
 
+
+
+
+
     public int setPlayerCount() {
         JPanel fields = new JPanel(new GridLayout(2, 1));
         JLabel label = new JLabel("How many players wish to play?");
@@ -418,6 +448,54 @@ public class Table extends Observable {
         numPlayers = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
         return numPlayers;
     }
+
+    public List<Player> setPlayers(String[] characterNames, int numPlayers, List<Player> players, Map<String, CharacterCard> characterCardsMap) {
+        ArrayList<String> charNames = new ArrayList<>(Arrays.asList(characterNames));
+        ArrayList<String> used = new ArrayList<>();
+
+        // menu for each player to select options
+        for (int i = 0; i < numPlayers; i++) {
+            JPanel fields = new JPanel(new GridLayout(5, 2));
+            JLabel label = new JLabel("Enter your name then select your player token ");
+            JTextField nameField = new JTextField();
+            nameField.setText("Player " + (i + 1));
+            ButtonGroup b = new ButtonGroup();
+            fields.add(label);
+            fields.add(nameField);
+
+            // create radio button for each token option
+            for (String character : charNames) {
+                JRadioButton radButton = new JRadioButton();
+                if (used.contains(character)) {
+                    radButton.setEnabled(false);
+                }
+                radButton.setText(character);
+                radButton.setActionCommand(character);
+                b.add(radButton);
+                fields.add(radButton);
+            }
+
+            JOptionPane.showMessageDialog(null, fields, "Set Player Preferences", JOptionPane.PLAIN_MESSAGE);
+
+            // if valid selection then add to array of players, otherwise repeat
+            if (b.getSelection() != null || nameField.getText().length() == 0) {
+                used.add(b.getSelection().getActionCommand());
+                players.add(new Player(characterCardsMap.get(b.getSelection().getActionCommand()), nameField.getText()));
+            } else {
+                i--;
+            }
+        }
+        return players;
+    }
+
+
+
+
+
+
+
+
+
 
     public void makeMovement(Move.Direction direction) {
         currentPlayer = game.getCurrentPlayer();

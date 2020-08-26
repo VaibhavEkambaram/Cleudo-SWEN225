@@ -34,6 +34,7 @@ public class AccusationMenu {
 
     public void incorrectAccusation(Player currentPlayer) {
         JOptionPane.showMessageDialog(null, "You (" + currentPlayer.getPlayerVanityName() + ") were incorrect in your accusation.\nYou may remain playing the game and offering suggestions, but are no longer able to make further accusations.", "Incorrect Accusation", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Moving to next player...", "Information", JOptionPane.PLAIN_MESSAGE);
     }
 
     public void successfulAccusation(Player currentPlayer, Scenario murderScenario) {
