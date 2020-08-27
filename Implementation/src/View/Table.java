@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -129,9 +130,6 @@ public class Table extends Observable {
         mainPanel.add(handPanel, constraints);
 
 
-
-
-
         // Movement Panel
         movementPanel = new JPanel(new GridBagLayout());
         movementPanel.setBackground(Color.WHITE);
@@ -158,11 +156,11 @@ public class Table extends Observable {
             @Override
             public void mousePressed(MouseEvent e) {
 
-                if(!game.getSubState().equals(MOVEMENT)){
+                if (!game.getSubState().equals(MOVEMENT)) {
                     return;
                 }
 
-                p2 = new Point(e.getX(),e.getY());
+                p2 = new Point(e.getX(), e.getY());
                 // todo: add method to board class to find closest???
 
             }
@@ -173,7 +171,7 @@ public class Table extends Observable {
             }
         });
 
-                rollDiceButton = new JButton("Roll Dice");
+        rollDiceButton = new JButton("Roll Dice");
         actionPanel.add(rollDiceButton);
         rollDiceButton.addActionListener(new ActionListener() {
             @Override
@@ -324,7 +322,7 @@ public class Table extends Observable {
     }
 
 
-    public Frame getGameFrame(){
+    public Frame getGameFrame() {
         return gameFrame;
     }
 
@@ -341,10 +339,6 @@ public class Table extends Observable {
         label2.setVisible(true);
         handPanel.add(label2);
     }
-
-
-
-
 
 
     public void setRollDiceButtonVisibility(boolean value) {
@@ -454,7 +448,6 @@ public class Table extends Observable {
             for (Card c : currentPlayer.getHand()) {
 
 
-
                 image1 = new ImageIcon(getClass().getResource("/resources/card_" + c.toString() + ".png"));
                 label1 = new JLabel(image1);
                 handPanel.add(label1);
@@ -469,7 +462,7 @@ public class Table extends Observable {
                 }
                 JLabel picLabel = new JLabel(new ImageIcon(card));
         */
-              //  handPanel.add(picLabel);
+                //  handPanel.add(picLabel);
             }
             //scrollHandPane = new JScrollPane(handPanel);
             previousPlayer = currentPlayer;
@@ -529,7 +522,7 @@ public class Table extends Observable {
     }
 
     public void paint(Graphics g, int rectSize) {
-        if(g!=null) {
+        if (g != null) {
             Graphics2D g2 = (Graphics2D) g;
             int border = BORDER_SIZE / 2;
             for (int i = 0; i < 24; i++) {
@@ -537,7 +530,6 @@ public class Table extends Observable {
 
                     game.getBoard().getPositions()[j][i].draw(g);
                     g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
-
 
 
                     if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
@@ -548,6 +540,15 @@ public class Table extends Observable {
                     if (game.getBoard().getPositions()[j][i].getWeapon() != null) {
                         g.setColor(Color.DARK_GRAY);
                         g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+
+
+                            ImageIcon img = new ImageIcon(getClass().getResource("/resources/image_" + game.getBoard().getPositions()[j][i].getWeapon().getWeaponName() + ".png"));
+
+
+                           // g.drawImage(img, border + rectSize * i, border + rectSize * j, null);
+                            gameFrame.repaint();
+
+
                     }
 
                     g.setColor(Color.BLACK);
