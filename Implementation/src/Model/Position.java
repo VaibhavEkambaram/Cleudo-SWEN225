@@ -31,10 +31,10 @@ public class Position {
     private boolean isDoor = false;
     private boolean passableTile;
 
-    private final Color COLOR_1 = new Color(223,213,205);
-    private final Color COLOR_2 = new Color(221,82,53);
-    private final Color COLOR_3 = new Color(215,202,193);
-    private final Color COLOR_4 = new Color(255,155,0);
+    private final Color COLOR_1 = new Color(223, 213, 205);
+    private final Color COLOR_2 = new Color(221, 82, 53);
+    private final Color COLOR_3 = new Color(215, 202, 193);
+    private final Color COLOR_4 = new Color(255, 155, 0);
 
 
     /**
@@ -54,7 +54,7 @@ public class Position {
     }
 
 
-    public String getDisplayName(){
+    public String getDisplayName() {
         return this.displayName;
     }
 
@@ -185,45 +185,47 @@ public class Position {
     }
 
 
-    public void draw(Graphics g){
+    public void draw(Graphics g) {
+        if (g != null) {
 
-        if (displayName.equals("x")) {
-            g.setColor(new Color(1, 50, 32));
-        } else if(displayName.equals("_") && inRoom==null) {
-            g.setColor(new Color(219, 211, 150));
-        } else {
-            switch (inRoom.getRoomChar()) {
-                case "K":
-                    g.setColor(xLoc % 2 == 0 ? yLoc % 2 == 0 ? Color.BLACK : COLOR_1 : yLoc % 2 == 0 ? COLOR_1 : Color.BLACK);
-                    break;
-                case "H":
-                    g.setColor(xLoc % 2 == 0 ? yLoc % 2 == 0 ? COLOR_2 : COLOR_3 : yLoc % 2 == 0 ? COLOR_3 : COLOR_2);
-                    break;
-                case "C":
-                    g.setColor(xLoc % 2 == 0 ? yLoc % 2 == 0 ? COLOR_4 : COLOR_1 : yLoc % 2 == 0 ? COLOR_1 : COLOR_4);
-                    break;
-                case "B":
-                    g.setColor(xLoc % 2 == 0 ? COLOR_3 : COLOR_1);
-                    break;
-                case "D":
-                    g.setColor(new Color(200, 121, 80));
-                    break;
-                case "I":
-                    g.setColor(new Color(220, 170, 99));
-                    break;
-                case "Y":
-                    g.setColor(new Color(190, 60, 60));
-                    break;
-                case "L":
-                    g.setColor(new Color(157, 127, 97));
-                    break;
-                case "O":
-                    g.setColor(new Color(104, 140, 200));
-                    break;
+            if (displayName.equals("x")) {
+                g.setColor(new Color(1, 50, 32));
+            } else if (displayName.equals("_") && inRoom == null) {
+                g.setColor(new Color(219, 211, 150));
+            } else {
+                switch (inRoom.getRoomChar()) {
+                    case "K":
+                        g.setColor(xLoc % 2 == 0 ? yLoc % 2 == 0 ? Color.BLACK : COLOR_1 : yLoc % 2 == 0 ? COLOR_1 : Color.BLACK);
+                        break;
+                    case "H":
+                        g.setColor(xLoc % 2 == 0 ? yLoc % 2 == 0 ? COLOR_2 : COLOR_3 : yLoc % 2 == 0 ? COLOR_3 : COLOR_2);
+                        break;
+                    case "C":
+                        g.setColor(xLoc % 2 == 0 ? yLoc % 2 == 0 ? COLOR_4 : COLOR_1 : yLoc % 2 == 0 ? COLOR_1 : COLOR_4);
+                        break;
+                    case "B":
+                        g.setColor(xLoc % 2 == 0 ? COLOR_3 : COLOR_1);
+                        break;
+                    case "D":
+                        g.setColor(new Color(200, 121, 80));
+                        break;
+                    case "I":
+                        g.setColor(new Color(220, 170, 99));
+                        break;
+                    case "Y":
+                        g.setColor(new Color(190, 60, 60));
+                        break;
+                    case "L":
+                        g.setColor(new Color(157, 127, 97));
+                        break;
+                    case "O":
+                        g.setColor(new Color(104, 140, 200));
+                        break;
 
-                default:
-                    g.setColor(Color.WHITE);
-                    break;
+                    default:
+                        g.setColor(Color.WHITE);
+                        break;
+                }
             }
         }
     }
