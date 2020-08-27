@@ -155,7 +155,7 @@ public class Board {
             for (int j = 0; j < cloneBoard.positions[0].length; j++) {
                 Position found = cloneBoard.positions[i][j];
                 if (found.getRoom() != null) {
-                    if (found.getRoom().equals(room) && found.isPassableTile() && !found.isDoor()) {
+                    if (found.getRoom().equals(room) && found.isPassableTile() && !found.isDoor() && found.getWeapon()==null && found.getCharacter()==null) {
                         int y = player.getCurrentPosition().getLocationY();
                         int x = player.getCurrentPosition().getLocationX();
                         cloneBoard.positions[y][x].removeCharacter();
@@ -168,6 +168,13 @@ public class Board {
         }
         return null;
     }
+
+
+
+
+
+
+
 
     // Model.Board Valid Movement Checks
 

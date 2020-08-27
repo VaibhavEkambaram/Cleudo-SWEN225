@@ -538,10 +538,17 @@ public class Table extends Observable {
                     game.getBoard().getPositions()[j][i].draw(g);
                     g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
 
+
+
                     if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
                         g.setColor(game.getBoard().getPositions()[j][i].getCharacter().getCharacterBoardColor());
+                        g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
                     }
-                    g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+
+                    if (game.getBoard().getPositions()[j][i].getWeapon() != null) {
+                        g.setColor(Color.DARK_GRAY);
+                        g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                    }
 
                     g.setColor(Color.BLACK);
                     g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);

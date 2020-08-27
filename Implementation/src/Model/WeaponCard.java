@@ -17,6 +17,8 @@ public class WeaponCard implements Card {
 
     //Model.WeaponCard Attributes
     private final String weaponString; // name of the weapon
+    private final char weaponBoardChar;
+
 
     /**
      * Constructor Method for Model.WeaponCard
@@ -25,6 +27,31 @@ public class WeaponCard implements Card {
      */
     public WeaponCard(String weaponString) {
         this.weaponString = weaponString;
+
+        switch (weaponString) {
+            case "Candlestick":
+                this.weaponBoardChar = '?';
+                break;
+            case "Dagger":
+                this.weaponBoardChar = '!';
+                break;
+            case "Lead Pipe":
+                this.weaponBoardChar = '$';
+                break;
+            case "Revolver":
+                this.weaponBoardChar = '%';
+                break;
+            case "Rope":
+                this.weaponBoardChar = '@';
+                break;
+            case "Spanner":
+                this.weaponBoardChar = '&';
+                break;
+            default:
+                this.weaponBoardChar = '~';
+                break;
+
+        }
     }
 
     /**

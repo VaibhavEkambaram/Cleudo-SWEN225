@@ -32,6 +32,7 @@ public class Game {
 
     private List<Card> deck;
     private List<Room> rooms;
+
     public List<Player> players;
 
     private Board board;
@@ -105,9 +106,12 @@ public class Game {
         deck = new ArrayList<>();
 
         // Weapons
+
         List<WeaponCard> weaponCards = new ArrayList<>();
         for (String weaponName : weaponNames) {
             WeaponCard weapon = new WeaponCard(weaponName);
+
+
             weaponCards.add(weapon);
             weaponCardsMap.put(weaponName, weapon);
             deck.add(weapon);
@@ -187,15 +191,15 @@ public class Game {
         String boardLayout =
                 " x x x x x x x x x 3 x x x x 4 x x x x x x x x x \n" +
                         " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
-                        " k K K K K k _ _ b b b B B b b b _ _ c C C C C c \n" +
+                        " k $K K K K k _ _ b b b %B B b b b _ _ c C C C C c \n" +
                         " k K K K K k _ _ b B B B B B B b _ _ c C C C C c \n" +
                         " k K K K K k _ _ b B B B B B B b _ _ <C c C C c c \n" +
                         " k k K K K k _ _ <B B B B B B B >B _ _ _ c c c c x \n" +
                         " x k k k vK k _ _ b B B B B B B b _ _ _ _ _ _ _ 5 \n" +
                         " _ _ _ _ _ _ _ _ b vB b b b b vB b _ _ _ _ _ _ _ x \n" +
                         " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i \n" +
-                        " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ <I I I I I i \n" +
-                        " d D D D d d d d _ _ x x x x x _ _ _ i I I I I i \n" +
+                        " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ <I @I I I I i \n" +
+                        " d !D D D d d d d _ _ x x x x x _ _ _ i I I I I i \n" +
                         " d D D D D D D d _ _ x x x x x _ _ _ i I I I I i \n" +
                         " d D D D D D D >D _ _ x x x x x _ _ _ i i i i vI i \n" +
                         " d D D D D D D d _ _ x x x x x _ _ _ _ _ _ _ _ x \n" +
@@ -205,9 +209,9 @@ public class Game {
                         " 2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l \n" +
                         " x _ _ _ _ _ _ _ _ h h ^H ^H h h _ _ _ l l l l l x \n" +
                         " o o o o o o ^O _ _ h H H H H h _ _ _ _ _ _ _ _ 6 \n" +
-                        " o O O O O O o _ _ h H H H H >H _ _ _ _ _ _ _ _ x \n" +
+                        " o ?O O O O O o _ _ h H H H H >H _ _ _ _ _ _ _ _ x \n" +
                         " o O O O O O o _ _ h H H H H h _ _ ^Y y y y y y y \n" +
-                        " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
+                        " o O O O O O o _ _ h H H H H h _ _ y &Y Y Y Y Y y \n" +
                         " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                         " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
 
@@ -234,22 +238,40 @@ public class Game {
                 if (newPosition == null) { // If still haven't found anything
                     for (Room r : rooms) { // Check for a room
                         if (positionName.equals(r.getRoomChar())) { // Is this an inner room position?
-                            newPosition = new Position(x, y, true, true, null, r);
+                            newPosition = new Position(x, y, true, true, null, r, null);
+                            break;
+                        } else if (positionName.equals("?" + r.getRoomChar())){
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Candlestick"));
+                            break;
+                        } else if (positionName.equals("!" + r.getRoomChar())){
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Dagger"));
+                            break;
+                        } else if (positionName.equals("$" + r.getRoomChar())){
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Lead Pipe"));
+                            break;
+                        } else if (positionName.equals("%" + r.getRoomChar())) {
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Revolver"));
+                            break;
+                        } else if (positionName.equals("@" + r.getRoomChar())) {
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Rope"));
+                            break;
+                        } else if (positionName.equals("&" + r.getRoomChar())) {
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Spanner"));
                             break;
                         } else if (positionName.equals("^" + r.getRoomChar())) { // Up door
-                            newPosition = new Position(x, y, true, true, Move.Direction.UP, r);
+                            newPosition = new Position(x, y, true, true, Move.Direction.UP, r,null);
                             break;
                         } else if (positionName.equals(">" + r.getRoomChar())) { // Right door
-                            newPosition = new Position(x, y, true, true, Move.Direction.RIGHT, r);
+                            newPosition = new Position(x, y, true, true, Move.Direction.RIGHT, r,null);
                             break;
                         } else if (positionName.equals("v" + r.getRoomChar())) { // Down door
-                            newPosition = new Position(x, y, true, true, Move.Direction.DOWN, r);
+                            newPosition = new Position(x, y, true, true, Move.Direction.DOWN, r,null);
                             break;
                         } else if (positionName.equals("<" + r.getRoomChar())) {
-                            newPosition = new Position(x, y, true, true, Move.Direction.LEFT, r);
+                            newPosition = new Position(x, y, true, true, Move.Direction.LEFT, r,null);
                             break;
                         } else if (positionName.equals(r.getRoomChar().toLowerCase())) { // Is this an outer room position?
-                            newPosition = new Position(x, y, true, false, null, r);
+                            newPosition = new Position(x, y, true, false, null, r,null);
                             break;
                         }
                     }
@@ -450,6 +472,8 @@ public class Game {
                 }
             }
         }
+
+
 
 
         Scenario suggestion = new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter);

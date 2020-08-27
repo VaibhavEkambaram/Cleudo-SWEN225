@@ -20,6 +20,8 @@ public class Position {
 
     // Basic Model.Position Attributes
     private CharacterCard character;
+    private WeaponCard weapon;
+
     private String displayName = "_";
     private boolean canMove;
     private int xLoc;
@@ -58,6 +60,9 @@ public class Position {
         return this.displayName;
     }
 
+    public WeaponCard getWeapon(){
+        return weapon;
+    }
 
     /**
      * Character Model.Position Constructor
@@ -75,6 +80,9 @@ public class Position {
     }
 
 
+
+
+
     /**
      * Model.Room Model.Position Constructor
      *
@@ -85,13 +93,14 @@ public class Position {
      * @param direction    direction
      * @param inRoom       is the position located in a room
      */
-    public Position(int x, int y, boolean canMove, boolean passableTile, Move.Direction direction, Room inRoom) {
+    public Position(int x, int y, boolean canMove, boolean passableTile, Move.Direction direction, Room inRoom, WeaponCard weapon) {
         this.xLoc = x;
         this.yLoc = y;
         this.canMove = canMove;
         this.inRoom = inRoom;
         this.passableTile = passableTile;
         this.doorDirection = direction;
+        this.weapon = weapon;
 
         if (this.doorDirection != null) {
             this.isDoor = true;
@@ -129,6 +138,7 @@ public class Position {
     public Position clone() {
         Position clonePosition = new Position(this.xLoc, this.yLoc, this.canMove);
         clonePosition.character = this.character;
+        clonePosition.weapon = this.weapon;
         clonePosition.inRoom = this.inRoom;
         clonePosition.displayName = this.displayName;
         clonePosition.doorDirection = this.doorDirection;
@@ -221,7 +231,6 @@ public class Position {
                     case "O":
                         g.setColor(new Color(104, 140, 200));
                         break;
-
                     default:
                         g.setColor(Color.WHITE);
                         break;
