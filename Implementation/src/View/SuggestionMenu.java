@@ -54,7 +54,8 @@ public class SuggestionMenu {
         Object[] options = {"OK", "Pass"};
         int n = JOptionPane.showOptionDialog(null, fields, refutePlayer.getPlayerVanityName() + " - Make a Refutation", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
 
-        return n == 0 ? Objects.requireNonNull(hand.getSelectedItem()).toString() : "-1";
+        if (n == 0) return Objects.requireNonNull(hand.getSelectedItem()).toString();
+        return "-1";
     }
 
 
@@ -77,6 +78,10 @@ public class SuggestionMenu {
 
     public void refuted(String characterName) {
         JOptionPane.showMessageDialog(null, characterName + "'s suggestion was refuted!", "Suggestion Refuted", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public void refutationFailed(String characterName) {
+        JOptionPane.showMessageDialog(null, characterName + "'s refutation failed!", "Failed Refutation", JOptionPane.ERROR_MESSAGE);
     }
 }
 
