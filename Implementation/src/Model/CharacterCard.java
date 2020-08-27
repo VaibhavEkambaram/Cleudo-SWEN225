@@ -93,6 +93,8 @@ public class CharacterCard implements Card {
         return characterBoardColor;
     }
 
+    public String getCharacterColorName(){ return characterColorName; }
+
     /**
      * toString Method - Print of the character name
      *

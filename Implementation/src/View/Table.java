@@ -389,11 +389,11 @@ public class Table extends Observable {
                 //System.out.println(c.toString());
                 BufferedImage card = null;
                 try {
-                    card = ImageIO.read(new File("assets/cards/card_" + c.toString() + ".png"));
+                    card = ImageIO.read(new File("resources/card_" + c.toString() + ".png"));
                 } catch (IOException e) {
 
                 }
-                // JLabel picLabel = new JLabel(new ImageIcon(card));
+                //JLabel picLabel = new JLabel(new ImageIcon(card));
                 //handPanel.add(picLabel);
             }
             //scrollHandPane = new JScrollPane(handPanel);

@@ -99,10 +99,10 @@ public class Player {
      * @return player board character
      */
     public String toString() {
-        return playerVanityName + " - " + this.character + " [" + this.character.getCharacterBoardChar() + "] on board";
+        return playerVanityName + " - " + this.character + " [" + this.character.getCharacterColorName() + "] on board";
     }
 
-    // Model.Player State Getters
+    // Model.Player State Gettersa
 
     /**
      * Check player ability to make accusation
