@@ -1,5 +1,3 @@
-import Model.Game;
-
 public class Main {
     /**
      * MAIN METHOD
