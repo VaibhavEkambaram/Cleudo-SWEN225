@@ -2,6 +2,7 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import View.AccusationMenu;
+import View.RollDiceMenu;
 import View.SuggestionMenu;
 import View.Table;
 
@@ -331,8 +332,7 @@ public class Game {
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
 
-        System.out.println("first dice throw: " + firstResult);
-        System.out.println("second dice throw: " + secondResult);
+        table.RollDiceMenu(firstResult,secondResult);
         return firstResult + secondResult;
     }
 

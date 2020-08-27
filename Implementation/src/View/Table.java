@@ -42,6 +42,12 @@ public class Table extends Observable {
     private JPanel actionPanel;
     private JPanel movementPanel;
 
+    private ImageIcon image1;
+    private JLabel label1;
+    private ImageIcon image2;
+    private JLabel label2;
+
+
     // Scroll Pane
     private JScrollPane scrollHandPane;
 
@@ -122,6 +128,10 @@ public class Table extends Observable {
 
         mainPanel.add(handPanel, constraints);
 
+
+
+
+
         // Movement Panel
         movementPanel = new JPanel(new GridBagLayout());
         movementPanel.setBackground(Color.WHITE);
@@ -187,6 +197,9 @@ public class Table extends Observable {
                 if (suggest == -1) {
                     game.movementTransition();
                     setRollDiceButtonVisibility(true);
+
+                    label1.setVisible(false);
+                    label2.setVisible(false);
                 }
             }
         });
@@ -203,6 +216,8 @@ public class Table extends Observable {
                 } else {
                     game.movementTransition();
                     setRollDiceButtonVisibility(true);
+                    label1.setVisible(false);
+                    label2.setVisible(false);
                 }
             }
         });
@@ -215,6 +230,8 @@ public class Table extends Observable {
             public void actionPerformed(ActionEvent e) {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
+                label1.setVisible(false);
+                label2.setVisible(false);
             }
         });
 
@@ -308,6 +325,24 @@ public class Table extends Observable {
     public Frame getGameFrame(){
         return gameFrame;
     }
+
+    public void RollDiceMenu(int firstNumber, int secondNumber) {
+
+
+        image1 = new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png"));
+        label1 = new JLabel(image1);
+        handPanel.add(label1);
+
+        image2 = new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png"));
+        label2 = new JLabel(image2);
+        label1.setVisible(true);
+        label2.setVisible(true);
+        handPanel.add(label2);
+    }
+
+
+
+
 
 
     public void setRollDiceButtonVisibility(boolean value) {
