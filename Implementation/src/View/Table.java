@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
+import static Model.Game.subStates.MOVEMENT;
+
 
 public class Table extends Observable {
     private final int BORDER_SIZE = 20;
@@ -47,6 +49,9 @@ public class Table extends Observable {
     Player currentPlayer;
     Player previousPlayer;
     private Font infoFont;
+
+    Point p1;
+    Point p2;
 
     Game game;
     // Display
@@ -142,7 +147,14 @@ public class Table extends Observable {
         mainPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
+
+                if(!game.getSubState().equals(MOVEMENT)){
+                    return;
+                }
+
+                p2 = new Point(e.getX(),e.getY());
+                // todo: add method to board class to find closest???
+
             }
 
             @Override
@@ -292,6 +304,12 @@ public class Table extends Observable {
         //updateDisplay();
     }
 
+
+    public Frame getGameFrame(){
+        return gameFrame;
+    }
+
+
     public void setRollDiceButtonVisibility(boolean value) {
         if (value) {
             actionPanel.add(rollDiceButton);
@@ -363,7 +381,7 @@ public class Table extends Observable {
         gameMenu.add(setupGameMenuItem);
 
         setupGameMenuItem.addActionListener(e -> {
-            new Game();
+            game.resetGame();
 
         });
 
@@ -427,7 +445,7 @@ public class Table extends Observable {
 
         if (game.getGameState().equals(Game.States.RUNNING)) {
             infoPanel.setVisible(true);
-            if (game.getSubState().equals(Game.subStates.MOVEMENT)) {
+            if (game.getSubState().equals(MOVEMENT)) {
                 if (game.getMovesRemaining() > 0) {
                     showMovement(true);
                 }
@@ -438,7 +456,7 @@ public class Table extends Observable {
                 setFinishedButtonVisibility(false);
 
             }
-            if (game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
+            if (game.getSubState().equals(MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
                 createHand(game);
             }
         } else {
