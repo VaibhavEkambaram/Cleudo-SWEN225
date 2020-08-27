@@ -139,7 +139,19 @@ public class Table extends Observable {
 
         gameFrame.add(mainPanel);
 
-        rollDiceButton = new JButton("Roll Dice");
+        mainPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+            }
+        });
+
+                rollDiceButton = new JButton("Roll Dice");
         actionPanel.add(rollDiceButton);
         rollDiceButton.addActionListener(new ActionListener() {
             @Override
@@ -351,8 +363,7 @@ public class Table extends Observable {
         gameMenu.add(setupGameMenuItem);
 
         setupGameMenuItem.addActionListener(e -> {
-            //setPlayerCount();
-            //new Game();
+            new Game();
 
         });
 
