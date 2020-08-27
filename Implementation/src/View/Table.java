@@ -9,8 +9,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 
 public class Table extends Observable {
@@ -42,6 +42,7 @@ public class Table extends Observable {
     // Scroll Pane
     private JScrollPane scrollHandPane;
 
+    private int movesRemaining;
     Player currentPlayer;
     Player previousPlayer;
     private Font infoFont;
@@ -172,7 +173,7 @@ public class Table extends Observable {
             public void actionPerformed(ActionEvent e) {
                 int accuse = game.makeAccusation(game.getCurrentPlayer());
                 if (accuse == 1) {
-                    game.transitionGameState();
+                    game.finishTransition();
                 } else {
                     game.movementTransition();
                     setRollDiceButton(true);
@@ -401,7 +402,7 @@ public class Table extends Observable {
                 showMovement(false);
                 setSuggestionAccusationVisibility(true);
             }
-            if(game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)){
+            if (game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
                 createHand(game);
             }
         } else {
@@ -409,12 +410,20 @@ public class Table extends Observable {
             setSuggestionAccusationVisibility(false);
             infoPanel.setVisible(false);
         }
-        //if (game.getCurrentPlayer() != currentPlayer) {
-        info.setText(game.getGameState().toString() + "\n");
-        info.append(game.getSubState().toString() + "\n");
-        info.append(game.getCurrentPlayer().toString());
-        currentPlayer = game.getCurrentPlayer();
-        //}
+        if (game.getCurrentPlayer() != currentPlayer) {
+            info.setText(game.getCurrentPlayer().toString() + "\n");
+            currentPlayer = game.getCurrentPlayer();
+        }
+
+        if (game.getCurrentPlayer() == currentPlayer) {
+            if (game.getMovesRemaining() != this.movesRemaining && game.getMovesRemaining() > 0) {
+                this.movesRemaining = game.getMovesRemaining();
+                info.setText(game.getCurrentPlayer().toString() + "\n");
+                info.append(this.movesRemaining + " moves remaining");
+            } else if (game.getMovesRemaining() < 1) {
+                info.setText(game.getCurrentPlayer().toString() + "\n");
+            }
+        }
 
         paint(displayPanel.getGraphics(), rectSize);
     }
