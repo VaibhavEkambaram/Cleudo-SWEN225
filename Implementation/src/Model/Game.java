@@ -332,6 +332,7 @@ public class Game {
         if (newBoard != null) {
             movesRemaining = movesRemaining - move.getSpaces();
             if (movesRemaining < 1) {
+                table.setSuggestionAccusationVisibility(true);
                 actionTransition();
             }
             board = newBoard;
@@ -363,6 +364,7 @@ public class Game {
 
         if (murderScenario.equals(accusationScenario)) {
             a.successfulAccusation(p, murderScenario);
+            table.setSuggestionAccusationVisibility(false);
             return 1;
         } else {
             a.incorrectAccusation(p);
@@ -377,7 +379,7 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav Ekambaram, Cameron Li
      */
     public int makeSuggestion(Player p) {
-        // TODO: Fix this
+
         SuggestionMenu s = new SuggestionMenu();
 
 
@@ -407,7 +409,6 @@ public class Game {
         suggestionCharacter = characterCardsMap.get(suggestionStringSplit[0]);
 
 
-        System.out.println("Moving " + suggestionCharacter.getCharacterName() + " to " + room.toString() + "...");
 
         // teleport the suggested player to the suggested room
         for (Player findP : players) {
@@ -426,10 +427,8 @@ public class Game {
             }
         }
 
-        System.out.println("\n" + this.board + "\n");
 
         Scenario suggestion = new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter);
-        System.out.println(p.getCharacter().getCharacterName() + "'s suggestion: [" + suggestion.toString() + "]");
 
         // place all other players in a stack so that they can take turns at refuting
         Stack<Player> refuters = new Stack<>();
@@ -444,68 +443,48 @@ public class Game {
         while (!refuters.isEmpty()) {
             Player currentTurn = refuters.pop();
 
-            s.makeRefutation(currentTurn, currentPlayer, suggestion);
+            String refute = s.makeRefutation(currentTurn, currentPlayer, suggestion);
+            if(refute.equals("-1")){ continue;}
 
-
-            System.out.println(currentTurn.getCharacter().getCharacterName() + "'s turn to refute");
-            System.out.println(currentTurn.getCharacter().getCharacterName() + "'s hand: ");
 
             List<Card> refuteCards = currentTurn.getHand();
 
-            for (Card c : refuteCards) System.out.println("\t" + c.toString());
-
-            System.out.println("Refute this suggestion with a card from your hand or type pass to skip: ");
-
             Card refutation = null;
-            boolean failedRefutation = false;
 
-            // read the input from the player and match it to a card in their hand. If no matching card exists, the player is prompted to try again
-            while (refutation == null && !failedRefutation) {
-                String refutationInput = new Scanner(System.in).nextLine();
-
-                if (refutationInput.equalsIgnoreCase("Pass")) {
-                    failedRefutation = true;
-                } else {
-                    for (Card c : refuteCards) {
-                        if (c.toString().equals(refutationInput)) refutation = c;
-                    }
-                }
-
-                if (refutation == null && !failedRefutation) {
-                    System.out.println("Card not found in players hand! Please try again: ");
+            for(Card c : refuteCards){
+                if(c.toString().equals(refute)){
+                    refutation = c;
                 }
             }
 
-            // if the previous player failed to refute, continue the loop
-            if (failedRefutation) continue;
-
             // if the player successfully refutes the suggestion, end the loop
-            if (refutation.toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom != null ? suggestionRoom.toString() : null) || refutation.toString().equals(suggestionWeapon.toString())) {
+            if (refutation.toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom.toString()) || refutation.toString().equals(suggestionWeapon.toString())) {
                 s.refuted(p.getCharacter().getCharacterName());
                 refuted = true;
+                movementTransition();
+                table.setRollDiceButtonVisibility(true);
                 break;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
-                System.out.println("Invalid refutation!");
+                s.refutationFailed(currentTurn.getPlayerVanityName());
+
             }
         }
 
         //if the stack is empty and no other player could refute, offer the option of making an Accusation to player who suggested
         if (!refuted) {
-            System.out.println(p.getCharacter().getCharacterName() + "'s turn");
-
             int i = s.nobodyCouldRefute();
-            System.out.println(i);
             if (i == 0) {
                 int accuse = makeAccusation(p);
                 if (accuse == 1) {
-                    finishTransition();
+                    table.setSuggestionAccusationVisibility(false);
+                    gameState = States.FINISHED;
                 } else {
                     movementTransition();
-
-                    table.setRollDiceButton(true);
+                    table.setRollDiceButtonVisibility(true);
                 }
             } else {
-                System.out.println("next players turn");
+                movementTransition();
+                table.setRollDiceButtonVisibility(true);
             }
         }
         return 0;
@@ -598,7 +577,7 @@ public class Game {
         currentPlayer = players.get(currentPlayerIndex);
     }
 
-    private void actionTransition() {
+    public void actionTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
         }

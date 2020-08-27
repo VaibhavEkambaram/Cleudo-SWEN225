@@ -30,6 +30,7 @@ public class Table extends Observable {
     JButton leftButton;
     JButton rightButton;
     JButton rollDiceButton;
+    JButton finishedButton;
 
     // Panels
     private JPanel mainPanel;
@@ -145,7 +146,9 @@ public class Table extends Observable {
             public void actionPerformed(ActionEvent e) {
                 game.setMovesRemaining(-1);
                 game.setMovesRemaining(game.rollDice());
-                setRollDiceButton(false);
+                setRollDiceButtonVisibility(false);
+                setFinishedButtonVisibility(true);
+                movementPanel.setVisible(true);
             }
         });
 
@@ -159,7 +162,7 @@ public class Table extends Observable {
                 int suggest = game.makeSuggestion(game.getCurrentPlayer());
                 if(suggest == -1){
                     game.movementTransition();
-                    setRollDiceButton(true);
+                    setRollDiceButtonVisibility(true);
                 }
             }
         });
@@ -176,7 +179,7 @@ public class Table extends Observable {
                     game.finishTransition();
                 } else {
                     game.movementTransition();
-                    setRollDiceButton(true);
+                    setRollDiceButtonVisibility(true);
                 }
             }
         });
@@ -189,7 +192,18 @@ public class Table extends Observable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 game.movementTransition();
-                setRollDiceButton(true);
+                setRollDiceButtonVisibility(true);
+            }
+        });
+
+        finishedButton = new JButton("Finished");
+        finishedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.actionTransition();
+                setFinishedButtonVisibility(false);
+                movementPanel.setVisible(false);
+                setSuggestionAccusationVisibility(true);
             }
         });
 
@@ -268,17 +282,26 @@ public class Table extends Observable {
         //updateDisplay();
     }
 
-    public void setRollDiceButton(boolean value){
+    public void setRollDiceButtonVisibility(boolean value){
         if(value){
             actionPanel.add(rollDiceButton);
+        } else {
+            actionPanel.remove(rollDiceButton);
+
+        }
+        rollDiceButton.setVisible(value);
+    }
+
+    public void setFinishedButtonVisibility(boolean value){
+        if(value){
+            actionPanel.add(finishedButton);
             actionPanel.revalidate();
             actionPanel.repaint();
         } else {
-            actionPanel.remove(rollDiceButton);
+            actionPanel.remove(finishedButton);
             actionPanel.revalidate();
             actionPanel.repaint();
         }
-        rollDiceButton.setVisible(value);
     }
 
     public void setSuggestionAccusationVisibility(boolean value) {
@@ -290,8 +313,7 @@ public class Table extends Observable {
             suggestionButton.setVisible(true);
             accusationButton.setVisible(true);
             passButton.setVisible(true);
-            actionPanel.revalidate();
-            actionPanel.repaint();
+
 
         } else {
             suggestionButton.setVisible(false);
@@ -300,8 +322,6 @@ public class Table extends Observable {
             actionPanel.remove(suggestionButton);
             actionPanel.remove(accusationButton);
             actionPanel.remove(passButton);
-            actionPanel.revalidate();
-            actionPanel.repaint();
         }
     }
 
@@ -397,10 +417,12 @@ public class Table extends Observable {
                 if (game.getMovesRemaining() > 0) {
                     showMovement(true);
                 }
+
                 setSuggestionAccusationVisibility(false);
             } else {
                 showMovement(false);
-                setSuggestionAccusationVisibility(true);
+                setFinishedButtonVisibility(false);
+
             }
             if (game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
                 createHand(game);

@@ -84,5 +84,3 @@ public class SuggestionMenu {
         JOptionPane.showMessageDialog(null, characterName + "'s refutation failed!", "Failed Refutation", JOptionPane.ERROR_MESSAGE);
     }
 }
-
-
