@@ -525,6 +525,7 @@ public class Game {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     private void idleToInit() {
         if (gameState.equals(States.IDLE)) {
             throw new Error("Expected IDLE game state but " + gameState);
@@ -534,6 +535,12 @@ public class Game {
         if (gameState.equals(States.IDLE) && subState == null) {
             return;
         }
+=======
+    private void checkGameState() {
+        if (gameState.equals(States.IDLE) && subState == null) {
+            return;
+        }
+>>>>>>> parent of 497a1aa... State Transitions Finished
 =======
     private void checkGameState() {
         if (gameState.equals(States.IDLE) && subState == null) {
@@ -599,6 +606,9 @@ public class Game {
             throw new Error("Expected IDLE game state but " + gameState);
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 497a1aa... State Transitions Finished
+=======
 >>>>>>> parent of 497a1aa... State Transitions Finished
 =======
 >>>>>>> parent of 497a1aa... State Transitions Finished
@@ -636,6 +646,7 @@ public class Game {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     public void finishTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("stuff");
@@ -643,6 +654,8 @@ public class Game {
         gameState = States.FINISHED;
     }
 
+=======
+>>>>>>> parent of 497a1aa... State Transitions Finished
 =======
 >>>>>>> parent of 497a1aa... State Transitions Finished
 =======
