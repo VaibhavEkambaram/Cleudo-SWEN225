@@ -129,7 +129,7 @@ public class Game {
      * @author Vaibhav Ekambaram
      */
     private void initPlayers() {
-        playerTransition(); // Transition from DECK to PLAYERS
+        transitionSubState(); // Transition from DECK to PLAYERS
 
         if (!subState.equals(subStates.PLAYERS)) {
             throw new Error("Expecting PLAYERS Sub State but " + subState);
@@ -153,7 +153,7 @@ public class Game {
      * @author Cameron Li
      */
     private void initBoard() {
-        boardTransition(); // Transition from PLAYERS to BOARD
+        transitionSubState(); // Transition from DECK to BOARD
 
         if (!subState.equals(subStates.BOARD)) {
             throw new Error("Expecting BOARD Sub State but " + subState);
@@ -502,7 +502,7 @@ public class Game {
                 } else {
                     movementTransition();
 
-                    table.setRollDiceButton(true);
+                    table.setRollDiceButtonVisibility(true);
                 }
             } else {
                 System.out.println("next players turn");
@@ -524,25 +524,10 @@ public class Game {
     }
 
     private void idleToInit() {
-        if (!gameState.equals(States.IDLE)) {
+        if (gameState.equals(States.IDLE)) {
             throw new Error("Expected IDLE game state but " + gameState);
         }
         gameState = States.INIT;
-        subState = subStates.DECK;
-    }
-
-    private void playerTransition() {
-        if (!gameState.equals(States.INIT)) {
-            throw new Error("Expected INIT game state but " + gameState);
-        }
-        subState = subStates.PLAYERS;
-    }
-
-    private void boardTransition() {
-        if (!gameState.equals(States.INIT)) {
-            throw new Error("Expected INIT game state but " + gameState);
-        }
-        subState = subStates.BOARD;
     }
 
     private void initToRunning() {
@@ -564,7 +549,7 @@ public class Game {
         currentPlayer = players.get(currentPlayerIndex);
     }
 
-    private void actionTransition() {
+    public void actionTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
         }
@@ -576,9 +561,9 @@ public class Game {
 
     public void finishTransition() {
         if (!gameState.equals(States.RUNNING)) {
-            throw new Error("Expected RUNNING game state but " + gameState);
+            throw new Error("stuff");
         }
-        this.gameState = States.FINISHED;
+        gameState = States.FINISHED;
     }
 
     /**
