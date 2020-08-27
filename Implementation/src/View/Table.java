@@ -171,7 +171,7 @@ public class Table extends Observable {
             public void actionPerformed(ActionEvent e) {
                 int accuse = game.makeAccusation(game.getCurrentPlayer());
                 if (accuse == 1) {
-                    game.transitionGameState();
+                    game.finishTransition();
                 } else {
                     game.movementTransition();
                     rollDiceButton.setVisible(true);

@@ -71,7 +71,7 @@ public class Game {
      * @author Cameron Li
      */
     private void initDeck() {
-        transitionGameState(); // Transition from IDLE to INIT
+        idleToInit();
         if (!subState.equals(subStates.DECK)) {
             throw new Error("Expecting DECK Sub State but " + subState);
         }
@@ -129,7 +129,7 @@ public class Game {
      * @author Vaibhav Ekambaram
      */
     private void initPlayers() {
-        transitionSubState(); // Transition from DECK to PLAYERS
+        playerTransition(); // Transition from DECK to PLAYERS
 
         if (!subState.equals(subStates.PLAYERS)) {
             throw new Error("Expecting PLAYERS Sub State but " + subState);
@@ -153,7 +153,7 @@ public class Game {
      * @author Cameron Li
      */
     private void initBoard() {
-        transitionSubState(); // Transition from DECK to BOARD
+        boardTransition(); // Transition from PLAYERS to BOARD
 
         if (!subState.equals(subStates.BOARD)) {
             throw new Error("Expecting BOARD Sub State but " + subState);
@@ -498,7 +498,7 @@ public class Game {
             if (i == 0) {
                 int accuse = makeAccusation(p);
                 if (accuse == 1) {
-                    transitionGameState();
+                    finishTransition();
                 } else {
                     movementTransition();
 
@@ -523,69 +523,26 @@ public class Game {
         currentPlayer = players.get(currentPlayerIndex);
     }
 
-    private void checkGameState() {
-        if (gameState.equals(States.IDLE) && subState == null) {
-            return;
-        }
-
-        if (gameState.equals(States.RUNNING)) { // Check Sub state matches RUNNING game state
-            if (!subState.equals(subStates.MOVEMENT) && !subState.equals(subStates.ACTION)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        } else if (gameState.equals(States.INIT)) { // Check Sub state matches INIT game state
-            if (!subState.equals(subStates.PLAYERS) && !subState.equals(subStates.DECK) && !subState.equals(subStates.BOARD)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        }
-
-        // Check game state matches relevant sub states
-        if (subState.equals(subStates.MOVEMENT) || subState.equals(subStates.ACTION)) {
-            if (!gameState.equals(States.RUNNING)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        } else if (subState.equals(subStates.PLAYERS) || subState.equals(subStates.DECK) || subState.equals(subStates.BOARD)) {
-            if (!gameState.equals(States.INIT)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        }
-
-    }
-
-    public void transitionGameState() {
-        checkGameState();
-        if (gameState.equals(States.IDLE)) {
-            gameState = States.INIT;
-            subState = subStates.DECK;
-        } else if (gameState.equals(States.INIT)) {
-            gameState = States.RUNNING;
-            subState = subStates.MOVEMENT;
-        } else if (gameState.equals(States.RUNNING)) {
-            gameState = States.FINISHED;
-        }
-    }
-
-    private void transitionSubState() {
-        checkGameState();
-        if (gameState.equals(States.RUNNING)) {
-            if (subState.equals(subStates.MOVEMENT)) {
-                subState = subStates.ACTION;
-            } else {
-                subState = subStates.MOVEMENT;
-            }
-        } else if (gameState.equals(States.INIT)) {
-            if (subState.equals(subStates.DECK)) {
-                subState = subStates.PLAYERS;
-            } else {
-                subState = subStates.BOARD;
-            }
-        }
-    }
-
     private void idleToInit() {
-        if (gameState.equals(States.IDLE)) {
+        if (!gameState.equals(States.IDLE)) {
             throw new Error("Expected IDLE game state but " + gameState);
         }
         gameState = States.INIT;
+        subState = subStates.DECK;
+    }
+
+    private void playerTransition() {
+        if (!gameState.equals(States.INIT)) {
+            throw new Error("Expected INIT game state but " + gameState);
+        }
+        subState = subStates.PLAYERS;
+    }
+
+    private void boardTransition() {
+        if (!gameState.equals(States.INIT)) {
+            throw new Error("Expected INIT game state but " + gameState);
+        }
+        subState = subStates.BOARD;
     }
 
     private void initToRunning() {
@@ -615,6 +572,13 @@ public class Game {
             throw new Error("Expected Movement sub state but : " + subState);
         }
         subState = subStates.ACTION;
+    }
+
+    public void finishTransition() {
+        if (!gameState.equals(States.RUNNING)) {
+            throw new Error("Expected RUNNING game state but " + gameState);
+        }
+        this.gameState = States.FINISHED;
     }
 
     /**
