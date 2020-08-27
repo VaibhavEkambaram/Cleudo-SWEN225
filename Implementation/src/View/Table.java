@@ -160,13 +160,12 @@ public class Table extends Observable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int suggest = game.makeSuggestion(game.getCurrentPlayer());
-                if(suggest == -1){
+                if (suggest == -1) {
                     game.movementTransition();
                     setRollDiceButtonVisibility(true);
                 }
             }
         });
-
 
 
         accusationButton = new JButton("Make Accusation");
@@ -183,7 +182,6 @@ public class Table extends Observable {
                 }
             }
         });
-
 
 
         passButton = new JButton("Pass");
@@ -282,8 +280,8 @@ public class Table extends Observable {
         //updateDisplay();
     }
 
-    public void setRollDiceButtonVisibility(boolean value){
-        if(value){
+    public void setRollDiceButtonVisibility(boolean value) {
+        if (value) {
             actionPanel.add(rollDiceButton);
         } else {
             actionPanel.remove(rollDiceButton);
@@ -292,8 +290,8 @@ public class Table extends Observable {
         rollDiceButton.setVisible(value);
     }
 
-    public void setFinishedButtonVisibility(boolean value){
-        if(value){
+    public void setFinishedButtonVisibility(boolean value) {
+        if (value) {
             actionPanel.add(finishedButton);
             actionPanel.revalidate();
             actionPanel.repaint();
@@ -385,7 +383,7 @@ public class Table extends Observable {
             return;
         }
 
-        if(previousPlayer != currentPlayer){
+        if (previousPlayer != currentPlayer) {
             handPanel.removeAll();
             for (Card c : currentPlayer.getHand()) {
                 //System.out.println(c.toString());
@@ -395,7 +393,7 @@ public class Table extends Observable {
                 } catch (IOException e) {
 
                 }
-               // JLabel picLabel = new JLabel(new ImageIcon(card));
+                // JLabel picLabel = new JLabel(new ImageIcon(card));
                 //handPanel.add(picLabel);
             }
             //scrollHandPane = new JScrollPane(handPanel);
@@ -403,6 +401,11 @@ public class Table extends Observable {
         }
     }
 
+    /**
+     * Update all visual elements on the GUI
+     *
+     * @author Cameron Li
+     */
     public void updateDisplay() {
         int rectSize;
         if (displayPanel.getWidth() > displayPanel.getHeight()) {
@@ -451,58 +454,26 @@ public class Table extends Observable {
     }
 
     public void paint(Graphics g, int rectSize) {
-        Graphics2D g2 = (Graphics2D) g;
-        int border = BORDER_SIZE / 2;
-        for (int i = 0; i < 24; i++) {
-            for (int j = 0; j < 25; j++) {
+        if(g!=null) {
+            Graphics2D g2 = (Graphics2D) g;
+            int border = BORDER_SIZE / 2;
+            for (int i = 0; i < 24; i++) {
+                for (int j = 0; j < 25; j++) {
 
-                game.getBoard().getPositions()[j][i].draw(g);
-                g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                    game.getBoard().getPositions()[j][i].draw(g);
+                    g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
 
-                if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
-                    switch (game.getBoard().getPositions()[j][i].getCharacter().toString()) {
-                        case "Miss Scarlett":
-                            g.setColor(Color.RED);
-                            break;
-                        case "Col. Mustard":
-                            g.setColor(Color.YELLOW);
-                            break;
-                        case "Mrs. White":
-                            g.setColor(Color.WHITE);
-                            break;
-                        case "Mr. Green":
-                            g.setColor(Color.GREEN);
-                            break;
-                        case "Mrs. Peacock":
-                            g.setColor(Color.BLUE);
-                            break;
-                        case "Prof. Plum":
-                            g.setColor(new Color(128, 0, 128));
-                            break;
+                    if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
+                        g.setColor(game.getBoard().getPositions()[j][i].getCharacter().getCharacterBoardColor());
                     }
-
                     g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+
+                    g.setColor(Color.BLACK);
+                    g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
                 }
-
-
-                g.setColor(Color.BLACK);
-
-                g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
-                /*
-                if(game.getBoard().getPositions()[j][i].getDisplayName().equals("o") || game.getBoard().getPositions()[j][i].getDisplayName().equals("o")){
-                    g2.setStroke(new BasicStroke(5));
-                    if((!game.getBoard().getPositions()[j][i+1].getDisplayName().equals("O") || !game.getBoard().getPositions()[j][i+1].getDisplayName().equals("O"))) {
-                        g2.drawLine(border + rectSize * i + rectSize, border + rectSize * j, border + rectSize * i + rectSize, border + rectSize * j + rectSize);
-                    }
-                }
-
-                 */
             }
         }
     }
-
-
-
 
 
     public int setPlayerCount() {
@@ -554,14 +525,6 @@ public class Table extends Observable {
         }
         return players;
     }
-
-
-
-
-
-
-
-
 
 
     public void makeMovement(Move.Direction direction) {
