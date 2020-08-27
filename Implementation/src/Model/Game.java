@@ -2,7 +2,6 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import View.AccusationMenu;
-import View.PlayerSetupMenu;
 import View.SuggestionMenu;
 import View.Table;
 
@@ -484,11 +483,6 @@ public class Game {
             if (refutation.toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom != null ? suggestionRoom.toString() : null) || refutation.toString().equals(suggestionWeapon.toString())) {
                 s.refuted(p.getCharacter().getCharacterName());
                 refuted = true;
-<<<<<<< HEAD
-=======
-                movementTransition();
-                table.setRollDiceButton(true);
->>>>>>> parent of ae45f4a... updated button behaviour
                 break;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
                 System.out.println("Invalid refutation!");
@@ -507,19 +501,11 @@ public class Game {
                     transitionGameState();
                 } else {
                     movementTransition();
-<<<<<<< HEAD
 
                     table.setRollDiceButton(true);
                 }
             } else {
                 System.out.println("next players turn");
-=======
-                    table.setRollDiceButton(true);
-                }
-            } else {
-                movementTransition();
-                table.setRollDiceButton(true);
->>>>>>> parent of ae45f4a... updated button behaviour
             }
         }
         return 0;
@@ -683,14 +669,11 @@ public class Game {
 
 
     /**
-<<<<<<< HEAD
      * System.out Core Methods
      */
 
 
     /**
-=======
->>>>>>> parent of ae45f4a... updated button behaviour
      * MAIN GAME LOOP
      * This method contains the main game logic. After the game as been setup in the game constructor, this method then
      * loops through, carrying out the game functions
@@ -775,7 +758,6 @@ public class Game {
     }
      */
 
-<<<<<<< HEAD
     /**
      * Asks current player to perform an action
      * Returns a move to apply to the board
@@ -830,6 +812,4 @@ public class Game {
     }
      */
 
-=======
->>>>>>> parent of ae45f4a... updated button behaviour
 }
