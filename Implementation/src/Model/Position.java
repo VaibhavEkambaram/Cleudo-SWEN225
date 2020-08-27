@@ -80,11 +80,8 @@ public class Position {
     }
 
 
-
-
-
     /**
-     * Model.Room Model.Position Constructor
+     * Room Position Constructor
      *
      * @param x            x
      * @param y            y
@@ -92,6 +89,7 @@ public class Position {
      * @param passableTile is tile passable
      * @param direction    direction
      * @param inRoom       is the position located in a room
+     * @param weapon       weapon piece
      */
     public Position(int x, int y, boolean canMove, boolean passableTile, Move.Direction direction, Room inRoom, WeaponCard weapon) {
         this.xLoc = x;
@@ -176,7 +174,7 @@ public class Position {
      * @return boolean
      */
     public boolean canMove() {
-        if (this.character == null) { // If no character occupies position
+        if (this.character == null && this.weapon == null) { // If no character occupies position
             return this.canMove;
         }
         return false;
@@ -304,5 +302,13 @@ public class Position {
             return doorDirection;
         }
         return null;
+    }
+
+    public void removeWeapon() {
+        this.weapon = null;
+    }
+
+    public void setWeapon(WeaponCard weapon) {
+        this.weapon = weapon;
     }
 }

@@ -64,7 +64,7 @@ public class SuggestionMenu {
     }
 
     public void teleportFailed() {
-        JOptionPane.showMessageDialog(null, "An error occured while attempting to teleport the suggested player", "Suggestion Failed", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "An error occured while attempting to teleport the suggested player and weapon", "Suggestion Failed", JOptionPane.ERROR_MESSAGE);
     }
 
     public int nobodyCouldRefute() {

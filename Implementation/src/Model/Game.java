@@ -473,8 +473,13 @@ public class Game {
             }
         }
 
-
-
+        // teleport the suggested board to the suggested room
+        Board newBoard = board.teleportWeapon(suggestionWeapon,room);
+        if(newBoard != null){
+            board = newBoard;
+        } else {
+            s.teleportFailed();
+        }
 
         Scenario suggestion = new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter);
 
