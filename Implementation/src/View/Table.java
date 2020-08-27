@@ -438,27 +438,7 @@ public class Table extends Observable {
                 g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
 
                 if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
-                    switch (game.getBoard().getPositions()[j][i].getCharacter().toString()) {
-                        case "Miss Scarlett":
-                            g.setColor(Color.RED);
-                            break;
-                        case "Col. Mustard":
-                            g.setColor(Color.YELLOW);
-                            break;
-                        case "Mrs. White":
-                            g.setColor(Color.WHITE);
-                            break;
-                        case "Mr. Green":
-                            g.setColor(Color.GREEN);
-                            break;
-                        case "Mrs. Peacock":
-                            g.setColor(Color.BLUE);
-                            break;
-                        case "Prof. Plum":
-                            g.setColor(new Color(128, 0, 128));
-                            break;
-                    }
-
+                    g.setColor(game.getBoard().getPositions()[j][i].getCharacter().getCharacterBoardColor());
                     g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
                 }
 
