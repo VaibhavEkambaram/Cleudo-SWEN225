@@ -30,7 +30,6 @@ public class Table extends Observable {
     JButton leftButton;
     JButton rightButton;
     JButton rollDiceButton;
-    JButton finishedButton;
 
     // Panels
     private JPanel mainPanel;
@@ -145,9 +144,7 @@ public class Table extends Observable {
             public void actionPerformed(ActionEvent e) {
                 game.setMovesRemaining(-1);
                 game.setMovesRemaining(game.rollDice());
-                setRollDiceButtonVisibility(false);
-                setFinishedButtonVisibility(true);
-                movementPanel.setVisible(true);
+                setRollDiceButton(false);
             }
         });
 
@@ -161,8 +158,7 @@ public class Table extends Observable {
                 int suggest = game.makeSuggestion(game.getCurrentPlayer());
                 if(suggest == -1){
                     game.movementTransition();
-                    setRollDiceButtonVisibility(true);
-                    movementPanel.setVisible(false);
+                    setRollDiceButton(true);
                 }
             }
         });
@@ -179,7 +175,7 @@ public class Table extends Observable {
                     game.transitionGameState();
                 } else {
                     game.movementTransition();
-                    setRollDiceButtonVisibility(true);
+                    setRollDiceButton(true);
                 }
             }
         });
@@ -192,20 +188,9 @@ public class Table extends Observable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 game.movementTransition();
-                setRollDiceButtonVisibility(true);
+                setRollDiceButton(true);
             }
         });
-
-        finishedButton = new JButton("Finished");
-        finishedButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                game.actionTransition();
-                setFinishedButtonVisibility(false);
-                movementPanel.setVisible(false);
-            }
-        });
-
 
 
         constraints.fill = GridBagConstraints.BOTH;
@@ -282,20 +267,7 @@ public class Table extends Observable {
         //updateDisplay();
     }
 
-
-    public void setFinishedButtonVisibility(boolean value){
-        if(value){
-            actionPanel.add(finishedButton);
-            actionPanel.revalidate();
-            actionPanel.repaint();
-        } else {
-            actionPanel.remove(finishedButton);
-            actionPanel.revalidate();
-            actionPanel.repaint();
-        }
-    }
-
-    public void setRollDiceButtonVisibility(boolean value){
+    public void setRollDiceButton(boolean value){
         if(value){
             actionPanel.add(rollDiceButton);
             actionPanel.revalidate();
@@ -427,7 +399,6 @@ public class Table extends Observable {
                 setSuggestionAccusationVisibility(false);
             } else {
                 showMovement(false);
-                setFinishedButtonVisibility(false);
                 setSuggestionAccusationVisibility(true);
             }
             if(game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)){
