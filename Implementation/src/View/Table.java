@@ -9,8 +9,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 
 public class Table extends Observable {
@@ -44,7 +44,7 @@ public class Table extends Observable {
 
     Player currentPlayer;
     Player previousPlayer;
-    int movesRemaining;
+    private Font infoFont;
 
     Game game;
     // Display
@@ -97,6 +97,7 @@ public class Table extends Observable {
         info.setText("Hello and welcome to Cluedo\nMade by:\nCameron Li, Vaibhav Ekambaram and Baxter Kirikiri");
         info.setEditable(false);
         infoPanel.add(info, BorderLayout.CENTER);
+        infoFont = info.getFont();
         infoPanel.setPreferredSize(new Dimension(500, 50));
 
         // Hand Panel
@@ -143,7 +144,7 @@ public class Table extends Observable {
             public void actionPerformed(ActionEvent e) {
                 game.setMovesRemaining(-1);
                 game.setMovesRemaining(game.rollDice());
-                rollDiceButton.setVisible(false);
+                setRollDiceButton(false);
             }
         });
 
@@ -157,7 +158,7 @@ public class Table extends Observable {
                 int suggest = game.makeSuggestion(game.getCurrentPlayer());
                 if(suggest == -1){
                     game.movementTransition();
-                    rollDiceButton.setVisible(true);
+                    setRollDiceButton(true);
                 }
             }
         });
@@ -174,7 +175,7 @@ public class Table extends Observable {
                     game.transitionGameState();
                 } else {
                     game.movementTransition();
-                    rollDiceButton.setVisible(true);
+                    setRollDiceButton(true);
                 }
             }
         });
@@ -187,7 +188,7 @@ public class Table extends Observable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 game.movementTransition();
-                rollDiceButton.setVisible(true);
+                setRollDiceButton(true);
             }
         });
 
@@ -267,18 +268,39 @@ public class Table extends Observable {
     }
 
     public void setRollDiceButton(boolean value){
+        if(value){
+            actionPanel.add(rollDiceButton);
+            actionPanel.revalidate();
+            actionPanel.repaint();
+        } else {
+            actionPanel.remove(rollDiceButton);
+            actionPanel.revalidate();
+            actionPanel.repaint();
+        }
         rollDiceButton.setVisible(value);
     }
 
     public void setSuggestionAccusationVisibility(boolean value) {
         if (value) {
+
+            actionPanel.add(suggestionButton);
+            actionPanel.add(accusationButton);
+            actionPanel.add(passButton);
             suggestionButton.setVisible(true);
             accusationButton.setVisible(true);
             passButton.setVisible(true);
+            actionPanel.revalidate();
+            actionPanel.repaint();
+
         } else {
             suggestionButton.setVisible(false);
             accusationButton.setVisible(false);
             passButton.setVisible(false);
+            actionPanel.remove(suggestionButton);
+            actionPanel.remove(accusationButton);
+            actionPanel.remove(passButton);
+            actionPanel.revalidate();
+            actionPanel.repaint();
         }
     }
 
@@ -352,19 +374,14 @@ public class Table extends Observable {
                 } catch (IOException e) {
 
                 }
-                JLabel picLabel = new JLabel(new ImageIcon(card));
-                handPanel.add(picLabel);
+               // JLabel picLabel = new JLabel(new ImageIcon(card));
+                //handPanel.add(picLabel);
             }
             //scrollHandPane = new JScrollPane(handPanel);
             previousPlayer = currentPlayer;
         }
     }
 
-    /**
-     * Update all visual elements on the GUI
-     *
-     * @author Cameron Li
-     */
     public void updateDisplay() {
         int rectSize;
         if (displayPanel.getWidth() > displayPanel.getHeight()) {
@@ -384,7 +401,7 @@ public class Table extends Observable {
                 showMovement(false);
                 setSuggestionAccusationVisibility(true);
             }
-            if (game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
+            if(game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)){
                 createHand(game);
             }
         } else {
@@ -392,20 +409,12 @@ public class Table extends Observable {
             setSuggestionAccusationVisibility(false);
             infoPanel.setVisible(false);
         }
-        if (game.getCurrentPlayer() != currentPlayer) {
-            info.setText(game.getCurrentPlayer().toString() + "\n");
-            currentPlayer = game.getCurrentPlayer();
-        }
-
-        if (game.getCurrentPlayer() == currentPlayer) {
-            if (game.getMovesRemaining() != this.movesRemaining && game.getMovesRemaining() > 0) {
-                this.movesRemaining = game.getMovesRemaining();
-                info.setText(game.getCurrentPlayer().toString() + "\n");
-                info.append(this.movesRemaining + " moves remaining");
-            } else if (game.getMovesRemaining() < 1) {
-                info.setText(game.getCurrentPlayer().toString() + "\n");
-            }
-        }
+        //if (game.getCurrentPlayer() != currentPlayer) {
+        info.setText(game.getGameState().toString() + "\n");
+        info.append(game.getSubState().toString() + "\n");
+        info.append(game.getCurrentPlayer().toString());
+        currentPlayer = game.getCurrentPlayer();
+        //}
 
         paint(displayPanel.getGraphics(), rectSize);
     }
@@ -420,15 +429,50 @@ public class Table extends Observable {
                 g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
 
                 if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
-                    g.setColor(game.getBoard().getPositions()[j][i].getCharacter().getCharacterBoardColor());
+                    switch (game.getBoard().getPositions()[j][i].getCharacter().toString()) {
+                        case "Miss Scarlett":
+                            g.setColor(Color.RED);
+                            break;
+                        case "Col. Mustard":
+                            g.setColor(Color.YELLOW);
+                            break;
+                        case "Mrs. White":
+                            g.setColor(Color.WHITE);
+                            break;
+                        case "Mr. Green":
+                            g.setColor(Color.GREEN);
+                            break;
+                        case "Mrs. Peacock":
+                            g.setColor(Color.BLUE);
+                            break;
+                        case "Prof. Plum":
+                            g.setColor(new Color(128, 0, 128));
+                            break;
                     }
-                g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+
+                    g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                }
+
 
                 g.setColor(Color.BLACK);
+
                 g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                /*
+                if(game.getBoard().getPositions()[j][i].getDisplayName().equals("o") || game.getBoard().getPositions()[j][i].getDisplayName().equals("o")){
+                    g2.setStroke(new BasicStroke(5));
+                    if((!game.getBoard().getPositions()[j][i+1].getDisplayName().equals("O") || !game.getBoard().getPositions()[j][i+1].getDisplayName().equals("O"))) {
+                        g2.drawLine(border + rectSize * i + rectSize, border + rectSize * j, border + rectSize * i + rectSize, border + rectSize * j + rectSize);
+                    }
+                }
+
+                 */
             }
         }
     }
+
+
+
+
 
     public int setPlayerCount() {
         JPanel fields = new JPanel(new GridLayout(2, 1));
@@ -479,6 +523,15 @@ public class Table extends Observable {
         }
         return players;
     }
+
+
+
+
+
+
+
+
+
 
     public void makeMovement(Move.Direction direction) {
         currentPlayer = game.getCurrentPlayer();
