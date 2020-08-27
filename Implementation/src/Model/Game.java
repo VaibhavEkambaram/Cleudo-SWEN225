@@ -2,7 +2,6 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import View.AccusationMenu;
-import View.PlayerSetupMenu;
 import View.SuggestionMenu;
 import View.Table;
 
@@ -507,7 +506,7 @@ public class Game {
                 s.refuted(p.getCharacter().getCharacterName());
                 refuted = true;
                 movementTransition();
-                table.setRollDiceButton(true);
+                table.setRollDiceButtonVisibility(true);
                 break;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
                 s.refutationFailed(currentTurn.getPlayerVanityName());
@@ -524,11 +523,11 @@ public class Game {
                     gameState = States.FINISHED;
                 } else {
                     movementTransition();
-                    table.setRollDiceButton(true);
+                    table.setRollDiceButtonVisibility(true);
                 }
             } else {
                 movementTransition();
-                table.setRollDiceButton(true);
+                table.setRollDiceButtonVisibility(true);
             }
         }
 
@@ -633,7 +632,7 @@ public class Game {
         currentPlayer = players.get(currentPlayerIndex);
     }
 
-    private void actionTransition() {
+    public void actionTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
         }
@@ -671,91 +670,4 @@ public class Game {
     public enum subStates {
         PLAYERS, DECK, BOARD, MOVEMENT, ACTION
     }
-
-
-    /**
-     * MAIN GAME LOOP
-     * This method contains the main game logic. After the game as been setup in the game constructor, this method then
-     * loops through, carrying out the game functions
-     *
-     * @author Vaibhav Ekambaram
-     */
-    /*
-    public void mainGameLoop() {
-
-
-        while (gameState.equals(States.RUNNING)) {
-            for (Player p : players) {
-                movesRemaining = -1;
-                System.out.println("**************************************************");
-                System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
-                currentPlayer = p;
-                System.out.println("**************************************************");
-                movesRemaining = rollDice();
-                System.out.println("Result: " + movesRemaining);
-                System.out.println("**************************************************");
-                while (subState.equals(subStates.MOVEMENT)) {
-                    if (p.getCurrentPosition().getRoom() != null) {
-                        System.out.println("Currently in " + p.getCurrentPosition().getRoom());
-                        System.out.println("**************************************************");
-                    }
-                    System.out.println("Please enter a move command or type \"finish\" to complete move (" + movesRemaining + " tiles remaining):");
-                    Move move = movementInput(movesRemaining);
-                    if (move != null) {
-                        Board newBoard = this.board.apply(p, move);
-                        if (newBoard != null) {
-                            this.board = newBoard;
-                            movesRemaining = movesRemaining - move.getSpaces();
-                            System.out.println(board.toString());
-                            table.updateDisplay(board.toString());
-                        }
-                    } else {
-                        transitionSubState();
-                        break;
-                    }
-                    if (movesRemaining < 1) {
-                        transitionSubState(); // Transition from Movement to Action
-                    }
-                }
-                System.out.println("\t\t________________________________");
-                System.out.println("\t\tCurrent Players Hand:");
-                System.out.println("\t\t________________________________");
-                for (Card c : p.getHand()) {
-                    if (c instanceof CharacterCard) {
-                        System.out.println("\t\t[Character] " + c.toString());
-                    } else if (c instanceof WeaponCard) {
-                        System.out.println("\t\t[Weapon] " + c.toString());
-                    } else if (c instanceof RoomCard) {
-                        System.out.println("\t\t[Room] " + c.toString());
-                    }
-                }
-                System.out.println("\t\t________________________________");
-                System.out.println("Would you like to make a suggestion, accusation or pass?");
-                System.out.println("Available commands - [suggestion][accusation][pass]:");
-                table.setSuggestionAccusationVisibility(true);
-                String answer = "";
-                String input = new Scanner(System.in).nextLine();
-                try {
-                    answer = input;
-                } catch (Exception e) {
-                    System.out.println("Please enter 'Accusation', 'Suggestion', or 'Pass'");
-                }
-                if (answer.equalsIgnoreCase("a") || answer.equalsIgnoreCase("accusation")) {
-                    int accuse = makeAccusation(p);
-                    if (accuse == 1) {
-                        gameState = States.FINISHED;
-                        break;
-                    }
-                } else if (answer.equalsIgnoreCase("s") || answer.equalsIgnoreCase("suggestion")) {
-                    makeSuggestion(p);
-                }
-                System.out.println("[Hit Enter to move to the next player]");
-                Scanner wait = new Scanner(System.in);
-                wait.nextLine();
-                transitionSubState(); // Transition Action to Movement
-            }
-        }
-    }
-     */
-
 }
