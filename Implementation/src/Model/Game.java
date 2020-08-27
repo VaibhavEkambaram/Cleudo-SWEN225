@@ -71,7 +71,7 @@ public class Game {
      * @author Cameron Li
      */
     private void initDeck() {
-        idleToInit();
+        transitionGameState(); // Transition from IDLE to INIT
         if (!subState.equals(subStates.DECK)) {
             throw new Error("Expecting DECK Sub State but " + subState);
         }
@@ -498,7 +498,7 @@ public class Game {
             if (i == 0) {
                 int accuse = makeAccusation(p);
                 if (accuse == 1) {
-                    finishTransition();
+                    transitionGameState();
                 } else {
                     movementTransition();
 
@@ -523,10 +523,75 @@ public class Game {
         currentPlayer = players.get(currentPlayerIndex);
     }
 
+<<<<<<< HEAD
     private void idleToInit() {
         if (gameState.equals(States.IDLE)) {
             throw new Error("Expected IDLE game state but " + gameState);
         }
+=======
+    private void checkGameState() {
+        if (gameState.equals(States.IDLE) && subState == null) {
+            return;
+        }
+
+        if (gameState.equals(States.RUNNING)) { // Check Sub state matches RUNNING game state
+            if (!subState.equals(subStates.MOVEMENT) && !subState.equals(subStates.ACTION)) {
+                throw new Error(gameState + " game state with " + subState + " sub state");
+            }
+        } else if (gameState.equals(States.INIT)) { // Check Sub state matches INIT game state
+            if (!subState.equals(subStates.PLAYERS) && !subState.equals(subStates.DECK) && !subState.equals(subStates.BOARD)) {
+                throw new Error(gameState + " game state with " + subState + " sub state");
+            }
+        }
+
+        // Check game state matches relevant sub states
+        if (subState.equals(subStates.MOVEMENT) || subState.equals(subStates.ACTION)) {
+            if (!gameState.equals(States.RUNNING)) {
+                throw new Error(gameState + " game state with " + subState + " sub state");
+            }
+        } else if (subState.equals(subStates.PLAYERS) || subState.equals(subStates.DECK) || subState.equals(subStates.BOARD)) {
+            if (!gameState.equals(States.INIT)) {
+                throw new Error(gameState + " game state with " + subState + " sub state");
+            }
+        }
+
+    }
+
+    public void transitionGameState() {
+        checkGameState();
+        if (gameState.equals(States.IDLE)) {
+            gameState = States.INIT;
+            subState = subStates.DECK;
+        } else if (gameState.equals(States.INIT)) {
+            gameState = States.RUNNING;
+            subState = subStates.MOVEMENT;
+        } else if (gameState.equals(States.RUNNING)) {
+            gameState = States.FINISHED;
+        }
+    }
+
+    private void transitionSubState() {
+        checkGameState();
+        if (gameState.equals(States.RUNNING)) {
+            if (subState.equals(subStates.MOVEMENT)) {
+                subState = subStates.ACTION;
+            } else {
+                subState = subStates.MOVEMENT;
+            }
+        } else if (gameState.equals(States.INIT)) {
+            if (subState.equals(subStates.DECK)) {
+                subState = subStates.PLAYERS;
+            } else {
+                subState = subStates.BOARD;
+            }
+        }
+    }
+
+    private void idleToInit() {
+        if (gameState.equals(States.IDLE)) {
+            throw new Error("Expected IDLE game state but " + gameState);
+        }
+>>>>>>> parent of 497a1aa... State Transitions Finished
         gameState = States.INIT;
     }
 
@@ -559,6 +624,7 @@ public class Game {
         subState = subStates.ACTION;
     }
 
+<<<<<<< HEAD
     public void finishTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("stuff");
@@ -566,6 +632,8 @@ public class Game {
         gameState = States.FINISHED;
     }
 
+=======
+>>>>>>> parent of 497a1aa... State Transitions Finished
     /**
      * Getters
      */
