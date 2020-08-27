@@ -116,7 +116,7 @@ public class Table extends Observable {
         // Hand Panel
         handPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         handPanel.setBackground(Color.WHITE);
-        handPanel.setPreferredSize(new Dimension(500, 183));
+        handPanel.setPreferredSize(new Dimension(600, 183));
         //scrollHandPane = new JScrollPane(handPanel);
         //scrollHandPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         //scrollHandPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -149,7 +149,7 @@ public class Table extends Observable {
         actionPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         movementPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        actionPanel.setLayout(new GridLayout(12, 1));
+        actionPanel.setLayout(new GridLayout(12, 2));
 
 
         gameFrame.add(mainPanel);
@@ -197,7 +197,7 @@ public class Table extends Observable {
                 if (suggest == -1) {
                     game.movementTransition();
                     setRollDiceButtonVisibility(true);
-
+                    createHand(game);
                     label1.setVisible(false);
                     label2.setVisible(false);
                 }
@@ -216,6 +216,7 @@ public class Table extends Observable {
                 } else {
                     game.movementTransition();
                     setRollDiceButtonVisibility(true);
+                    createHand(game);
                     label1.setVisible(false);
                     label2.setVisible(false);
                 }
@@ -230,6 +231,7 @@ public class Table extends Observable {
             public void actionPerformed(ActionEvent e) {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
+                createHand(game);
                 label1.setVisible(false);
                 label2.setVisible(false);
             }
@@ -450,6 +452,14 @@ public class Table extends Observable {
         if (previousPlayer != currentPlayer) {
             handPanel.removeAll();
             for (Card c : currentPlayer.getHand()) {
+
+
+
+                image1 = new ImageIcon(getClass().getResource("/resources/card_" + c.toString() + ".png"));
+                label1 = new JLabel(image1);
+                handPanel.add(label1);
+
+/*
                 //System.out.println(c.toString());
                 BufferedImage card = null;
                 try {
@@ -457,8 +467,9 @@ public class Table extends Observable {
                 } catch (IOException e) {
 
                 }
-                //JLabel picLabel = new JLabel(new ImageIcon(card));
-                //handPanel.add(picLabel);
+                JLabel picLabel = new JLabel(new ImageIcon(card));
+        */
+              //  handPanel.add(picLabel);
             }
             //scrollHandPane = new JScrollPane(handPanel);
             previousPlayer = currentPlayer;
