@@ -7,10 +7,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+
+import static Model.Game.subStates.MOVEMENT;
 
 
 public class Table extends Observable {
@@ -30,6 +33,7 @@ public class Table extends Observable {
     JButton leftButton;
     JButton rightButton;
     JButton rollDiceButton;
+    JButton finishedButton;
 
     // Panels
     private JPanel mainPanel;
@@ -39,6 +43,12 @@ public class Table extends Observable {
     private JPanel actionPanel;
     private JPanel movementPanel;
 
+    private ImageIcon image1;
+    private JLabel label1;
+    private ImageIcon image2;
+    private JLabel label2;
+
+
     // Scroll Pane
     private JScrollPane scrollHandPane;
 
@@ -46,6 +56,9 @@ public class Table extends Observable {
     Player currentPlayer;
     Player previousPlayer;
     private Font infoFont;
+
+    Point p1;
+    Point p2;
 
     Game game;
     // Display
@@ -104,7 +117,7 @@ public class Table extends Observable {
         // Hand Panel
         handPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         handPanel.setBackground(Color.WHITE);
-        handPanel.setPreferredSize(new Dimension(500, 183));
+        handPanel.setPreferredSize(new Dimension(600, 183));
         //scrollHandPane = new JScrollPane(handPanel);
         //scrollHandPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         //scrollHandPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -115,6 +128,7 @@ public class Table extends Observable {
         constraints.gridwidth = 2;
 
         mainPanel.add(handPanel, constraints);
+
 
         // Movement Panel
         movementPanel = new JPanel(new GridBagLayout());
@@ -133,10 +147,29 @@ public class Table extends Observable {
         actionPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         movementPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        actionPanel.setLayout(new GridLayout(12, 1));
+        actionPanel.setLayout(new GridLayout(12, 2));
 
 
         gameFrame.add(mainPanel);
+
+        mainPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+                if (!game.getSubState().equals(MOVEMENT)) {
+                    return;
+                }
+
+                p2 = new Point(e.getX(), e.getY());
+                // todo: add method to board class to find closest???
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+            }
+        });
 
         rollDiceButton = new JButton("Roll Dice");
         actionPanel.add(rollDiceButton);
@@ -145,7 +178,9 @@ public class Table extends Observable {
             public void actionPerformed(ActionEvent e) {
                 game.setMovesRemaining(-1);
                 game.setMovesRemaining(game.rollDice());
-                setRollDiceButton(false);
+                setRollDiceButtonVisibility(false);
+                setFinishedButtonVisibility(true);
+                movementPanel.setVisible(true);
             }
         });
 
@@ -157,13 +192,15 @@ public class Table extends Observable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int suggest = game.makeSuggestion(game.getCurrentPlayer());
-                if(suggest == -1){
+                if (suggest == -1) {
                     game.movementTransition();
-                    setRollDiceButton(true);
+                    setRollDiceButtonVisibility(true);
+                    createHand(game);
+                    label1.setVisible(false);
+                    label2.setVisible(false);
                 }
             }
         });
-
 
 
         accusationButton = new JButton("Make Accusation");
@@ -176,11 +213,13 @@ public class Table extends Observable {
                     game.finishTransition();
                 } else {
                     game.movementTransition();
-                    setRollDiceButton(true);
+                    setRollDiceButtonVisibility(true);
+                    createHand(game);
+                    label1.setVisible(false);
+                    label2.setVisible(false);
                 }
             }
         });
-
 
 
         passButton = new JButton("Pass");
@@ -189,7 +228,21 @@ public class Table extends Observable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 game.movementTransition();
-                setRollDiceButton(true);
+                setRollDiceButtonVisibility(true);
+                createHand(game);
+                label1.setVisible(false);
+                label2.setVisible(false);
+            }
+        });
+
+        finishedButton = new JButton("Finished");
+        finishedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.actionTransition();
+                setFinishedButtonVisibility(false);
+                movementPanel.setVisible(false);
+                setSuggestionAccusationVisibility(true);
             }
         });
 
@@ -268,17 +321,46 @@ public class Table extends Observable {
         //updateDisplay();
     }
 
-    public void setRollDiceButton(boolean value){
-        if(value){
+
+    public Frame getGameFrame() {
+        return gameFrame;
+    }
+
+    public void RollDiceMenu(int firstNumber, int secondNumber) {
+
+
+        image1 = new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png"));
+        label1 = new JLabel(image1);
+        handPanel.add(label1);
+
+        image2 = new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png"));
+        label2 = new JLabel(image2);
+        label1.setVisible(true);
+        label2.setVisible(true);
+        handPanel.add(label2);
+    }
+
+
+    public void setRollDiceButtonVisibility(boolean value) {
+        if (value) {
             actionPanel.add(rollDiceButton);
+        } else {
+            actionPanel.remove(rollDiceButton);
+
+        }
+        rollDiceButton.setVisible(value);
+    }
+
+    public void setFinishedButtonVisibility(boolean value) {
+        if (value) {
+            actionPanel.add(finishedButton);
             actionPanel.revalidate();
             actionPanel.repaint();
         } else {
-            actionPanel.remove(rollDiceButton);
+            actionPanel.remove(finishedButton);
             actionPanel.revalidate();
             actionPanel.repaint();
         }
-        rollDiceButton.setVisible(value);
     }
 
     public void setSuggestionAccusationVisibility(boolean value) {
@@ -290,8 +372,7 @@ public class Table extends Observable {
             suggestionButton.setVisible(true);
             accusationButton.setVisible(true);
             passButton.setVisible(true);
-            actionPanel.revalidate();
-            actionPanel.repaint();
+
 
         } else {
             suggestionButton.setVisible(false);
@@ -300,8 +381,6 @@ public class Table extends Observable {
             actionPanel.remove(suggestionButton);
             actionPanel.remove(accusationButton);
             actionPanel.remove(passButton);
-            actionPanel.revalidate();
-            actionPanel.repaint();
         }
     }
 
@@ -333,8 +412,7 @@ public class Table extends Observable {
         gameMenu.add(setupGameMenuItem);
 
         setupGameMenuItem.addActionListener(e -> {
-            //setPlayerCount();
-            //new Game();
+            game.resetGame();
 
         });
 
@@ -365,24 +443,37 @@ public class Table extends Observable {
             return;
         }
 
-        if(previousPlayer != currentPlayer){
+        if (previousPlayer != currentPlayer) {
             handPanel.removeAll();
             for (Card c : currentPlayer.getHand()) {
+
+
+                image1 = new ImageIcon(getClass().getResource("/resources/card_" + c.toString() + ".png"));
+                label1 = new JLabel(image1);
+                handPanel.add(label1);
+
+/*
                 //System.out.println(c.toString());
                 BufferedImage card = null;
                 try {
-                    card = ImageIO.read(new File("assets/cards/card_" + c.toString() + ".png"));
+                    card = ImageIO.read(new File("resources/card_" + c.toString() + ".png"));
                 } catch (IOException e) {
 
                 }
-               // JLabel picLabel = new JLabel(new ImageIcon(card));
-                //handPanel.add(picLabel);
+                JLabel picLabel = new JLabel(new ImageIcon(card));
+        */
+                //  handPanel.add(picLabel);
             }
             //scrollHandPane = new JScrollPane(handPanel);
             previousPlayer = currentPlayer;
         }
     }
 
+    /**
+     * Update all visual elements on the GUI
+     *
+     * @author Cameron Li
+     */
     public void updateDisplay() {
         int rectSize;
         if (displayPanel.getWidth() > displayPanel.getHeight()) {
@@ -393,16 +484,18 @@ public class Table extends Observable {
 
         if (game.getGameState().equals(Game.States.RUNNING)) {
             infoPanel.setVisible(true);
-            if (game.getSubState().equals(Game.subStates.MOVEMENT)) {
+            if (game.getSubState().equals(MOVEMENT)) {
                 if (game.getMovesRemaining() > 0) {
                     showMovement(true);
                 }
+
                 setSuggestionAccusationVisibility(false);
             } else {
                 showMovement(false);
-                setSuggestionAccusationVisibility(true);
+                setFinishedButtonVisibility(false);
+
             }
-            if (game.getSubState().equals(Game.subStates.MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
+            if (game.getSubState().equals(MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
                 createHand(game);
             }
         } else {
@@ -429,38 +522,41 @@ public class Table extends Observable {
     }
 
     public void paint(Graphics g, int rectSize) {
-        Graphics2D g2 = (Graphics2D) g;
-        int border = BORDER_SIZE / 2;
-        for (int i = 0; i < 24; i++) {
-            for (int j = 0; j < 25; j++) {
+        if (g != null) {
+            Graphics2D g2 = (Graphics2D) g;
+            int border = BORDER_SIZE / 2;
+            for (int i = 0; i < 24; i++) {
+                for (int j = 0; j < 25; j++) {
 
-                game.getBoard().getPositions()[j][i].draw(g);
-                g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
-
-                if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
-                    g.setColor(game.getBoard().getPositions()[j][i].getCharacter().getCharacterBoardColor());
-                    g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
-                }
+                    game.getBoard().getPositions()[j][i].draw(g);
+                    g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
 
 
-                g.setColor(Color.BLACK);
-
-                g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
-                /*
-                if(game.getBoard().getPositions()[j][i].getDisplayName().equals("o") || game.getBoard().getPositions()[j][i].getDisplayName().equals("o")){
-                    g2.setStroke(new BasicStroke(5));
-                    if((!game.getBoard().getPositions()[j][i+1].getDisplayName().equals("O") || !game.getBoard().getPositions()[j][i+1].getDisplayName().equals("O"))) {
-                        g2.drawLine(border + rectSize * i + rectSize, border + rectSize * j, border + rectSize * i + rectSize, border + rectSize * j + rectSize);
+                    if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
+                        g.setColor(game.getBoard().getPositions()[j][i].getCharacter().getCharacterBoardColor());
+                        g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
                     }
-                }
 
-                 */
+                    if (game.getBoard().getPositions()[j][i].getWeapon() != null) {
+                        g.setColor(Color.DARK_GRAY);
+                        g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+
+
+                            ImageIcon img = new ImageIcon(getClass().getResource("/resources/image_" + game.getBoard().getPositions()[j][i].getWeapon().getWeaponName() + ".png"));
+
+
+                           // g.drawImage(img, border + rectSize * i, border + rectSize * j, null);
+                            gameFrame.repaint();
+
+
+                    }
+
+                    g.setColor(Color.BLACK);
+                    g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                }
             }
         }
     }
-
-
-
 
 
     public int setPlayerCount() {
@@ -512,14 +608,6 @@ public class Table extends Observable {
         }
         return players;
     }
-
-
-
-
-
-
-
-
 
 
     public void makeMovement(Move.Direction direction) {

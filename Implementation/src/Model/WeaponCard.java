@@ -18,6 +18,7 @@ public class WeaponCard implements Card {
     //Model.WeaponCard Attributes
     private final String weaponString; // name of the weapon
 
+
     /**
      * Constructor Method for Model.WeaponCard
      *

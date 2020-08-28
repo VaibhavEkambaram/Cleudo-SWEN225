@@ -26,12 +26,13 @@ public class Game {
     private final String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study", "Library", "Billiard Room", "Conservatory", "Ball Room"};
     private final String[] characterNames = {"Miss Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
 
-    private final Map<String, WeaponCard> weaponCardsMap = new HashMap<>();
-    private final Map<String, RoomCard> roomCardsMap = new HashMap<>();
-    private final Map<String, CharacterCard> characterCardsMap = new HashMap<>();
+    private Map<String, WeaponCard> weaponCardsMap = new HashMap<>();
+    private Map<String, RoomCard> roomCardsMap = new HashMap<>();
+    private Map<String, CharacterCard> characterCardsMap = new HashMap<>();
 
     private List<Card> deck;
     private List<Room> rooms;
+
     public List<Player> players;
 
     private Board board;
@@ -51,6 +52,31 @@ public class Game {
      * @author Cameron Li, Vaibhav Ekambaram
      */
     public Game() {
+        initDeck();
+        initPlayers();
+        initBoard(); // generate board
+        dealCards();
+        runGame(); // main game logic loop
+    }
+
+    public void resetGame(){
+        table.getGameFrame().dispose();
+        gameState = States.IDLE;
+        subState = null;
+        table = null;
+
+        board = null;
+        currentPlayer = null;
+        murderScenario = null;
+
+        currentPlayerIndex = 0;
+        movesRemaining = -1;
+        numPlayers = -1;
+
+        deck.clear();
+        rooms.clear();
+        players.clear();
+
         initDeck();
         initPlayers();
         initBoard(); // generate board
@@ -80,9 +106,12 @@ public class Game {
         deck = new ArrayList<>();
 
         // Weapons
+
         List<WeaponCard> weaponCards = new ArrayList<>();
         for (String weaponName : weaponNames) {
             WeaponCard weapon = new WeaponCard(weaponName);
+
+
             weaponCards.add(weapon);
             weaponCardsMap.put(weaponName, weapon);
             deck.add(weapon);
@@ -162,15 +191,15 @@ public class Game {
         String boardLayout =
                 " x x x x x x x x x 3 x x x x 4 x x x x x x x x x \n" +
                         " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
-                        " k K K K K k _ _ b b b B B b b b _ _ c C C C C c \n" +
+                        " k $K K K K k _ _ b b b %B B b b b _ _ c C C C C c \n" +
                         " k K K K K k _ _ b B B B B B B b _ _ c C C C C c \n" +
                         " k K K K K k _ _ b B B B B B B b _ _ <C c C C c c \n" +
                         " k k K K K k _ _ <B B B B B B B >B _ _ _ c c c c x \n" +
                         " x k k k vK k _ _ b B B B B B B b _ _ _ _ _ _ _ 5 \n" +
                         " _ _ _ _ _ _ _ _ b vB b b b b vB b _ _ _ _ _ _ _ x \n" +
                         " x _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ i i i i i i \n" +
-                        " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ <I I I I I i \n" +
-                        " d D D D d d d d _ _ x x x x x _ _ _ i I I I I i \n" +
+                        " d d d d d _ _ _ _ _ _ _ _ _ _ _ _ _ <I @I I I I i \n" +
+                        " d !D D D d d d d _ _ x x x x x _ _ _ i I I I I i \n" +
                         " d D D D D D D d _ _ x x x x x _ _ _ i I I I I i \n" +
                         " d D D D D D D >D _ _ x x x x x _ _ _ i i i i vI i \n" +
                         " d D D D D D D d _ _ x x x x x _ _ _ _ _ _ _ _ x \n" +
@@ -180,9 +209,9 @@ public class Game {
                         " 2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ l l L L L l l \n" +
                         " x _ _ _ _ _ _ _ _ h h ^H ^H h h _ _ _ l l l l l x \n" +
                         " o o o o o o ^O _ _ h H H H H h _ _ _ _ _ _ _ _ 6 \n" +
-                        " o O O O O O o _ _ h H H H H >H _ _ _ _ _ _ _ _ x \n" +
+                        " o ?O O O O O o _ _ h H H H H >H _ _ _ _ _ _ _ _ x \n" +
                         " o O O O O O o _ _ h H H H H h _ _ ^Y y y y y y y \n" +
-                        " o O O O O O o _ _ h H H H H h _ _ y Y Y Y Y Y y \n" +
+                        " o O O O O O o _ _ h H H H H h _ _ y &Y Y Y Y Y y \n" +
                         " o O O O O o o _ _ h H H H H h _ _ y y Y Y Y Y y \n" +
                         " o o o o o o x 1 x h h h h h h x _ x y y y y y y \n";
 
@@ -209,22 +238,40 @@ public class Game {
                 if (newPosition == null) { // If still haven't found anything
                     for (Room r : rooms) { // Check for a room
                         if (positionName.equals(r.getRoomChar())) { // Is this an inner room position?
-                            newPosition = new Position(x, y, true, true, null, r);
+                            newPosition = new Position(x, y, true, true, null, r, null);
+                            break;
+                        } else if (positionName.equals("?" + r.getRoomChar())){
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Candlestick"));
+                            break;
+                        } else if (positionName.equals("!" + r.getRoomChar())){
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Dagger"));
+                            break;
+                        } else if (positionName.equals("$" + r.getRoomChar())){
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Lead Pipe"));
+                            break;
+                        } else if (positionName.equals("%" + r.getRoomChar())) {
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Revolver"));
+                            break;
+                        } else if (positionName.equals("@" + r.getRoomChar())) {
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Rope"));
+                            break;
+                        } else if (positionName.equals("&" + r.getRoomChar())) {
+                            newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Spanner"));
                             break;
                         } else if (positionName.equals("^" + r.getRoomChar())) { // Up door
-                            newPosition = new Position(x, y, true, true, Move.Direction.UP, r);
+                            newPosition = new Position(x, y, true, true, Move.Direction.UP, r,null);
                             break;
                         } else if (positionName.equals(">" + r.getRoomChar())) { // Right door
-                            newPosition = new Position(x, y, true, true, Move.Direction.RIGHT, r);
+                            newPosition = new Position(x, y, true, true, Move.Direction.RIGHT, r,null);
                             break;
                         } else if (positionName.equals("v" + r.getRoomChar())) { // Down door
-                            newPosition = new Position(x, y, true, true, Move.Direction.DOWN, r);
+                            newPosition = new Position(x, y, true, true, Move.Direction.DOWN, r,null);
                             break;
                         } else if (positionName.equals("<" + r.getRoomChar())) {
-                            newPosition = new Position(x, y, true, true, Move.Direction.LEFT, r);
+                            newPosition = new Position(x, y, true, true, Move.Direction.LEFT, r,null);
                             break;
                         } else if (positionName.equals(r.getRoomChar().toLowerCase())) { // Is this an outer room position?
-                            newPosition = new Position(x, y, true, false, null, r);
+                            newPosition = new Position(x, y, true, false, null, r,null);
                             break;
                         }
                     }
@@ -306,8 +353,7 @@ public class Game {
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
 
-        System.out.println("first dice throw: " + firstResult);
-        System.out.println("second dice throw: " + secondResult);
+        table.RollDiceMenu(firstResult,secondResult);
         return firstResult + secondResult;
     }
 
@@ -332,6 +378,7 @@ public class Game {
         if (newBoard != null) {
             movesRemaining = movesRemaining - move.getSpaces();
             if (movesRemaining < 1) {
+                table.setSuggestionAccusationVisibility(true);
                 actionTransition();
             }
             board = newBoard;
@@ -363,6 +410,7 @@ public class Game {
 
         if (murderScenario.equals(accusationScenario)) {
             a.successfulAccusation(p, murderScenario);
+            table.setSuggestionAccusationVisibility(false);
             return 1;
         } else {
             a.incorrectAccusation(p);
@@ -377,7 +425,7 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav Ekambaram, Cameron Li
      */
     public int makeSuggestion(Player p) {
-        // TODO: Fix this
+
         SuggestionMenu s = new SuggestionMenu();
 
 
@@ -407,7 +455,6 @@ public class Game {
         suggestionCharacter = characterCardsMap.get(suggestionStringSplit[0]);
 
 
-        System.out.println("Moving " + suggestionCharacter.getCharacterName() + " to " + room.toString() + "...");
 
         // teleport the suggested player to the suggested room
         for (Player findP : players) {
@@ -426,10 +473,15 @@ public class Game {
             }
         }
 
-        System.out.println("\n" + this.board + "\n");
+        // teleport the suggested board to the suggested room
+        Board newBoard = board.teleportWeapon(suggestionWeapon,room);
+        if(newBoard != null){
+            board = newBoard;
+        } else {
+            s.teleportFailed();
+        }
 
         Scenario suggestion = new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter);
-        System.out.println(p.getCharacter().getCharacterName() + "'s suggestion: [" + suggestion.toString() + "]");
 
         // place all other players in a stack so that they can take turns at refuting
         Stack<Player> refuters = new Stack<>();
@@ -444,68 +496,48 @@ public class Game {
         while (!refuters.isEmpty()) {
             Player currentTurn = refuters.pop();
 
-            s.makeRefutation(currentTurn, currentPlayer, suggestion);
+            String refute = s.makeRefutation(currentTurn, currentPlayer, suggestion);
+            if(refute.equals("-1")){ continue;}
 
-
-            System.out.println(currentTurn.getCharacter().getCharacterName() + "'s turn to refute");
-            System.out.println(currentTurn.getCharacter().getCharacterName() + "'s hand: ");
 
             List<Card> refuteCards = currentTurn.getHand();
 
-            for (Card c : refuteCards) System.out.println("\t" + c.toString());
-
-            System.out.println("Refute this suggestion with a card from your hand or type pass to skip: ");
-
             Card refutation = null;
-            boolean failedRefutation = false;
 
-            // read the input from the player and match it to a card in their hand. If no matching card exists, the player is prompted to try again
-            while (refutation == null && !failedRefutation) {
-                String refutationInput = new Scanner(System.in).nextLine();
-
-                if (refutationInput.equalsIgnoreCase("Pass")) {
-                    failedRefutation = true;
-                } else {
-                    for (Card c : refuteCards) {
-                        if (c.toString().equals(refutationInput)) refutation = c;
-                    }
-                }
-
-                if (refutation == null && !failedRefutation) {
-                    System.out.println("Card not found in players hand! Please try again: ");
+            for(Card c : refuteCards){
+                if(c.toString().equals(refute)){
+                    refutation = c;
                 }
             }
 
-            // if the previous player failed to refute, continue the loop
-            if (failedRefutation) continue;
-
             // if the player successfully refutes the suggestion, end the loop
-            if (refutation.toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom != null ? suggestionRoom.toString() : null) || refutation.toString().equals(suggestionWeapon.toString())) {
+            if (refutation.toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom.toString()) || refutation.toString().equals(suggestionWeapon.toString())) {
                 s.refuted(p.getCharacter().getCharacterName());
                 refuted = true;
+                movementTransition();
+                table.setRollDiceButtonVisibility(true);
                 break;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
-                System.out.println("Invalid refutation!");
+                s.refutationFailed(currentTurn.getPlayerVanityName());
+
             }
         }
 
         //if the stack is empty and no other player could refute, offer the option of making an Accusation to player who suggested
         if (!refuted) {
-            System.out.println(p.getCharacter().getCharacterName() + "'s turn");
-
             int i = s.nobodyCouldRefute();
-            System.out.println(i);
             if (i == 0) {
                 int accuse = makeAccusation(p);
                 if (accuse == 1) {
-                    finishTransition();
+                    table.setSuggestionAccusationVisibility(false);
+                    gameState = States.FINISHED;
                 } else {
                     movementTransition();
-
-                    table.setRollDiceButton(true);
+                    table.setRollDiceButtonVisibility(true);
                 }
             } else {
-                System.out.println("next players turn");
+                movementTransition();
+                table.setRollDiceButtonVisibility(true);
             }
         }
         return 0;
@@ -598,7 +630,7 @@ public class Game {
         currentPlayer = players.get(currentPlayerIndex);
     }
 
-    private void actionTransition() {
+    public void actionTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
         }

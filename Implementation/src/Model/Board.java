@@ -2,8 +2,6 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 
-import java.lang.reflect.Array;
-
 /**
  * Model.Board Class
  * A board is made up of position classes, which are then all stored in this class
@@ -60,7 +58,7 @@ public class Board {
         return boardPrint.toString();
     }
 
-    public Position[][] getPositions(){
+    public Position[][] getPositions() {
         return this.positions;
     }
 
@@ -141,7 +139,7 @@ public class Board {
     }
 
     /**
-     * Teleports a player to a Model.Room
+     * Teleports a player to a Room
      * Used for Suggestions
      *
      * @param player player
@@ -155,7 +153,7 @@ public class Board {
             for (int j = 0; j < cloneBoard.positions[0].length; j++) {
                 Position found = cloneBoard.positions[i][j];
                 if (found.getRoom() != null) {
-                    if (found.getRoom().equals(room) && found.isPassableTile() && !found.isDoor()) {
+                    if (found.getRoom().equals(room) && found.isPassableTile() && !found.isDoor() && found.getWeapon() == null && found.getCharacter() == null) {
                         int y = player.getCurrentPosition().getLocationY();
                         int x = player.getCurrentPosition().getLocationX();
                         cloneBoard.positions[y][x].removeCharacter();
@@ -169,7 +167,49 @@ public class Board {
         return null;
     }
 
-    // Model.Board Valid Movement Checks
+
+    /**
+     * Teleports a weapon to a Room
+     *
+     * @param weapon weapon to teleport
+     * @param room room to teleport to
+     * @return copy of board if applicable
+     *
+     * @author Vaibhav Ekambaram
+     */
+    public Board teleportWeapon(WeaponCard weapon, Room room) {
+        int initialX = -1;
+        int initialY = -1;
+
+        // find old position on board
+        for (int i = 0; i < this.positions.length; i++) {
+            for (int j = 0; j < this.positions[0].length; j++) {
+                if (this.positions[i][j].getWeapon() != null && this.positions[i][j].getWeapon().equals(weapon) && !this.positions[i][j].getRoom().equals(room)) {
+                    initialX = j;
+                    initialY = i;
+                }
+            }
+        }
+
+        // replace position
+        if (initialX != -1 && initialY != -1) {
+            Board cloneBoard = new Board(this);
+            for (int i = 0; i < cloneBoard.positions.length; i++) {
+                for (int j = 0; j < cloneBoard.positions[0].length; j++) {
+                    Position found = cloneBoard.positions[i][j];
+                    if (found.getRoom() != null && found.getRoom().equals(room) && found.isPassableTile() && !found.isDoor() && found.getWeapon() == null && found.getCharacter() == null) {
+                        cloneBoard.positions[initialY][initialX].removeWeapon();
+                        found.setWeapon(weapon);
+                        return cloneBoard;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+    // Board Valid Movement Checks
 
     /**
      * Check if co-ordinates are within game board

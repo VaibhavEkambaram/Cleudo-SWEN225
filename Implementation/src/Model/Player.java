@@ -102,7 +102,7 @@ public class Player {
         return playerVanityName + " - " + this.character + " [" + this.character.getCharacterColorName() + "] on board";
     }
 
-    // Model.Player State Getters
+    // Model.Player State Gettersa
 
     /**
      * Check player ability to make accusation
