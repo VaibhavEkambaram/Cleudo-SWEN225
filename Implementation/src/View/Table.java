@@ -492,30 +492,22 @@ public class Table extends Observable {
                     }
 
 
+                    g.setColor(Color.BLACK);
+                    g2.setStroke(new BasicStroke(1));
+                    g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+
                     if (!game.getBoard().getPositions()[j][i].isPassableTile() && game.getBoard().getPositions()[j][i].getRoom() != null) {
-                        g.setColor(Color.BLACK);
-
-
+                        g.setColor(Color.DARK_GRAY);
                         g2.setStroke(new BasicStroke(2));
 
                         int iValue = border + rectSize * i;
                         int jValue = border + rectSize * j;
 
-
-                        if(i==0){
-                            g2.drawLine(iValue, jValue, iValue, jValue + rectSize);
-                        }
-
-                        if(i==23){
+                        if (i == 0) g2.drawLine(iValue, jValue, iValue, jValue + rectSize);
+                        if (i == 23)
                             g2.drawLine(iValue + rectSize - 1, jValue, iValue + rectSize - 1, jValue + rectSize);
-                        }
-
-                        if(j==24){
+                        if (j == 24)
                             g2.drawLine(iValue, jValue + rectSize - 1, iValue + rectSize, jValue + rectSize - 1);
-                        }
-
-
-
 
                         if (i > 0 && game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
                             g2.drawLine(iValue, jValue, iValue, jValue + rectSize);
@@ -523,21 +515,32 @@ public class Table extends Observable {
                         if (i < 23 && game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
                             g2.drawLine(iValue + rectSize - 1, jValue, iValue + rectSize - 1, jValue + rectSize);
                         }
-
                         if (j > 0 && game.getBoard().getPositions()[j - 1][i].getRoom() == null) {
                             g2.drawLine(iValue, jValue, iValue + rectSize, jValue);
                         }
-                        if (j < 23 && game.getBoard().getPositions()[j + 1][i].getRoom() == null) {
+                        if (j < 24 && game.getBoard().getPositions()[j + 1][i].getRoom() == null) {
                             g2.drawLine(iValue, jValue + rectSize - 1, iValue + rectSize, jValue + rectSize - 1);
                         }
-
-
                     }
 
 
-                    g.setColor(Color.BLACK);
-                    g2.setStroke(new BasicStroke(1));
-                    // g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                    if (game.getBoard().getPositions()[j][i].isDoor()) {
+                        g.setColor(Color.DARK_GRAY);
+                        g2.setStroke(new BasicStroke(2));
+                        int iValue = border + rectSize * i;
+                        int jValue = border + rectSize * j;
+
+                        if (game.getBoard().getPositions()[j][i].getDisplayName().equals("^") || game.getBoard().getPositions()[j][i].getDisplayName().equals("v")) {
+
+                            if (game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
+                                g2.drawLine(iValue + rectSize - 1, jValue, iValue + rectSize - 1, jValue + rectSize);
+                            }
+
+                            if (game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
+                                g2.drawLine(iValue, jValue, iValue, jValue + rectSize);
+                            }
+                        }
+                    }
                 }
             }
         }
