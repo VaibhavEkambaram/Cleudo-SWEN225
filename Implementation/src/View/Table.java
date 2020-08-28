@@ -14,7 +14,7 @@ import static Model.Game.subStates.MOVEMENT;
 
 public class Table extends Observable {
     private final int BORDER_SIZE = 20;
-
+    private int RECT_SIZE;
 
     final JFrame gameFrame;
     public int numPlayers = -1;

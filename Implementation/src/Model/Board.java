@@ -264,4 +264,11 @@ public class Board {
             }
         }
     }
+
+    public Position findNearest(int x, int y) {
+        if (positions[y][x] != null) {
+            return positions[y][x];
+        }
+        return null;
+    }
 }
