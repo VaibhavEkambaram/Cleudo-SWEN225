@@ -172,9 +172,8 @@ public class Board {
      * Teleports a weapon to a Room
      *
      * @param weapon weapon to teleport
-     * @param room room to teleport to
+     * @param room   room to teleport to
      * @return copy of board if applicable
-     *
      * @author Vaibhav Ekambaram
      */
     public Board teleportWeapon(WeaponCard weapon, Room room) {
@@ -205,6 +204,30 @@ public class Board {
                 }
             }
         }
+        return null;
+    }
+
+
+    public Board movePlayer(Player player, Position newPosition, Game game) {
+
+        Position position = player.getCurrentPosition();
+
+        System.out.println(newPosition.getLocationX() + " " + newPosition.getLocationY());
+
+        if(newPosition!=position && newPosition.canMove()){
+            Board cloneBoard = new Board(this);
+            Position found = cloneBoard.positions[newPosition.getLocationY()][newPosition.getLocationX()];
+
+            cloneBoard.getPositions()[position.getLocationY()][position.getLocationX()].setCharacter(null);
+            cloneBoard.getPositions()[found.getLocationY()][found.getLocationX()].setCharacter(player.getCharacter());
+            player.setCurrentPosition(found);
+
+            return cloneBoard;
+
+
+        }
+
+
         return null;
     }
 

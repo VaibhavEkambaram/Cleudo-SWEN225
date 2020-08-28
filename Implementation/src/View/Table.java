@@ -168,7 +168,13 @@ public class Table extends Observable {
                 y = y / RECT_SIZE;
                 Position select = game.getBoard().findNearest((int) x, (int) y);
                 if (select != null) {
-                    System.out.println("x: " + (int) x + " | y: " + (int) y);
+
+                    game.setSelectedTile((int) x,(int) y);
+                   // System.out.println("x: " + (int) x + " | y: " + (int) y);
+                   Board board = game.getBoard().movePlayer(game.getCurrentPlayer(),game.getSelectedTile(),game);
+                   if(board!=null){
+                       game.setBoard(board);
+                   }
                 }
             }
 
@@ -412,19 +418,8 @@ public class Table extends Observable {
                 label1 = new JLabel(image1);
                 handPanel.add(label1);
 
-/*
-                //System.out.println(c.toString());
-                BufferedImage card = null;
-                try {
-                    card = ImageIO.read(new File("resources/card_" + c.toString() + ".png"));
-                } catch (IOException e) {
-
-                }
-                JLabel picLabel = new JLabel(new ImageIcon(card));
-        */
-                //  handPanel.add(picLabel);
             }
-            //scrollHandPane = new JScrollPane(handPanel);
+
             previousPlayer = currentPlayer;
         }
     }
@@ -484,11 +479,18 @@ public class Table extends Observable {
         if (g != null) {
             Graphics2D g2 = (Graphics2D) g;
             int border = BORDER_SIZE / 2;
+
+
+
+
             for (int i = 0; i < 24; i++) {
                 for (int j = 0; j < 25; j++) {
 
-                    game.getBoard().getPositions()[j][i].draw(g);
-                    g.fillRect(border + RECT_SIZE * i, border + RECT_SIZE * j, RECT_SIZE, RECT_SIZE);
+
+                        if(!game.getBoard().getPositions()[j][i].equals(game.getSelectedTile())){
+                            game.getBoard().getPositions()[j][i].draw(g);
+                            g.fillRect(border + RECT_SIZE * i, border + RECT_SIZE * j, RECT_SIZE, RECT_SIZE);
+                        }
 
 
                     if (game.getBoard().getPositions()[j][i].getCharacter() != null) {

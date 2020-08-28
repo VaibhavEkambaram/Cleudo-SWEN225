@@ -44,6 +44,9 @@ public class Game {
     int movesRemaining = -1;
     int numPlayers;
 
+    Position selectedTile = null;
+
+
 
     /**
      * Game Constructor
@@ -543,6 +546,11 @@ public class Game {
         return 0;
     }
 
+    public List<Player> getPlayers(){
+        return this.players;
+    }
+
+
     /**
      * Switch current player to the next player
      */
@@ -664,6 +672,10 @@ public class Game {
         return this.board;
     }
 
+    public void setBoard(Board board){
+        this.board = board;
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -680,6 +692,19 @@ public class Game {
     public void setMovesRemaining(int value) {
         this.movesRemaining = value;
     }
+
+
+
+
+    public void setSelectedTile(int x,int y){
+        selectedTile = board.getPositions()[y][x];
+    }
+
+    public Position getSelectedTile(){
+        return selectedTile;
+    }
+
+
 
     /**
      * State Methods
