@@ -148,17 +148,28 @@ public class Table extends Observable {
 
         gameFrame.add(mainPanel);
 
-        mainPanel.addMouseListener(new MouseAdapter() {
+        displayPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+
+                if (game.getBoard() == null) {
+                    return;
+                }
 
                 if (!game.getSubState().equals(MOVEMENT)) {
                     return;
                 }
 
-                p2 = new Point(e.getX(), e.getY());
-                // todo: add method to board class to find closest???
-
+                double x = e.getX();
+                double y = e.getY();
+                x = x - BORDER_SIZE / 2;
+                y = y - BORDER_SIZE / 2;
+                x = x / RECT_SIZE;
+                y = y / RECT_SIZE;
+                Position select = game.getBoard().findNearest((int) x, (int) y);
+                if (select != null) {
+                    System.out.println("x: " + (int) x + " | y: " + (int) y);
+                }
             }
 
             @Override
@@ -424,11 +435,10 @@ public class Table extends Observable {
      * @author Cameron Li
      */
     public void updateDisplay() {
-        int rectSize;
         if (displayPanel.getWidth() > displayPanel.getHeight()) {
-            rectSize = (displayPanel.getHeight() - BORDER_SIZE) / 25;
+            RECT_SIZE = (displayPanel.getHeight() - BORDER_SIZE) / 25;
         } else {
-            rectSize = (displayPanel.getWidth() - BORDER_SIZE) / 25;
+            RECT_SIZE = (displayPanel.getWidth() - BORDER_SIZE) / 25;
         }
 
         if (game.getGameState().equals(Game.States.RUNNING)) {
@@ -467,10 +477,10 @@ public class Table extends Observable {
             }
         }
 
-        paint(displayPanel.getGraphics(), rectSize);
+        paint(displayPanel.getGraphics());
     }
 
-    public void paint(Graphics g, int rectSize) {
+    public void paint(Graphics g) {
         if (g != null) {
             Graphics2D g2 = (Graphics2D) g;
             int border = BORDER_SIZE / 2;
@@ -478,48 +488,48 @@ public class Table extends Observable {
                 for (int j = 0; j < 25; j++) {
 
                     game.getBoard().getPositions()[j][i].draw(g);
-                    g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                    g.fillRect(border + RECT_SIZE * i, border + RECT_SIZE * j, RECT_SIZE, RECT_SIZE);
 
 
                     if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
                         g.setColor(game.getBoard().getPositions()[j][i].getCharacter().getCharacterBoardColor());
-                        g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                        g.fillOval(border + RECT_SIZE * i, border + RECT_SIZE * j, RECT_SIZE, RECT_SIZE);
                     }
 
                     if (game.getBoard().getPositions()[j][i].getWeapon() != null) {
-                        g2.drawImage(resize(game.getBoard().getPositions()[j][i].getWeapon().getWeaponImage(), rectSize, rectSize), border + rectSize * i, border + rectSize * j, null);
+                        g2.drawImage(resize(game.getBoard().getPositions()[j][i].getWeapon().getWeaponImage(), RECT_SIZE, RECT_SIZE), border + RECT_SIZE * i, border + RECT_SIZE * j, null);
 
                     }
 
 
                     g.setColor(Color.BLACK);
                     g2.setStroke(new BasicStroke(1));
-                    g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                    g.drawRect(border + RECT_SIZE * i, border + RECT_SIZE * j, RECT_SIZE, RECT_SIZE);
 
                     if (!game.getBoard().getPositions()[j][i].isPassableTile() && game.getBoard().getPositions()[j][i].getRoom() != null) {
                         g.setColor(Color.DARK_GRAY);
                         g2.setStroke(new BasicStroke(2));
 
-                        int iValue = border + rectSize * i;
-                        int jValue = border + rectSize * j;
+                        int iValue = border + RECT_SIZE * i;
+                        int jValue = border + RECT_SIZE * j;
 
-                        if (i == 0) g2.drawLine(iValue, jValue, iValue, jValue + rectSize);
+                        if (i == 0) g2.drawLine(iValue, jValue, iValue, jValue + RECT_SIZE);
                         if (i == 23)
-                            g2.drawLine(iValue + rectSize - 1, jValue, iValue + rectSize - 1, jValue + rectSize);
+                            g2.drawLine(iValue + RECT_SIZE - 1, jValue, iValue + RECT_SIZE - 1, jValue + RECT_SIZE);
                         if (j == 24)
-                            g2.drawLine(iValue, jValue + rectSize - 1, iValue + rectSize, jValue + rectSize - 1);
+                            g2.drawLine(iValue, jValue + RECT_SIZE - 1, iValue + RECT_SIZE, jValue + RECT_SIZE - 1);
 
                         if (i > 0 && game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
-                            g2.drawLine(iValue, jValue, iValue, jValue + rectSize);
+                            g2.drawLine(iValue, jValue, iValue, jValue + RECT_SIZE);
                         }
                         if (i < 23 && game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
-                            g2.drawLine(iValue + rectSize - 1, jValue, iValue + rectSize - 1, jValue + rectSize);
+                            g2.drawLine(iValue + RECT_SIZE - 1, jValue, iValue + RECT_SIZE - 1, jValue + RECT_SIZE);
                         }
                         if (j > 0 && game.getBoard().getPositions()[j - 1][i].getRoom() == null) {
-                            g2.drawLine(iValue, jValue, iValue + rectSize, jValue);
+                            g2.drawLine(iValue, jValue, iValue + RECT_SIZE, jValue);
                         }
                         if (j < 24 && game.getBoard().getPositions()[j + 1][i].getRoom() == null) {
-                            g2.drawLine(iValue, jValue + rectSize - 1, iValue + rectSize, jValue + rectSize - 1);
+                            g2.drawLine(iValue, jValue + RECT_SIZE - 1, iValue + RECT_SIZE, jValue + RECT_SIZE - 1);
                         }
                     }
 
@@ -527,17 +537,17 @@ public class Table extends Observable {
                     if (game.getBoard().getPositions()[j][i].isDoor()) {
                         g.setColor(Color.DARK_GRAY);
                         g2.setStroke(new BasicStroke(2));
-                        int iValue = border + rectSize * i;
-                        int jValue = border + rectSize * j;
+                        int iValue = border + RECT_SIZE * i;
+                        int jValue = border + RECT_SIZE * j;
 
                         if (game.getBoard().getPositions()[j][i].getDisplayName().equals("^") || game.getBoard().getPositions()[j][i].getDisplayName().equals("v")) {
 
                             if (game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
-                                g2.drawLine(iValue + rectSize - 1, jValue, iValue + rectSize - 1, jValue + rectSize);
+                                g2.drawLine(iValue + RECT_SIZE - 1, jValue, iValue + RECT_SIZE - 1, jValue + RECT_SIZE);
                             }
 
                             if (game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
-                                g2.drawLine(iValue, jValue, iValue, jValue + rectSize);
+                                g2.drawLine(iValue, jValue, iValue, jValue + RECT_SIZE);
                             }
                         }
                     }

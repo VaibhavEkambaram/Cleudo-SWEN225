@@ -222,7 +222,7 @@ public class Board {
         if (x < 0 || y < 0) {
             return true;
         }
-        return x > positions.length || y > positions[0].length;
+        return x > positions[0].length - 1 || y > positions.length - 1;
     }
 
     /**
@@ -266,9 +266,10 @@ public class Board {
     }
 
     public Position findNearest(int x, int y) {
-        if (positions[y][x] != null) {
+        if (outOfBounds(x, y)) {
+            return null;
+        } else {
             return positions[y][x];
         }
-        return null;
     }
 }
