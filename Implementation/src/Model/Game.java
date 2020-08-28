@@ -193,7 +193,7 @@ public class Game {
                         " k k k k k k x _ _ _ b b b b _ _ _ x c c c c c c \n" +
                         " k $K K K K k _ _ b b b %B B b b b _ _ c C C C C c \n" +
                         " k K K K K k _ _ b B B B B B B b _ _ c C C C C c \n" +
-                        " k K K K K k _ _ b B B B B B B b _ _ <C c C C c c \n" +
+                        " k K K K K k _ _ b B B B B B B b _ _ vC c C C c c \n" +
                         " k k K K K k _ _ <B B B B B B B >B _ _ _ c c c c x \n" +
                         " x k k k vK k _ _ b B B B B B B b _ _ _ _ _ _ _ 5 \n" +
                         " _ _ _ _ _ _ _ _ b vB b b b b vB b _ _ _ _ _ _ _ x \n" +
