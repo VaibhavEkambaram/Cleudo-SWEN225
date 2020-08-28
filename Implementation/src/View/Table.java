@@ -170,11 +170,13 @@ public class Table extends Observable {
                 if (select != null) {
                     System.out.println("x: " + (int) x + " | y: " + (int) y);
                 }
+                updateDisplay();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
+                updateDisplay();
             }
         });
 
@@ -186,6 +188,7 @@ public class Table extends Observable {
             setRollDiceButtonVisibility(false);
             setFinishedButtonVisibility(true);
             movementPanel.setVisible(true);
+            updateDisplay();
         });
 
 
@@ -200,6 +203,7 @@ public class Table extends Observable {
                 createHand(game);
                 label1.setVisible(false);
                 label2.setVisible(false);
+                updateDisplay();
             }
         });
 
@@ -217,6 +221,7 @@ public class Table extends Observable {
                 label1.setVisible(false);
                 label2.setVisible(false);
             }
+            updateDisplay();
         });
 
 
@@ -228,6 +233,7 @@ public class Table extends Observable {
             createHand(game);
             label1.setVisible(false);
             label2.setVisible(false);
+            updateDisplay();
         });
 
         finishedButton = new JButton("Finished");
@@ -236,6 +242,7 @@ public class Table extends Observable {
             setFinishedButtonVisibility(false);
             movementPanel.setVisible(false);
             setSuggestionAccusationVisibility(true);
+            updateDisplay();
         });
 
 
@@ -290,7 +297,6 @@ public class Table extends Observable {
 
         setSuggestionAccusationVisibility(false);
         showMovement(false);
-        //updateDisplay();
     }
 
 
@@ -310,6 +316,7 @@ public class Table extends Observable {
         label1.setVisible(true);
         label2.setVisible(true);
         handPanel.add(label2);
+        updateDisplay();
     }
 
 
@@ -321,6 +328,7 @@ public class Table extends Observable {
 
         }
         rollDiceButton.setVisible(value);
+        updateDisplay();
     }
 
     public void setFinishedButtonVisibility(boolean value) {
@@ -335,15 +343,12 @@ public class Table extends Observable {
 
     public void setSuggestionAccusationVisibility(boolean value) {
         if (value) {
-
             actionPanel.add(suggestionButton);
             actionPanel.add(accusationButton);
             actionPanel.add(passButton);
             suggestionButton.setVisible(true);
             accusationButton.setVisible(true);
             passButton.setVisible(true);
-
-
         } else {
             suggestionButton.setVisible(false);
             accusationButton.setVisible(false);
@@ -467,13 +472,15 @@ public class Table extends Observable {
             currentPlayer = game.getCurrentPlayer();
         }
 
-        if (game.getCurrentPlayer() == currentPlayer) {
-            if (game.getMovesRemaining() != this.movesRemaining && game.getMovesRemaining() > 0) {
-                this.movesRemaining = game.getMovesRemaining();
-                info.setText(game.getCurrentPlayer().toString() + "\n");
-                info.append(this.movesRemaining + " moves remaining");
-            } else if (game.getMovesRemaining() < 1) {
-                info.setText(game.getCurrentPlayer().toString() + "\n");
+        if (game.getCurrentPlayer() != null) {
+            if (game.getCurrentPlayer() == currentPlayer) {
+                if (game.getMovesRemaining() != this.movesRemaining && game.getMovesRemaining() > 0) {
+                    this.movesRemaining = game.getMovesRemaining();
+                    info.setText(game.getCurrentPlayer().toString() + "\n");
+                    info.append(this.movesRemaining + " moves remaining");
+                } else if (game.getMovesRemaining() < 1) {
+                    info.setText(game.getCurrentPlayer().toString() + "\n");
+                }
             }
         }
 
@@ -623,5 +630,6 @@ public class Table extends Observable {
         currentPlayer = game.getCurrentPlayer();
         Move move = new Move(direction, 1);
         game.movementInput(move);
+        updateDisplay();
     }
 }

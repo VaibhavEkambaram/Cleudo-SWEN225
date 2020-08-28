@@ -338,7 +338,7 @@ public class Game {
         movementTransition();
         table.updateDisplay();
         while (gameState.equals(States.RUNNING)) {
-            table.updateDisplay();
+            //table.updateDisplay();
         }
     }
 
@@ -354,6 +354,7 @@ public class Game {
         int secondResult = new Random().nextInt(6) + 1;
 
         table.RollDiceMenu(firstResult,secondResult);
+        table.updateDisplay();
         return firstResult + secondResult;
     }
 
@@ -372,6 +373,7 @@ public class Game {
         }
 
         if (move.getSpaces() > movesRemaining) {
+            table.updateDisplay();
             return false;
         }
         Board newBoard = board.apply(currentPlayer, move);
@@ -382,9 +384,11 @@ public class Game {
                 actionTransition();
             }
             board = newBoard;
+            table.updateDisplay();
             return true;
         }
 
+        table.updateDisplay();
         return false;
     }
 
@@ -411,10 +415,12 @@ public class Game {
         if (murderScenario.equals(accusationScenario)) {
             a.successfulAccusation(p, murderScenario);
             table.setSuggestionAccusationVisibility(false);
+            table.updateDisplay();
             return 1;
         } else {
             a.incorrectAccusation(p);
             p.setCanAccuse(false);
+            table.updateDisplay();
             return 0;
         }
     }
@@ -439,6 +445,7 @@ public class Game {
         // check if player is currently in a room, can not suggest if not
         if (p.getCurrentPosition().getRoom() == null) {
             s.unableToSuggest(p);
+            table.updateDisplay();
             return -1;
         }
 
@@ -516,6 +523,7 @@ public class Game {
                 refuted = true;
                 movementTransition();
                 table.setRollDiceButtonVisibility(true);
+                table.updateDisplay();
                 break;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
                 s.refutationFailed(currentTurn.getPlayerVanityName());
@@ -540,6 +548,7 @@ public class Game {
                 table.setRollDiceButtonVisibility(true);
             }
         }
+        table.updateDisplay();
         return 0;
     }
 
@@ -555,33 +564,6 @@ public class Game {
         currentPlayer = players.get(currentPlayerIndex);
     }
 
-    private void checkGameState() {
-        if (gameState.equals(States.IDLE) && subState == null) {
-            return;
-        }
-
-        if (gameState.equals(States.RUNNING)) { // Check Sub state matches RUNNING game state
-            if (!subState.equals(subStates.MOVEMENT) && !subState.equals(subStates.ACTION)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        } else if (gameState.equals(States.INIT)) { // Check Sub state matches INIT game state
-            if (!subState.equals(subStates.PLAYERS) && !subState.equals(subStates.DECK) && !subState.equals(subStates.BOARD)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        }
-
-        // Check game state matches relevant sub states
-        if (subState.equals(subStates.MOVEMENT) || subState.equals(subStates.ACTION)) {
-            if (!gameState.equals(States.RUNNING)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        } else if (subState.equals(subStates.PLAYERS) || subState.equals(subStates.DECK) || subState.equals(subStates.BOARD)) {
-            if (!gameState.equals(States.INIT)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        }
-
-    }
 
     private void idleToInit() {
         if (!gameState.equals(States.IDLE)) {
@@ -616,6 +598,7 @@ public class Game {
             throw new Error("Expected INIT game state but " + gameState);
         }
         gameState = States.RUNNING;
+        table.updateDisplay();
     }
 
     public void movementTransition() {
@@ -628,6 +611,7 @@ public class Game {
 
         subState = subStates.MOVEMENT;
         currentPlayer = players.get(currentPlayerIndex);
+        table.updateDisplay();
     }
 
     public void actionTransition() {
@@ -638,6 +622,7 @@ public class Game {
             throw new Error("Expected Movement sub state but : " + subState);
         }
         subState = subStates.ACTION;
+        table.updateDisplay();
     }
 
     public void finishTransition() {
