@@ -6,6 +6,12 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 // line 141 "model.ump"
 // line 199 "model.ump"
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.Buffer;
+
 /**
  * Model.WeaponCard Class - Implements Model.Card Interface
  */
@@ -17,6 +23,7 @@ public class WeaponCard implements Card {
 
     //Model.WeaponCard Attributes
     private final String weaponString; // name of the weapon
+    BufferedImage image;
 
 
     /**
@@ -26,6 +33,18 @@ public class WeaponCard implements Card {
      */
     public WeaponCard(String weaponString) {
         this.weaponString = weaponString;
+
+
+        try {
+            image = ImageIO.read(getClass().getResource("/resources/image_"+weaponString+".png"));
+        } catch (IOException e) {
+            System.out.println("failed");
+        }
+    }
+
+
+    public BufferedImage getWeaponImage(){
+        return this.image;
     }
 
     /**
@@ -46,4 +65,6 @@ public class WeaponCard implements Card {
     public String toString() {
         return getWeaponName();
     }
+
+
 }

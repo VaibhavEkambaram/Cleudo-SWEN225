@@ -537,16 +537,8 @@ public class Table extends Observable {
                     }
 
                     if (game.getBoard().getPositions()[j][i].getWeapon() != null) {
-                        BufferedImage image;
-                        String value = "/resources/image_" + game.getBoard().getPositions()[j][i].getWeapon().toString() + ".png";
-                        try {
-                            image = ImageIO.read(getClass().getResource(value));
-                            BufferedImage resized = resize(image, rectSize, rectSize);
+                        g2.drawImage(resize(game.getBoard().getPositions()[j][i].getWeapon().getWeaponImage(), rectSize, rectSize), border + rectSize * i, border + rectSize * j, null);
 
-                            g2.drawImage(resized, border + rectSize * i, border + rectSize * j, null);
-                        } catch (IOException e) {
-                            System.out.println("failed");
-                        }
                     }
 
 
@@ -582,6 +574,7 @@ public class Table extends Observable {
         g2d.dispose();
         return resized;
     }
+
 
     public int setPlayerCount() {
         JPanel fields = new JPanel(new GridLayout(2, 1));
