@@ -2,13 +2,10 @@ package View;
 
 import Model.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
@@ -24,23 +21,23 @@ public class Table extends Observable {
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
 
     // Buttons
-    JButton suggestionButton;
-    JButton accusationButton;
-    JButton passButton;
-    JButton upButton;
-    JButton downButton;
-    JButton leftButton;
-    JButton rightButton;
-    JButton rollDiceButton;
-    JButton finishedButton;
+    final JButton suggestionButton;
+    final JButton accusationButton;
+    final JButton passButton;
+    final JButton upButton;
+    final JButton downButton;
+    final JButton leftButton;
+    final JButton rightButton;
+    final JButton rollDiceButton;
+    final JButton finishedButton;
 
     // Panels
-    private JPanel mainPanel;
-    private JPanel infoPanel;
-    private JPanel displayPanel;
-    private JPanel handPanel;
-    private JPanel actionPanel;
-    private JPanel movementPanel;
+    private final JPanel mainPanel;
+    private final JPanel infoPanel;
+    private final JPanel displayPanel;
+    private final JPanel handPanel;
+    private final JPanel actionPanel;
+    private final JPanel movementPanel;
 
     private ImageIcon image1;
     private JLabel label1;
@@ -54,14 +51,14 @@ public class Table extends Observable {
     private int movesRemaining;
     Player currentPlayer;
     Player previousPlayer;
-    private Font infoFont;
+    private final Font infoFont;
 
     Point p1;
     Point p2;
 
-    Game game;
+    final Game game;
     // Display
-    private JTextArea info;
+    private final JTextArea info;
 
     public Table(Game game) {
         this.game = game;
@@ -172,60 +169,21 @@ public class Table extends Observable {
 
         rollDiceButton = new JButton("Roll Dice");
         actionPanel.add(rollDiceButton);
-        rollDiceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                game.setMovesRemaining(-1);
-                game.setMovesRemaining(game.rollDice());
-                setRollDiceButtonVisibility(false);
-                setFinishedButtonVisibility(true);
-                movementPanel.setVisible(true);
-            }
+        rollDiceButton.addActionListener(e -> {
+            game.setMovesRemaining(-1);
+            game.setMovesRemaining(game.rollDice());
+            setRollDiceButtonVisibility(false);
+            setFinishedButtonVisibility(true);
+            movementPanel.setVisible(true);
         });
 
 
         // Buttons
         suggestionButton = new JButton("Make Suggestion");
         actionPanel.add(suggestionButton);
-        suggestionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int suggest = game.makeSuggestion(game.getCurrentPlayer());
-                if (suggest == -1) {
-                    game.movementTransition();
-                    setRollDiceButtonVisibility(true);
-                    createHand(game);
-                    label1.setVisible(false);
-                    label2.setVisible(false);
-                }
-            }
-        });
-
-
-        accusationButton = new JButton("Make Accusation");
-        actionPanel.add(accusationButton);
-        accusationButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int accuse = game.makeAccusation(game.getCurrentPlayer());
-                if (accuse == 1) {
-                    game.finishTransition();
-                } else {
-                    game.movementTransition();
-                    setRollDiceButtonVisibility(true);
-                    createHand(game);
-                    label1.setVisible(false);
-                    label2.setVisible(false);
-                }
-            }
-        });
-
-
-        passButton = new JButton("Pass");
-        actionPanel.add(passButton);
-        passButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        suggestionButton.addActionListener(e -> {
+            int suggest = game.makeSuggestion(game.getCurrentPlayer());
+            if (suggest == -1) {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
                 createHand(game);
@@ -234,15 +192,39 @@ public class Table extends Observable {
             }
         });
 
-        finishedButton = new JButton("Finished");
-        finishedButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                game.actionTransition();
-                setFinishedButtonVisibility(false);
-                movementPanel.setVisible(false);
-                setSuggestionAccusationVisibility(true);
+
+        accusationButton = new JButton("Make Accusation");
+        actionPanel.add(accusationButton);
+        accusationButton.addActionListener(e -> {
+            int accuse = game.makeAccusation(game.getCurrentPlayer());
+            if (accuse == 1) {
+                game.finishTransition();
+            } else {
+                game.movementTransition();
+                setRollDiceButtonVisibility(true);
+                createHand(game);
+                label1.setVisible(false);
+                label2.setVisible(false);
             }
+        });
+
+
+        passButton = new JButton("Pass");
+        actionPanel.add(passButton);
+        passButton.addActionListener(e -> {
+            game.movementTransition();
+            setRollDiceButtonVisibility(true);
+            createHand(game);
+            label1.setVisible(false);
+            label2.setVisible(false);
+        });
+
+        finishedButton = new JButton("Finished");
+        finishedButton.addActionListener(e -> {
+            game.actionTransition();
+            setFinishedButtonVisibility(false);
+            movementPanel.setVisible(false);
+            setSuggestionAccusationVisibility(true);
         });
 
 
@@ -252,45 +234,25 @@ public class Table extends Observable {
         constraints.gridy = 0;
         upButton = new JButton("Up");
         movementPanel.add(upButton, constraints);
-        upButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                makeMovement(Move.Direction.UP);
-            }
-        });
+        upButton.addActionListener(e -> makeMovement(Move.Direction.UP));
 
         constraints.gridx = 1;
         constraints.gridy = 1;
         downButton = new JButton("Down");
         movementPanel.add(downButton, constraints);
-        downButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                makeMovement(Move.Direction.DOWN);
-            }
-        });
+        downButton.addActionListener(e -> makeMovement(Move.Direction.DOWN));
 
         constraints.gridx = 0;
         constraints.gridy = 1;
         leftButton = new JButton("Left");
         movementPanel.add(leftButton, constraints);
-        leftButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                makeMovement(Move.Direction.LEFT);
-            }
-        });
+        leftButton.addActionListener(e -> makeMovement(Move.Direction.LEFT));
 
         constraints.gridx = 2;
         constraints.gridy = 1;
         rightButton = new JButton("Right");
         movementPanel.add(rightButton, constraints);
-        rightButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                makeMovement(Move.Direction.RIGHT);
-            }
-        });
+        rightButton.addActionListener(e -> makeMovement(Move.Direction.RIGHT));
 
         gameFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
@@ -353,13 +315,11 @@ public class Table extends Observable {
     public void setFinishedButtonVisibility(boolean value) {
         if (value) {
             actionPanel.add(finishedButton);
-            actionPanel.revalidate();
-            actionPanel.repaint();
         } else {
             actionPanel.remove(finishedButton);
-            actionPanel.revalidate();
-            actionPanel.repaint();
         }
+        actionPanel.revalidate();
+        actionPanel.repaint();
     }
 
     public void setSuggestionAccusationVisibility(boolean value) {
@@ -407,14 +367,6 @@ public class Table extends Observable {
 
     private JMenu createGameMenu() {
         final JMenu gameMenu = new JMenu("Game");
-        final JMenuItem setupGameMenuItem = new JMenuItem("Setup Game");
-        gameMenu.add(setupGameMenuItem);
-
-        setupGameMenuItem.addActionListener(e -> {
-            game.resetGame();
-
-        });
-
 
         final JMenuItem exitMenuItem = new JMenuItem("Exit");
         exitMenuItem.addActionListener(e -> {
@@ -429,9 +381,7 @@ public class Table extends Observable {
     private JMenu createHelpMenu() {
         final JMenu helpMenu = new JMenu("Help");
         final JMenuItem about = new JMenuItem("About");
-        about.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, "Cluedo!\nSWEN225 Assignment 2\nA group project by:\nCameron Li Vaibhav Ekambaram Baxter Kirikiri", "About", JOptionPane.PLAIN_MESSAGE);
-        });
+        about.addActionListener(e -> JOptionPane.showMessageDialog(null, "Cluedo!\nSWEN225 Assignment 2\nA group project by:\nCameron Li Vaibhav Ekambaram Baxter Kirikiri", "About", JOptionPane.PLAIN_MESSAGE));
         helpMenu.add(about);
         return helpMenu;
     }
@@ -547,13 +497,42 @@ public class Table extends Observable {
 
 
                         g2.setStroke(new BasicStroke(2));
-                        g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+
+                        int iValue = border + rectSize * i;
+                        int jValue = border + rectSize * j;
+
+
+                        if(i==0){
+                            g2.drawLine(iValue, jValue, iValue, jValue + rectSize);
+                        }
+
+                        if(i==23){
+                            g2.drawLine(iValue + rectSize - 1, jValue, iValue + rectSize - 1, jValue + rectSize);
+                        }
+
+                        if(j==24){
+                            g2.drawLine(iValue, jValue + rectSize - 1, iValue + rectSize, jValue + rectSize - 1);
+                        }
+
+
+
+
+                        if (i > 0 && game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
+                            g2.drawLine(iValue, jValue, iValue, jValue + rectSize);
+                        }
+                        if (i < 23 && game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
+                            g2.drawLine(iValue + rectSize - 1, jValue, iValue + rectSize - 1, jValue + rectSize);
+                        }
+
+                        if (j > 0 && game.getBoard().getPositions()[j - 1][i].getRoom() == null) {
+                            g2.drawLine(iValue, jValue, iValue + rectSize, jValue);
+                        }
+                        if (j < 23 && game.getBoard().getPositions()[j + 1][i].getRoom() == null) {
+                            g2.drawLine(iValue, jValue + rectSize - 1, iValue + rectSize, jValue + rectSize - 1);
+                        }
+
+
                     }
-
-
-
-
-
 
 
                     g.setColor(Color.BLACK);
