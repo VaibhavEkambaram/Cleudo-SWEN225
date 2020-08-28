@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -96,7 +95,7 @@ public class Table extends Observable {
         constraints.gridy = 0;
         constraints.gridheight = 1;
         displayPanel = new JPanel();
-        displayPanel.setBackground(Color.BLACK);
+        displayPanel.setBackground(Color.WHITE);
         displayPanel.setPreferredSize(new Dimension(500, 500));
         mainPanel.add(displayPanel, constraints);
 
@@ -538,26 +537,51 @@ public class Table extends Observable {
                     }
 
                     if (game.getBoard().getPositions()[j][i].getWeapon() != null) {
-                        g.setColor(Color.DARK_GRAY);
-                        g.fillOval(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                        BufferedImage image;
+                        String value = "/resources/image_" + game.getBoard().getPositions()[j][i].getWeapon().toString() + ".png";
+                        try {
+                            image = ImageIO.read(getClass().getResource(value));
+                            BufferedImage resized = resize(image, rectSize, rectSize);
 
-
-                            ImageIcon img = new ImageIcon(getClass().getResource("/resources/image_" + game.getBoard().getPositions()[j][i].getWeapon().getWeaponName() + ".png"));
-
-
-                           // g.drawImage(img, border + rectSize * i, border + rectSize * j, null);
-                            gameFrame.repaint();
-
-
+                            g2.drawImage(resized, border + rectSize * i, border + rectSize * j, null);
+                        } catch (IOException e) {
+                            System.out.println("failed");
+                        }
                     }
 
+
+                    if (!game.getBoard().getPositions()[j][i].isPassableTile() && game.getBoard().getPositions()[j][i].getRoom() != null) {
+                        g.setColor(Color.BLACK);
+
+
+                        g2.setStroke(new BasicStroke(2));
+                        g.fillRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                    }
+
+
+
+
+
+
+
                     g.setColor(Color.BLACK);
-                    g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
+                    g2.setStroke(new BasicStroke(1));
+                    // g.drawRect(border + rectSize * i, border + rectSize * j, rectSize, rectSize);
                 }
             }
         }
+
     }
 
+
+    private static BufferedImage resize(BufferedImage img, int height, int width) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
+    }
 
     public int setPlayerCount() {
         JPanel fields = new JPanel(new GridLayout(2, 1));
