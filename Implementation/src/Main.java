@@ -8,6 +8,6 @@ public class Main {
      * @param args arguments
      */
     public static void main(String[] args) {
-        new Game();
+        new Game(true);
     }
 }

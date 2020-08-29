@@ -6,7 +6,7 @@ import org.junit.Test;
 public class CluedoTests {
     @Test
     public void test1(){
-        Game game = new Game();
+        Game game = new Game(false);
 
     }
 }

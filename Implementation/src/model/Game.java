@@ -51,11 +51,12 @@ public class Game {
      *
      * @author Cameron Li, Vaibhav Ekambaram
      */
-    public Game() {
+    public Game(boolean run) {
         initDeck();
         initPlayers();
         initBoard(); // generate board
         dealCards();
+        if(!run) return;
         runGame(); // main game logic loop
     }
 
