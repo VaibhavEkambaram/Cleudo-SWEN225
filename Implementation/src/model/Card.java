@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Model.Card Interface - Later used to make Character, Model.Room and Weapon Cards
+ * Card Interface - Later used to make Character, Model.Room and Weapon Cards
  */
 public interface Card {
 

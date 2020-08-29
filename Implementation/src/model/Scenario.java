@@ -1,13 +1,7 @@
-package model;/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
-
-// line 32 "model.ump"
-// line 135 "model.ump"
-// line 156 "model.ump"
-// line 214 "model.ump"
+package model;
 
 /**
- * Model.Scenario Class
+ * Scenario Class
  * Stores a randomly generated murder scenario consisting of a room, character and weapon
  */
 public class Scenario {
@@ -21,7 +15,7 @@ public class Scenario {
     private final CharacterCard murderer;
 
     /**
-     * Model.Scenario Constructor
+     * Scenario Constructor
      *
      * @param weapon   murder weapon
      * @param room     room where murder took place
@@ -34,16 +28,16 @@ public class Scenario {
     }
 
     /**
-     * Model.Room Model.Card Get Method
+     * Room Card Get Method
      *
      * @return room card
      */
-    public RoomCard getRoomCard() {
+    public RoomCard getRoom() {
         return roomCard;
     }
 
     /**
-     * Weapon Model.Card Get Method
+     * Weapon Card Get Method
      *
      * @return weapon card
      */
@@ -52,7 +46,7 @@ public class Scenario {
     }
 
     /**
-     * Character Model.Card Get Method
+     * Character Card Get Method
      *
      * @return murderer character card
      */
@@ -82,6 +76,6 @@ public class Scenario {
      * @author Vaibhav Ekambaram
      */
     public String toString() {
-        return getRoomCard().getRoomName() + " " + getMurderer().getCharacterName() + " " + getWeapon().getWeaponName();
+        return getRoom().getRoomName() + " " + getMurderer().getCharacterName() + " " + getWeapon().getWeaponName();
     }
 }

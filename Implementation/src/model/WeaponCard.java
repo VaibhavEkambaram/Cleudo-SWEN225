@@ -1,10 +1,4 @@
-package model;/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
-
-// line 11 "model.ump"
-// line 117 "model.ump"
-// line 141 "model.ump"
-// line 199 "model.ump"
+package model;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,13 +9,9 @@ import java.io.IOException;
  */
 public class WeaponCard implements Card {
 
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-
-    //Model.WeaponCard Attributes
+    //WeaponCard Attributes
     private final String weaponString; // name of the weapon
-    BufferedImage image;
+    BufferedImage weaponImage;
 
 
     /**
@@ -31,18 +21,16 @@ public class WeaponCard implements Card {
      */
     public WeaponCard(String weaponString) {
         this.weaponString = weaponString;
-
-
+        
         try {
-            image = ImageIO.read(getClass().getResource("/resources/image_"+weaponString+".png"));
+            weaponImage = ImageIO.read(getClass().getResource("/resources/image_" + weaponString + ".png"));
         } catch (IOException e) {
-            System.out.println("failed");
+            System.out.println("Failed to load image!");
         }
     }
 
-
-    public BufferedImage getWeaponImage(){
-        return this.image;
+    public BufferedImage getWeaponImage() {
+        return this.weaponImage;
     }
 
     /**

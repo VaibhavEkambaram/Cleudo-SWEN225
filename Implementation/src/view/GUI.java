@@ -11,13 +11,12 @@ import java.util.*;
 
 import static model.Game.subStates.MOVEMENT;
 
-
-public class Table extends Observable {
+public class GUI extends Observable {
     private final int BORDER_SIZE = 20;
     private int RECT_SIZE;
 
     final JFrame gameFrame;
-    private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
+    private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(700, 700);
 
     // Buttons
     final JButton suggestionButton;
@@ -30,35 +29,32 @@ public class Table extends Observable {
     final JButton rollDiceButton;
     final JButton finishedButton;
 
-    // Panels
-    private final JPanel mainPanel;
     private final JPanel infoPanel;
     private final JPanel displayPanel;
     private final JPanel handPanel;
     private final JPanel actionPanel;
     private final JPanel movementPanel;
 
-    private ImageIcon image1;
-    private JLabel label1;
-    private ImageIcon image2;
-    private JLabel label2;
-
-
-    // Scroll Pane
-    private JScrollPane scrollHandPane;
+    private ImageIcon firstDiceImage;
+    private JLabel firstDiceImageLabel;
+    private JLabel secondDiceImageLabel;
 
     private int movesRemaining;
     Player currentPlayer;
     Player previousPlayer;
 
-    Point p1;
-    Point p2;
+
+    Graphics g;
+
+    Image cachedWindow;
+    Graphics2D cachedGraphics;
+
 
     final Game game;
     // Display
     private final JTextArea info;
 
-    public Table(Game game) {
+    public GUI(Game game) {
         this.game = game;
         gameFrame = new JFrame("Cluedo");
         gameFrame.setLayout(new BorderLayout());
@@ -66,12 +62,12 @@ public class Table extends Observable {
         gameFrame.setJMenuBar(tableMenuBar);
         gameFrame.setSize(OUTER_FRAME_DIMENSION);
         gameFrame.setVisible(true);
-        //gameFrame.setPreferredSize(new Dimension(600, 750));
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
 
-        mainPanel = new JPanel(new GridBagLayout());
+        // Panels
+        JPanel mainPanel = new JPanel(new GridBagLayout());
 
         // Action Panel
         actionPanel = new JPanel();
@@ -91,7 +87,9 @@ public class Table extends Observable {
         constraints.gridheight = 1;
         displayPanel = new JPanel();
         displayPanel.setBackground(Color.WHITE);
-        displayPanel.setPreferredSize(new Dimension(500, 500));
+        displayPanel.setPreferredSize(new Dimension(750, 600));
+        displayPanel.setDoubleBuffered(true);
+        mainPanel.setDoubleBuffered(true);
         mainPanel.add(displayPanel, constraints);
 
         // Info Panel
@@ -110,7 +108,7 @@ public class Table extends Observable {
         // Hand Panel
         handPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         handPanel.setBackground(Color.WHITE);
-        handPanel.setPreferredSize(new Dimension(600, 183));
+        handPanel.setPreferredSize(new Dimension(700, 183));
         //scrollHandPane = new JScrollPane(handPanel);
         //scrollHandPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         //scrollHandPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -136,7 +134,6 @@ public class Table extends Observable {
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         displayPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         handPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        //scrollHandPane.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         actionPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         movementPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -177,8 +174,8 @@ public class Table extends Observable {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
                 createHand();
-                label1.setVisible(false);
-                label2.setVisible(false);
+                firstDiceImageLabel.setVisible(false);
+                secondDiceImageLabel.setVisible(false);
             }
         });
 
@@ -193,8 +190,8 @@ public class Table extends Observable {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
                 createHand();
-                label1.setVisible(false);
-                label2.setVisible(false);
+                firstDiceImageLabel.setVisible(false);
+                secondDiceImageLabel.setVisible(false);
             }
         });
 
@@ -204,9 +201,10 @@ public class Table extends Observable {
         passButton.addActionListener(e -> {
             game.movementTransition();
             setRollDiceButtonVisibility(true);
+
             createHand();
-            label1.setVisible(false);
-            label2.setVisible(false);
+            firstDiceImageLabel.setVisible(false);
+            secondDiceImageLabel.setVisible(false);
         });
 
         finishedButton = new JButton("Finished");
@@ -258,42 +256,32 @@ public class Table extends Observable {
 
         gameFrame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
-                if (game.getBoard() != null) {
-                    updateDisplay();
-                }
+                if (game.getBoard() != null) updateDisplay();
             }
         });
 
-        gameFrame.setMinimumSize(new Dimension(750, 750));
+        gameFrame.setMinimumSize(new Dimension(800, 800));
         gameFrame.pack();
 
         setSuggestionAccusationVisibility(false);
         showMovement(false);
-        //updateDisplay();
     }
 
     /**
      * Java Swing Elements
-     *
-     * @return
      */
 
-    public Frame getGameFrame() {
-        return gameFrame;
-    }
 
     public void RollDiceMenu(int firstNumber, int secondNumber) {
+        firstDiceImage = new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png"));
+        firstDiceImageLabel = new JLabel(firstDiceImage);
+        handPanel.add(firstDiceImageLabel);
 
-
-        image1 = new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png"));
-        label1 = new JLabel(image1);
-        handPanel.add(label1);
-
-        image2 = new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png"));
-        label2 = new JLabel(image2);
-        label1.setVisible(true);
-        label2.setVisible(true);
-        handPanel.add(label2);
+        ImageIcon secondDiceImage = new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png"));
+        secondDiceImageLabel = new JLabel(secondDiceImage);
+        firstDiceImageLabel.setVisible(true);
+        secondDiceImageLabel.setVisible(true);
+        handPanel.add(secondDiceImageLabel);
     }
 
     public void setRollDiceButtonVisibility(boolean value) {
@@ -301,7 +289,6 @@ public class Table extends Observable {
             actionPanel.add(rollDiceButton);
         } else {
             actionPanel.remove(rollDiceButton);
-
         }
         rollDiceButton.setVisible(value);
     }
@@ -318,15 +305,12 @@ public class Table extends Observable {
 
     public void setSuggestionAccusationVisibility(boolean value) {
         if (value) {
-
             actionPanel.add(suggestionButton);
             actionPanel.add(accusationButton);
             actionPanel.add(passButton);
             suggestionButton.setVisible(true);
             accusationButton.setVisible(true);
             passButton.setVisible(true);
-
-
         } else {
             suggestionButton.setVisible(false);
             accusationButton.setVisible(false);
@@ -354,6 +338,7 @@ public class Table extends Observable {
     private JMenuBar createTableMenuBar() {
         final JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createGameMenu());
+        tableMenuBar.add(createDebugMenu());
         tableMenuBar.add(createHelpMenu());
         return tableMenuBar;
     }
@@ -370,6 +355,25 @@ public class Table extends Observable {
         gameMenu.add(exitMenuItem);
         return gameMenu;
     }
+    private JMenu createDebugMenu(){
+        final JMenu debugMenu = new JMenu("Debug");
+        final JMenuItem scenarioMenuItem = new JMenuItem("Murder Scenario");
+        scenarioMenuItem.addActionListener(e -> {
+
+            String message;
+            if(game.getMurderScenario()!=null){
+                message = "[Character] "+game.getMurderScenario().getMurderer()+"\n[Weapon] "+game.getMurderScenario().getWeapon()+"\n[Room] "+game.getMurderScenario().getRoom();
+            } else {
+                message = "Game has not been loaded!";
+            }
+            JOptionPane.showMessageDialog(null, message, "Murder Scenario", JOptionPane.PLAIN_MESSAGE);
+        });
+        debugMenu.add(scenarioMenuItem);
+
+
+        return debugMenu;
+    }
+
 
     private JMenu createHelpMenu() {
         final JMenu helpMenu = new JMenu("Help");
@@ -380,21 +384,14 @@ public class Table extends Observable {
     }
 
     private void createHand() {
-        // TODO: make the hand panel scrollable so the player can actually see all of their cards
-        if (currentPlayer == null) {
-            return;
-        }
-
+        if (currentPlayer == null) return;
         if (previousPlayer != currentPlayer) {
             handPanel.removeAll();
-            for (Card c : currentPlayer.getHand()) {
-
-
-                image1 = new ImageIcon(getClass().getResource("/resources/card_" + c.toString() + ".png"));
-                label1 = new JLabel(image1);
-                handPanel.add(label1);
-
-            }
+            currentPlayer.getHand().forEach(c -> {
+                firstDiceImage = new ImageIcon(getClass().getResource("/resources/card_" + c.toString() + ".png"));
+                firstDiceImageLabel = new JLabel(firstDiceImage);
+                handPanel.add(firstDiceImageLabel);
+            });
 
             previousPlayer = currentPlayer;
         }
@@ -412,11 +409,7 @@ public class Table extends Observable {
      * @author Cameron Li
      */
     public void updateDisplay() {
-        if (displayPanel.getWidth() > displayPanel.getHeight()) {
-            RECT_SIZE = (displayPanel.getHeight() - BORDER_SIZE) / 25;
-        } else {
-            RECT_SIZE = (displayPanel.getWidth() - BORDER_SIZE) / 25;
-        }
+        RECT_SIZE = displayPanel.getWidth() > displayPanel.getHeight() ? (displayPanel.getHeight() - BORDER_SIZE) / 25 : (displayPanel.getWidth() - BORDER_SIZE) / 25;
 
         if (game.getGameState().equals(Game.States.RUNNING)) {
             infoPanel.setVisible(true);
@@ -424,7 +417,6 @@ public class Table extends Observable {
                 if (game.getMovesRemaining() > 0) {
                     showMovement(true);
                 }
-
                 setSuggestionAccusationVisibility(false);
             } else {
                 showMovement(false);
@@ -453,106 +445,113 @@ public class Table extends Observable {
                 info.setText(game.getCurrentPlayer().toString() + "\n");
                 info.append(this.movesRemaining + " moves remaining\n");
                 if (game.getCurrentPlayer().getCurrentPosition().getRoom() != null) {
-                    info.append(game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
+                    info.append("Player is currently in " + game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
                 }
             } else if (game.getMovesRemaining() < 1) {
                 info.setText(game.getCurrentPlayer().toString() + "\n");
                 if (game.getCurrentPlayer().getCurrentPosition().getRoom() != null) {
-                    info.append(game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
+                    info.append("Player is currently in " + game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
                 }
             }
         }
 
-        paint(displayPanel.getGraphics());
+        g = displayPanel.getGraphics();
+
+        paint((Graphics2D) g);
+
     }
 
+    /*
     /**
      * Draw all the relevant Display Panel Elements
      * Grid Board, Players, Weapons
      *
-     * @param g
      * @author Vaibhav Ekambaram
      */
-    public void paint(Graphics g) {
+    public void paint(Graphics2D g) {
         if (g != null) {
-            Graphics2D g2 = (Graphics2D) g;
+
             int border = BORDER_SIZE / 2;
 
-            for (int i = 0; i < 24; i++) {
-                for (int j = 0; j < 25; j++) {
+            int BOARD_WIDTH = 24;
+            for (int i = 0; i < BOARD_WIDTH; i++) {
+                int BOARD_HEIGHT = 25;
+                for (int j = 0; j < BOARD_HEIGHT; j++) {
 
+                    Position currentPosition = game.getBoard().getPositions()[j][i];
+                    int xValue = border + RECT_SIZE * i;
+                    int yValue = border + RECT_SIZE * j;
 
-                    if (!game.getBoard().getPositions()[j][i].equals(game.getSelectedTile())) {
-                        game.getBoard().getPositions()[j][i].draw(g);
-                        g.fillRect(border + RECT_SIZE * i, border + RECT_SIZE * j, RECT_SIZE, RECT_SIZE);
+                    currentPosition.draw(g);
+                    g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
+
+                    if (currentPosition.getCharacter() != null) {
+                        g.setColor(currentPosition.getCharacter().getCharacterBoardColor());
+                        g.fillOval(xValue, yValue, RECT_SIZE, RECT_SIZE);
                     }
 
-
-                    if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
-                        g.setColor(game.getBoard().getPositions()[j][i].getCharacter().getCharacterBoardColor());
-                        g.fillOval(border + RECT_SIZE * i, border + RECT_SIZE * j, RECT_SIZE, RECT_SIZE);
+                    if (currentPosition.getWeapon() != null) {
+                        g.drawImage(resize(currentPosition.getWeapon().getWeaponImage(), RECT_SIZE - 4, RECT_SIZE - 4), xValue + 2, yValue + 2, displayPanel);
                     }
-
-                    if (game.getBoard().getPositions()[j][i].getWeapon() != null) {
-                        g2.drawImage(resize(game.getBoard().getPositions()[j][i].getWeapon().getWeaponImage(), RECT_SIZE, RECT_SIZE), border + RECT_SIZE * i, border + RECT_SIZE * j, null);
-
-                    }
-
 
                     g.setColor(Color.BLACK);
-                    g2.setStroke(new BasicStroke(1));
-                    g.drawRect(border + RECT_SIZE * i, border + RECT_SIZE * j, RECT_SIZE, RECT_SIZE);
-
-                    if (!game.getBoard().getPositions()[j][i].isPassableTile() && game.getBoard().getPositions()[j][i].getRoom() != null) {
-                        g.setColor(Color.DARK_GRAY);
-                        g2.setStroke(new BasicStroke(2));
-
-                        int iValue = border + RECT_SIZE * i;
-                        int jValue = border + RECT_SIZE * j;
-
-                        if (i == 0) g2.drawLine(iValue, jValue, iValue, jValue + RECT_SIZE);
-                        if (i == 23)
-                            g2.drawLine(iValue + RECT_SIZE - 1, jValue, iValue + RECT_SIZE - 1, jValue + RECT_SIZE);
-                        if (j == 24)
-                            g2.drawLine(iValue, jValue + RECT_SIZE - 1, iValue + RECT_SIZE, jValue + RECT_SIZE - 1);
-
-                        if (i > 0 && game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
-                            g2.drawLine(iValue, jValue, iValue, jValue + RECT_SIZE);
-                        }
-                        if (i < 23 && game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
-                            g2.drawLine(iValue + RECT_SIZE - 1, jValue, iValue + RECT_SIZE - 1, jValue + RECT_SIZE);
-                        }
-                        if (j > 0 && game.getBoard().getPositions()[j - 1][i].getRoom() == null) {
-                            g2.drawLine(iValue, jValue, iValue + RECT_SIZE, jValue);
-                        }
-                        if (j < 24 && game.getBoard().getPositions()[j + 1][i].getRoom() == null) {
-                            g2.drawLine(iValue, jValue + RECT_SIZE - 1, iValue + RECT_SIZE, jValue + RECT_SIZE - 1);
-                        }
-                    }
-
-
-                    if (game.getBoard().getPositions()[j][i].isDoor()) {
-                        g.setColor(Color.DARK_GRAY);
-                        g2.setStroke(new BasicStroke(2));
-                        int iValue = border + RECT_SIZE * i;
-                        int jValue = border + RECT_SIZE * j;
-
-                        if (game.getBoard().getPositions()[j][i].getDisplayName().equals("^") || game.getBoard().getPositions()[j][i].getDisplayName().equals("v")) {
-
-                            if (game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
-                                g2.drawLine(iValue + RECT_SIZE - 1, jValue, iValue + RECT_SIZE - 1, jValue + RECT_SIZE);
-                            }
-
-                            if (game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
-                                g2.drawLine(iValue, jValue, iValue, jValue + RECT_SIZE);
-                            }
-                        }
-                    }
+                    g.setStroke(new BasicStroke(1));
+                    g.drawRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
+                    drawWalls(currentPosition, g, i, j, xValue, yValue);
                 }
             }
         }
 
     }
+
+
+
+    public void drawWalls(Position currentPosition, Graphics2D g2, int i, int j, int xValue, int yValue) {
+        if (!currentPosition.isPassableTile() && currentPosition.getRoom() != null) {
+            g2.setColor(Color.DARK_GRAY);
+            g2.setStroke(new BasicStroke(2));
+
+
+            if (i == 0) {
+                g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
+                g2.drawLine(xValue, yValue, xValue + RECT_SIZE, yValue);
+            }
+            if (i == 23)
+                g2.drawLine(xValue + RECT_SIZE, yValue, xValue + RECT_SIZE, yValue + RECT_SIZE);
+            if (j == 24)
+                g2.drawLine(xValue, yValue + RECT_SIZE, xValue + RECT_SIZE, yValue + RECT_SIZE);
+
+            if (i > 0 && game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
+                g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
+            }
+            if (i < 23 && game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
+                g2.drawLine(xValue + RECT_SIZE, yValue, xValue + RECT_SIZE, yValue + RECT_SIZE);
+            }
+            if (j > 0 && game.getBoard().getPositions()[j - 1][i].getRoom() == null) {
+                g2.drawLine(xValue, yValue, xValue + RECT_SIZE, yValue);
+            }
+            if (j < 24 && game.getBoard().getPositions()[j + 1][i].getRoom() == null) {
+                g2.drawLine(xValue, yValue + RECT_SIZE, xValue + RECT_SIZE, yValue + RECT_SIZE);
+            }
+        }
+
+        if (currentPosition.isDoor()) {
+            g2.setColor(Color.DARK_GRAY);
+            g2.setStroke(new BasicStroke(2));
+
+            if (currentPosition.getDisplayName().equals("^") || currentPosition.getDisplayName().equals("v")) {
+
+                if (game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
+                    g2.drawLine(xValue + RECT_SIZE, yValue, xValue + RECT_SIZE, yValue + RECT_SIZE);
+                }
+
+                if (game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
+                    g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
+                }
+            }
+        }
+    }
+
 
     private static BufferedImage resize(BufferedImage img, int height, int width) {
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -646,10 +645,10 @@ public class Table extends Observable {
 
     /**
      * Move to a position on the board given by mouse click
-     * Check if position is alligned via X-axis or Y-axis
+     * Check if position is aligned via X-axis or Y-axis
      * If valid, commence the move and apply to board
      *
-     * @param e
+     * @param e event
      * @author Cameron Li
      */
     public void makeMouseMovement(MouseEvent e) {
@@ -673,7 +672,7 @@ public class Table extends Observable {
             game.setSelectedTile((int) x, (int) y);
             Position currentPosition = game.getCurrentPlayer().getCurrentPosition();
             // Check X-axis or Y-axis Alignment
-            if (currentPosition.checkAlligned(select)) {
+            if (currentPosition.checkAligned(select)) {
                 // Find number of spaces to move
                 int xDif = currentPosition.getLocationX() - select.getLocationX();
                 int yDif = currentPosition.getLocationY() - select.getLocationY();
@@ -683,7 +682,7 @@ public class Table extends Observable {
                     return;
                 }
 
-                Move move = null;
+                Move move;
                 // Create new move depending on alignment and direction
                 if (yDif == 0) {
                     if (xDif < 0) {

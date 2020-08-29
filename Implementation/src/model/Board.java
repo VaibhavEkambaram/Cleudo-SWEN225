@@ -85,7 +85,6 @@ public class Board {
         int dy = move.yChange();
         while (spaces > 0) {
             if (outOfBounds(x + dx, y + dy)) { // Check boundary errors
-                System.out.println("Out of bounds");
                 return null;
             }
 
@@ -261,7 +260,7 @@ public class Board {
 
     /**
      * Given a set of co-ordinates
-     * Find if such a Position exists on the baord
+     * Find if such a Position exists on the board
      *
      * @param x
      * @param y

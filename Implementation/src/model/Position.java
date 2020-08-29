@@ -47,14 +47,6 @@ public class Position {
         }
     }
 
-    public void setParent(Position position){
-        this.parent = parent;
-    }
-
-    public Position getParent(){
-        return this.parent;
-    }
-
 
     public String getDisplayName() {
         return this.displayName;
@@ -312,7 +304,7 @@ public class Position {
      * @return
      * @author Cameron Li
      */
-    public boolean checkAlligned(Position b) {
+    public boolean checkAligned(Position b) {
         return (b.getLocationX() == this.getLocationX() || b.getLocationY() == this.getLocationY());
     }
 }

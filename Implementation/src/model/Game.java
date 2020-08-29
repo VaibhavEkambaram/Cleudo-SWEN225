@@ -3,7 +3,7 @@ package model;/*PLEASE DO NOT EDIT THIS CODE*/
 
 import view.AccusationMenu;
 import view.SuggestionMenu;
-import view.Table;
+import view.GUI;
 
 import java.util.*;
 
@@ -15,7 +15,7 @@ public class Game {
 
     private States gameState = States.IDLE;
     private subStates subState;
-    Table table;
+    GUI GUI;
 
     /**
      * Check if States are matching within their appropriate sub-states
@@ -32,7 +32,6 @@ public class Game {
 
     private List<Card> deck;
     private List<Room> rooms;
-
     public List<Player> players;
 
     private Board board;
@@ -47,7 +46,6 @@ public class Game {
     Position selectedTile = null;
 
 
-
     /**
      * Game Constructor
      * Primary game springboard for all other methods of the game
@@ -55,31 +53,6 @@ public class Game {
      * @author Cameron Li, Vaibhav Ekambaram
      */
     public Game() {
-        initDeck();
-        initPlayers();
-        initBoard(); // generate board
-        dealCards();
-        runGame(); // main game logic loop
-    }
-
-    public void resetGame(){
-        table.getGameFrame().dispose();
-        gameState = States.IDLE;
-        subState = null;
-        table = null;
-
-        board = null;
-        currentPlayer = null;
-        murderScenario = null;
-
-        currentPlayerIndex = 0;
-        movesRemaining = -1;
-        numPlayers = -1;
-
-        deck.clear();
-        rooms.clear();
-        players.clear();
-
         initDeck();
         initPlayers();
         initBoard(); // generate board
@@ -167,17 +140,17 @@ public class Game {
             throw new Error("Expecting PLAYERS Sub State but " + subState);
         }
 
-        table = new Table(this);
-        numPlayers = table.setPlayerCount();
+        GUI = new GUI(this);
+        numPlayers = GUI.setPlayerCount();
         players = new ArrayList<>();
-        players = table.setPlayers(characterNames, numPlayers, players, characterCardsMap);
+        players = GUI.setPlayers(characterNames, numPlayers, players, characterCardsMap);
     }
 
     /**
      * Load and create the Cluedo board
      * "x" = Forbidden Position
      * "_" = Standard Position
-     * number = Model.Player starting Position
+     * number = Player starting Position
      * uppercase letter = Inner Room Position
      * lowercase letter = Outer Room Position
      * "d" + letter = Room Door Position
@@ -339,9 +312,9 @@ public class Game {
     public void runGame() {
         initToRunning();
         movementTransition();
-        table.updateDisplay();
+        GUI.updateDisplay();
         while (gameState.equals(States.RUNNING)) {
-            table.updateDisplay();
+            GUI.updateDisplay();
         }
     }
 
@@ -356,7 +329,7 @@ public class Game {
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
 
-        table.RollDiceMenu(firstResult,secondResult);
+        GUI.RollDiceMenu(firstResult,secondResult);
         return firstResult + secondResult;
     }
 
@@ -381,13 +354,12 @@ public class Game {
         if (newBoard != null) {
             movesRemaining = movesRemaining - move.getSpaces();
             if (movesRemaining < 1) {
-                table.setSuggestionAccusationVisibility(true);
+                GUI.setSuggestionAccusationVisibility(true);
                 actionTransition();
             }
             board = newBoard;
             return true;
         }
-
         return false;
     }
 
@@ -413,7 +385,7 @@ public class Game {
 
         if (murderScenario.equals(accusationScenario)) {
             a.successfulAccusation(p, murderScenario);
-            table.setSuggestionAccusationVisibility(false);
+            GUI.setSuggestionAccusationVisibility(false);
             return 1;
         } else {
             a.incorrectAccusation(p);
@@ -514,11 +486,11 @@ public class Game {
             }
 
             // if the player successfully refutes the suggestion, end the loop
-            if (refutation.toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom.toString()) || refutation.toString().equals(suggestionWeapon.toString())) {
+            if (Objects.requireNonNull(refutation).toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom.toString()) || refutation.toString().equals(suggestionWeapon.toString())) {
                 s.refuted(p.getCharacter().getCharacterName());
                 refuted = true;
                 movementTransition();
-                table.setRollDiceButtonVisibility(true);
+                GUI.setRollDiceButtonVisibility(true);
                 break;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
                 s.refutationFailed(currentTurn.getPlayerVanityName());
@@ -532,22 +504,18 @@ public class Game {
             if (i == 0) {
                 int accuse = makeAccusation(p);
                 if (accuse == 1) {
-                    table.setSuggestionAccusationVisibility(false);
+                    GUI.setSuggestionAccusationVisibility(false);
                     gameState = States.FINISHED;
                 } else {
                     movementTransition();
-                    table.setRollDiceButtonVisibility(true);
+                    GUI.setRollDiceButtonVisibility(true);
                 }
             } else {
                 movementTransition();
-                table.setRollDiceButtonVisibility(true);
+                GUI.setRollDiceButtonVisibility(true);
             }
         }
         return 0;
-    }
-
-    public List<Player> getPlayers(){
-        return this.players;
     }
 
     /**
@@ -688,6 +656,10 @@ public class Game {
 
     public int getMovesRemaining() {
         return movesRemaining;
+    }
+
+    public Scenario getMurderScenario(){
+        return murderScenario;
     }
 
     /**
