@@ -311,4 +311,8 @@ public class Position {
     public void setWeapon(WeaponCard weapon) {
         this.weapon = weapon;
     }
+
+    public boolean checkAlligned(Position b) {
+        return (b.getLocationX() == this.getLocationX() || b.getLocationY() == this.getLocationY());
+    }
 }

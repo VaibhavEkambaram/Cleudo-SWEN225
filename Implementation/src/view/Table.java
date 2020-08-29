@@ -148,33 +148,7 @@ public class Table extends Observable {
         displayPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-
-                if (game.getBoard() == null) {
-                    return;
-                }
-
-                if (!game.getSubState().equals(MOVEMENT)) {
-                    return;
-                }
-
-                double x = e.getX();
-                double y = e.getY();
-                x = x - BORDER_SIZE / 2;
-                y = y - BORDER_SIZE / 2;
-                x = x / RECT_SIZE;
-                y = y / RECT_SIZE;
-                Position select = game.getBoard().findNearest((int) x, (int) y);
-                if (select != null) {
-
-                    game.setSelectedTile((int) x, (int) y);
-
-
-                    Board board = game.getBoard().movePlayer(game.getCurrentPlayer(), game.getSelectedTile(), game);
-
-                    if (board != null) {
-                        game.setBoard(board);
-                    }
-                }
+                makeMouseMovement(e);
             }
 
             @Override
@@ -425,6 +399,7 @@ public class Table extends Observable {
 
     /**
      * Update all visual elements on the GUI
+     * Buttons, Panels and Display
      *
      * @author Cameron Li
      */
@@ -564,10 +539,6 @@ public class Table extends Observable {
         return resized;
     }
 
-    public void makeMovement(Move.Direction direction) {
-        currentPlayer = game.getCurrentPlayer();
-        game.movementInput(new Move(direction, 1));
-    }
 
     /**
      * Set player count through option pane
@@ -583,7 +554,6 @@ public class Table extends Observable {
         JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.PLAIN_MESSAGE);
         return Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
     }
-
 
     /**
      * Set player vanity name and tokens through option pane
@@ -629,5 +599,76 @@ public class Table extends Observable {
             }
         }
         return players;
+    }
+
+    /**
+     * Move one tile in specified direction given by Button Press
+     *
+     * @param direction
+     * @author Cameron Li
+     */
+    public void makeMovement(Move.Direction direction) {
+        currentPlayer = game.getCurrentPlayer();
+        game.movementInput(new Move(direction, 1));
+    }
+
+
+    /**
+     * Move to a position on the board given by mouse click
+     * Check if position is alligned via X-axis or Y-axis
+     * If valid, commence the move and apply to board
+     *
+     * @param e
+     * @author Cameron Li
+     */
+    public void makeMouseMovement(MouseEvent e) {
+        // Check Game Validity
+        if (game.getBoard() == null) {
+            return;
+        }
+        if (!game.getSubState().equals(MOVEMENT)) {
+            return;
+        }
+        if (game.getMovesRemaining() < 1) {
+            return;
+        }
+        movesRemaining = game.getMovesRemaining();
+
+        // Find specifided Position of Mouse Click
+        double x = (e.getX() - (BORDER_SIZE / 2)) / RECT_SIZE;
+        double y = (e.getY() - (BORDER_SIZE / 2)) / RECT_SIZE;
+        Position select = game.getBoard().findNearest((int) x, (int) y);
+        if (select != null) {
+            game.setSelectedTile((int) x, (int) y);
+            Position currentPosition = game.getCurrentPlayer().getCurrentPosition();
+            // Check X-axis or Y-axis Alignment
+            if (currentPosition.checkAlligned(select)) {
+                // Find number of spaces to move
+                int xDif = currentPosition.getLocationX() - select.getLocationX();
+                int yDif = currentPosition.getLocationY() - select.getLocationY();
+
+                // Check enough moves left to apply move
+                if (Math.abs(xDif) > movesRemaining || Math.abs(yDif) > movesRemaining) {
+                    return;
+                }
+
+                Move move = null;
+                // Create new move depending on alignment and direction
+                if (yDif == 0) {
+                    if (xDif < 0) {
+                        move = new Move(Move.Direction.RIGHT, Math.abs(xDif));
+                    } else {
+                        move = new Move(Move.Direction.LEFT, xDif);
+                    }
+                } else {
+                    if (yDif < 0) {
+                        move = new Move(Move.Direction.DOWN, Math.abs(yDif));
+                    } else {
+                        move = new Move(Move.Direction.UP, yDif);
+                    }
+                }
+                game.movementInput(move);
+            }
+        }
     }
 }
