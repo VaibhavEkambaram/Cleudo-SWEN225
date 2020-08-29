@@ -442,15 +442,24 @@ public class Table extends Observable {
         if (game.getCurrentPlayer() != currentPlayer) {
             info.setText(game.getCurrentPlayer().toString() + "\n");
             currentPlayer = game.getCurrentPlayer();
+            if (game.getCurrentPlayer().getCurrentPosition().getRoom() != null) {
+                info.append(game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
+            }
         }
 
         if (game.getCurrentPlayer() == currentPlayer) {
             if (game.getMovesRemaining() != this.movesRemaining && game.getMovesRemaining() > 0) {
                 this.movesRemaining = game.getMovesRemaining();
                 info.setText(game.getCurrentPlayer().toString() + "\n");
-                info.append(this.movesRemaining + " moves remaining");
+                info.append(this.movesRemaining + " moves remaining\n");
+                if (game.getCurrentPlayer().getCurrentPosition().getRoom() != null) {
+                    info.append(game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
+                }
             } else if (game.getMovesRemaining() < 1) {
                 info.setText(game.getCurrentPlayer().toString() + "\n");
+                if (game.getCurrentPlayer().getCurrentPosition().getRoom() != null) {
+                    info.append(game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
+                }
             }
         }
 
