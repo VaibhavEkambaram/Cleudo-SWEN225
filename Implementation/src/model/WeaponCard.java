@@ -5,17 +5,17 @@ import java.awt.*;
 
 
 /**
- * Model.WeaponCard Class - Implements Model.Card Interface
+ * WeaponCard Class - Implements Card Interface
  */
 public class WeaponCard implements Card {
 
     //WeaponCard Attributes
-    private final String weaponString; // name of the weapon
-    Image weaponImage;
+    private final String weaponString; // weapon name
+    Image weaponImage; // weapon board image storage
 
 
     /**
-     * Constructor Method for Model.WeaponCard
+     * Constructor Method for WeaponCard
      *
      * @param weaponString String identifying the weapon
      */
@@ -25,6 +25,11 @@ public class WeaponCard implements Card {
     }
 
 
+    /**
+     * Get Weapon image for drawing
+     *
+     * @return Image
+     */
     public Image getWeaponImage() {
         return this.weaponImage;
     }

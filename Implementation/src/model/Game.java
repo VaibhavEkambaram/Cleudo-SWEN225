@@ -15,7 +15,7 @@ public class Game {
 
     private States gameState = States.IDLE;
     private subStates subState;
-    GUI GUI;
+    private GUI userInterface;
 
     /**
      * Check if States are matching within their appropriate sub-states
@@ -139,10 +139,10 @@ public class Game {
             throw new Error("Expecting PLAYERS Sub State but " + subState);
         }
 
-        GUI = new GUI(this);
-        numPlayers = GUI.setPlayerCount();
+        userInterface = new GUI(this);
+        numPlayers = userInterface.setPlayerCount();
         players = new ArrayList<>();
-        players = GUI.setPlayers(characterNames, numPlayers, players, characterCardsMap);
+        players = userInterface.setPlayers(characterNames, numPlayers, players, characterCardsMap);
         Collections.sort(players);
     }
 
@@ -312,9 +312,9 @@ public class Game {
     public void runGame() {
         initToRunning();
         movementTransition();
-        GUI.updateDisplay();
+        userInterface.updateDisplay();
         while (gameState.equals(States.RUNNING)) {
-            GUI.updateDisplay();
+            userInterface.updateDisplay();
         }
     }
 
@@ -329,7 +329,7 @@ public class Game {
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
 
-        GUI.RollDiceMenu(firstResult,secondResult);
+        userInterface.RollDiceMenu(firstResult,secondResult);
         return firstResult + secondResult;
     }
 
@@ -354,7 +354,7 @@ public class Game {
         if (newBoard != null) {
             movesRemaining = movesRemaining - move.getSpaces();
             if (movesRemaining < 1) {
-                GUI.setSuggestionAccusationVisibility(true);
+                userInterface.setSuggestionAccusationVisibility(true);
                 actionTransition();
             }
             board = newBoard;
@@ -385,7 +385,7 @@ public class Game {
 
         if (murderScenario.equals(accusationScenario)) {
             a.successfulAccusation(p, murderScenario);
-            GUI.setSuggestionAccusationVisibility(false);
+            userInterface.setSuggestionAccusationVisibility(false);
             return 1;
         } else {
             a.incorrectAccusation(p);
@@ -484,7 +484,7 @@ public class Game {
                 s.refuted(p.getCharacter().getCharacterName());
                 refuted = true;
                 movementTransition();
-                GUI.setRollDiceButtonVisibility(true);
+                userInterface.setRollDiceButtonVisibility(true);
                 break;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
                 s.refutationFailed(currentTurn.getPlayerVanityName());
@@ -498,15 +498,15 @@ public class Game {
             if (i == 0) {
                 int accuse = makeAccusation(p);
                 if (accuse == 1) {
-                    GUI.setSuggestionAccusationVisibility(false);
+                    userInterface.setSuggestionAccusationVisibility(false);
                     gameState = States.FINISHED;
                 } else {
                     movementTransition();
-                    GUI.setRollDiceButtonVisibility(true);
+                    userInterface.setRollDiceButtonVisibility(true);
                 }
             } else {
                 movementTransition();
-                GUI.setRollDiceButtonVisibility(true);
+                userInterface.setRollDiceButtonVisibility(true);
             }
         }
         return 0;
@@ -664,13 +664,6 @@ public class Game {
         this.movesRemaining = value;
     }
 
-    public void setSelectedTile(int x,int y){
-        selectedTile = board.getPositions()[y][x];
-    }
-
-    public Position getSelectedTile(){
-        return selectedTile;
-    }
 
 
 

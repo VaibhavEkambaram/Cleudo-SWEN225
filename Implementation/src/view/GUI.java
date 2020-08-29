@@ -557,7 +557,7 @@ public class GUI extends Observable {
 
             fields.add(nameField);
 
-            // create radio button for each token option
+            // radio button for each token option
             charNames.forEach(character -> {
                 JRadioButton radButton = new JRadioButton();
                 if (used.contains(character)) radButton.setEnabled(false);
@@ -614,7 +614,6 @@ public class GUI extends Observable {
         double y = (e.getY() - (BORDER_SIZE / 2)) / RECT_SIZE;
         Position select = game.getBoard().findNearest((int) x, (int) y);
         if (select != null) {
-            game.setSelectedTile((int) x, (int) y);
             Position currentPosition = game.getCurrentPlayer().getCurrentPosition();
             // Check X-axis or Y-axis Alignment
             if (currentPosition.checkAligned(select)) {
