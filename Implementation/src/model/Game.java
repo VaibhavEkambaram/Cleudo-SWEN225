@@ -44,6 +44,8 @@ public class Game {
     int movesRemaining = -1;
     int numPlayers;
 
+    // boolean to prevent infinite loop while testing
+    boolean running;
 
     /**
      * Game Constructor
@@ -52,11 +54,11 @@ public class Game {
      * @author Cameron Li, Vaibhav Ekambaram
      */
     public Game(boolean run) {
+        running = run;
         initDeck();
         initPlayers();
         initBoard(); // generate board
         dealCards();
-        if(!run) return;
         runGame(); // main game logic loop
     }
 
@@ -314,7 +316,7 @@ public class Game {
         initToRunning();
         movementTransition();
         userInterface.updateDisplay();
-        while (gameState.equals(States.RUNNING)) {
+        while (gameState.equals(States.RUNNING) && running) {
             userInterface.updateDisplay();
         }
     }

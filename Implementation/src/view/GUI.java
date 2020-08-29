@@ -24,7 +24,7 @@ public class GUI extends Observable {
     private int RECT_SIZE;
 
     // Frames
-    private final JFrame gameFrame;
+    public final JFrame gameFrame;
 
     // Panels
     private final JPanel infoPanel;
@@ -59,7 +59,7 @@ public class GUI extends Observable {
     // Display
     private final JTextArea info;
 
-    private KeyStates keyTracker = KeyStates.PRE_ROLL;
+    public KeyStates keyTracker = KeyStates.PRE_ROLL;
 
 
     public enum KeyStates {
