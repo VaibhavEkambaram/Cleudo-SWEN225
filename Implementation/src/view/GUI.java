@@ -60,6 +60,8 @@ public class GUI extends Observable {
     // Display
     private final JTextArea info;
 
+    private KeyStates keyTracker = KeyStates.PRE_ROLL;
+
     /**
      * User Interface Constructor
      *
@@ -163,7 +165,7 @@ public class GUI extends Observable {
         });
 
         // Roll Dice Button
-        rollDiceButton = new JButton("Roll Dice");
+        rollDiceButton = new JButton("Roll Dice [r]");
         actionPanel.add(rollDiceButton);
         rollDiceButton.addActionListener(e -> {
             game.setMovesRemaining(-1);
@@ -172,24 +174,7 @@ public class GUI extends Observable {
             setFinishedButtonVisibility(true);
             movementPanel.setVisible(true);
         });
-
-        rollDiceButton.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                System.out.println("typed "+e.getKeyCode());
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        });
-
+        rollDiceButton.setFocusable(true);
 
 
 
@@ -255,6 +240,9 @@ public class GUI extends Observable {
         movementPanel.add(upButton, constraints);
         upButton.addActionListener(e -> makeMovement(Move.Direction.UP));
 
+
+
+
         constraints.gridx = 1;
         constraints.gridy = 1;
         downButton = new JButton("Down");
@@ -274,12 +262,58 @@ public class GUI extends Observable {
         rightButton.addActionListener(e -> makeMovement(Move.Direction.RIGHT));
 
 
+
+        suggestionButton.setFocusable(false);
+        accusationButton.setFocusable(false);
+        passButton.setFocusable(false);
+        upButton.setFocusable(false);
+        downButton.setFocusable(false);
+        leftButton.setFocusable(false);
+        rightButton.setFocusable(false);
+        rollDiceButton.setFocusable(false);
+        finishedButton.setFocusable(false);
+
+
+
+        gameFrame.setFocusable(true);
+        gameFrame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // not doing anything
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(keyTracker == KeyStates.PRE_ROLL){
+                    if(e.getKeyCode() == 82){
+                        game.setMovesRemaining(-1);
+                        game.setMovesRemaining(game.rollDice());
+                        setRollDiceButtonVisibility(false);
+                        setFinishedButtonVisibility(true);
+                        movementPanel.setVisible(true);
+                    }
+
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // not doing anything
+            }
+        });
+
+
+
+
+
+
         // Window Close Listener
         gameFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
                 int closeDialogButton = JOptionPane.YES_NO_OPTION;
                 int closeDialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Warning", closeDialogButton);
                 if (closeDialogResult == JOptionPane.YES_OPTION) {
+                    gameFrame.dispose();
                     gameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 } else {
                     gameFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -326,6 +360,7 @@ public class GUI extends Observable {
     public void setRollDiceButtonVisibility(boolean value) {
         if (value) {
             game.setMovesRemaining(-1);
+            keyTracker = KeyStates.PRE_ROLL;
             actionPanel.add(rollDiceButton);
         } else {
             actionPanel.remove(rollDiceButton);
@@ -357,6 +392,7 @@ public class GUI extends Observable {
      */
     public void setSuggestionAccusationVisibility(boolean value) {
         if (value) {
+            keyTracker = KeyStates.DECISION;
             actionPanel.add(suggestionButton);
             actionPanel.add(accusationButton);
             actionPanel.add(passButton);
@@ -381,6 +417,7 @@ public class GUI extends Observable {
      */
     public void showMovement(boolean value) {
         if (value) {
+            keyTracker = KeyStates.MOVEMENT;
             upButton.setVisible(true);
             downButton.setVisible(true);
             leftButton.setVisible(true);
@@ -418,6 +455,7 @@ public class GUI extends Observable {
         exitMenuItem.addActionListener(e -> {
             int closeDialogButton = JOptionPane.YES_NO_OPTION;
             int closeDialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Warning", closeDialogButton);
+            gameFrame.dispose();
             if (closeDialogResult == JOptionPane.YES_OPTION) System.exit(0);
         });
         gameMenu.add(exitMenuItem);
@@ -473,6 +511,7 @@ public class GUI extends Observable {
             handPanel.removeAll();
             currentPlayer.getHand().forEach(c -> {
                 JLabel handLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/card_" + c.toString() + ".png")));
+                handLabel.setToolTipText("Card Type: "+c.getClass().getSimpleName());
                 handPanel.add(handLabel);
             });
             previousPlayer = currentPlayer;
@@ -733,5 +772,9 @@ public class GUI extends Observable {
                 game.movementInput(move);
             }
         }
+    }
+
+    public enum KeyStates {
+        PRE_ROLL, MOVEMENT, DECISION
     }
 }
