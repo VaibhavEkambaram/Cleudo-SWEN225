@@ -7,13 +7,13 @@ import view.PlayerSetupMenu;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class autoSetup {
+public class AutoSetup {
     /**
      * Automatically performs a player setup of 3 players for testing
      *
      * @author Baxter Kirikiri
      */
-    public autoSetup(Game game){
+    public AutoSetup(Game game){
         game.playerTransition();
 
         if (!game.getSubState().equals(Game.subStates.PLAYERS)) {

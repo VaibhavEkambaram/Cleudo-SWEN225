@@ -1,7 +1,7 @@
 package model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
-import util.autoSetup;
+import util.AutoSetup;
 import view.AccusationMenu;
 import view.PlayerSetupMenu;
 import view.SuggestionMenu;
@@ -60,7 +60,7 @@ public class Game {
         if(run) {
             initPlayers();
         } else {
-            new autoSetup(this);
+            new AutoSetup(this);
         }
         initBoard(); // generate board
         dealCards();
