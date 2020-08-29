@@ -550,7 +550,6 @@ public class Game {
         return this.players;
     }
 
-
     /**
      * Switch current player to the next player
      */
@@ -563,34 +562,11 @@ public class Game {
         currentPlayer = players.get(currentPlayerIndex);
     }
 
-    private void checkGameState() {
-        if (gameState.equals(States.IDLE) && subState == null) {
-            return;
-        }
-
-        if (gameState.equals(States.RUNNING)) { // Check Sub state matches RUNNING game state
-            if (!subState.equals(subStates.MOVEMENT) && !subState.equals(subStates.ACTION)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        } else if (gameState.equals(States.INIT)) { // Check Sub state matches INIT game state
-            if (!subState.equals(subStates.PLAYERS) && !subState.equals(subStates.DECK) && !subState.equals(subStates.BOARD)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        }
-
-        // Check game state matches relevant sub states
-        if (subState.equals(subStates.MOVEMENT) || subState.equals(subStates.ACTION)) {
-            if (!gameState.equals(States.RUNNING)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        } else if (subState.equals(subStates.PLAYERS) || subState.equals(subStates.DECK) || subState.equals(subStates.BOARD)) {
-            if (!gameState.equals(States.INIT)) {
-                throw new Error(gameState + " game state with " + subState + " sub state");
-            }
-        }
-
-    }
-
+    /**
+     * Transition from Idle Game State to Init Game State
+     *
+     * @author Cameron Li
+     */
     private void idleToInit() {
         if (!gameState.equals(States.IDLE)) {
             throw new Error("Expected IDLE game state but " + gameState);
@@ -599,6 +575,12 @@ public class Game {
         subState = subStates.DECK;
     }
 
+    /**
+     * Must be within Init Game State
+     * Transition from Deck Sub State to Player Sub State
+     *
+     * @author Cameron li
+     */
     private void playerTransition() {
         if (!gameState.equals(States.INIT)) {
             throw new Error("Expected INIT game state but : " + gameState);
@@ -609,6 +591,12 @@ public class Game {
         subState = subStates.PLAYERS;
     }
 
+    /**
+     * Must be within Init Game State
+     * Transition from Player Sub State to Board Sub State
+     *
+     * @author Cameron li
+     */
     private void boardTransition() {
         if (!gameState.equals(States.INIT)) {
             throw new Error("Expected INIT game state but : " + gameState);
@@ -619,6 +607,11 @@ public class Game {
         subState = subStates.BOARD;
     }
 
+    /**
+     * Transition from Init Game State to Running Game State
+     *
+     * @author Cameron Li
+     */
     private void initToRunning() {
         if (!gameState.equals(States.INIT)) {
             throw new Error("Expected INIT game state but " + gameState);
@@ -626,6 +619,13 @@ public class Game {
         gameState = States.RUNNING;
     }
 
+    /**
+     * Must be within Running Game State
+     * Transition from ANY Sub State to Movement Sub State
+     * If specifically, Action Sub State, change player as well
+     *
+     * @author Cameron li
+     */
     public void movementTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
@@ -638,6 +638,12 @@ public class Game {
         currentPlayer = players.get(currentPlayerIndex);
     }
 
+    /**
+     * Must be within Running Game State
+     * Transition from Movement Sub State to Action Sub State
+     *
+     * @author Cameron li
+     */
     public void actionTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
@@ -648,6 +654,11 @@ public class Game {
         subState = subStates.ACTION;
     }
 
+    /**
+     * Transition from Running Game State to Finished Game State
+     *
+     * @author Cameron Li
+     */
     public void finishTransition() {
         if (!gameState.equals(States.RUNNING)) {
             throw new Error("Expected RUNNING game state but : " + gameState);
@@ -659,7 +670,6 @@ public class Game {
      * Getters
      */
 
-
     public States getGameState() {
         return gameState;
     }
@@ -670,10 +680,6 @@ public class Game {
 
     public Board getBoard() {
         return this.board;
-    }
-
-    public void setBoard(Board board){
-        this.board = board;
     }
 
     public Player getCurrentPlayer() {
@@ -688,13 +694,9 @@ public class Game {
      * Setters
      */
 
-
     public void setMovesRemaining(int value) {
         this.movesRemaining = value;
     }
-
-
-
 
     public void setSelectedTile(int x,int y){
         selectedTile = board.getPositions()[y][x];

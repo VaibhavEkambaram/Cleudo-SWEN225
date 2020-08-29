@@ -79,7 +79,6 @@ public class Position {
         this.character = character;
     }
 
-
     /**
      * Room Position Constructor
      *
@@ -148,7 +147,6 @@ public class Position {
         return clonePosition;
     }
 
-
     /**
      * x co-ordinate
      *
@@ -166,7 +164,6 @@ public class Position {
     public int getLocationY() {
         return yLoc;
     }
-
 
     /**
      * Can this tile be moved
@@ -191,7 +188,6 @@ public class Position {
         }
         return this.displayName;
     }
-
 
     public void draw(Graphics g) {
         if (g != null) {
@@ -237,7 +233,6 @@ public class Position {
         }
     }
 
-
     /**
      * Get Character
      *
@@ -263,7 +258,6 @@ public class Position {
         this.character = null;
     }
 
-
     /**
      * Get Model.Room associated with this position
      *
@@ -281,7 +275,6 @@ public class Position {
     public boolean isDoor() {
         return isDoor;
     }
-
 
     /**
      * Determine whether this is an inner or outer room
@@ -312,6 +305,13 @@ public class Position {
         this.weapon = weapon;
     }
 
+    /**
+     * Check if two Positions are aligned via X-axis or Y-axis
+     *
+     * @param b
+     * @return
+     * @author Cameron Li
+     */
     public boolean checkAlligned(Position b) {
         return (b.getLocationX() == this.getLocationX() || b.getLocationY() == this.getLocationY());
     }

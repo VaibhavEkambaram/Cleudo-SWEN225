@@ -17,7 +17,7 @@ public class CharacterCard implements Card {
      * CharacterCard Constructor
      *
      * @param c name of the character
-     * @author Vaibhav Ekambaram
+     * @author Vaibhav Ekambaram, Cameron Li
      */
     public CharacterCard(String c) {
         this.characterName = c;
