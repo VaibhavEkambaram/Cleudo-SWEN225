@@ -272,6 +272,11 @@ public class Table extends Observable {
         //updateDisplay();
     }
 
+    /**
+     * Java Swing Elements
+     *
+     * @return
+     */
 
     public Frame getGameFrame() {
         return gameFrame;
@@ -290,7 +295,6 @@ public class Table extends Observable {
         label2.setVisible(true);
         handPanel.add(label2);
     }
-
 
     public void setRollDiceButtonVisibility(boolean value) {
         if (value) {
@@ -347,7 +351,6 @@ public class Table extends Observable {
         }
     }
 
-
     private JMenuBar createTableMenuBar() {
         final JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createGameMenu());
@@ -396,6 +399,11 @@ public class Table extends Observable {
             previousPlayer = currentPlayer;
         }
     }
+
+
+    /**
+     * Update Visual Elements
+     */
 
     /**
      * Update all visual elements on the GUI
@@ -449,6 +457,13 @@ public class Table extends Observable {
         paint(displayPanel.getGraphics());
     }
 
+    /**
+     * Draw all the relevant Display Panel Elements
+     * Grid Board, Players, Weapons
+     *
+     * @param g
+     * @author Vaibhav Ekambaram
+     */
     public void paint(Graphics g) {
         if (g != null) {
             Graphics2D g2 = (Graphics2D) g;
@@ -530,7 +545,6 @@ public class Table extends Observable {
 
     }
 
-
     private static BufferedImage resize(BufferedImage img, int height, int width) {
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = resized.createGraphics();
@@ -539,6 +553,10 @@ public class Table extends Observable {
         return resized;
     }
 
+
+    /**
+     * Setup Helpers
+     */
 
     /**
      * Set player count through option pane
@@ -601,6 +619,11 @@ public class Table extends Observable {
         return players;
     }
 
+
+    /**
+     * Movement
+     */
+
     /**
      * Move one tile in specified direction given by Button Press
      *
@@ -611,7 +634,6 @@ public class Table extends Observable {
         currentPlayer = game.getCurrentPlayer();
         game.movementInput(new Move(direction, 1));
     }
-
 
     /**
      * Move to a position on the board given by mouse click
@@ -634,7 +656,7 @@ public class Table extends Observable {
         }
         movesRemaining = game.getMovesRemaining();
 
-        // Find specifided Position of Mouse Click
+        // Find specified Position of Mouse Click
         double x = (e.getX() - (BORDER_SIZE / 2)) / RECT_SIZE;
         double y = (e.getY() - (BORDER_SIZE / 2)) / RECT_SIZE;
         Position select = game.getBoard().findNearest((int) x, (int) y);
@@ -667,6 +689,7 @@ public class Table extends Observable {
                         move = new Move(Move.Direction.UP, yDif);
                     }
                 }
+                // Apply Move
                 game.movementInput(move);
             }
         }

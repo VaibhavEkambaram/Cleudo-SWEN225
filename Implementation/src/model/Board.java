@@ -213,30 +213,6 @@ public class Board {
         return null;
     }
 
-
-    public Board movePlayer(Player player, Position newPosition, Game game) {
-
-        Position position = player.getCurrentPosition();
-
-        System.out.println(newPosition.getLocationX() + " " + newPosition.getLocationY());
-
-        if(newPosition!=position && newPosition.canMove()){
-            Board cloneBoard = new Board(this);
-            Position found = cloneBoard.positions[newPosition.getLocationY()][newPosition.getLocationX()];
-
-            calculate(player,position,newPosition);
-
-            cloneBoard.getPositions()[position.getLocationY()][position.getLocationX()].setCharacter(null);
-            cloneBoard.getPositions()[found.getLocationY()][found.getLocationX()].setCharacter(player.getCharacter());
-            player.setCurrentPosition(found);
-
-            return cloneBoard;
-
-
-        }
-        return null;
-    }
-
     public void calculate(Player player,Position startPosition, Position endPosition){
         int count = 0;
         Queue<AStarPosition> fringe = new PriorityQueue<>();
