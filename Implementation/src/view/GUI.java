@@ -286,6 +286,7 @@ public class GUI extends Observable {
 
     public void setRollDiceButtonVisibility(boolean value) {
         if (value) {
+            game.setMovesRemaining(-1);
             actionPanel.add(rollDiceButton);
         } else {
             actionPanel.remove(rollDiceButton);
@@ -491,7 +492,7 @@ public class GUI extends Observable {
                     }
 
                     if (currentPosition.getWeapon() != null) {
-                        g.drawImage(resize(currentPosition.getWeapon().getWeaponImage(), RECT_SIZE - 4, RECT_SIZE - 4), xValue + 2, yValue + 2, displayPanel);
+                        g.drawImage(currentPosition.getWeapon().getWeaponImage(), xValue, yValue, RECT_SIZE, RECT_SIZE, displayPanel);
                     }
 
                     g.setColor(Color.BLACK);
@@ -550,15 +551,6 @@ public class GUI extends Observable {
                 }
             }
         }
-    }
-
-
-    private static BufferedImage resize(BufferedImage img, int height, int width) {
-        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = resized.createGraphics();
-        g2d.drawImage(img.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
-        g2d.dispose();
-        return resized;
     }
 
 
@@ -653,15 +645,10 @@ public class GUI extends Observable {
      */
     public void makeMouseMovement(MouseEvent e) {
         // Check Game Validity
-        if (game.getBoard() == null) {
+        if (game.getBoard() == null || !game.getSubState().equals(MOVEMENT) || game.getMovesRemaining() < 1) {
             return;
         }
-        if (!game.getSubState().equals(MOVEMENT)) {
-            return;
-        }
-        if (game.getMovesRemaining() < 1) {
-            return;
-        }
+
         movesRemaining = game.getMovesRemaining();
 
         // Find specified Position of Mouse Click
@@ -685,17 +672,9 @@ public class GUI extends Observable {
                 Move move;
                 // Create new move depending on alignment and direction
                 if (yDif == 0) {
-                    if (xDif < 0) {
-                        move = new Move(Move.Direction.RIGHT, Math.abs(xDif));
-                    } else {
-                        move = new Move(Move.Direction.LEFT, xDif);
-                    }
+                    move = xDif < 0 ? new Move(Move.Direction.RIGHT, Math.abs(xDif)) : new Move(Move.Direction.LEFT, xDif);
                 } else {
-                    if (yDif < 0) {
-                        move = new Move(Move.Direction.DOWN, Math.abs(yDif));
-                    } else {
-                        move = new Move(Move.Direction.UP, yDif);
-                    }
+                    move = yDif < 0 ? new Move(Move.Direction.DOWN, Math.abs(yDif)) : new Move(Move.Direction.UP, yDif);
                 }
                 // Apply Move
                 game.movementInput(move);

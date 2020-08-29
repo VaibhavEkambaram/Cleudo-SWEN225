@@ -1,6 +1,8 @@
 package model;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -11,7 +13,7 @@ public class WeaponCard implements Card {
 
     //WeaponCard Attributes
     private final String weaponString; // name of the weapon
-    BufferedImage weaponImage;
+    Image weaponImage;
 
 
     /**
@@ -21,15 +23,13 @@ public class WeaponCard implements Card {
      */
     public WeaponCard(String weaponString) {
         this.weaponString = weaponString;
-        
-        try {
-            weaponImage = ImageIO.read(getClass().getResource("/resources/image_" + weaponString + ".png"));
-        } catch (IOException e) {
-            System.out.println("Failed to load image!");
-        }
+
+
+        weaponImage = new ImageIcon(getClass().getResource("/resources/image_"+weaponString+".png")).getImage();
     }
 
-    public BufferedImage getWeaponImage() {
+
+    public Image getWeaponImage() {
         return this.weaponImage;
     }
 

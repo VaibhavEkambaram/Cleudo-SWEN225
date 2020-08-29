@@ -121,7 +121,6 @@ public class Game {
         RoomCard murderRoom = roomCards.get(new Random().nextInt(roomNames.length - 1) + 1);
         CharacterCard murderer = characterCards.get(new Random().nextInt(characterNames.length - 1) + 1);
         murderScenario = new Scenario(murderWeapon, murderRoom, murderer);
-        System.out.println(murderScenario.toString());
         deck.remove(murderWeapon);
         deck.remove(murderRoom);
         deck.remove(murderer);
