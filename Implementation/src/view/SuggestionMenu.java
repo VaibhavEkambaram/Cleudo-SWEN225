@@ -56,9 +56,6 @@ public class SuggestionMenu {
         JOptionPane.showMessageDialog(null, "You (" + currentPlayer.getPlayerVanityName() + ") are not able to make a suggestion as you are not in a room.", "Suggestion Failed", JOptionPane.ERROR_MESSAGE);
     }
 
-    public void teleportFailed() {
-        JOptionPane.showMessageDialog(null, "An error occurred while attempting to teleport the suggested player and weapon", "Suggestion Failed", JOptionPane.ERROR_MESSAGE);
-    }
 
     public int nobodyCouldRefute() {
         Object[] options = {"Make Accusation", "Pass"};

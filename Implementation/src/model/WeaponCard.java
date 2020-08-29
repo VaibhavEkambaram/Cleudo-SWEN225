@@ -1,10 +1,8 @@
 package model;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+
 
 /**
  * Model.WeaponCard Class - Implements Model.Card Interface
@@ -23,9 +21,7 @@ public class WeaponCard implements Card {
      */
     public WeaponCard(String weaponString) {
         this.weaponString = weaponString;
-
-
-        weaponImage = new ImageIcon(getClass().getResource("/resources/image_"+weaponString+".png")).getImage();
+        this.weaponImage = new ImageIcon(getClass().getResource("/resources/image_" + weaponString + ".png")).getImage();
     }
 
 
@@ -51,6 +47,4 @@ public class WeaponCard implements Card {
     public String toString() {
         return getWeaponName();
     }
-
-
 }

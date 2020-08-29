@@ -52,7 +52,7 @@ public class Position {
         return this.displayName;
     }
 
-    public WeaponCard getWeapon(){
+    public WeaponCard getWeapon() {
         return weapon;
     }
 
@@ -181,6 +181,16 @@ public class Position {
         return this.displayName;
     }
 
+    /**
+     * Draw board positions
+     *
+     * @param g            graphics
+     * @param xValue       x position
+     * @param yValue       y position
+     * @param RECT_SIZE    rectangle size
+     * @param displayPanel JPanel
+     * @author Vaibhav Ekambaram
+     */
     public void draw(Graphics2D g, int xValue, int yValue, int RECT_SIZE, JPanel displayPanel) {
         if (g != null) {
 
@@ -192,7 +202,7 @@ public class Position {
                 g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                 g.setColor(Color.BLACK);
                 g.setStroke(new BasicStroke(1));
-                g.drawRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
+               g.drawRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
 
             } else {
                 switch (inRoom.getRoomChar()) {
@@ -326,7 +336,7 @@ public class Position {
     /**
      * Check if two Positions are aligned via X-axis or Y-axis
      *
-     * @param b
+     * @param b position
      * @return
      * @author Cameron Li
      */

@@ -441,8 +441,6 @@ public class Game {
                     Board newBoard = board.teleportPlayer(findP, room);
                     if (newBoard != null) {
                         board = newBoard;
-                    } else {
-                        s.teleportFailed();
                     }
                 }
             }
@@ -452,11 +450,7 @@ public class Game {
         Board newBoard = board.teleportWeapon(suggestionWeapon,room);
         if(newBoard != null){
             board = newBoard;
-        } else {
-            s.teleportFailed();
         }
-
-        Scenario suggestion = new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter);
 
         // place all other players in a stack so that they can take turns at refuting
         Stack<Player> refuters = new Stack<>();
@@ -471,7 +465,7 @@ public class Game {
         while (!refuters.isEmpty()) {
             Player currentTurn = refuters.pop();
 
-            String refute = s.makeRefutation(currentTurn, currentPlayer, suggestion);
+            String refute = s.makeRefutation(currentTurn, currentPlayer, new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter));
             if(refute.equals("-1")){ continue;}
 
 

@@ -5,7 +5,6 @@ import model.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 
@@ -43,11 +42,12 @@ public class GUI extends Observable {
     Player currentPlayer;
     Player previousPlayer;
 
+    final int BOARD_WIDTH = 24;
+    final int BOARD_HEIGHT = 25;
 
-    Graphics g;
 
-    Image cachedWindow;
-    Graphics2D cachedGraphics;
+
+
 
 
     final Game game;
@@ -86,7 +86,7 @@ public class GUI extends Observable {
         constraints.gridy = 0;
         constraints.gridheight = 1;
         displayPanel = new JPanel();
-        displayPanel.setBackground(Color.WHITE);
+        displayPanel.setBackground(new Color(97,185,125));
         displayPanel.setPreferredSize(new Dimension(750, 600));
         displayPanel.setDoubleBuffered(true);
         mainPanel.setDoubleBuffered(true);
@@ -109,9 +109,6 @@ public class GUI extends Observable {
         handPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         handPanel.setBackground(Color.WHITE);
         handPanel.setPreferredSize(new Dimension(700, 183));
-        //scrollHandPane = new JScrollPane(handPanel);
-        //scrollHandPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        //scrollHandPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         constraints.weightx = 1;
         constraints.weighty = 0.2;
         constraints.gridx = 0;
@@ -273,15 +270,13 @@ public class GUI extends Observable {
 
 
     public void RollDiceMenu(int firstNumber, int secondNumber) {
-        firstDiceImage = new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png"));
-        firstDiceImageLabel = new JLabel(firstDiceImage);
+        firstDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png")));
+        secondDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png")));
         handPanel.add(firstDiceImageLabel);
-
-        ImageIcon secondDiceImage = new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png"));
-        secondDiceImageLabel = new JLabel(secondDiceImage);
+        handPanel.add(secondDiceImageLabel);
         firstDiceImageLabel.setVisible(true);
         secondDiceImageLabel.setVisible(true);
-        handPanel.add(secondDiceImageLabel);
+
     }
 
     public void setRollDiceButtonVisibility(boolean value) {
@@ -390,19 +385,13 @@ public class GUI extends Observable {
         if (previousPlayer != currentPlayer) {
             handPanel.removeAll();
             currentPlayer.getHand().forEach(c -> {
-                firstDiceImage = new ImageIcon(getClass().getResource("/resources/card_" + c.toString() + ".png"));
-                firstDiceImageLabel = new JLabel(firstDiceImage);
-                handPanel.add(firstDiceImageLabel);
+                JLabel handLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/card_" + c.toString() + ".png")));
+                handPanel.add(handLabel);
             });
-
             previousPlayer = currentPlayer;
         }
     }
 
-
-    /**
-     * Update Visual Elements
-     */
 
     /**
      * Update all visual elements on the GUI
@@ -457,10 +446,7 @@ public class GUI extends Observable {
             }
         }
 
-        g = displayPanel.getGraphics();
-
-        paint((Graphics2D) g);
-
+        paint((Graphics2D) displayPanel.getGraphics());
     }
 
 
@@ -474,10 +460,7 @@ public class GUI extends Observable {
         if (g != null) {
 
             int border = BORDER_SIZE / 2;
-
-            int BOARD_WIDTH = 24;
             for (int i = 0; i < BOARD_WIDTH; i++) {
-                int BOARD_HEIGHT = 25;
                 for (int j = 0; j < BOARD_HEIGHT; j++) {
 
                     Position currentPosition = game.getBoard().getPositions()[j][i];
@@ -493,16 +476,17 @@ public class GUI extends Observable {
 
 
     public void drawWalls(Position currentPosition, Graphics2D g2, int i, int j, int xValue, int yValue) {
+        g2.setColor(Color.DARK_GRAY);
+        g2.setStroke(new BasicStroke(3));
         if (!currentPosition.isPassableTile() && currentPosition.getRoom() != null) {
-            g2.setColor(Color.DARK_GRAY);
-            g2.setStroke(new BasicStroke(2));
+
 
 
             if (i == 0) {
                 g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
             }
             if (i == 23)
-                g2.drawLine(xValue + RECT_SIZE, yValue, xValue + RECT_SIZE, yValue + RECT_SIZE);
+                g2.drawLine(xValue + RECT_SIZE-2, yValue, xValue + RECT_SIZE-2, yValue + RECT_SIZE);
             if (j == 24)
                 g2.drawLine(xValue, yValue + RECT_SIZE, xValue + RECT_SIZE, yValue + RECT_SIZE);
 
@@ -510,23 +494,20 @@ public class GUI extends Observable {
                 g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
             }
             if (i < 23 && game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
-                g2.drawLine(xValue + RECT_SIZE, yValue, xValue + RECT_SIZE, yValue + RECT_SIZE);
+                g2.drawLine(xValue + RECT_SIZE-2, yValue, xValue + RECT_SIZE-2, yValue + RECT_SIZE-2);
             }
             if (j > 0 && game.getBoard().getPositions()[j - 1][i].getRoom() == null) {
                 g2.drawLine(xValue, yValue, xValue + RECT_SIZE, yValue);
             }
             if (j < 24 && game.getBoard().getPositions()[j + 1][i].getRoom() == null) {
-                g2.drawLine(xValue, yValue + RECT_SIZE, xValue + RECT_SIZE, yValue + RECT_SIZE);
+                g2.drawLine(xValue, yValue + RECT_SIZE-2, xValue + RECT_SIZE-2, yValue + RECT_SIZE-2);
             }
         }
         if (currentPosition.isDoor()) {
-            g2.setColor(Color.DARK_GRAY);
-            g2.setStroke(new BasicStroke(2));
-
             if (currentPosition.getDisplayName().equals("^") || currentPosition.getDisplayName().equals("v")) {
 
                 if (game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
-                    g2.drawLine(xValue + RECT_SIZE, yValue, xValue + RECT_SIZE, yValue + RECT_SIZE);
+                    g2.drawLine(xValue + RECT_SIZE-2, yValue, xValue + RECT_SIZE-2, yValue + RECT_SIZE-2);
                 }
 
                 if (game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
@@ -536,10 +517,6 @@ public class GUI extends Observable {
         }
     }
 
-
-    /**
-     * Setup Helpers
-     */
 
     /**
      * Set player count through option pane
@@ -606,13 +583,9 @@ public class GUI extends Observable {
 
 
     /**
-     * Movement
-     */
-
-    /**
      * Move one tile in specified direction given by Button Press
      *
-     * @param direction
+     * @param direction dir
      * @author Cameron Li
      */
     public void makeMovement(Move.Direction direction) {
