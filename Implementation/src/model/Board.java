@@ -262,9 +262,9 @@ public class Board {
      * Given a set of co-ordinates
      * Find if such a Position exists on the board
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x x
+     * @param y y
+     * @return Position
      */
     public Position findNearest(int x, int y) {
         if (outOfBounds(x, y)) {

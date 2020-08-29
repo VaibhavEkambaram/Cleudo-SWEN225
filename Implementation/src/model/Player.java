@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Player Class
  */
-public class Player implements Comparable<Player>{
+public class Player implements Comparable<Player> {
 
     private final List<Card> hand;
     // Player Gameplay Information
@@ -15,6 +15,7 @@ public class Player implements Comparable<Player>{
     // Player State
     private boolean canAccuse = true;
 
+    // player set name
     private final String playerVanityName;
 
 
@@ -51,7 +52,7 @@ public class Player implements Comparable<Player>{
 
 
     /**
-     * Set current Model.Position of player
+     * Set current Position of player
      *
      * @param aCurrentPosition position on board
      */
@@ -59,7 +60,7 @@ public class Player implements Comparable<Player>{
         currentPosition = aCurrentPosition;
     }
 
-    // Model.Player Information Getters
+    // Player Information Getters
 
 
     /**
@@ -109,13 +110,24 @@ public class Player implements Comparable<Player>{
         return canAccuse;
     }
 
+    /**
+     * Get "Vanity" name of player which was set at the beginning of the game
+     *
+     * @return name string
+     */
     public String getPlayerVanityName() {
         return playerVanityName;
     }
 
+    /**
+     * Comparator for sorting players
+     *
+     * @param o other player
+     * @return comparator value
+     */
     @Override
     public int compareTo(Player o) {
-        if(this.character.getCharacterPriority() > o.character.getCharacterPriority()){
+        if (this.character.getCharacterPriority() > o.character.getCharacterPriority()) {
             return 1;
         } else {
             return -1;

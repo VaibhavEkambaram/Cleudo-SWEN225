@@ -2,7 +2,7 @@ package model;
 
 
 /**
- * Model.RoomCard Class - Implements Model.Card Interface
+ * RoomCard Class - Implements Card Interface
  */
 public class RoomCard implements Card {
 

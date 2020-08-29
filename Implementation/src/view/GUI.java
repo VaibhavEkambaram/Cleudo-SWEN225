@@ -173,6 +173,26 @@ public class GUI extends Observable {
             movementPanel.setVisible(true);
         });
 
+        rollDiceButton.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                System.out.println("typed "+e.getKeyCode());
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
+
+
+
         // Suggestion Button
         suggestionButton = new JButton("Make Suggestion");
         actionPanel.add(suggestionButton);

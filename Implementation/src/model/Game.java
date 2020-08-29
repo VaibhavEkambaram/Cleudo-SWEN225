@@ -43,8 +43,6 @@ public class Game {
     int movesRemaining = -1;
     int numPlayers;
 
-    Position selectedTile = null;
-
 
     /**
      * Game Constructor
@@ -155,7 +153,7 @@ public class Game {
      * lowercase letter = Outer Room Position
      * "d" + letter = Room Door Position
      *
-     * @author Cameron Li
+     * @author Cameron Li, Vaibhav Ekambaram
      */
     private void initBoard() {
         boardTransition(); // Transition from DECK to BOARD

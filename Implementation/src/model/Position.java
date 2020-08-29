@@ -6,12 +6,12 @@ import java.awt.*;
 import java.util.Objects;
 
 /**
- * Model.Position Class
+ * Position Class
  * Used as a "Tile" on the board
  */
 public class Position {
 
-    // Basic Model.Position Attributes
+    // Basic Position Attributes
     private CharacterCard character;
     private WeaponCard weapon;
 
@@ -20,7 +20,7 @@ public class Position {
     private int xLoc;
     private int yLoc;
 
-    // Model.Room Attributes
+    // Room Attributes
     private Room inRoom;
     private Move.Direction doorDirection;
     private boolean isDoor = false;
@@ -48,16 +48,18 @@ public class Position {
     }
 
 
+    /**
+     * Get Display name
+     *
+     * @return display name string
+     */
     public String getDisplayName() {
         return this.displayName;
     }
 
-    public WeaponCard getWeapon() {
-        return weapon;
-    }
 
     /**
-     * Character Model.Position Constructor
+     * Character Position Constructor
      *
      * @param x         x
      * @param y         y
@@ -120,7 +122,7 @@ public class Position {
     }
 
     /**
-     * Clone Model.Position Constructor
+     * Clone Position Constructor
      *
      * @return cloned position
      */
@@ -202,7 +204,7 @@ public class Position {
                 g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                 g.setColor(Color.BLACK);
                 g.setStroke(new BasicStroke(1));
-               g.drawRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
+                g.drawRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
 
             } else {
                 switch (inRoom.getRoomChar()) {
@@ -264,7 +266,7 @@ public class Position {
     /**
      * Get Character
      *
-     * @return Model.CharacterCard
+     * @return CharacterCard
      */
     public CharacterCard getCharacter() {
         return this.character;
@@ -273,7 +275,7 @@ public class Position {
     /**
      * Set Character
      *
-     * @param character Model.CharacterCard
+     * @param character CharacterCard
      */
     public void setCharacter(CharacterCard character) {
         this.character = character;
@@ -287,9 +289,9 @@ public class Position {
     }
 
     /**
-     * Get Model.Room associated with this position
+     * Get Room associated with this position
      *
-     * @return Model.Room
+     * @return Room
      */
     public Room getRoom() {
         return inRoom;
@@ -316,7 +318,7 @@ public class Position {
     /**
      * Get direction orientation of a particular door
      *
-     * @return Model.Move direction
+     * @return Move direction
      */
     public Move.Direction getDoorDirection() {
         if (isDoor) {
@@ -325,19 +327,36 @@ public class Position {
         return null;
     }
 
+    /**
+     * Remove Weapon from this position
+     */
     public void removeWeapon() {
         this.weapon = null;
     }
 
+    /**
+     * Bake weapon to this position
+     *
+     * @param weapon weaponCard
+     */
     public void setWeapon(WeaponCard weapon) {
         this.weapon = weapon;
+    }
+
+    /**
+     * Get possible weapon located at this position
+     *
+     * @return weaponCard
+     */
+    public WeaponCard getWeapon() {
+        return weapon;
     }
 
     /**
      * Check if two Positions are aligned via X-axis or Y-axis
      *
      * @param b position
-     * @return
+     * @return boolean validator
      * @author Cameron Li
      */
     public boolean checkAligned(Position b) {

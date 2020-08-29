@@ -5,11 +5,8 @@ package model;
  * Stores a randomly generated murder scenario consisting of a room, character and weapon
  */
 public class Scenario {
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
 
-    //Model.Scenario Attributes
+    // Scenario Attributes
     private final RoomCard roomCard;
     private final WeaponCard weapon;
     private final CharacterCard murderer;
