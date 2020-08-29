@@ -34,15 +34,15 @@ public class GUI extends Observable {
     private final JPanel movementPanel;
 
     // Buttons
-    final JButton suggestionButton;
-    final JButton accusationButton;
-    final JButton passButton;
-    final JButton upButton;
-    final JButton downButton;
-    final JButton leftButton;
-    final JButton rightButton;
-    final JButton rollDiceButton;
-    final JButton finishedButton;
+    private final JButton suggestionButton;
+    private final JButton accusationButton;
+    private final JButton passButton;
+    private final JButton upButton;
+    private final JButton downButton;
+    private final JButton leftButton;
+    private final JButton rightButton;
+    private final JButton rollDiceButton;
+    private final JButton finishedButton;
 
     // Image Labels
     private JLabel firstDiceImageLabel;
@@ -62,17 +62,15 @@ public class GUI extends Observable {
     private KeyStates keyTracker = KeyStates.PRE_ROLL;
 
 
-
     public enum KeyStates {
         PRE_ROLL, MOVEMENT, DECISION
     }
 
 
-
     /**
      * User Interface Constructor
      *
-     * @param game
+     * @param game game
      * @author Vaibhav Ekambaram, Cameron Li
      */
     public GUI(Game game) {
@@ -174,39 +172,28 @@ public class GUI extends Observable {
         // Roll Dice Button
         rollDiceButton = new JButton("Roll Dice [r]");
         actionPanel.add(rollDiceButton);
-        rollDiceButton.addActionListener(e -> {
-            onRollDice();
-        });
+        rollDiceButton.addActionListener(e -> onRollDice());
         rollDiceButton.setFocusable(true);
-
 
 
         // Suggestion Button
         suggestionButton = new JButton("Make Suggestion [s]");
         actionPanel.add(suggestionButton);
-        suggestionButton.addActionListener(e -> {
-            onSuggestion();
-        });
+        suggestionButton.addActionListener(e -> onSuggestion());
 
         // Accusation Button
         accusationButton = new JButton("Make Accusation [a]");
         actionPanel.add(accusationButton);
-        accusationButton.addActionListener(e -> {
-            onAccusation();
-        });
+        accusationButton.addActionListener(e -> onAccusation());
 
         // Pass Button
         passButton = new JButton("Pass [p]");
         actionPanel.add(passButton);
-        passButton.addActionListener(e -> {
-            onPass();
-        });
+        passButton.addActionListener(e -> onPass());
 
         // Finished Button
         finishedButton = new JButton("Finished [f]");
-        finishedButton.addActionListener(e -> {
-            onFinish();
-        });
+        finishedButton.addActionListener(e -> onFinish());
 
 
         // Movement Buttons
@@ -217,8 +204,6 @@ public class GUI extends Observable {
         upButton = new JButton("Up [^]");
         movementPanel.add(upButton, constraints);
         upButton.addActionListener(e -> makeMovement(Move.Direction.UP));
-
-
 
 
         constraints.gridx = 1;
@@ -240,7 +225,6 @@ public class GUI extends Observable {
         rightButton.addActionListener(e -> makeMovement(Move.Direction.RIGHT));
 
 
-
         suggestionButton.setFocusable(false);
         accusationButton.setFocusable(false);
         passButton.setFocusable(false);
@@ -252,7 +236,6 @@ public class GUI extends Observable {
         finishedButton.setFocusable(false);
 
 
-
         gameFrame.setFocusable(true);
         gameFrame.addKeyListener(new KeyListener() {
             @Override
@@ -260,13 +243,17 @@ public class GUI extends Observable {
                 // not doing anything
             }
 
+            /**
+             * Key-Press Shortcuts - Uses keyTracker states
+             * @param e key event
+             */
             @Override
             public void keyPressed(KeyEvent e) {
-                if(keyTracker.equals(KeyStates.PRE_ROLL)){
-                    if(e.getKeyCode() == 82){
+                if (keyTracker.equals(KeyStates.PRE_ROLL)) {
+                    if (e.getKeyCode() == 82) {
                         onRollDice();
                     }
-                }else if(keyTracker.equals(KeyStates.MOVEMENT)){
+                } else if (keyTracker.equals(KeyStates.MOVEMENT)) {
                     switch (e.getKeyCode()) {
                         case 70:
                             onFinish();
@@ -284,7 +271,7 @@ public class GUI extends Observable {
                             makeMovement(Move.Direction.RIGHT);
                             break;
                     }
-                } else if(keyTracker.equals(KeyStates.DECISION)){
+                } else if (keyTracker.equals(KeyStates.DECISION)) {
                     switch (e.getKeyCode()) {
                         case 83:
                             onSuggestion();
@@ -334,7 +321,10 @@ public class GUI extends Observable {
     }
 
 
-    public void onRollDice(){
+    /**
+     * Execute Dice Roll Action for Button
+     */
+    public void onRollDice() {
         game.setMovesRemaining(-1);
         game.setMovesRemaining(game.rollDice());
         setRollDiceButtonVisibility(false);
@@ -342,14 +332,21 @@ public class GUI extends Observable {
         movementPanel.setVisible(true);
     }
 
-    public void onFinish(){
+
+    /**
+     * Execute Action for Finish Button
+     */
+    public void onFinish() {
         game.actionTransition();
         setFinishedButtonVisibility(false);
         movementPanel.setVisible(false);
         setSuggestionAccusationVisibility(true);
     }
 
-    public void onSuggestion(){
+    /**
+     * Execute Action for Suggestion Button
+     */
+    public void onSuggestion() {
         int suggest = game.makeSuggestion(game.getCurrentPlayer());
         if (suggest == -1) {
             game.movementTransition();
@@ -361,7 +358,10 @@ public class GUI extends Observable {
         }
     }
 
-    public void onAccusation(){
+    /**
+     * Execute Action for Accusation Button
+     */
+    public void onAccusation() {
         int accuse = game.makeAccusation(game.getCurrentPlayer());
         if (accuse == 1) {
             game.finishTransition();
@@ -375,7 +375,10 @@ public class GUI extends Observable {
         }
     }
 
-    public void onPass(){
+    /**
+     * Execute Action for Pass Button
+     */
+    public void onPass() {
         game.movementTransition();
         setRollDiceButtonVisibility(true);
         setFinishedButtonVisibility(false);
@@ -384,7 +387,6 @@ public class GUI extends Observable {
         firstDiceImageLabel.setVisible(false);
         secondDiceImageLabel.setVisible(false);
     }
-
 
 
     /**
@@ -564,7 +566,7 @@ public class GUI extends Observable {
             handPanel.removeAll();
             currentPlayer.getHand().forEach(c -> {
                 JLabel handLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/card_" + c.toString() + ".png")));
-                handLabel.setToolTipText("Card Type: "+c.getClass().getSimpleName());
+                handLabel.setToolTipText("Card Type: " + c.getClass().getSimpleName());
                 handPanel.add(handLabel);
             });
             previousPlayer = currentPlayer;
@@ -704,7 +706,6 @@ public class GUI extends Observable {
             }
         }
     }
-
 
 
     /**
