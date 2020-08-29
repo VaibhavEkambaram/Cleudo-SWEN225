@@ -5,7 +5,6 @@ import model.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.List;
 import java.util.*;
 
 import static model.Game.subStates.MOVEMENT;
@@ -61,6 +60,14 @@ public class GUI extends Observable {
     private final JTextArea info;
 
     private KeyStates keyTracker = KeyStates.PRE_ROLL;
+
+
+
+    public enum KeyStates {
+        PRE_ROLL, MOVEMENT, DECISION
+    }
+
+
 
     /**
      * User Interface Constructor
@@ -175,48 +182,24 @@ public class GUI extends Observable {
 
 
         // Suggestion Button
-        suggestionButton = new JButton("Make Suggestion");
+        suggestionButton = new JButton("Make Suggestion [s]");
         actionPanel.add(suggestionButton);
         suggestionButton.addActionListener(e -> {
-            int suggest = game.makeSuggestion(game.getCurrentPlayer());
-            if (suggest == -1) {
-                game.movementTransition();
-                setRollDiceButtonVisibility(true);
-                setFinishedButtonVisibility(false);
-                drawHand();
-                firstDiceImageLabel.setVisible(false);
-                secondDiceImageLabel.setVisible(false);
-            }
+            onSuggestion();
         });
 
         // Accusation Button
-        accusationButton = new JButton("Make Accusation");
+        accusationButton = new JButton("Make Accusation [a]");
         actionPanel.add(accusationButton);
         accusationButton.addActionListener(e -> {
-            int accuse = game.makeAccusation(game.getCurrentPlayer());
-            if (accuse == 1) {
-                game.finishTransition();
-            } else {
-                game.movementTransition();
-                setRollDiceButtonVisibility(true);
-                setFinishedButtonVisibility(false);
-                drawHand();
-                firstDiceImageLabel.setVisible(false);
-                secondDiceImageLabel.setVisible(false);
-            }
+            onAccusation();
         });
 
         // Pass Button
-        passButton = new JButton("Pass");
+        passButton = new JButton("Pass [p]");
         actionPanel.add(passButton);
         passButton.addActionListener(e -> {
-            game.movementTransition();
-            setRollDiceButtonVisibility(true);
-            setFinishedButtonVisibility(false);
-
-            drawHand();
-            firstDiceImageLabel.setVisible(false);
-            secondDiceImageLabel.setVisible(false);
+            onPass();
         });
 
         // Finished Button
@@ -231,7 +214,7 @@ public class GUI extends Observable {
         constraints.weightx = .3;
         constraints.gridx = 1;
         constraints.gridy = 0;
-        upButton = new JButton("Up [w]");
+        upButton = new JButton("Up [^]");
         movementPanel.add(upButton, constraints);
         upButton.addActionListener(e -> makeMovement(Move.Direction.UP));
 
@@ -240,19 +223,19 @@ public class GUI extends Observable {
 
         constraints.gridx = 1;
         constraints.gridy = 1;
-        downButton = new JButton("Down [s]");
+        downButton = new JButton("Down [v]");
         movementPanel.add(downButton, constraints);
         downButton.addActionListener(e -> makeMovement(Move.Direction.DOWN));
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        leftButton = new JButton("Left [a]");
+        leftButton = new JButton("Left [<]");
         movementPanel.add(leftButton, constraints);
         leftButton.addActionListener(e -> makeMovement(Move.Direction.LEFT));
 
         constraints.gridx = 2;
         constraints.gridy = 1;
-        rightButton = new JButton("Right [d]");
+        rightButton = new JButton("Right [>]");
         movementPanel.add(rightButton, constraints);
         rightButton.addActionListener(e -> makeMovement(Move.Direction.RIGHT));
 
@@ -279,22 +262,39 @@ public class GUI extends Observable {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if(keyTracker == KeyStates.PRE_ROLL){
+                if(keyTracker.equals(KeyStates.PRE_ROLL)){
                     if(e.getKeyCode() == 82){
                         onRollDice();
                     }
-                }else if(keyTracker == KeyStates.MOVEMENT){
-                    System.out.println(e.getKeyCode());
-                    if(e.getKeyCode() == 70){
-                        onFinish();
-                    } else if(e.getKeyCode() == 38 || e.getKeyCode() == 87){
-                        makeMovement(Move.Direction.UP);
-                    } else if(e.getKeyCode() == 83 || e.getKeyCode() == 40) {
-                        makeMovement(Move.Direction.DOWN);
-                    } else if(e.getKeyCode() == 37 || e.getKeyCode() == 65) {
-                        makeMovement(Move.Direction.LEFT);
-                    } else if(e.getKeyCode() == 68 || e.getKeyCode() == 39) {
-                        makeMovement(Move.Direction.RIGHT);
+                }else if(keyTracker.equals(KeyStates.MOVEMENT)){
+                    switch (e.getKeyCode()) {
+                        case 70:
+                            onFinish();
+                            break;
+                        case 38:
+                            makeMovement(Move.Direction.UP);
+                            break;
+                        case 40:
+                            makeMovement(Move.Direction.DOWN);
+                            break;
+                        case 37:
+                            makeMovement(Move.Direction.LEFT);
+                            break;
+                        case 39:
+                            makeMovement(Move.Direction.RIGHT);
+                            break;
+                    }
+                } else if(keyTracker.equals(KeyStates.DECISION)){
+                    switch (e.getKeyCode()) {
+                        case 83:
+                            onSuggestion();
+                            break;
+                        case 65:
+                            onAccusation();
+                            break;
+                        case 80:
+                            onPass();
+                            break;
                     }
                 }
             }
@@ -304,10 +304,6 @@ public class GUI extends Observable {
                 // not doing anything
             }
         });
-
-
-
-
 
 
         // Window Close Listener
@@ -351,6 +347,42 @@ public class GUI extends Observable {
         setFinishedButtonVisibility(false);
         movementPanel.setVisible(false);
         setSuggestionAccusationVisibility(true);
+    }
+
+    public void onSuggestion(){
+        int suggest = game.makeSuggestion(game.getCurrentPlayer());
+        if (suggest == -1) {
+            game.movementTransition();
+            setRollDiceButtonVisibility(true);
+            setFinishedButtonVisibility(false);
+            drawHand();
+            firstDiceImageLabel.setVisible(false);
+            secondDiceImageLabel.setVisible(false);
+        }
+    }
+
+    public void onAccusation(){
+        int accuse = game.makeAccusation(game.getCurrentPlayer());
+        if (accuse == 1) {
+            game.finishTransition();
+        } else {
+            game.movementTransition();
+            setRollDiceButtonVisibility(true);
+            setFinishedButtonVisibility(false);
+            drawHand();
+            firstDiceImageLabel.setVisible(false);
+            secondDiceImageLabel.setVisible(false);
+        }
+    }
+
+    public void onPass(){
+        game.movementTransition();
+        setRollDiceButtonVisibility(true);
+        setFinishedButtonVisibility(false);
+
+        drawHand();
+        firstDiceImageLabel.setVisible(false);
+        secondDiceImageLabel.setVisible(false);
     }
 
 
@@ -674,69 +706,6 @@ public class GUI extends Observable {
     }
 
 
-    /**
-     * Set player count through option pane
-     *
-     * @return number of players
-     * @author Vaibhav Ekambaram
-     */
-    public int setPlayerCount() {
-        JPanel fields = new JPanel(new GridLayout(2, 1));
-        JComboBox<String> comboBox = new JComboBox<>(new String[]{"3", "4", "5", "6"});
-        fields.add(new JLabel("How many players wish to play?"));
-        fields.add(comboBox);
-        JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.PLAIN_MESSAGE);
-        return Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
-    }
-
-    /**
-     * Set player vanity name and tokens through option pane
-     *
-     * @param characterNames    array of character name strings
-     * @param numPlayers        number of players
-     * @param players           list of players to write to
-     * @param characterCardsMap map of characters
-     * @return list of players
-     * @author Vaibhav Ekambaram
-     */
-    public List<Player> setPlayers(String[] characterNames, int numPlayers, List<Player> players, Map<String, CharacterCard> characterCardsMap) {
-        ArrayList<String> charNames = new ArrayList<>(Arrays.asList(characterNames));
-        ArrayList<String> used = new ArrayList<>();
-
-        // menu for each player to select options
-        for (int i = 0; i < numPlayers; i++) {
-            JPanel fields = new JPanel(new GridLayout(5, 2));
-            JTextField nameField = new JTextField();
-            nameField.setText("Player " + (i + 1));
-            ButtonGroup buttonGroup = new ButtonGroup();
-            fields.add(new JLabel("Enter your name then select your player token "));
-
-            fields.add(nameField);
-
-            // radio button for each token option
-            charNames.forEach(character -> {
-                JRadioButton radButton = new JRadioButton();
-                if (used.contains(character)) radButton.setEnabled(false);
-                radButton.setText(character);
-                radButton.setActionCommand(character);
-                buttonGroup.add(radButton);
-                fields.add(radButton);
-            });
-            fields.add(new JLabel("Note: regardless of choice, players will start at token start, and the game will play clockwise around the board!"));
-
-            JOptionPane.showMessageDialog(null, fields, "Set Player Preferences", JOptionPane.PLAIN_MESSAGE);
-
-            // if valid selection then add to array of players, otherwise repeat
-            if (buttonGroup.getSelection() != null || nameField.getText().length() == 0) {
-                used.add(buttonGroup.getSelection().getActionCommand());
-                players.add(new Player(characterCardsMap.get(buttonGroup.getSelection().getActionCommand()), nameField.getText()));
-            } else {
-                i--;
-            }
-        }
-        return players;
-    }
-
 
     /**
      * Move one tile in specified direction given by Button Press
@@ -795,7 +764,5 @@ public class GUI extends Observable {
         }
     }
 
-    public enum KeyStates {
-        PRE_ROLL, MOVEMENT, DECISION
-    }
+
 }

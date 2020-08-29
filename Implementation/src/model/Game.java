@@ -2,6 +2,7 @@ package model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 import view.AccusationMenu;
+import view.PlayerSetupMenu;
 import view.SuggestionMenu;
 import view.GUI;
 
@@ -138,9 +139,10 @@ public class Game {
         }
 
         userInterface = new GUI(this);
-        numPlayers = userInterface.setPlayerCount();
+        PlayerSetupMenu p = new PlayerSetupMenu();
+        numPlayers = p.setPlayerCount();
         players = new ArrayList<>();
-        players = userInterface.setPlayers(characterNames, numPlayers, players, characterCardsMap);
+        players = p.setPlayers(characterNames, numPlayers, players, characterCardsMap);
         Collections.sort(players);
     }
 
