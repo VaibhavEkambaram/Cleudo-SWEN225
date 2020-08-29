@@ -1,9 +1,9 @@
-package View;
+package view;
 
-import Model.Card;
-import Model.Player;
-import Model.RoomCard;
-import Model.Scenario;
+import model.Card;
+import model.Player;
+import model.RoomCard;
+import model.Scenario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +14,7 @@ public class SuggestionMenu {
 
     public String makeSuggestion(String[] characters, String[] weapons, String[] rooms, RoomCard suggestionRoom) {
         JPanel fields = new JPanel(new GridLayout(0, 1));
-        JLabel label = new JLabel("Make a suggestion, then click okay when ready");
-        fields.add(label);
+        fields.add(new JLabel("Make a suggestion, then click okay when ready"));
 
         JComboBox<String> roomBox = new JComboBox<>(rooms);
         JComboBox<String> charBox = new JComboBox<>(characters);
@@ -37,15 +36,10 @@ public class SuggestionMenu {
     public String makeRefutation(Player refutePlayer, Player currentPlayer, Scenario suggestion) {
         JPanel fields = new JPanel(new GridLayout(0, 1));
         fields.add(new JLabel("Refute " + currentPlayer.getPlayerVanityName() + "'s Suggestion by making a refutation using a card from your hand."));
-
         fields.add(new JLabel("Suggestion:  " + suggestion.toString()));
-
         fields.add(new JLabel("Your Hand"));
         List<Card> refuteCards = refutePlayer.getHand();
-        String[] refuteCardsStrings = new String[refuteCards.size()];
-        for (int i = 0; i < refuteCards.size(); i++) {
-            refuteCardsStrings[i] = refuteCards.get(i).toString();
-        }
+        String[] refuteCardsStrings = refuteCards.stream().map(Card::toString).toArray(String[]::new);
 
         JComboBox<String> hand = new JComboBox<>(refuteCardsStrings);
         fields.add(hand);
@@ -54,8 +48,7 @@ public class SuggestionMenu {
         Object[] options = {"OK", "Pass"};
         int n = JOptionPane.showOptionDialog(null, fields, refutePlayer.getPlayerVanityName() + " - Make a Refutation", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
 
-        if (n == 0) return Objects.requireNonNull(hand.getSelectedItem()).toString();
-        return "-1";
+        return n == 0 ? Objects.requireNonNull(hand.getSelectedItem()).toString() : "-1";
     }
 
 
@@ -69,11 +62,10 @@ public class SuggestionMenu {
 
     public int nobodyCouldRefute() {
         Object[] options = {"Make Accusation", "Pass"};
-        int n = JOptionPane.showOptionDialog(null, "No one could refute your suggestion. What would you like to do?", "Suggestion not Refuted",
+        return JOptionPane.showOptionDialog(null, "No one could refute your suggestion. What would you like to do?", "Suggestion not Refuted",
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null,//do not use a custom Icon
                 options,//the titles of buttons
-                options[1]);//default button title
-        return n;
+                options[1]);
     }
 
     public void refuted(String characterName) {

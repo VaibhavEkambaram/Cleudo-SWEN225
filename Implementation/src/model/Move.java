@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * Model.Move Class - Used in determining player movement around a board

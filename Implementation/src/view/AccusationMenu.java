@@ -1,7 +1,7 @@
-package View;
+package view;
 
-import Model.Player;
-import Model.Scenario;
+import model.Player;
+import model.Scenario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,8 +9,7 @@ import java.awt.*;
 public class AccusationMenu {
     public String makeAccusation(String[] characters, String[] weapons, String[] rooms) {
         JPanel fields = new JPanel(new GridLayout(0, 1));
-        JLabel label = new JLabel("Pick out an accusation scenario, then click okay when ready ");
-        fields.add(label);
+        fields.add(new JLabel("Pick out an accusation scenario, then click okay when ready "));
 
         JComboBox<String> charBox = new JComboBox<>(characters);
         JComboBox<String> weaponBox = new JComboBox<>(weapons);

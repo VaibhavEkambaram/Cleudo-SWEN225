@@ -1,4 +1,4 @@
-package Model;/*PLEASE DO NOT EDIT THIS CODE*/
+package model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 
@@ -15,12 +15,12 @@ public class RoomCard implements Card {
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-    //Model.RoomCard Attributes
+    //RoomCard Attributes
     private final String roomName; // the name of this room
     private final Room room; // room object
 
     /**
-     * Model.RoomCard Constructor
+     * RoomCard Constructor
      *
      * @param roomString name
      * @param room       room
@@ -35,7 +35,7 @@ public class RoomCard implements Card {
     //------------------------
 
     /**
-     * Retrieve Model.Room Name
+     * Retrieve Room Name
      *
      * @return room string
      */
@@ -44,7 +44,7 @@ public class RoomCard implements Card {
     }
 
     /**
-     * Retrieve Model.Room object
+     * Retrieve Room object
      *
      * @return room object
      */

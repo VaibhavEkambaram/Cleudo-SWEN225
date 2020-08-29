@@ -1,6 +1,6 @@
-package View;
+package view;
 
-import Model.*;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 
-import static Model.Game.subStates.MOVEMENT;
+import static model.Game.subStates.MOVEMENT;
 
 
 public class Table extends Observable {
@@ -17,7 +17,6 @@ public class Table extends Observable {
     private int RECT_SIZE;
 
     final JFrame gameFrame;
-    public int numPlayers = -1;
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
 
     // Buttons
@@ -51,7 +50,6 @@ public class Table extends Observable {
     private int movesRemaining;
     Player currentPlayer;
     Player previousPlayer;
-    private final Font infoFont;
 
     Point p1;
     Point p2;
@@ -107,7 +105,6 @@ public class Table extends Observable {
         info.setText("Hello and welcome to Cluedo\nMade by:\nCameron Li, Vaibhav Ekambaram and Baxter Kirikiri");
         info.setEditable(false);
         infoPanel.add(info, BorderLayout.CENTER);
-        infoFont = info.getFont();
         infoPanel.setPreferredSize(new Dimension(500, 50));
 
         // Hand Panel
@@ -169,26 +166,14 @@ public class Table extends Observable {
                 Position select = game.getBoard().findNearest((int) x, (int) y);
                 if (select != null) {
 
-                    game.setSelectedTile((int) x,(int) y);
+                    game.setSelectedTile((int) x, (int) y);
 
 
+                    Board board = game.getBoard().movePlayer(game.getCurrentPlayer(), game.getSelectedTile(), game);
 
-
-
-
-
-
-
-
-
-
-
-
-                   Board board = game.getBoard().movePlayer(game.getCurrentPlayer(),game.getSelectedTile(),game);
-
-                   if(board!=null){
-                       game.setBoard(board);
-                   }
+                    if (board != null) {
+                        game.setBoard(board);
+                    }
                 }
             }
 
@@ -217,7 +202,7 @@ public class Table extends Observable {
             if (suggest == -1) {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
-                createHand(game);
+                createHand();
                 label1.setVisible(false);
                 label2.setVisible(false);
             }
@@ -233,7 +218,7 @@ public class Table extends Observable {
             } else {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
-                createHand(game);
+                createHand();
                 label1.setVisible(false);
                 label2.setVisible(false);
             }
@@ -245,7 +230,7 @@ public class Table extends Observable {
         passButton.addActionListener(e -> {
             game.movementTransition();
             setRollDiceButtonVisibility(true);
-            createHand(game);
+            createHand();
             label1.setVisible(false);
             label2.setVisible(false);
         });
@@ -417,7 +402,7 @@ public class Table extends Observable {
         return helpMenu;
     }
 
-    private void createHand(Game game) {
+    private void createHand() {
         // TODO: make the hand panel scrollable so the player can actually see all of their cards
         if (currentPlayer == null) {
             return;
@@ -464,7 +449,7 @@ public class Table extends Observable {
 
             }
             if (game.getSubState().equals(MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
-                createHand(game);
+                createHand();
             }
         } else {
             showMovement(false);
@@ -494,17 +479,14 @@ public class Table extends Observable {
             Graphics2D g2 = (Graphics2D) g;
             int border = BORDER_SIZE / 2;
 
-
-
-
             for (int i = 0; i < 24; i++) {
                 for (int j = 0; j < 25; j++) {
 
 
-                        if(!game.getBoard().getPositions()[j][i].equals(game.getSelectedTile())){
-                            game.getBoard().getPositions()[j][i].draw(g);
-                            g.fillRect(border + RECT_SIZE * i, border + RECT_SIZE * j, RECT_SIZE, RECT_SIZE);
-                        }
+                    if (!game.getBoard().getPositions()[j][i].equals(game.getSelectedTile())) {
+                        game.getBoard().getPositions()[j][i].draw(g);
+                        g.fillRect(border + RECT_SIZE * i, border + RECT_SIZE * j, RECT_SIZE, RECT_SIZE);
+                    }
 
 
                     if (game.getBoard().getPositions()[j][i].getCharacter() != null) {
@@ -575,26 +557,44 @@ public class Table extends Observable {
 
 
     private static BufferedImage resize(BufferedImage img, int height, int width) {
-        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = resized.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
+        g2d.drawImage(img.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
         g2d.dispose();
         return resized;
     }
 
-
-    public int setPlayerCount() {
-        JPanel fields = new JPanel(new GridLayout(2, 1));
-        JLabel label = new JLabel("How many players wish to play?");
-        JComboBox<String> comboBox = new JComboBox<>(new String[]{"3", "4", "5", "6"});
-        fields.add(label);
-        fields.add(comboBox);
-        JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.PLAIN_MESSAGE);
-        numPlayers = Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
-        return numPlayers;
+    public void makeMovement(Move.Direction direction) {
+        currentPlayer = game.getCurrentPlayer();
+        game.movementInput(new Move(direction, 1));
     }
 
+    /**
+     * Set player count through option pane
+     *
+     * @return number of players
+     * @author Vaibhav Ekambaram
+     */
+    public int setPlayerCount() {
+        JPanel fields = new JPanel(new GridLayout(2, 1));
+        JComboBox<String> comboBox = new JComboBox<>(new String[]{"3", "4", "5", "6"});
+        fields.add(new JLabel("How many players wish to play?"));
+        fields.add(comboBox);
+        JOptionPane.showMessageDialog(gameFrame, fields, "Game Startup Parameters", JOptionPane.PLAIN_MESSAGE);
+        return Integer.parseInt(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
+    }
+
+
+    /**
+     * Set player vanity name and tokens through option pane
+     *
+     * @param characterNames    array of character name strings
+     * @param numPlayers        number of players
+     * @param players           list of players to write to
+     * @param characterCardsMap map of characters
+     * @return list of players
+     * @author Vaibhav Ekambaram
+     */
     public List<Player> setPlayers(String[] characterNames, int numPlayers, List<Player> players, Map<String, CharacterCard> characterCardsMap) {
         ArrayList<String> charNames = new ArrayList<>(Arrays.asList(characterNames));
         ArrayList<String> used = new ArrayList<>();
@@ -602,42 +602,32 @@ public class Table extends Observable {
         // menu for each player to select options
         for (int i = 0; i < numPlayers; i++) {
             JPanel fields = new JPanel(new GridLayout(5, 2));
-            JLabel label = new JLabel("Enter your name then select your player token ");
             JTextField nameField = new JTextField();
             nameField.setText("Player " + (i + 1));
-            ButtonGroup b = new ButtonGroup();
-            fields.add(label);
+            ButtonGroup buttonGroup = new ButtonGroup();
+            fields.add(new JLabel("Enter your name then select your player token "));
             fields.add(nameField);
 
             // create radio button for each token option
-            for (String character : charNames) {
+            charNames.forEach(character -> {
                 JRadioButton radButton = new JRadioButton();
-                if (used.contains(character)) {
-                    radButton.setEnabled(false);
-                }
+                if (used.contains(character)) radButton.setEnabled(false);
                 radButton.setText(character);
                 radButton.setActionCommand(character);
-                b.add(radButton);
+                buttonGroup.add(radButton);
                 fields.add(radButton);
-            }
+            });
 
             JOptionPane.showMessageDialog(null, fields, "Set Player Preferences", JOptionPane.PLAIN_MESSAGE);
 
             // if valid selection then add to array of players, otherwise repeat
-            if (b.getSelection() != null || nameField.getText().length() == 0) {
-                used.add(b.getSelection().getActionCommand());
-                players.add(new Player(characterCardsMap.get(b.getSelection().getActionCommand()), nameField.getText()));
+            if (buttonGroup.getSelection() != null || nameField.getText().length() == 0) {
+                used.add(buttonGroup.getSelection().getActionCommand());
+                players.add(new Player(characterCardsMap.get(buttonGroup.getSelection().getActionCommand()), nameField.getText()));
             } else {
                 i--;
             }
         }
         return players;
-    }
-
-
-    public void makeMovement(Move.Direction direction) {
-        currentPlayer = game.getCurrentPlayer();
-        Move move = new Move(direction, 1);
-        game.movementInput(move);
     }
 }

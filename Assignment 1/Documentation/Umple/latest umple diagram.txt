@@ -1,12 +1,12 @@
-interface Model.Card {
+interface model.Card {
   String toString();
 }
 
 
 
 
-class Model.CharacterCard {
-  isA Model.Card;
+class model.CharacterCard {
+  isA model.Card;
   
   String characterName;
   String characterBoardChar;
@@ -15,11 +15,11 @@ class Model.CharacterCard {
 
 
 
-class Model.RoomCard {
-  isA Model.Card;
+class model.RoomCard {
+  isA model.Card;
   
   String roomName;
-  Model.Room room;
+  model.Room room;
   
   
 }
@@ -27,19 +27,19 @@ class Model.RoomCard {
 
 
 
-class Model.WeaponCard {
-  isA Model.Card;
+class model.WeaponCard {
+  isA model.Card;
   
   String weaponString;
-  Model.Room room;
+  model.Room room;
 }
 
 
 
-class Model.Scenario {
-  Model.RoomCard roomCard;
-  Model.WeaponCard weaponCard;
-  Model.CharacterCard murdererCard;
+class model.Scenario {
+  model.RoomCard roomCard;
+  model.WeaponCard weaponCard;
+  model.CharacterCard murdererCard;
   
   
 
@@ -48,24 +48,24 @@ class Model.Scenario {
   }
 }
 
-class Model.Room {
+class model.Room {
   String roomName;
   String roomChar;
 }
 
-class Model.Position {
-  Model.CharacterCard character;
+class model.Position {
+  model.CharacterCard character;
   String displayName;
   boolean canMove;
   int xLoc;
   int yLoc;
   
-  Model.Room inRoom;
+  model.Room inRoom;
   MoveDirection doorDirection;
   boolean isDoor;
   boolean passableTile;
   
-  public Model.Position clone(){
+  public model.Position clone(){
   }
   
   public boolean canMove(){
@@ -79,17 +79,17 @@ class Model.Position {
 }
 
 
-class Model.Player {
-   Model.Card[] hand;
-   Model.CharacterCard character;
-   Model.Position currentPosition;
+class model.Player {
+   model.Card[] hand;
+   model.CharacterCard character;
+   model.Position currentPosition;
   
    boolean canAccuse;
    boolean canRefute;
 }
 
 
-class Model.Move {
+class model.Move {
   Direction direction;
   int spaces;
   
@@ -100,39 +100,39 @@ class Model.Move {
   }
 }
 
-class Model.Board {
-  Model.Position[] positions;
+class model.Board {
+  model.Position[] positions;
   
-  public Model.Board apply(Model.Player player, Model.Move move){
+  public model.Board apply(model.Player player, model.Move move){
   }
   
-  public Model.Board teleportPlayer(Model.Player player, Model.Room room){
+  public model.Board teleportPlayer(model.Player player, model.Room room){
   }
   
   public boolean outOfBounds(int x,int y){
   }
   
-  public boolean checkDoorMovement(Model.Position checkPosition, int dx,int dy,boolean enter){
+  public boolean checkDoorMovement(model.Position checkPosition, int dx,int dy,boolean enter){
   }
 }
 
 
-class Model.Game {
-  Model.Card[] deck;
-  Model.Player[] players;
-  Model.Room[] rooms;
+class model.Game {
+  model.Card[] deck;
+  model.Player[] players;
+  model.Room[] rooms;
   
-  Model.WeaponCard[] weaponCards;
-  Model.RoomCard[] roomCards;
-  Model.CharacterCard[] characterCards;
+  model.WeaponCard[] weaponCards;
+  model.RoomCard[] roomCards;
+  model.CharacterCard[] characterCards;
   
   Map weaponCardsMap;
   Map roomCardsMap;
   Map characterCardsMap;
   
-  Model.Board board;
-  Model.Player currentPlayer;
-  Model.Scenario murderScenario;
+  model.Board board;
+  model.Player currentPlayer;
+  model.Scenario murderScenario;
   
   int movesRemaining;
   
@@ -161,13 +161,13 @@ class Model.Game {
   public int rollDice() {
   }
   
-  public Model.Move movementInput(int movesRemaining) {
+  public model.Move movementInput(int movesRemaining) {
   }
   
-  private int makeAccusation(Model.Player p) {
+  private int makeAccusation(model.Player p) {
   }
   
-  private void makeSuggestion(Model.Player p) {
+  private void makeSuggestion(model.Player p) {
   }
   
   private String suggestionValidateInput() {
@@ -179,132 +179,132 @@ class Model.Game {
 namespace -;
 
 
-class Model.CharacterCard
+class model.CharacterCard
 {
   position 56 192 109 61;
 }
 
-class Model.RoomCard
+class model.RoomCard
 {
   position 315 191 157 112;
 }
 
-class Model.WeaponCard
+class model.WeaponCard
 {
   position 536 209 109 61;
 }
 
-class Model.Scenario
+class model.Scenario
 {
   position 50 330 225 112;
 }
 
-class Model.Room
+class model.Room
 {
   position 304 333 149 95;
 }
 
-class Model.Position
+class model.Position
 {
   position 808 168 109 61;
 }
 
-class Model.Player
+class model.Player
 {
   position 88 503 109 78;
 }
 
-class Model.CharacterCard
+class model.CharacterCard
 {
   position 56 192 109 61;
 }
 
-class Model.RoomCard
+class model.RoomCard
 {
   position 315 191 157 112;
 }
 
-class Model.WeaponCard
+class model.WeaponCard
 {
   position 536 209 109 61;
 }
 
-class Model.Scenario
+class model.Scenario
 {
   position 50 330 225 112;
 }
 
-class Model.Room
+class model.Room
 {
   position 304 333 149 95;
 }
 
-class Model.Position
+class model.Position
 {
   position 808 168 109 61;
 }
 
-class Model.Player
+class model.Player
 {
   position 88 503 109 78;
 }
 
-class Model.Move
+class model.Move
 {
   position 324 505 153 129;
 }
 
-class Model.Board
+class model.Board
 {
   position 569 499 408 146;
 }
 
-class Model.CharacterCard
+class model.CharacterCard
 {
   position 56 192 109 61;
 }
 
-class Model.RoomCard
+class model.RoomCard
 {
   position 315 191 157 112;
 }
 
-class Model.WeaponCard
+class model.WeaponCard
 {
   position 536 209 109 61;
 }
 
-class Model.Scenario
+class model.Scenario
 {
   position 50 330 225 112;
 }
 
-class Model.Room
+class model.Room
 {
   position 304 333 149 95;
 }
 
-class Model.Position
+class model.Position
 {
   position 808 168 109 61;
 }
 
-class Model.Player
+class model.Player
 {
   position 88 503 109 78;
 }
 
-class Model.Move
+class model.Move
 {
   position 324 505 153 129;
 }
 
-class Model.Board
+class model.Board
 {
   position 569 499 408 146;
 }
 
-class Model.Game
+class model.Game
 {
   position 82 672 244 333;
 }

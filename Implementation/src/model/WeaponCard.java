@@ -1,4 +1,4 @@
-package Model;/*PLEASE DO NOT EDIT THIS CODE*/
+package model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 // line 11 "model.ump"
@@ -7,10 +7,8 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 // line 199 "model.ump"
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.Buffer;
 
 /**
  * Model.WeaponCard Class - Implements Model.Card Interface

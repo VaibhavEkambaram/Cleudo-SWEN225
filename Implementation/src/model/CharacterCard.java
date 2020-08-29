@@ -1,30 +1,20 @@
-package Model;/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
-
-// line 25 "model.ump"
-// line 128 "model.ump"
-// line 151 "model.ump"
-// line 209 "model.ump"
+package model;
 
 import java.awt.*;
 
 /**
- * Model.CharacterCard - Implements Model.Card Interface
+ * CharacterCard - Implements Model.Card Interface
  */
 public class CharacterCard implements Card {
 
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-
-    //Model.CharacterCard Attributes
+    // CharacterCard Attributes
     private final String characterName;
     private final String characterBoardChar;
     private final Color characterBoardColor;
     private final String characterColorName;
 
     /**
-     * Model.CharacterCard Constructor
+     * CharacterCard Constructor
      *
      * @param c name of the character
      * @author Vaibhav Ekambaram
@@ -89,11 +79,23 @@ public class CharacterCard implements Card {
         return characterBoardChar;
     }
 
+    /**
+     * get character board colour
+     *
+     * @return Color
+     */
     public Color getCharacterBoardColor() {
         return characterBoardColor;
     }
 
-    public String getCharacterColorName(){ return characterColorName; }
+    /**
+     * Get character colour name
+     *
+     * @return colour string
+     */
+    public String getCharacterColorName() {
+        return characterColorName;
+    }
 
     /**
      * toString Method - Print of the character name

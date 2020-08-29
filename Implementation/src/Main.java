@@ -1,4 +1,4 @@
-import Model.Game;
+import model.Game;
 
 public class Main {
     /**

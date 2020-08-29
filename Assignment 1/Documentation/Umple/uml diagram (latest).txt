@@ -2,59 +2,59 @@
 //Unable to update umple code due to error at null
 //Unable to update umple code due to error at null
 //Unable to update umple code due to error at null
-interface Model.Card {
+interface model.Card {
     String toString();
 }
 
 
-class Model.WeaponCard
+class model.WeaponCard
 {
   weapon;
-isA Model.Card;
+isA model.Card;
 }
 
-class Model.RoomCard
+class model.RoomCard
 {
   roomName;
-Model.Room room;
-isA Model.Card;
-  * -- * Model.Scenario;
+model.Room room;
+isA model.Card;
+  * -- * model.Scenario;
 }
 
-class Model.CharacterCard
+class model.CharacterCard
 {
   characterName;
-isA Model.Card;
-    * -- * Model.Scenario;
+isA model.Card;
+    * -- * model.Scenario;
 }
 
-class Model.Scenario
+class model.Scenario
 {
-  Model.RoomCard roomCard;
-  Model.WeaponCard weapon;
-  Model.CharacterCard murderer;
-    * -- * Model.WeaponCard;
-public Boolean isEqual(Model.Scenario o){
+  model.RoomCard roomCard;
+  model.WeaponCard weapon;
+  model.CharacterCard murderer;
+    * -- * model.WeaponCard;
+public Boolean isEqual(model.Scenario o){
 
 }
 }
 
-class Model.Room
+class model.Room
 {
-  Model.RoomCard roomCard;
-  Model.WeaponCard weapon;
-  Model.CharacterCard character;
+  model.RoomCard roomCard;
+  model.WeaponCard weapon;
+  model.CharacterCard character;
 }
 
-class Model.Game
+class model.Game
 {
-  Model.Board board;
-  Model.Player currentPlayer;
-  Model.Scenario murderScenario;
+  model.Board board;
+  model.Player currentPlayer;
+  model.Scenario murderScenario;
   
-  Model.Player[] players;
+  model.Player[] players;
   
-    * -- * Model.Scenario;
+    * -- * model.Scenario;
 public int rollDice(){
 
 }
@@ -69,14 +69,14 @@ public boolean accusation(){
 }
 }
 
-class Model.Player
+class model.Player
 {
-  Model.CharacterCard character;
-  Model.Card[] hand;
+  model.CharacterCard character;
+  model.Card[] hand;
   boolean canAccuse;
   boolean canRefute;
-  Model.Position currentPosition;
-public void refutation(Model.RoomCard arg0,Model.CharacterCard arg1,Model.WeaponCard arg2){
+  model.Position currentPosition;
+public void refutation(model.RoomCard arg0,model.CharacterCard arg1,model.WeaponCard arg2){
 
 }
 public Boolean checkInRoom(){ // Check if player is in a room
@@ -86,22 +86,22 @@ public Boolean checkInRoom(){ // Check if player is in a room
 }
 }
 
-class Model.Board
+class model.Board
 {
-  Model.Position[] tiles;
-  * -- * Model.Scenario;
-  * -- * Model.Position;
-public boolean movePlayer(Model.Player arg0,Tile arg1,int arg2){
+  model.Position[] tiles;
+  * -- * model.Scenario;
+  * -- * model.Position;
+public boolean movePlayer(model.Player arg0,Tile arg1,int arg2){
 
 }
 }
 
-class Model.Position
+class model.Position
 {
-  Model.Room inRoom;
-  /* Not quite sure we will need this as the Model.Room card should store this information for us, instead of individual tiles.
-  Model.CharacterCard hasCharacter;
-  Model.WeaponCard hasWeapon;
+  model.Room inRoom;
+  /* Not quite sure we will need this as the model.Room card should store this information for us, instead of individual tiles.
+  model.CharacterCard hasCharacter;
+  model.WeaponCard hasWeapon;
   */
   boolean passableTile;
   displayName;
@@ -113,56 +113,56 @@ class Model.Position
 namespace -;
 
 
-class Model.WeaponCard
+class model.WeaponCard
 {
   position 20 205 157 95;
 }
 
-class Model.RoomCard
+class model.RoomCard
 {
   position 199 207 157 95;
   position.association RoomCard__Scenario 124,112 73,0;
 }
 
-class Model.CharacterCard
+class model.CharacterCard
 {
   position 376 206 157 78;
     position.association CharacterCard__Scenario 91,104 167,0;
   position.association CharacterCard__Player 177,48 0,43;
 }
 
-class Model.Scenario
+class model.Scenario
 {
   position 261 444 221 129;
   position.association Scenario__WeaponCard 25,0 157,95;
 }
 
-class Model.WeaponCard
+class model.WeaponCard
 {
   position 20 205 157 95;
 }
 
-class Model.RoomCard
+class model.RoomCard
 {
   position 199 207 157 95;
 }
 
-class Model.CharacterCard
+class model.CharacterCard
 {
   position 376 206 157 78;
 }
 
-class Model.Scenario
+class model.Scenario
 {
   position 261 444 221 129;
 }
 
-class Model.Room
+class model.Room
 {
   position 29 398 195 112;
   }
 
-class Model.Game
+class model.Game
 {
   position 664 403 199 197;
   position.association Game__Scenario 0,56 222,92;
@@ -174,19 +174,19 @@ class Model.Game
   position.association Game__Player 168,0 221,195;
 }
 
-class Model.Player
+class model.Player
 {
   position 663 123 406 163;
 }
 
-class Model.Board
+class model.Board
 {
   position 336 644 282 95;
   position.association Board__Scenario 71,0 199,129;
   position.association Board__Position 0,49 220,51;
 }
 
-class Model.Position
+class model.Position
 {
   position 31 569 219 163;
   position.association Position__Room 106,0 89,101;
@@ -195,32 +195,32 @@ class Model.Position
 namespace -;
 
 
-class Model.WeaponCard
+class model.WeaponCard
 {
   position 20 205 157 95;
 }
 
-class Model.RoomCard
+class model.RoomCard
 {
   position 199 207 157 95;
 }
 
-class Model.CharacterCard
+class model.CharacterCard
 {
   position 376 206 157 78;
 }
 
-class Model.Scenario
+class model.Scenario
 {
   position 261 444 221 129;
 }
 
-class Model.Room
+class model.Room
 {
   position 29 398 195 112;
 }
 
-class Model.Game
+class model.Game
 {
   position 664 403 199 197;
 }

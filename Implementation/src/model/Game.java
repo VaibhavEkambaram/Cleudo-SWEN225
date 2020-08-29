@@ -1,9 +1,9 @@
-package Model;/*PLEASE DO NOT EDIT THIS CODE*/
+package model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
-import View.AccusationMenu;
-import View.SuggestionMenu;
-import View.Table;
+import view.AccusationMenu;
+import view.SuggestionMenu;
+import view.Table;
 
 import java.util.*;
 
@@ -18,7 +18,7 @@ public class Game {
     Table table;
 
     /**
-     * Check if States are matching within their appropriate substates
+     * Check if States are matching within their appropriate sub-states
      * If incorrect, throw an error with respective states
      */
 

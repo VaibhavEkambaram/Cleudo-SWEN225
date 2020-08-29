@@ -1,8 +1,5 @@
-package Model;/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
+package model;
 
-// line 100 "model.ump"
-// line 190 "model.ump"
 
 import java.awt.*;
 import java.util.Objects;
@@ -12,11 +9,6 @@ import java.util.Objects;
  * Used as a "Tile" on the board
  */
 public class Position {
-
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-
 
     // Basic Model.Position Attributes
     private CharacterCard character;
@@ -38,7 +30,6 @@ public class Position {
     private final Color COLOR_2 = new Color(221, 82, 53);
     private final Color COLOR_3 = new Color(215, 202, 193);
     private final Color COLOR_4 = new Color(255, 155, 0);
-
 
     /**
      * Default Constructor

@@ -1,33 +1,29 @@
-package Model;/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// line 73 "model.ump"
-// line 178 "model.ump"
-
 /**
- * Model.Player Class
+ * Player Class
  */
 public class Player {
 
     private final List<Card> hand;
-    // Model.Player Gameplay Information
+    // Player Gameplay Information
     private final CharacterCard character;
     private Position currentPosition;
-    // Model.Player State
+    // Player State
     private boolean canAccuse = true;
 
     private final String playerVanityName;
 
 
     /**
-     * Model.Player Constructor and Initialise Methods
+     * Player Constructor and Initialise Methods
      *
      * @param aCharacter character associated with player
      */
-    public Player(CharacterCard aCharacter,String playerVanityName) {
+    public Player(CharacterCard aCharacter, String playerVanityName) {
         character = aCharacter;
         this.playerVanityName = playerVanityName;
         hand = new ArrayList<>();
@@ -35,7 +31,7 @@ public class Player {
 
 
     /**
-     * Add Model.Card to player hand
+     * Add Card to player hand
      *
      * @param card card to add
      */
@@ -94,7 +90,7 @@ public class Player {
     }
 
     /**
-     * Model.Player toString
+     * Player toString
      *
      * @return player board character
      */
@@ -113,7 +109,7 @@ public class Player {
         return canAccuse;
     }
 
-    public String getPlayerVanityName(){
+    public String getPlayerVanityName() {
         return playerVanityName;
     }
 
