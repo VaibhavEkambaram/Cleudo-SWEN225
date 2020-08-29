@@ -1,10 +1,13 @@
 package view;
 
+import com.sun.javafx.font.directwrite.RECT;
 import model.*;
 
+import javax.sound.sampled.Line;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Line2D;
 import java.util.*;
 
 import static model.Game.subStates.MOVEMENT;
@@ -17,7 +20,7 @@ import static model.Game.subStates.MOVEMENT;
 public class GUI extends Observable {
 
     // Constants
-    private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(700, 700);
+    private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(800, 800);
     private final int BOARD_WIDTH = 24;
     private final int BOARD_HEIGHT = 25;
     private final int BORDER_SIZE = 20;
@@ -51,6 +54,8 @@ public class GUI extends Observable {
     // Players
     private Player currentPlayer;
     private Player previousPlayer;
+
+    Graphics2D g;
 
     private int movesRemaining;
 
@@ -92,7 +97,7 @@ public class GUI extends Observable {
         actionPanel = new JPanel();
         actionPanel.setBackground(Color.WHITE);
         constraints.weightx = .2;
-        constraints.weighty = .8;
+        constraints.weighty = .4;
         constraints.gridx = 0;
         constraints.gridy = 0;
         actionPanel.setPreferredSize(new Dimension(200, 500));
@@ -173,7 +178,10 @@ public class GUI extends Observable {
         rollDiceButton = new JButton("Roll Dice [r]");
         actionPanel.add(rollDiceButton);
         rollDiceButton.addActionListener(e -> onRollDice());
-        rollDiceButton.setFocusable(true);
+
+        finishedButton = new JButton("Finished [f]");
+        actionPanel.add(finishedButton);
+        finishedButton.addActionListener(e -> onFinish());
 
 
         // Suggestion Button
@@ -192,8 +200,7 @@ public class GUI extends Observable {
         passButton.addActionListener(e -> onPass());
 
         // Finished Button
-        finishedButton = new JButton("Finished [f]");
-        finishedButton.addActionListener(e -> onFinish());
+
 
 
         // Movement Buttons
@@ -316,6 +323,7 @@ public class GUI extends Observable {
         gameFrame.setMinimumSize(new Dimension(800, 800));
         gameFrame.pack();
 
+        setFinishedButtonVisibility(false);
         setSuggestionAccusationVisibility(false);
         showMovement(false);
     }
@@ -338,8 +346,8 @@ public class GUI extends Observable {
      */
     public void onFinish() {
         game.actionTransition();
-        setFinishedButtonVisibility(false);
         movementPanel.setVisible(false);
+        setFinishedButtonVisibility(false);
         setSuggestionAccusationVisibility(true);
     }
 
@@ -350,8 +358,9 @@ public class GUI extends Observable {
         int suggest = game.makeSuggestion(game.getCurrentPlayer());
         if (suggest == -1) {
             game.movementTransition();
-            setRollDiceButtonVisibility(true);
             setFinishedButtonVisibility(false);
+            setRollDiceButtonVisibility(true);
+
             drawHand();
             firstDiceImageLabel.setVisible(false);
             secondDiceImageLabel.setVisible(false);
@@ -367,8 +376,9 @@ public class GUI extends Observable {
             game.finishTransition();
         } else {
             game.movementTransition();
-            setRollDiceButtonVisibility(true);
             setFinishedButtonVisibility(false);
+            setRollDiceButtonVisibility(true);
+
             drawHand();
             firstDiceImageLabel.setVisible(false);
             secondDiceImageLabel.setVisible(false);
@@ -380,9 +390,8 @@ public class GUI extends Observable {
      */
     public void onPass() {
         game.movementTransition();
-        setRollDiceButtonVisibility(true);
         setFinishedButtonVisibility(false);
-
+        setRollDiceButtonVisibility(true);
         drawHand();
         firstDiceImageLabel.setVisible(false);
         secondDiceImageLabel.setVisible(false);
@@ -417,10 +426,12 @@ public class GUI extends Observable {
             game.setMovesRemaining(-1);
             keyTracker = KeyStates.PRE_ROLL;
             actionPanel.add(rollDiceButton);
+            rollDiceButton.setVisible(true);
         } else {
+            rollDiceButton.setVisible(false);
             actionPanel.remove(rollDiceButton);
         }
-        rollDiceButton.setVisible(value);
+
     }
 
     /**
@@ -431,11 +442,13 @@ public class GUI extends Observable {
      */
     public void setFinishedButtonVisibility(boolean value) {
         if (value) {
+            actionPanel.update(g);
             actionPanel.add(finishedButton);
             finishedButton.setVisible(true);
         } else {
-            actionPanel.remove(finishedButton);
             finishedButton.setVisible(false);
+            actionPanel.remove(finishedButton);
+            
         }
     }
 
@@ -627,7 +640,11 @@ public class GUI extends Observable {
             }
         }
 
-        paint((Graphics2D) displayPanel.getGraphics());
+       g = (Graphics2D) displayPanel.getGraphics();
+
+
+       paint();
+
     }
 
 
@@ -637,7 +654,7 @@ public class GUI extends Observable {
      *
      * @author Vaibhav Ekambaram
      */
-    public void paint(Graphics2D g) {
+    public void paint() {
         if (g != null) {
 
             int border = BORDER_SIZE / 2;
@@ -683,6 +700,7 @@ public class GUI extends Observable {
             if (i > 0 && game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
                 g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
             }
+
             if (i < 23 && game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
                 g2.drawLine(xValue + RECT_SIZE - 2, yValue, xValue + RECT_SIZE - 2, yValue + RECT_SIZE - 2);
             }
@@ -699,6 +717,7 @@ public class GUI extends Observable {
                 if (game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
                     g2.drawLine(xValue + RECT_SIZE - 2, yValue, xValue + RECT_SIZE - 2, yValue + RECT_SIZE - 2);
                 }
+
 
                 if (game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
                     g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
