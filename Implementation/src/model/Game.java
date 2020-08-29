@@ -481,13 +481,13 @@ public class Game {
 
             // if the player successfully refutes the suggestion, end the loop
             if (Objects.requireNonNull(refutation).toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom.toString()) || refutation.toString().equals(suggestionWeapon.toString())) {
-                s.refuted(p.getCharacter().getCharacterName());
+                s.successfulRefutation(p.getCharacter().getCharacterName());
                 refuted = true;
                 movementTransition();
                 userInterface.setRollDiceButtonVisibility(true);
                 break;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
-                s.refutationFailed(currentTurn.getPlayerVanityName());
+                s.failedRefutation(currentTurn.getPlayerVanityName());
 
             }
         }

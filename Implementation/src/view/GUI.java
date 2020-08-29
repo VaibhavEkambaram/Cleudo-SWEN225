@@ -202,6 +202,7 @@ public class GUI extends Observable {
             createHand();
             firstDiceImageLabel.setVisible(false);
             secondDiceImageLabel.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Moving to next player...", "Information", JOptionPane.PLAIN_MESSAGE);
         });
 
         finishedButton = new JButton("Finished");
