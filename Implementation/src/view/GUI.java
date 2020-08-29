@@ -168,11 +168,7 @@ public class GUI extends Observable {
         rollDiceButton = new JButton("Roll Dice [r]");
         actionPanel.add(rollDiceButton);
         rollDiceButton.addActionListener(e -> {
-            game.setMovesRemaining(-1);
-            game.setMovesRemaining(game.rollDice());
-            setRollDiceButtonVisibility(false);
-            setFinishedButtonVisibility(true);
-            movementPanel.setVisible(true);
+            onRollDice();
         });
         rollDiceButton.setFocusable(true);
 
@@ -186,6 +182,7 @@ public class GUI extends Observable {
             if (suggest == -1) {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
+                setFinishedButtonVisibility(false);
                 drawHand();
                 firstDiceImageLabel.setVisible(false);
                 secondDiceImageLabel.setVisible(false);
@@ -202,6 +199,7 @@ public class GUI extends Observable {
             } else {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
+                setFinishedButtonVisibility(false);
                 drawHand();
                 firstDiceImageLabel.setVisible(false);
                 secondDiceImageLabel.setVisible(false);
@@ -214,20 +212,17 @@ public class GUI extends Observable {
         passButton.addActionListener(e -> {
             game.movementTransition();
             setRollDiceButtonVisibility(true);
+            setFinishedButtonVisibility(false);
 
             drawHand();
             firstDiceImageLabel.setVisible(false);
             secondDiceImageLabel.setVisible(false);
-            JOptionPane.showMessageDialog(null, "Moving to next player...", "Information", JOptionPane.PLAIN_MESSAGE);
         });
 
         // Finished Button
-        finishedButton = new JButton("Finished");
+        finishedButton = new JButton("Finished [f]");
         finishedButton.addActionListener(e -> {
-            game.actionTransition();
-            setFinishedButtonVisibility(false);
-            movementPanel.setVisible(false);
-            setSuggestionAccusationVisibility(true);
+            onFinish();
         });
 
 
@@ -236,7 +231,7 @@ public class GUI extends Observable {
         constraints.weightx = .3;
         constraints.gridx = 1;
         constraints.gridy = 0;
-        upButton = new JButton("Up");
+        upButton = new JButton("Up [w]");
         movementPanel.add(upButton, constraints);
         upButton.addActionListener(e -> makeMovement(Move.Direction.UP));
 
@@ -245,19 +240,19 @@ public class GUI extends Observable {
 
         constraints.gridx = 1;
         constraints.gridy = 1;
-        downButton = new JButton("Down");
+        downButton = new JButton("Down [s]");
         movementPanel.add(downButton, constraints);
         downButton.addActionListener(e -> makeMovement(Move.Direction.DOWN));
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        leftButton = new JButton("Left");
+        leftButton = new JButton("Left [a]");
         movementPanel.add(leftButton, constraints);
         leftButton.addActionListener(e -> makeMovement(Move.Direction.LEFT));
 
         constraints.gridx = 2;
         constraints.gridy = 1;
-        rightButton = new JButton("Right");
+        rightButton = new JButton("Right [d]");
         movementPanel.add(rightButton, constraints);
         rightButton.addActionListener(e -> makeMovement(Move.Direction.RIGHT));
 
@@ -286,13 +281,21 @@ public class GUI extends Observable {
             public void keyPressed(KeyEvent e) {
                 if(keyTracker == KeyStates.PRE_ROLL){
                     if(e.getKeyCode() == 82){
-                        game.setMovesRemaining(-1);
-                        game.setMovesRemaining(game.rollDice());
-                        setRollDiceButtonVisibility(false);
-                        setFinishedButtonVisibility(true);
-                        movementPanel.setVisible(true);
+                        onRollDice();
                     }
-
+                }else if(keyTracker == KeyStates.MOVEMENT){
+                    System.out.println(e.getKeyCode());
+                    if(e.getKeyCode() == 70){
+                        onFinish();
+                    } else if(e.getKeyCode() == 38 || e.getKeyCode() == 87){
+                        makeMovement(Move.Direction.UP);
+                    } else if(e.getKeyCode() == 83 || e.getKeyCode() == 40) {
+                        makeMovement(Move.Direction.DOWN);
+                    } else if(e.getKeyCode() == 37 || e.getKeyCode() == 65) {
+                        makeMovement(Move.Direction.LEFT);
+                    } else if(e.getKeyCode() == 68 || e.getKeyCode() == 39) {
+                        makeMovement(Move.Direction.RIGHT);
+                    }
                 }
             }
 
@@ -335,6 +338,23 @@ public class GUI extends Observable {
     }
 
 
+    public void onRollDice(){
+        game.setMovesRemaining(-1);
+        game.setMovesRemaining(game.rollDice());
+        setRollDiceButtonVisibility(false);
+        setFinishedButtonVisibility(true);
+        movementPanel.setVisible(true);
+    }
+
+    public void onFinish(){
+        game.actionTransition();
+        setFinishedButtonVisibility(false);
+        movementPanel.setVisible(false);
+        setSuggestionAccusationVisibility(true);
+    }
+
+
+
     /**
      * Draw Dice Roll Results
      *
@@ -359,6 +379,7 @@ public class GUI extends Observable {
      */
     public void setRollDiceButtonVisibility(boolean value) {
         if (value) {
+            setFinishedButtonVisibility(false);
             game.setMovesRemaining(-1);
             keyTracker = KeyStates.PRE_ROLL;
             actionPanel.add(rollDiceButton);
@@ -377,11 +398,11 @@ public class GUI extends Observable {
     public void setFinishedButtonVisibility(boolean value) {
         if (value) {
             actionPanel.add(finishedButton);
+            finishedButton.setVisible(true);
         } else {
             actionPanel.remove(finishedButton);
+            finishedButton.setVisible(false);
         }
-        actionPanel.revalidate();
-        actionPanel.repaint();
     }
 
     /**
