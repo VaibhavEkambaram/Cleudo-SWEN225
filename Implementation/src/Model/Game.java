@@ -26,9 +26,9 @@ public class Game {
     private final String[] roomNames = {"Kitchen", "Dining Room", "Lounge", "Hall", "Study", "Library", "Billiard Room", "Conservatory", "Ball Room"};
     private final String[] characterNames = {"Miss Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
 
-    private Map<String, WeaponCard> weaponCardsMap = new HashMap<>();
-    private Map<String, RoomCard> roomCardsMap = new HashMap<>();
-    private Map<String, CharacterCard> characterCardsMap = new HashMap<>();
+    private final Map<String, WeaponCard> weaponCardsMap = new HashMap<>();
+    private final Map<String, RoomCard> roomCardsMap = new HashMap<>();
+    private final Map<String, CharacterCard> characterCardsMap = new HashMap<>();
 
     private List<Card> deck;
     private List<Room> rooms;

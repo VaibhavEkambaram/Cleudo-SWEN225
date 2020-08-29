@@ -2,6 +2,12 @@ package Model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
 
+import java.awt.*;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
+
 /**
  * Model.Board Class
  * A board is made up of position classes, which are then all stored in this class
@@ -102,14 +108,14 @@ public class Board {
                         return null;
                     }
                     // Model.Player is entering through door, check matching direction
-                    if (!checkDoorMovement(nextPosition, dx, dy, true)) {
+                    if (checkDoorMovement(nextPosition, dx, dy, true)) {
                         return null;
                     }
                 }
             } else { // Model.Player is in Model.Room
                 // Model.Player must be leaving door through proper direction
                 if (playerPos.isDoor()) {
-                    if (nextPosition.getRoom() == null && !checkDoorMovement(playerPos, dx, dy, false)) {
+                    if (nextPosition.getRoom() == null && checkDoorMovement(playerPos, dx, dy, false)) {
                         return null;
                     }
                     // Not leaving through Door
@@ -218,6 +224,8 @@ public class Board {
             Board cloneBoard = new Board(this);
             Position found = cloneBoard.positions[newPosition.getLocationY()][newPosition.getLocationX()];
 
+            calculate(player,position,newPosition);
+
             cloneBoard.getPositions()[position.getLocationY()][position.getLocationX()].setCharacter(null);
             cloneBoard.getPositions()[found.getLocationY()][found.getLocationX()].setCharacter(player.getCharacter());
             player.setCurrentPosition(found);
@@ -226,9 +234,54 @@ public class Board {
 
 
         }
-
-
         return null;
+    }
+
+    public void calculate(Player player,Position startPosition, Position endPosition){
+        int count = 0;
+        Queue<AStarPosition> fringe = new PriorityQueue<>();
+        Set<Position> visited = new HashSet<>();
+
+        AStarPosition current;
+        Position currentPosition;
+
+        fringe.add(new AStarPosition(startPosition,null,0,calculateHeuristic(startPosition,endPosition)));
+
+        while(!fringe.isEmpty()){
+            current = fringe.poll();
+            currentPosition = current.getCurrentPosition();
+
+            if(!visited.contains(currentPosition)){
+                visited.add(currentPosition);
+                currentPosition.setParent(current.getPreviousPosition());
+
+                if(currentPosition.equals(endPosition)){
+                    count = 1;
+                    while(currentPosition.getParent() != startPosition){
+                        count++;
+                        currentPosition = currentPosition.getParent();
+                    }
+                    break;
+                }
+
+                checkNeighbouringPosition(fringe, visited, current,currentPosition,endPosition, 1, 0);
+                checkNeighbouringPosition(fringe, visited, current,currentPosition,endPosition, -1, 0);
+                checkNeighbouringPosition(fringe, visited, current,currentPosition,endPosition, 0, 1);
+                checkNeighbouringPosition(fringe, visited, current,currentPosition,endPosition, 0, -1);
+            }
+
+        }
+    }
+
+    private void checkNeighbouringPosition(Queue<AStarPosition> fringe, Set<Position> visited, AStarPosition current, Position currentPosition, Position endPosition, int i, int i1) {
+
+    }
+
+    public double calculateHeuristic(Position startPosition, Position endPosition){
+        Point startPoint = new Point(startPosition.getLocationX(), startPosition.getLocationY());
+        Point endPoint = new Point(endPosition.getLocationX(), startPosition.getLocationY());
+
+        return startPoint.distance(endPoint);
     }
 
 
@@ -262,28 +315,28 @@ public class Board {
         if (!enter) {
             switch (checkPosition.getDoorDirection()) {
                 case UP:
-                    return (dy == -1);
+                    return (dy != -1);
                 case DOWN:
-                    return (dy == 1);
+                    return (dy != 1);
                 case LEFT:
-                    return (dx == -1);
+                    return (dx != -1);
                 case RIGHT:
-                    return (dx == 1);
+                    return (dx != 1);
                 default:
-                    return false;
+                    return true;
             }
         } else {
             switch (checkPosition.getDoorDirection()) {
                 case UP:
-                    return (dy == 1);
+                    return (dy != 1);
                 case DOWN:
-                    return (dy == -1);
+                    return (dy != -1);
                 case LEFT:
-                    return (dx == 1);
+                    return (dx != 1);
                 case RIGHT:
-                    return (dx == -1);
+                    return (dx != -1);
                 default:
-                    return false;
+                    return true;
             }
         }
     }

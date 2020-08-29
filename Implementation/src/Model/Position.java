@@ -26,6 +26,7 @@ public class Position {
     private boolean canMove;
     private int xLoc;
     private int yLoc;
+    private Position parent;
 
     // Model.Room Attributes
     private Room inRoom;
@@ -53,6 +54,14 @@ public class Position {
         if (!canMove) {
             this.displayName = "x";
         }
+    }
+
+    public void setParent(Position position){
+        this.parent = parent;
+    }
+
+    public Position getParent(){
+        return this.parent;
     }
 
 

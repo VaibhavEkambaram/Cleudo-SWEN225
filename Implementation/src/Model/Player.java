@@ -19,7 +19,7 @@ public class Player {
     // Model.Player State
     private boolean canAccuse = true;
 
-    private String playerVanityName;
+    private final String playerVanityName;
 
 
     /**
@@ -102,7 +102,7 @@ public class Player {
         return playerVanityName + " - " + this.character + " [" + this.character.getCharacterColorName() + "] on board";
     }
 
-    // Model.Player State Gettersa
+    // Player State Getters
 
     /**
      * Check player ability to make accusation

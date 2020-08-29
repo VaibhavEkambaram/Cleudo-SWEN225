@@ -170,8 +170,22 @@ public class Table extends Observable {
                 if (select != null) {
 
                     game.setSelectedTile((int) x,(int) y);
-                   // System.out.println("x: " + (int) x + " | y: " + (int) y);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                    Board board = game.getBoard().movePlayer(game.getCurrentPlayer(),game.getSelectedTile(),game);
+
                    if(board!=null){
                        game.setBoard(board);
                    }
