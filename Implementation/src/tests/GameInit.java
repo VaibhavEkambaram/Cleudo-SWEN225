@@ -4,10 +4,13 @@ import model.Game;
 import org.junit.*;
 
 public class GameInit{
-    Game game;
-
+    /**
+     * Tests if the game starts without issue
+     *
+     * @author Baxter Kirikiri
+     */
     @Test
     public void gameInits(){
-        game = new Game(false);
+        new Game(false);
     }
 }

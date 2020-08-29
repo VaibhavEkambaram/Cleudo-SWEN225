@@ -34,10 +34,15 @@ public class PlayerSetupMenu {
      * @return list of players
      * @author Vaibhav Ekambaram
      */
-    public java.util.List<Player> setPlayers(String[] characterNames, int numPlayers, List<Player> players, Map<String, CharacterCard> characterCardsMap) {
+    public java.util.List<Player> setPlayers(String[] characterNames, int numPlayers, List<Player> players, Map<String, CharacterCard> characterCardsMap, boolean show) {
         ArrayList<String> charNames = new ArrayList<>(Arrays.asList(characterNames));
         ArrayList<String> used = new ArrayList<>();
-
+        if(!show){
+            players.add(new Player(characterCardsMap.get("Miss Scarlett"), "Player 1"));
+            players.add(new Player(characterCardsMap.get("Col. Mustard"), "Player 2"));
+            players.add(new Player(characterCardsMap.get("Mrs. White"), "Player 3"));
+            return players;
+        }
         // menu for each player to select options
         for (int i = 0; i < numPlayers; i++) {
             JPanel fields = new JPanel(new GridLayout(0,1));

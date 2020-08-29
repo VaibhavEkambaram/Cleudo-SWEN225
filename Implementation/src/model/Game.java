@@ -1,6 +1,7 @@
 package model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.0.5071.d9da8f6cd modeling language!*/
 
+import util.autoSetup;
 import view.AccusationMenu;
 import view.PlayerSetupMenu;
 import view.SuggestionMenu;
@@ -16,7 +17,7 @@ public class Game {
 
     private States gameState = States.IDLE;
     private subStates subState;
-    private GUI userInterface;
+    public GUI userInterface;
 
     /**
      * Check if States are matching within their appropriate sub-states
@@ -42,7 +43,7 @@ public class Game {
     // track number of moves for current player
     int currentPlayerIndex = 0;
     int movesRemaining = -1;
-    int numPlayers;
+    public int numPlayers;
 
     // boolean to prevent infinite loop while testing
     boolean running;
@@ -56,7 +57,11 @@ public class Game {
     public Game(boolean run) {
         running = run;
         initDeck();
-        initPlayers();
+        if(run) {
+            initPlayers();
+        } else {
+            new autoSetup(this);
+        }
         initBoard(); // generate board
         dealCards();
         runGame(); // main game logic loop
@@ -145,7 +150,7 @@ public class Game {
         PlayerSetupMenu p = new PlayerSetupMenu();
         numPlayers = p.setPlayerCount();
         players = new ArrayList<>();
-        players = p.setPlayers(characterNames, numPlayers, players, characterCardsMap);
+        players = p.setPlayers(characterNames, numPlayers, players, characterCardsMap, true);
         Collections.sort(players);
     }
 
@@ -546,7 +551,7 @@ public class Game {
      *
      * @author Cameron li
      */
-    private void playerTransition() {
+    public void playerTransition() {
         if (!gameState.equals(States.INIT)) {
             throw new Error("Expected INIT game state but : " + gameState);
         }
@@ -658,6 +663,10 @@ public class Game {
     public Scenario getMurderScenario(){
         return murderScenario;
     }
+
+    public String[] getCharacterNames(){ return characterNames; }
+
+    public Map getCharacterCardsMap(){ return characterCardsMap; }
 
     /**
      * Setters
