@@ -10,12 +10,29 @@ import java.util.*;
 
 import static model.Game.subStates.MOVEMENT;
 
+/**
+ * Class for GUI Functionality
+ *
+ * @author Vaibhav Ekambaram, Cameron Li
+ */
 public class GUI extends Observable {
+
+    // Constants
+    private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(700, 700);
+    private final int BOARD_WIDTH = 24;
+    private final int BOARD_HEIGHT = 25;
     private final int BORDER_SIZE = 20;
     private int RECT_SIZE;
 
-    final JFrame gameFrame;
-    private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(700, 700);
+    // Frames
+    private final JFrame gameFrame;
+
+    // Panels
+    private final JPanel infoPanel;
+    private final JPanel displayPanel;
+    private final JPanel handPanel;
+    private final JPanel actionPanel;
+    private final JPanel movementPanel;
 
     // Buttons
     final JButton suggestionButton;
@@ -28,40 +45,35 @@ public class GUI extends Observable {
     final JButton rollDiceButton;
     final JButton finishedButton;
 
-    private final JPanel infoPanel;
-    private final JPanel displayPanel;
-    private final JPanel handPanel;
-    private final JPanel actionPanel;
-    private final JPanel movementPanel;
-
-    private ImageIcon firstDiceImage;
+    // Image Labels
     private JLabel firstDiceImageLabel;
     private JLabel secondDiceImageLabel;
 
+    // Players
+    private Player currentPlayer;
+    private Player previousPlayer;
+
     private int movesRemaining;
-    Player currentPlayer;
-    Player previousPlayer;
-
-    final int BOARD_WIDTH = 24;
-    final int BOARD_HEIGHT = 25;
-
-
-
-
 
 
     final Game game;
     // Display
     private final JTextArea info;
 
+    /**
+     * User Interface Constructor
+     *
+     * @param game
+     * @author Vaibhav Ekambaram, Cameron Li
+     */
     public GUI(Game game) {
         this.game = game;
-        gameFrame = new JFrame("Cluedo");
-        gameFrame.setLayout(new BorderLayout());
+        this.gameFrame = new JFrame("Cluedo");
+        this.gameFrame.setLayout(new BorderLayout());
         final JMenuBar tableMenuBar = createTableMenuBar();
-        gameFrame.setJMenuBar(tableMenuBar);
-        gameFrame.setSize(OUTER_FRAME_DIMENSION);
-        gameFrame.setVisible(true);
+        this.gameFrame.setJMenuBar(tableMenuBar);
+        this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
+        this.gameFrame.setVisible(true);
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
@@ -86,7 +98,7 @@ public class GUI extends Observable {
         constraints.gridy = 0;
         constraints.gridheight = 1;
         displayPanel = new JPanel();
-        displayPanel.setBackground(new Color(97,185,125));
+        displayPanel.setBackground(new Color(97, 185, 125));
         displayPanel.setPreferredSize(new Dimension(750, 600));
         displayPanel.setDoubleBuffered(true);
         mainPanel.setDoubleBuffered(true);
@@ -116,7 +128,6 @@ public class GUI extends Observable {
         constraints.gridwidth = 2;
 
         mainPanel.add(handPanel, constraints);
-
 
         // Movement Panel
         movementPanel = new JPanel(new GridBagLayout());
@@ -151,6 +162,7 @@ public class GUI extends Observable {
             }
         });
 
+        // Roll Dice Button
         rollDiceButton = new JButton("Roll Dice");
         actionPanel.add(rollDiceButton);
         rollDiceButton.addActionListener(e -> {
@@ -161,8 +173,7 @@ public class GUI extends Observable {
             movementPanel.setVisible(true);
         });
 
-
-        // Buttons
+        // Suggestion Button
         suggestionButton = new JButton("Make Suggestion");
         actionPanel.add(suggestionButton);
         suggestionButton.addActionListener(e -> {
@@ -170,13 +181,13 @@ public class GUI extends Observable {
             if (suggest == -1) {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
-                createHand();
+                drawHand();
                 firstDiceImageLabel.setVisible(false);
                 secondDiceImageLabel.setVisible(false);
             }
         });
 
-
+        // Accusation Button
         accusationButton = new JButton("Make Accusation");
         actionPanel.add(accusationButton);
         accusationButton.addActionListener(e -> {
@@ -186,25 +197,26 @@ public class GUI extends Observable {
             } else {
                 game.movementTransition();
                 setRollDiceButtonVisibility(true);
-                createHand();
+                drawHand();
                 firstDiceImageLabel.setVisible(false);
                 secondDiceImageLabel.setVisible(false);
             }
         });
 
-
+        // Pass Button
         passButton = new JButton("Pass");
         actionPanel.add(passButton);
         passButton.addActionListener(e -> {
             game.movementTransition();
             setRollDiceButtonVisibility(true);
 
-            createHand();
+            drawHand();
             firstDiceImageLabel.setVisible(false);
             secondDiceImageLabel.setVisible(false);
             JOptionPane.showMessageDialog(null, "Moving to next player...", "Information", JOptionPane.PLAIN_MESSAGE);
         });
 
+        // Finished Button
         finishedButton = new JButton("Finished");
         finishedButton.addActionListener(e -> {
             game.actionTransition();
@@ -214,6 +226,7 @@ public class GUI extends Observable {
         });
 
 
+        // Movement Buttons
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = .3;
         constraints.gridx = 1;
@@ -240,6 +253,8 @@ public class GUI extends Observable {
         movementPanel.add(rightButton, constraints);
         rightButton.addActionListener(e -> makeMovement(Move.Direction.RIGHT));
 
+
+        // Window Close Listener
         gameFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
                 int closeDialogButton = JOptionPane.YES_NO_OPTION;
@@ -265,11 +280,14 @@ public class GUI extends Observable {
         showMovement(false);
     }
 
+
     /**
-     * Java Swing Elements
+     * Draw Dice Roll Results
+     *
+     * @param firstNumber  first dice number
+     * @param secondNumber second dice number
+     * @author Vaibhav Ekambaram
      */
-
-
     public void RollDiceMenu(int firstNumber, int secondNumber) {
         firstDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png")));
         secondDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png")));
@@ -277,9 +295,14 @@ public class GUI extends Observable {
         handPanel.add(secondDiceImageLabel);
         firstDiceImageLabel.setVisible(true);
         secondDiceImageLabel.setVisible(true);
-
     }
 
+    /**
+     * Set visibility of dice roll button
+     *
+     * @param value boolean
+     * @author Vaibhav Ekambaram
+     */
     public void setRollDiceButtonVisibility(boolean value) {
         if (value) {
             game.setMovesRemaining(-1);
@@ -290,6 +313,12 @@ public class GUI extends Observable {
         rollDiceButton.setVisible(value);
     }
 
+    /**
+     * Set visibility of finished button
+     *
+     * @param value boolean
+     * @author Vaibhav Ekambaram
+     */
     public void setFinishedButtonVisibility(boolean value) {
         if (value) {
             actionPanel.add(finishedButton);
@@ -300,6 +329,12 @@ public class GUI extends Observable {
         actionPanel.repaint();
     }
 
+    /**
+     * Set visibility of suggestion, accusation and pass button visibility
+     *
+     * @param value boolean
+     * @author Vaibhav Ekambaram
+     */
     public void setSuggestionAccusationVisibility(boolean value) {
         if (value) {
             actionPanel.add(suggestionButton);
@@ -318,6 +353,12 @@ public class GUI extends Observable {
         }
     }
 
+    /**
+     * Set visibility of movement control buttons
+     *
+     * @param value boolean
+     * @author Cameron Li
+     */
     public void showMovement(boolean value) {
         if (value) {
             upButton.setVisible(true);
@@ -332,6 +373,11 @@ public class GUI extends Observable {
         }
     }
 
+    /**
+     * Create Menu bar for GUI
+     *
+     * @return menu bar
+     */
     private JMenuBar createTableMenuBar() {
         final JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createGameMenu());
@@ -340,6 +386,11 @@ public class GUI extends Observable {
         return tableMenuBar;
     }
 
+    /**
+     * Create Game Menu Dropdown in menu bar
+     *
+     * @return menu dropdown
+     */
     private JMenu createGameMenu() {
         final JMenu gameMenu = new JMenu("Game");
 
@@ -353,6 +404,11 @@ public class GUI extends Observable {
         return gameMenu;
     }
 
+    /**
+     * Create Debug Menu Dropdown in menu bar
+     *
+     * @return menu dropdown
+     */
     private JMenu createDebugMenu() {
         final JMenu debugMenu = new JMenu("Debug");
         final JMenuItem scenarioMenuItem = new JMenuItem("Murder Scenario");
@@ -373,6 +429,11 @@ public class GUI extends Observable {
     }
 
 
+    /**
+     * Create Help Menu Dropdown in menu bar
+     *
+     * @return menu dropdown
+     */
     private JMenu createHelpMenu() {
         final JMenu helpMenu = new JMenu("Help");
         final JMenuItem about = new JMenuItem("About");
@@ -381,7 +442,12 @@ public class GUI extends Observable {
         return helpMenu;
     }
 
-    private void createHand() {
+    /**
+     * Draw players hand on screen
+     *
+     * @author Baxter Kirikiri
+     */
+    private void drawHand() {
         if (currentPlayer == null) return;
         if (previousPlayer != currentPlayer) {
             handPanel.removeAll();
@@ -416,7 +482,7 @@ public class GUI extends Observable {
 
             }
             if (game.getSubState().equals(MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
-                createHand();
+                drawHand();
             }
         } else {
             showMovement(false);
@@ -476,18 +542,27 @@ public class GUI extends Observable {
     }
 
 
+    /**
+     * Draw Walls on board display (sub-method of paint)
+     *
+     * @param currentPosition currentPosition
+     * @param g2              Graphics
+     * @param i               i position
+     * @param j               j position
+     * @param xValue          draw x value
+     * @param yValue          draw y value
+     * @author Vaibhav Ekambaram
+     */
     public void drawWalls(Position currentPosition, Graphics2D g2, int i, int j, int xValue, int yValue) {
         g2.setColor(Color.DARK_GRAY);
         g2.setStroke(new BasicStroke(3));
         if (!currentPosition.isPassableTile() && currentPosition.getRoom() != null) {
 
-
-
             if (i == 0) {
                 g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
             }
             if (i == 23)
-                g2.drawLine(xValue + RECT_SIZE-2, yValue, xValue + RECT_SIZE-2, yValue + RECT_SIZE);
+                g2.drawLine(xValue + RECT_SIZE - 2, yValue, xValue + RECT_SIZE - 2, yValue + RECT_SIZE);
             if (j == 24)
                 g2.drawLine(xValue, yValue + RECT_SIZE, xValue + RECT_SIZE, yValue + RECT_SIZE);
 
@@ -495,20 +570,20 @@ public class GUI extends Observable {
                 g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
             }
             if (i < 23 && game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
-                g2.drawLine(xValue + RECT_SIZE-2, yValue, xValue + RECT_SIZE-2, yValue + RECT_SIZE-2);
+                g2.drawLine(xValue + RECT_SIZE - 2, yValue, xValue + RECT_SIZE - 2, yValue + RECT_SIZE - 2);
             }
             if (j > 0 && game.getBoard().getPositions()[j - 1][i].getRoom() == null) {
                 g2.drawLine(xValue, yValue, xValue + RECT_SIZE, yValue);
             }
             if (j < 24 && game.getBoard().getPositions()[j + 1][i].getRoom() == null) {
-                g2.drawLine(xValue, yValue + RECT_SIZE-2, xValue + RECT_SIZE-2, yValue + RECT_SIZE-2);
+                g2.drawLine(xValue, yValue + RECT_SIZE - 2, xValue + RECT_SIZE - 2, yValue + RECT_SIZE - 2);
             }
         }
         if (currentPosition.isDoor()) {
             if (currentPosition.getDisplayName().equals("^") || currentPosition.getDisplayName().equals("v")) {
 
                 if (game.getBoard().getPositions()[j][i + 1].getRoom() == null) {
-                    g2.drawLine(xValue + RECT_SIZE-2, yValue, xValue + RECT_SIZE-2, yValue + RECT_SIZE-2);
+                    g2.drawLine(xValue + RECT_SIZE - 2, yValue, xValue + RECT_SIZE - 2, yValue + RECT_SIZE - 2);
                 }
 
                 if (game.getBoard().getPositions()[j][i - 1].getRoom() == null) {
