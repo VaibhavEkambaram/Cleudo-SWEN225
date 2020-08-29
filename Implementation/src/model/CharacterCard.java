@@ -5,13 +5,14 @@ import java.awt.*;
 /**
  * CharacterCard - Implements Model.Card Interface
  */
-public class CharacterCard implements Card {
+public class CharacterCard implements Card{
 
     // CharacterCard Attributes
     private final String characterName;
     private final String characterBoardChar;
     private final Color characterBoardColor;
     private final String characterColorName;
+    int characterPriority;
 
     /**
      * CharacterCard Constructor
@@ -58,6 +59,7 @@ public class CharacterCard implements Card {
                 characterColorName = "BLACK";
                 break;
         }
+        characterPriority = Integer.parseInt(characterBoardChar);
     }
 
 
@@ -97,6 +99,10 @@ public class CharacterCard implements Card {
         return characterColorName;
     }
 
+    public int getCharacterPriority(){
+        return characterPriority;
+    }
+
     /**
      * toString Method - Print of the character name
      *
@@ -106,4 +112,5 @@ public class CharacterCard implements Card {
     public String toString() {
         return getCharacterName();
     }
+
 }

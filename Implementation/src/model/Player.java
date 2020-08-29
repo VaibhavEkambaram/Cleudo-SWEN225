@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Player Class
  */
-public class Player {
+public class Player implements Comparable<Player>{
 
     private final List<Card> hand;
     // Player Gameplay Information
@@ -113,4 +113,12 @@ public class Player {
         return playerVanityName;
     }
 
+    @Override
+    public int compareTo(Player o) {
+        if(this.character.getCharacterPriority() > o.character.getCharacterPriority()){
+            return 1;
+        } else {
+            return -1;
+        }
+    }
 }

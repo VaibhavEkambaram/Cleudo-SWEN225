@@ -143,6 +143,7 @@ public class Game {
         numPlayers = GUI.setPlayerCount();
         players = new ArrayList<>();
         players = GUI.setPlayers(characterNames, numPlayers, players, characterCardsMap);
+        Collections.sort(players);
     }
 
     /**

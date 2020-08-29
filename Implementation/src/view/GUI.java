@@ -356,14 +356,15 @@ public class GUI extends Observable {
         gameMenu.add(exitMenuItem);
         return gameMenu;
     }
-    private JMenu createDebugMenu(){
+
+    private JMenu createDebugMenu() {
         final JMenu debugMenu = new JMenu("Debug");
         final JMenuItem scenarioMenuItem = new JMenuItem("Murder Scenario");
         scenarioMenuItem.addActionListener(e -> {
 
             String message;
-            if(game.getMurderScenario()!=null){
-                message = "[Character] "+game.getMurderScenario().getMurderer()+"\n[Weapon] "+game.getMurderScenario().getWeapon()+"\n[Room] "+game.getMurderScenario().getRoom();
+            if (game.getMurderScenario() != null) {
+                message = "[Character] " + game.getMurderScenario().getMurderer() + "\n[Weapon] " + game.getMurderScenario().getWeapon() + "\n[Room] " + game.getMurderScenario().getRoom();
             } else {
                 message = "Game has not been loaded!";
             }
@@ -462,7 +463,7 @@ public class GUI extends Observable {
 
     }
 
-    /*
+
     /**
      * Draw all the relevant Display Panel Elements
      * Grid Board, Players, Weapons
@@ -483,28 +484,12 @@ public class GUI extends Observable {
                     int xValue = border + RECT_SIZE * i;
                     int yValue = border + RECT_SIZE * j;
 
-                    currentPosition.draw(g);
-                    g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
-
-                    if (currentPosition.getCharacter() != null) {
-                        g.setColor(currentPosition.getCharacter().getCharacterBoardColor());
-                        g.fillOval(xValue, yValue, RECT_SIZE, RECT_SIZE);
-                    }
-
-                    if (currentPosition.getWeapon() != null) {
-                        g.drawImage(currentPosition.getWeapon().getWeaponImage(), xValue, yValue, RECT_SIZE, RECT_SIZE, displayPanel);
-                    }
-
-                    g.setColor(Color.BLACK);
-                    g.setStroke(new BasicStroke(1));
-                    g.drawRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
+                    currentPosition.draw(g, xValue, yValue, RECT_SIZE, displayPanel);
                     drawWalls(currentPosition, g, i, j, xValue, yValue);
                 }
             }
         }
-
     }
-
 
 
     public void drawWalls(Position currentPosition, Graphics2D g2, int i, int j, int xValue, int yValue) {
@@ -515,7 +500,6 @@ public class GUI extends Observable {
 
             if (i == 0) {
                 g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
-                g2.drawLine(xValue, yValue, xValue + RECT_SIZE, yValue);
             }
             if (i == 23)
                 g2.drawLine(xValue + RECT_SIZE, yValue, xValue + RECT_SIZE, yValue + RECT_SIZE);
@@ -535,7 +519,6 @@ public class GUI extends Observable {
                 g2.drawLine(xValue, yValue + RECT_SIZE, xValue + RECT_SIZE, yValue + RECT_SIZE);
             }
         }
-
         if (currentPosition.isDoor()) {
             g2.setColor(Color.DARK_GRAY);
             g2.setStroke(new BasicStroke(2));
@@ -594,6 +577,7 @@ public class GUI extends Observable {
             nameField.setText("Player " + (i + 1));
             ButtonGroup buttonGroup = new ButtonGroup();
             fields.add(new JLabel("Enter your name then select your player token "));
+
             fields.add(nameField);
 
             // create radio button for each token option
@@ -605,6 +589,7 @@ public class GUI extends Observable {
                 buttonGroup.add(radButton);
                 fields.add(radButton);
             });
+            fields.add(new JLabel("Note: regardless of choice, players will start at token start, and the game will play clockwise around the board!"));
 
             JOptionPane.showMessageDialog(null, fields, "Set Player Preferences", JOptionPane.PLAIN_MESSAGE);
 

@@ -1,6 +1,7 @@
 package model;
 
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
@@ -18,7 +19,6 @@ public class Position {
     private boolean canMove;
     private int xLoc;
     private int yLoc;
-    private Position parent;
 
     // Model.Room Attributes
     private Room inRoom;
@@ -181,46 +181,72 @@ public class Position {
         return this.displayName;
     }
 
-    public void draw(Graphics g) {
+    public void draw(Graphics2D g, int xValue, int yValue, int RECT_SIZE, JPanel displayPanel) {
         if (g != null) {
 
             if (displayName.equals("x")) {
                 g.setColor(new Color(1, 50, 32));
+                g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
             } else if (displayName.equals("_") && inRoom == null) {
                 g.setColor(new Color(219, 211, 150));
+                g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
+                g.setColor(Color.BLACK);
+                g.setStroke(new BasicStroke(1));
+                g.drawRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
+
             } else {
                 switch (inRoom.getRoomChar()) {
                     case "K":
                         g.setColor(xLoc % 2 == 0 ? yLoc % 2 == 0 ? Color.BLACK : COLOR_1 : yLoc % 2 == 0 ? COLOR_1 : Color.BLACK);
+                        g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
+
                         break;
                     case "H":
                         g.setColor(xLoc % 2 == 0 ? yLoc % 2 == 0 ? COLOR_2 : COLOR_3 : yLoc % 2 == 0 ? COLOR_3 : COLOR_2);
+                        g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                         break;
                     case "C":
                         g.setColor(xLoc % 2 == 0 ? yLoc % 2 == 0 ? COLOR_4 : COLOR_1 : yLoc % 2 == 0 ? COLOR_1 : COLOR_4);
+                        g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                         break;
                     case "B":
                         g.setColor(xLoc % 2 == 0 ? COLOR_3 : COLOR_1);
+                        g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                         break;
                     case "D":
                         g.setColor(new Color(200, 121, 80));
+                        g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                         break;
                     case "I":
                         g.setColor(new Color(220, 170, 99));
+                        g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                         break;
                     case "Y":
                         g.setColor(new Color(190, 60, 60));
+                        g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                         break;
                     case "L":
                         g.setColor(new Color(157, 127, 97));
+                        g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                         break;
                     case "O":
                         g.setColor(new Color(104, 140, 200));
+                        g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                         break;
                     default:
                         g.setColor(Color.WHITE);
+                        g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
                         break;
                 }
+            }
+
+            if (character != null) {
+                g.setColor(character.getCharacterBoardColor());
+                g.fillOval(xValue, yValue, RECT_SIZE, RECT_SIZE);
+            }
+
+            if (weapon != null) {
+                g.drawImage(weapon.getWeaponImage(), xValue, yValue, RECT_SIZE, RECT_SIZE, displayPanel);
             }
         }
     }
@@ -307,4 +333,5 @@ public class Position {
     public boolean checkAligned(Position b) {
         return (b.getLocationX() == this.getLocationX() || b.getLocationY() == this.getLocationY());
     }
+
 }
