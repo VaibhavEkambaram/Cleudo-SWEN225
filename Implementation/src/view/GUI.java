@@ -8,13 +8,11 @@ import model.Player;
 import model.Position;
 
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Observable;
 
-import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
-import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 import static model.Game.subStates.MOVEMENT;
 
 /**
@@ -141,8 +139,9 @@ public class GUI extends Observable {
         mainPanel.add(movementPanel, constraints);
 
          */
-        dicePanel = new JPanel(new GridLayout(0,2));
-
+        dicePanel = new JPanel(new GridLayout(0, 2));
+        dicePanel.setBackground(Color.WHITE);
+        dicePanel.setBorder(new EmptyBorder(5, 0, 5, 0));
 
 
         // Info Panel
