@@ -13,6 +13,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Observable;
 
+import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS;
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 import static model.Game.subStates.MOVEMENT;
 
 /**
@@ -159,14 +161,17 @@ public class GUI extends Observable {
         // Hand Panel
         handPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         handPanel.setBackground(Color.WHITE);
-        handPanel.setPreferredSize(new Dimension(700, 183));
+
         constraints.weightx = 1;
         constraints.weighty = 0.2;
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 2;
+        JScrollPane scrollPanel = new JScrollPane(handPanel);
+        scrollPanel.setPreferredSize(new Dimension(700, 183));
+        scrollPanel.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
 
-        mainPanel.add(handPanel, constraints);
+        mainPanel.add(scrollPanel,constraints);
 
         // Borders
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
