@@ -397,7 +397,7 @@ public class GUI extends Observable {
      * Execute Action for Accusation Button
      */
     public void onAccusation() {
-        int accuse = game.makeAccusation(game.getCurrentPlayer());
+        int accuse = game.makeAccusation(game.getCurrentPlayer(),null);
         if (accuse == 1) {
             game.finishTransition();
         } else {

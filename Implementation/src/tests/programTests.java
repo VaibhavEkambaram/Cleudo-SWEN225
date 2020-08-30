@@ -2,10 +2,6 @@ package tests;
 
 import model.*;
 import org.junit.Test;
-import view.GUI;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
 
 import static org.junit.Assert.*;
 
@@ -181,7 +177,7 @@ public class programTests {
 
         assertEquals(true, game.getCurrentPlayer().getCanAccuse());
 
-        game.makeAccusation(game.getCurrentPlayer());
+        game.makeAccusation(game.getCurrentPlayer(),"Miss Scarlett" + "\t" + "Candlestick" + "\t" + "Library");
 
         assertEquals(false, game.getCurrentPlayer().getCanAccuse());
     }
@@ -198,6 +194,7 @@ public class programTests {
         game.actionTransition();
         game.setMurderScenario(new Scenario((WeaponCard)game.getWeaponCardsMap().get("Candlestick"), (RoomCard)game.getRoomCardsMap().get("Library"), (CharacterCard)game.getCharacterCardsMap().get("Miss Scarlett")));
         game.finishTransition();
+        game.makeAccusation(game.getCurrentPlayer(),"Miss Scarlett" + "\t" + "Candlestick" + "\t" + "Library");
 
         assertEquals(Game.States.FINISHED, game.getGameState());
     }

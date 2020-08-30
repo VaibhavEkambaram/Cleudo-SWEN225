@@ -379,7 +379,7 @@ public class Game {
      * @return integer (-1 invalid, 0 failed, 1 successful)
      * @author Baxter Kirikiri, Vaibhav Ekambaram
      */
-    public int makeAccusation(Player p) {
+    public int makeAccusation(Player p,String accusationStringPreset) {
         String accusationString;
         AccusationMenu a = null;
         if (runGraphicalOutput) {
@@ -390,7 +390,7 @@ public class Game {
             }
             accusationString = a.makeAccusation(characterNames, weaponNames, roomNames);
         } else {
-            accusationString = "Miss Scarlett" + "\t" + "Candlestick" + "\t" + "Library" + "\t";
+            accusationString = accusationStringPreset;
         }
         String[] accusationStringSplit = accusationString.split("\t");
 
@@ -514,7 +514,7 @@ public class Game {
         if (!refuted) {
             int i = s.nobodyCouldRefute();
             if (i == 0) {
-                int accuse = makeAccusation(p);
+                int accuse = makeAccusation(p,null);
                 if (accuse == 1) {
                     gameState = States.FINISHED;
                 } else {
