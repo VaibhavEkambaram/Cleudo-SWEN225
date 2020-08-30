@@ -316,7 +316,16 @@ public class GUI extends Observable {
             public void componentResized(ComponentEvent componentEvent) {
                 updateDisplay();
             }
+
             public void componentMoved(ComponentEvent componentEvent) {
+                updateDisplay();
+            }
+
+            public void componentShown(ComponentEvent componentEvent) {
+                updateDisplay();
+            }
+
+            public void componentHidden(ComponentEvent componentEvent) {
                 updateDisplay();
             }
         });
@@ -414,6 +423,7 @@ public class GUI extends Observable {
             rollDiceButton.setVisible(false);
             actionPanel.remove(rollDiceButton);
         }
+        paint();
     }
 
     /**
@@ -455,6 +465,7 @@ public class GUI extends Observable {
             actionPanel.remove(accusationButton);
             actionPanel.remove(passButton);
         }
+        paint();
     }
 
     /**
