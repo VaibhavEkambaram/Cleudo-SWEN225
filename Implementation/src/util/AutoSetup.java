@@ -24,7 +24,7 @@ public class AutoSetup {
         PlayerSetupMenu p = new PlayerSetupMenu();
         game.numPlayers = 3;
         game.players = new ArrayList<>();
-        game.players = p.setPlayers(game.getCharacterNames(), game.numPlayers, game.players, game.getCharacterCardsMap(), false);
+        game.players = p.setPlayers(game.getCharacterNames(), game.numPlayers, game.players, game.getCharacterCardsMap(), true);
         Collections.sort(game.players);
     }
 }
