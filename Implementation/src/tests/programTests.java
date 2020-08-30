@@ -201,4 +201,18 @@ public class programTests {
 
         assertEquals(Game.States.FINISHED, game.getGameState());
     }
+
+    /**
+     * Check player is unable to make suggestion if not located within a room time
+     *
+     * @author Vaibhav Ekambaram
+     */
+    @Test
+    public void cantMakeSuggestion(){
+        Game game = new Game(false);
+        game.setMovesRemaining(2);
+        game.actionTransition();
+        int value = game.makeSuggestion(game.getCurrentPlayer());
+        assertEquals(-1,value);
+    }
 }
