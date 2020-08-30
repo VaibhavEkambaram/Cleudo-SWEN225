@@ -319,12 +319,6 @@ public class Game {
     public void runGame() {
         initToRunning();
         movementTransition();
-        userInterface.updateDisplay();
-        /*
-        while (gameState.equals(States.RUNNING) && running) {
-            userInterface.updateDisplay();
-        }
-         */
     }
 
     /**
@@ -365,10 +359,8 @@ public class Game {
                 actionTransition();
             }
             board = newBoard;
-            userInterface.updateDisplay();
             return true;
         }
-        userInterface.updateDisplay();
         return false;
     }
 
@@ -583,7 +575,6 @@ public class Game {
             throw new Error("Expected INIT game state but " + gameState);
         }
         gameState = States.RUNNING;
-        userInterface.updateDisplay();
     }
 
     /**

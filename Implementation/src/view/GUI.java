@@ -180,6 +180,7 @@ public class GUI extends Observable {
         actionPanel.add(rollDiceButton);
         rollDiceButton.addActionListener(e -> onRollDice());
 
+        // Finished Button
         finishedButton = new JButton("Finished [f]");
         actionPanel.add(finishedButton);
         finishedButton.addActionListener(e -> onFinish());
@@ -199,10 +200,6 @@ public class GUI extends Observable {
         passButton = new JButton("Pass [p]");
         actionPanel.add(passButton);
         passButton.addActionListener(e -> onPass());
-
-        // Finished Button
-
-
 
         // Movement Buttons
         constraints.fill = GridBagConstraints.BOTH;
@@ -319,7 +316,6 @@ public class GUI extends Observable {
             public void componentResized(ComponentEvent componentEvent) {
                 updateDisplay();
             }
-
             public void componentMoved(ComponentEvent componentEvent) {
                 updateDisplay();
             }
@@ -609,6 +605,7 @@ public class GUI extends Observable {
                     firstDiceImageLabel.setVisible(false);
                     secondDiceImageLabel.setVisible(false);
                 }
+                paint();
             }
         }
        paint();
