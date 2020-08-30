@@ -194,8 +194,6 @@ public class Position {
      * @author Vaibhav Ekambaram
      */
     public void draw(Graphics2D g, int xValue, int yValue, int RECT_SIZE, JPanel displayPanel) {
-        if (g != null) {
-
             if (displayName.equals("x")) {
                 g.setColor(new Color(1, 50, 32));
                 g.fillRect(xValue, yValue, RECT_SIZE, RECT_SIZE);
@@ -260,7 +258,6 @@ public class Position {
             if (weapon != null) {
                 g.drawImage(weapon.getWeaponImage(), xValue, yValue, RECT_SIZE, RECT_SIZE, displayPanel);
             }
-        }
     }
 
     /**

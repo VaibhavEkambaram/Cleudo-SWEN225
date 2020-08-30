@@ -319,6 +319,7 @@ public class Game {
     public void runGame() {
         initToRunning();
         movementTransition();
+        userInterface.updateDisplay();
     }
 
     /**
@@ -441,6 +442,7 @@ public class Game {
                     Board newBoard = board.teleportPlayer(findP, room);
                     if (newBoard != null) {
                         board = newBoard;
+                        userInterface.updateDisplay();
                     }
                 }
             }
@@ -450,6 +452,7 @@ public class Game {
         Board newBoard = board.teleportWeapon(suggestionWeapon,room);
         if(newBoard != null){
             board = newBoard;
+            userInterface.updateDisplay();
         }
 
         // place all other players in a stack so that they can take turns at refuting
@@ -595,7 +598,6 @@ public class Game {
         subState = subStates.MOVEMENT;
         currentPlayer = players.get(currentPlayerIndex);
         movesRemaining = -1;
-        userInterface.updateDisplay();
     }
 
     /**
@@ -613,7 +615,6 @@ public class Game {
         }
         movesRemaining = -1;
         subState = subStates.ACTION;
-        userInterface.updateDisplay();
     }
 
     /**
