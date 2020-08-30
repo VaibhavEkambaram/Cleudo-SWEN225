@@ -167,6 +167,4 @@ public class programTests {
         game.userInterface.updateDisplay();
         assertEquals(GUI.KeyStates.PRE_ROLL, gui.keyTracker);
     }
-
-
 }
