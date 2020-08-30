@@ -46,7 +46,8 @@ public class Game {
     public int numPlayers;
 
     // boolean to prevent infinite loop while testing
-    boolean running;
+    boolean runGraphicalOutput;
+
 
     /**
      * Game Constructor
@@ -55,7 +56,7 @@ public class Game {
      * @author Cameron Li, Vaibhav Ekambaram
      */
     public Game(boolean run) {
-        running = run;
+        runGraphicalOutput = run;
         initDeck();
         if(run) {
             initPlayers();
@@ -704,8 +705,6 @@ public class Game {
      */
     /*
     public void mainGameLoop() {
-
-
         while (gameState.equals(States.RUNNING)) {
             for (Player p : players) {
                 movesRemaining = -1;
@@ -814,11 +813,9 @@ public class Game {
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a correct number of spaces");
             }
-
             if (direction != null && spaces <= movesRemaining) {
                 valid = true;
             }
-
             if (!valid) {
                 if (spaces > movesRemaining) {
                     System.out.println("Insufficient amount of moves left");
@@ -827,9 +824,7 @@ public class Game {
                     System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
                 }
             }
-
         }
-
         return new Move(direction, spaces);
     }
      */

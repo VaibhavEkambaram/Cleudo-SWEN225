@@ -35,6 +35,7 @@ public class PlayerSetupMenu {
      * @author Vaibhav Ekambaram
      */
     public java.util.List<Player> setPlayers(String[] characterNames, int numPlayers, List<Player> players, Map<String, CharacterCard> characterCardsMap, boolean test) {
+
         ArrayList<String> charNames = new ArrayList<>(Arrays.asList(characterNames));
         ArrayList<String> used = new ArrayList<>();
 
@@ -43,6 +44,9 @@ public class PlayerSetupMenu {
             players.add(new Player(characterCardsMap.get("Miss Scarlett"), "Player 1"));
             players.add(new Player(characterCardsMap.get("Col. Mustard"), "Player 2"));
             players.add(new Player(characterCardsMap.get("Mrs. White"), "Player 3"));
+            players.add(new Player(characterCardsMap.get("Mr. Green"), "Player 4"));
+            players.add(new Player(characterCardsMap.get("Mrs. Peacock"), "Player 5"));
+            players.add(new Player(characterCardsMap.get("Prof. Plum"), "Player 6"));
             return players;
         }
 

@@ -8,6 +8,7 @@ import model.Player;
 import model.Position;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Observable;
@@ -36,9 +37,10 @@ public class GUI extends Observable {
     private final JPanel displayPanel;
     private final JPanel handPanel;
     private final JPanel actionPanel;
-    /*
-    private final JPanel movementPanel;
-     */
+
+    //private final JPanel movementPanel;
+    JPanel dicePanel;
+
 
     // Buttons
     private final JButton suggestionButton;
@@ -100,14 +102,14 @@ public class GUI extends Observable {
         JPanel mainPanel = new JPanel(new GridBagLayout());
 
         // Action Panel
-        actionPanel = new JPanel(new GridLayout(12, 2));
+        actionPanel = new JPanel(new GridLayout(12, 1));
         actionPanel.setBackground(Color.WHITE);
         constraints.weightx = .2;
         constraints.weighty = 1;
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridheight = 2;
-        actionPanel.setPreferredSize(new Dimension(250, 500));
+        actionPanel.setPreferredSize(new Dimension(250, 600));
         mainPanel.add(actionPanel, constraints);
 
         // Display Panel
@@ -135,7 +137,11 @@ public class GUI extends Observable {
         constraints.gridwidth = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(movementPanel, constraints);
+
          */
+        dicePanel = new JPanel(new GridLayout(0,2));
+
+
 
         // Info Panel
         infoPanel = new JPanel(new BorderLayout());
@@ -407,6 +413,7 @@ public class GUI extends Observable {
     public void RollDiceMenu(int firstNumber, int secondNumber) {
         firstDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png")));
         secondDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png")));
+
     }
 
     /**
@@ -610,11 +617,17 @@ public class GUI extends Observable {
                         setFinishedButtonVisibility(true);
                         firstDiceImageLabel.setVisible(true);
                         secondDiceImageLabel.setVisible(true);
+                        dicePanel.add(firstDiceImageLabel);
+                        dicePanel.add(secondDiceImageLabel);
+                        actionPanel.add(dicePanel);
                     } else {
                         showMovement(false);
                         setRollDiceButtonVisibility(true);
                     }
                 } else if (game.getSubState().equals(Game.subStates.ACTION)) {
+                    dicePanel.remove(firstDiceImageLabel);
+                    dicePanel.remove(secondDiceImageLabel);
+                    actionPanel.remove(dicePanel);
                     setSuggestionAccusationVisibility(true);
                     setFinishedButtonVisibility(false);
                     showMovement(false);

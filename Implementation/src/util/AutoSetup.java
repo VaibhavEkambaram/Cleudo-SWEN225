@@ -22,9 +22,9 @@ public class AutoSetup {
 
         game.userInterface = new GUI(game);
         PlayerSetupMenu p = new PlayerSetupMenu();
-        game.numPlayers = 3;
+        game.numPlayers = 6;
         game.players = new ArrayList<>();
         game.players = p.setPlayers(game.getCharacterNames(), game.numPlayers, game.players, game.getCharacterCardsMap(), true);
-        Collections.sort(game.players);
+
     }
 }
