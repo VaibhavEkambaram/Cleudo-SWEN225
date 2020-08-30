@@ -151,7 +151,6 @@ public class Game {
         numPlayers = p.setPlayerCount();
         players = new ArrayList<>();
         players = p.setPlayers(characterNames, numPlayers, players, characterCardsMap, true);
-        Collections.sort(players);
     }
 
     /**
@@ -366,8 +365,10 @@ public class Game {
                 actionTransition();
             }
             board = newBoard;
+            userInterface.updateDisplay();
             return true;
         }
+        userInterface.updateDisplay();
         return false;
     }
 
@@ -393,7 +394,6 @@ public class Game {
 
         if (murderScenario.equals(accusationScenario)) {
             a.successfulAccusation(p, murderScenario);
-            userInterface.setSuggestionAccusationVisibility(false);
             return 1;
         } else {
             a.incorrectAccusation(p);

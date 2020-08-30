@@ -359,9 +359,6 @@ public class GUI extends Observable {
         int suggest = game.makeSuggestion(game.getCurrentPlayer());
         if (suggest == -1) {
             game.movementTransition();
-            drawHand();
-            firstDiceImageLabel.setVisible(false);
-            secondDiceImageLabel.setVisible(false);
         }
         updateDisplay();
     }
@@ -375,7 +372,6 @@ public class GUI extends Observable {
             game.finishTransition();
         } else {
             game.movementTransition();
-            drawHand();
         }
         updateDisplay();
     }
@@ -385,7 +381,6 @@ public class GUI extends Observable {
      */
     public void onPass() {
         game.movementTransition();
-        drawHand();
         updateDisplay();
     }
 
@@ -402,8 +397,6 @@ public class GUI extends Observable {
         secondDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png")));
         handPanel.add(firstDiceImageLabel);
         handPanel.add(secondDiceImageLabel);
-        firstDiceImageLabel.setVisible(true);
-        secondDiceImageLabel.setVisible(true);
         updateDisplay();
     }
 
@@ -609,6 +602,7 @@ public class GUI extends Observable {
                         info.append("Currently in Room: " + currentPlayer.getCurrentPosition().getRoom().toString() + "\n");
                     }
                 } else if (game.getSubState().equals(ACTION)) {
+                    drawHand();
                     setSuggestionAccusationVisibility(true);
                     setFinishedButtonVisibility(false);
                     showMovement(false);
