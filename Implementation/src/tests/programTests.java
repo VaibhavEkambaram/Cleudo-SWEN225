@@ -156,7 +156,7 @@ public class programTests {
      * @author Baxter Kirikiri
      */
     @Test
-    public void checkFinish() {
+    public void checkFinishMoves() {
         Game game = new Game(false);
         game.setMovesRemaining(9);
         game.movementInput(new Move(Move.Direction.UP, 3));
