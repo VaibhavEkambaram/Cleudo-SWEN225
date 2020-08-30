@@ -102,7 +102,7 @@ public class GUI extends Observable {
         JPanel mainPanel = new JPanel(new GridBagLayout());
 
         // Action Panel
-        actionPanel = new JPanel(new GridLayout(12, 1));
+        actionPanel = new JPanel(new GridLayout(8, 1));
         actionPanel.setBackground(Color.WHITE);
         constraints.weightx = .2;
         constraints.weighty = 1;
