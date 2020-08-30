@@ -215,4 +215,42 @@ public class programTests {
         int value = game.makeSuggestion(game.getCurrentPlayer());
         assertEquals(-1,value);
     }
+
+    /**
+     * Check player is able to make suggestion if located within a room time
+     *
+     * @author Baxter Kirikiri
+     */
+    @Test
+    public void canMakeSuggestion(){
+        Game game = new Game(false);
+        game.setMovesRemaining(9);
+        game.movementInput(new Move(Move.Direction.UP, 5));
+        game.movementInput(new Move(Move.Direction.LEFT, 1));
+        game.movementInput(new Move(Move.Direction.UP, 1));
+        game.movementInput(new Move(Move.Direction.LEFT, 1));
+        game.movementInput(new Move(Move.Direction.DOWN, 1));
+        game.actionTransition();
+
+        assertEquals("Lounge", game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
+
+        int value = game.makeSuggestion(game.getCurrentPlayer());
+
+        assertEquals(0,value);
+    }
+
+   /** @Test
+    public void checkAccusationAfterSuggestion(){
+        Game game = new Game(false);
+        game.setMovesRemaining(9);
+        game.movementInput(new Move(Move.Direction.UP, 5));
+        game.movementInput(new Move(Move.Direction.LEFT, 1));
+        game.movementInput(new Move(Move.Direction.UP, 1));
+        game.movementInput(new Move(Move.Direction.LEFT, 1));
+        game.movementInput(new Move(Move.Direction.DOWN, 1));
+        game.actionTransition();
+        game.makeSuggestion(game.getCurrentPlayer());
+
+
+    }**/
 }
