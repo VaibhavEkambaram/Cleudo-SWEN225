@@ -162,7 +162,9 @@ public class programTests {
         game.setMovesRemaining(9);
         game.movementInput(new Move(Move.Direction.UP, 3));
         game.actionTransition();
+
         assertEquals(7, game.getCurrentPlayer().getCurrentPosition().getLocationX());
         assertEquals(21, game.getCurrentPlayer().getCurrentPosition().getLocationY());
+        assertEquals(-1, game.getMovesRemaining());
     }
 }
