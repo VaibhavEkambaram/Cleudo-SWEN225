@@ -2,6 +2,7 @@ package tests;
 
 import model.Game;
 import model.Move;
+import model.Position;
 import org.junit.Test;
 import view.GUI;
 
@@ -151,20 +152,17 @@ public class programTests {
 
 
     /**
-     * Tests if the GUI is in the correct key state when the 'r' key is pressed for rolling the dice
+     * Tests if the player can finish their movements without using all of them
      *
      * @author Baxter Kirikiri
      */
     @Test
-    public void rollState() {
+    public void checkFinish() {
         Game game = new Game(false);
-        GUI gui = new GUI(game);
-
-        gui.gameFrame.requestFocusInWindow();
-        gui.gameFrame.dispatchEvent(new KeyEvent(gui.gameFrame,
-                KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0,
-                KeyEvent.VK_UNDEFINED, 'r'));
-        game.userInterface.updateDisplay();
-        assertEquals(GUI.KeyStates.PRE_ROLL, gui.keyTracker);
+        game.setMovesRemaining(9);
+        game.movementInput(new Move(Move.Direction.UP, 3));
+        game.actionTransition();
+        assertEquals(7, game.getCurrentPlayer().getCurrentPosition().getLocationX());
+        assertEquals(21, game.getCurrentPlayer().getCurrentPosition().getLocationY());
     }
 }
