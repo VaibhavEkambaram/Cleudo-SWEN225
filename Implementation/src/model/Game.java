@@ -390,12 +390,13 @@ public class Game {
             }
             accusationString = a.makeAccusation(characterNames, weaponNames, roomNames);
         } else {
-            accusationString = "Dagger\t"+"Conservatory\t"+"Col. Mustard\t";
+            accusationString = "Miss Scarlett"+"\t"+"Candlestick"+"\t"+"Library"+"\t";
         }
         String[] accusationStringSplit = accusationString.split("\t");
 
         // create scenario and compare to the original murder scenario
         Scenario accusationScenario = new Scenario(weaponCardsMap.get(accusationStringSplit[1]), roomCardsMap.get(accusationStringSplit[2]), characterCardsMap.get(accusationStringSplit[0]));
+
 
         if (murderScenario.equals(accusationScenario)) {
             if(runGraphicalOutput) a.successfulAccusation(p, murderScenario);
