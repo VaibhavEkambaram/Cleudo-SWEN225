@@ -64,7 +64,7 @@ public class Game {
         }
         initBoard(); // generate board
         dealCards();
-        runGame(); // main game logic loop
+        runGame(); // start up the game
     }
 
 
@@ -150,7 +150,7 @@ public class Game {
         PlayerSetupMenu p = new PlayerSetupMenu();
         numPlayers = p.setPlayerCount();
         players = new ArrayList<>();
-        players = p.setPlayers(characterNames, numPlayers, players, characterCardsMap, true);
+        players = p.setPlayers(characterNames, numPlayers, players, characterCardsMap, false);
     }
 
     /**
@@ -312,7 +312,7 @@ public class Game {
 
 
     /**
-     * Main Game Loop
+     * Start the game
      *
      * @author Cameron Li, Vaibhav Ekambaram
      */
