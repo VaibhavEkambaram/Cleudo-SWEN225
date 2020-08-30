@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Observable;
 
-import static model.Game.subStates.ACTION;
 import static model.Game.subStates.MOVEMENT;
 
 /**
@@ -320,6 +319,10 @@ public class GUI extends Observable {
             public void componentResized(ComponentEvent componentEvent) {
                 updateDisplay();
             }
+
+            public void componentMoved(ComponentEvent componentEvent) {
+                updateDisplay();
+            }
         });
 
         gameFrame.setMinimumSize(new Dimension(800, 800));
@@ -395,8 +398,6 @@ public class GUI extends Observable {
     public void RollDiceMenu(int firstNumber, int secondNumber) {
         firstDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png")));
         secondDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png")));
-        handPanel.add(firstDiceImageLabel);
-        handPanel.add(secondDiceImageLabel);
         updateDisplay();
     }
 
@@ -427,13 +428,11 @@ public class GUI extends Observable {
      */
     public void setFinishedButtonVisibility(boolean value) {
         if (value) {
-            actionPanel.update(g);
             actionPanel.add(finishedButton);
             finishedButton.setVisible(true);
         } else {
             finishedButton.setVisible(false);
             actionPanel.remove(finishedButton);
-            
         }
     }
 
@@ -585,7 +584,7 @@ public class GUI extends Observable {
             currentPlayer = game.getCurrentPlayer();
             if (currentPlayer != null) {
                 info.setText(currentPlayer.toString() + "\n");
-                if (game.getSubState().equals(MOVEMENT)) {
+                if (game.getSubState().equals(Game.subStates.MOVEMENT)) {
                     setSuggestionAccusationVisibility(false);
                     if (game.getMovesRemaining() > 0) {
                         info.append(game.getMovesRemaining() + " moves remaining\n");
@@ -601,7 +600,7 @@ public class GUI extends Observable {
                     if (currentPlayer.getCurrentPosition().getRoom() != null) {
                         info.append("Currently in Room: " + currentPlayer.getCurrentPosition().getRoom().toString() + "\n");
                     }
-                } else if (game.getSubState().equals(ACTION)) {
+                } else if (game.getSubState().equals(Game.subStates.ACTION)) {
                     drawHand();
                     setSuggestionAccusationVisibility(true);
                     setFinishedButtonVisibility(false);
@@ -612,8 +611,6 @@ public class GUI extends Observable {
                 }
             }
         }
-
-       g = (Graphics2D) displayPanel.getGraphics();
        paint();
     }
 
@@ -628,19 +625,17 @@ public class GUI extends Observable {
         if (game.getBoard() == null) {
             return;
         }
-        if (g != null) {
+        g = (Graphics2D) displayPanel.getGraphics();
+        int border = BORDER_SIZE / 2;
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            for (int j = 0; j < BOARD_HEIGHT; j++) {
 
-            int border = BORDER_SIZE / 2;
-            for (int i = 0; i < BOARD_WIDTH; i++) {
-                for (int j = 0; j < BOARD_HEIGHT; j++) {
+                Position currentPosition = game.getBoard().getPositions()[j][i];
+                int xValue = border + RECT_SIZE * i;
+                int yValue = border + RECT_SIZE * j;
 
-                    Position currentPosition = game.getBoard().getPositions()[j][i];
-                    int xValue = border + RECT_SIZE * i;
-                    int yValue = border + RECT_SIZE * j;
-
-                    currentPosition.draw(g, xValue, yValue, RECT_SIZE, displayPanel);
-                    drawWalls(currentPosition, g, i, j, xValue, yValue);
-                }
+                currentPosition.draw(g, xValue, yValue, RECT_SIZE, displayPanel);
+                drawWalls(currentPosition, g, i, j, xValue, yValue);
             }
         }
     }
