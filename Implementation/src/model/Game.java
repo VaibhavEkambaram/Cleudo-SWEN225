@@ -380,23 +380,28 @@ public class Game {
      * @author Baxter Kirikiri, Vaibhav Ekambaram
      */
     public int makeAccusation(Player p) {
-        AccusationMenu a = new AccusationMenu();
-        if (!p.getCanAccuse()) {
-            a.unableToAccuse(p);
-            return -1;
+        String accusationString;
+        AccusationMenu a = null;
+        if(runGraphicalOutput) {
+            a = new AccusationMenu();
+            if (!p.getCanAccuse()) {
+                a.unableToAccuse(p);
+                return -1;
+            }
+            accusationString = a.makeAccusation(characterNames, weaponNames, roomNames);
+        } else {
+            accusationString = "Dagger\t"+"Conservatory\t"+"Col. Mustard\t";
         }
-
-        String accusationString = a.makeAccusation(characterNames, weaponNames, roomNames);
         String[] accusationStringSplit = accusationString.split("\t");
 
         // create scenario and compare to the original murder scenario
         Scenario accusationScenario = new Scenario(weaponCardsMap.get(accusationStringSplit[1]), roomCardsMap.get(accusationStringSplit[2]), characterCardsMap.get(accusationStringSplit[0]));
 
         if (murderScenario.equals(accusationScenario)) {
-            a.successfulAccusation(p, murderScenario);
+            if(runGraphicalOutput) a.successfulAccusation(p, murderScenario);
             return 1;
         } else {
-            a.incorrectAccusation(p);
+            if(runGraphicalOutput) a.incorrectAccusation(p);
             p.setCanAccuse(false);
             return 0;
         }
@@ -674,6 +679,10 @@ public class Game {
         return characterCardsMap;
     }
 
+    public Map getWeaponCardsMap() { return weaponCardsMap; }
+
+    public Map getRoomCardsMap() { return roomCardsMap; }
+
     /**
      * Setters
      */
@@ -682,6 +691,7 @@ public class Game {
         this.movesRemaining = value;
     }
 
+    public void setMurderScenario(Scenario newScenario) { murderScenario = newScenario; }
 
     /**
      * State Methods

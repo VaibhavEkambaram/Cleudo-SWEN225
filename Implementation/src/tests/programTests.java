@@ -1,11 +1,10 @@
 package tests;
 
-import model.Game;
-import model.Move;
-import model.Position;
+import model.*;
 import org.junit.Test;
 import view.GUI;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import static org.junit.Assert.*;
@@ -166,5 +165,25 @@ public class programTests {
         assertEquals(7, game.getCurrentPlayer().getCurrentPosition().getLocationX());
         assertEquals(21, game.getCurrentPlayer().getCurrentPosition().getLocationY());
         assertEquals(-1, game.getMovesRemaining());
+    }
+
+    /**
+     * Tests if the player can no accuse after making a false accusation
+     *
+     * @author Baxter Kirikiri
+     */
+    @Test
+    public void checkFalseAccusation(){
+        Game game = new Game(false);
+        game.setMovesRemaining(2);
+        game.actionTransition();
+        game.setMurderScenario(new Scenario((WeaponCard)game.getWeaponCardsMap().get("Dagger"), (RoomCard)game.getRoomCardsMap().get("Conservatory"), (CharacterCard)game.getCharacterCardsMap().get("Col. Mustard")));
+
+
+        assertEquals(true, game.getCurrentPlayer().getCanAccuse());
+
+        game.makeAccusation(game.getCurrentPlayer());
+
+        assertEquals(false, game.getCurrentPlayer().getCanAccuse());
     }
 }
