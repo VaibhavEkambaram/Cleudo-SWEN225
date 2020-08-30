@@ -1,12 +1,14 @@
 package tests;
 
 import model.Game;
+import model.Move;
 import org.junit.Test;
 import view.GUI;
 
 import java.awt.event.KeyEvent;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 
 public class programTests {
@@ -62,7 +64,9 @@ public class programTests {
 
 
     /**
-     * check Dice Throw updates number of moves remaining
+     * Check Dice Throw
+     *
+     * @author Vaibhav Ekambaram
      */
     @Test
     public void checkDiceThrowResults() {
@@ -70,6 +74,38 @@ public class programTests {
         int value = game.rollDice();
         assertEquals(game.getMovesRemaining(), value);
     }
+
+
+    @Test
+    public void checkMovement(){
+        Game game = new Game(false);
+        game.setMovesRemaining(9);
+        game.movementInput(new Move(Move.Direction.UP, 3));
+
+        // check moves remaining depletion
+        assertEquals(6,game.getMovesRemaining());
+        game.movementInput(new Move(Move.Direction.UP, 2));
+
+        // check invalid wall does not succeed and thus does not reduce the moves remaining
+        game.movementInput(new Move(Move.Direction.LEFT,1));
+        assertEquals(4,game.getMovesRemaining());
+
+        // validate current tile is not a room
+        assertNull(game.getCurrentPlayer().getCurrentPosition().getRoom());
+
+        game.movementInput(new Move(Move.Direction.UP,1));
+        game.movementInput(new Move(Move.Direction.LEFT,1));
+        game.movementInput(new Move(Move.Direction.DOWN,1));
+        assertEquals(1,game.getMovesRemaining());
+
+    }
+
+
+
+
+
+
+
 
 
     /**
