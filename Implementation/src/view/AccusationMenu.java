@@ -67,5 +67,6 @@ public class AccusationMenu {
      */
     public void successfulAccusation(Player currentPlayer, Scenario murderScenario) {
         JOptionPane.showMessageDialog(null, currentPlayer.getPlayerVanityName() + " was successful in their accusation. They have won the game!!!\nThe murder scenario was: " + murderScenario.toString() + "\nThank you for playing Cluedo!", "Successful Accusation - Game Over!", JOptionPane.PLAIN_MESSAGE);
+        System.exit(0);
     }
 }

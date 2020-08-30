@@ -1,8 +1,11 @@
 package tests;
 
 import model.*;
-import org.junit.Assert;
 import org.junit.Test;
+import view.GUI;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 import static org.junit.Assert.*;
 
@@ -165,7 +168,7 @@ public class programTests {
     }
 
     /**
-     * Tests if the player can no accuse after making a false accusation
+     * Tests if the player can no longer accuse after making a false accusation
      *
      * @author Baxter Kirikiri
      */
@@ -176,22 +179,26 @@ public class programTests {
         game.actionTransition();
         game.setMurderScenario(new Scenario((WeaponCard)game.getWeaponCardsMap().get("Dagger"), (RoomCard)game.getRoomCardsMap().get("Conservatory"), (CharacterCard)game.getCharacterCardsMap().get("Col. Mustard")));
 
-        assertTrue(game.getCurrentPlayer().getCanAccuse());
+        assertEquals(true, game.getCurrentPlayer().getCanAccuse());
+
         game.makeAccusation(game.getCurrentPlayer());
-        assertFalse(game.getCurrentPlayer().getCanAccuse());
+
+        assertEquals(false, game.getCurrentPlayer().getCanAccuse());
     }
 
     /**
-     * Check player is unable to make suggestion if not located within a room time
+     * Tests if the player wins the game after a correct accusation
      *
-     * @author Vaibhav Ekambaram
+     * @author Baxter Kirikiri
      */
     @Test
-    public void cantMakeSuggestion(){
+    public void checkCorrectAccusation(){
         Game game = new Game(false);
         game.setMovesRemaining(2);
         game.actionTransition();
-        int value = game.makeSuggestion(game.getCurrentPlayer());
-        assertEquals(-1,value);
+        game.setMurderScenario(new Scenario((WeaponCard)game.getWeaponCardsMap().get("Candlestick"), (RoomCard)game.getRoomCardsMap().get("Library"), (CharacterCard)game.getCharacterCardsMap().get("Miss Scarlett")));
+        game.finishTransition();
+
+        assertEquals(Game.States.FINISHED, game.getGameState());
     }
 }
