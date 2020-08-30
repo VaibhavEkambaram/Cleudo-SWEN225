@@ -312,6 +312,14 @@ public class GUI extends Observable {
             }
         });
 
+        gameFrame.addWindowStateListener(e -> {
+            if((e.getNewState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH){
+                updateDisplay();
+            } else if((e.getNewState() & Frame.NORMAL) == Frame.NORMAL){
+                updateDisplay();
+            }
+        });
+
 
         // Window Close Listener
         gameFrame.addWindowListener(new WindowAdapter() {
