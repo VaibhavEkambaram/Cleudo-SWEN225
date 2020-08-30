@@ -150,7 +150,7 @@ public class Game {
         PlayerSetupMenu p = new PlayerSetupMenu();
         numPlayers = p.setPlayerCount();
         players = new ArrayList<>();
-        players = p.setPlayers(characterNames, numPlayers, players, characterCardsMap, true);
+        players = p.setPlayers(characterNames, numPlayers, players, characterCardsMap, false);
         Collections.sort(players);
     }
 
