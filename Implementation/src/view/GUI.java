@@ -169,7 +169,8 @@ public class GUI extends Observable {
         constraints.gridwidth = 2;
         JScrollPane scrollPanel = new JScrollPane(handPanel);
         scrollPanel.setPreferredSize(new Dimension(700, 183));
-        scrollPanel.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         mainPanel.add(scrollPanel,constraints);
 
