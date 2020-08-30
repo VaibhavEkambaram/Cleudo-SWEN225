@@ -624,8 +624,6 @@ public class GUI extends Observable {
                 }
             }
         }
-
-
         paint();
     }
 
