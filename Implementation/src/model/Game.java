@@ -382,7 +382,7 @@ public class Game {
     public int makeAccusation(Player p) {
         String accusationString;
         AccusationMenu a = null;
-        if(runGraphicalOutput) {
+        if (runGraphicalOutput) {
             a = new AccusationMenu();
             if (!p.getCanAccuse()) {
                 a.unableToAccuse(p);
@@ -390,7 +390,7 @@ public class Game {
             }
             accusationString = a.makeAccusation(characterNames, weaponNames, roomNames);
         } else {
-            accusationString = "Miss Scarlett"+"\t"+"Candlestick"+"\t"+"Library"+"\t";
+            accusationString = "Miss Scarlett" + "\t" + "Candlestick" + "\t" + "Library" + "\t";
         }
         String[] accusationStringSplit = accusationString.split("\t");
 
@@ -399,10 +399,10 @@ public class Game {
 
 
         if (murderScenario.equals(accusationScenario)) {
-            if(runGraphicalOutput) a.successfulAccusation(p, murderScenario);
+            if (runGraphicalOutput) a.successfulAccusation(p, murderScenario);
             return 1;
         } else {
-            if(runGraphicalOutput) a.incorrectAccusation(p);
+            if (runGraphicalOutput) a.incorrectAccusation(p);
             p.setCanAccuse(false);
             return 0;
         }
@@ -427,7 +427,9 @@ public class Game {
 
         // check if player is currently in a room, can not suggest if not
         if (p.getCurrentPosition().getRoom() == null) {
-            s.unableToSuggest(p);
+            if(runGraphicalOutput) {
+                s.unableToSuggest(p);
+            }
             return -1;
         }
 
@@ -680,9 +682,13 @@ public class Game {
         return characterCardsMap;
     }
 
-    public Map getWeaponCardsMap() { return weaponCardsMap; }
+    public Map getWeaponCardsMap() {
+        return weaponCardsMap;
+    }
 
-    public Map getRoomCardsMap() { return roomCardsMap; }
+    public Map getRoomCardsMap() {
+        return roomCardsMap;
+    }
 
     /**
      * Setters
@@ -692,7 +698,9 @@ public class Game {
         this.movesRemaining = value;
     }
 
-    public void setMurderScenario(Scenario newScenario) { murderScenario = newScenario; }
+    public void setMurderScenario(Scenario newScenario) {
+        murderScenario = newScenario;
+    }
 
     /**
      * State Methods

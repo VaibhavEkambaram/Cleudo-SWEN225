@@ -1,11 +1,8 @@
 package tests;
 
 import model.*;
+import org.junit.Assert;
 import org.junit.Test;
-import view.GUI;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
 
 import static org.junit.Assert.*;
 
@@ -179,11 +176,22 @@ public class programTests {
         game.actionTransition();
         game.setMurderScenario(new Scenario((WeaponCard)game.getWeaponCardsMap().get("Dagger"), (RoomCard)game.getRoomCardsMap().get("Conservatory"), (CharacterCard)game.getCharacterCardsMap().get("Col. Mustard")));
 
-
-        assertEquals(true, game.getCurrentPlayer().getCanAccuse());
-
+        assertTrue(game.getCurrentPlayer().getCanAccuse());
         game.makeAccusation(game.getCurrentPlayer());
+        assertFalse(game.getCurrentPlayer().getCanAccuse());
+    }
 
-        assertEquals(false, game.getCurrentPlayer().getCanAccuse());
+    /**
+     * Check player is unable to make suggestion if not located within a room time
+     *
+     * @author Vaibhav Ekambaram
+     */
+    @Test
+    public void cantMakeSuggestion(){
+        Game game = new Game(false);
+        game.setMovesRemaining(2);
+        game.actionTransition();
+        int value = game.makeSuggestion(game.getCurrentPlayer());
+        assertEquals(-1,value);
     }
 }
