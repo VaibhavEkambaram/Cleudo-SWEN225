@@ -368,8 +368,7 @@ public class GUI extends Observable {
      * Execute Dice Roll Action for Button
      */
     public void onRollDice() {
-        game.setMovesRemaining(-1);
-        game.setMovesRemaining(game.rollDice());
+        game.rollDice();
         movesRemaining = game.getMovesRemaining();
         updateDisplay();
     }
@@ -424,8 +423,6 @@ public class GUI extends Observable {
      * @author Vaibhav Ekambaram
      */
     public void RollDiceMenu(int firstNumber, int secondNumber) {
-
-
         firstDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png")));
         secondDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png")));
 
@@ -440,7 +437,6 @@ public class GUI extends Observable {
     public void setRollDiceButtonVisibility(boolean value) {
         if (value) {
             setFinishedButtonVisibility(false);
-            game.setMovesRemaining(-1);
             keyTracker = KeyStates.PRE_ROLL;
             actionPanel.add(rollDiceButton);
             rollDiceButton.setVisible(true);

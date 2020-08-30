@@ -61,13 +61,15 @@ public class programTests {
     }
 
 
+    /**
+     * check Dice Throw updates number of moves remaining
+     */
     @Test
     public void checkDiceThrowResults() {
         Game game = new Game(false);
         int value = game.rollDice();
+        assertEquals(game.getMovesRemaining(), value);
     }
-
-
 
 
     /**
@@ -87,9 +89,6 @@ public class programTests {
         game.userInterface.updateDisplay();
         assertEquals(GUI.KeyStates.PRE_ROLL, gui.keyTracker);
     }
-
-
-
 
 
 }

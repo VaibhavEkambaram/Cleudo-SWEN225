@@ -330,6 +330,7 @@ public class Game {
      * @author Vaibhav Ekambaram
      */
     public int rollDice() {
+        setMovesRemaining(-1);
         // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
@@ -338,6 +339,7 @@ public class Game {
             userInterface.RollDiceMenu(firstResult, secondResult);
         }
 
+        setMovesRemaining((firstResult + secondResult));
         return firstResult + secondResult;
     }
 
