@@ -169,17 +169,17 @@ public class programTests {
      * @author Baxter Kirikiri
      */
     @Test
-    public void checkFalseAccusation(){
+    public void failedAccusation() {
         Game game = new Game(false);
         game.setMovesRemaining(2);
         game.actionTransition();
-        game.setMurderScenario(new Scenario((WeaponCard)game.getWeaponCardsMap().get("Dagger"), (RoomCard)game.getRoomCardsMap().get("Conservatory"), (CharacterCard)game.getCharacterCardsMap().get("Col. Mustard")));
+        game.setMurderScenario(new Scenario((WeaponCard) game.getWeaponCardsMap().get("Dagger"), (RoomCard) game.getRoomCardsMap().get("Conservatory"), (CharacterCard) game.getCharacterCardsMap().get("Col. Mustard")));
 
-        assertEquals(true, game.getCurrentPlayer().getCanAccuse());
+        assertTrue(game.getCurrentPlayer().getCanAccuse());
 
-        game.makeAccusation(game.getCurrentPlayer(),"Miss Scarlett" + "\t" + "Candlestick" + "\t" + "Library");
+        game.makeAccusation(game.getCurrentPlayer(), "Miss Scarlett" + "\t" + "Candlestick" + "\t" + "Library");
 
-        assertEquals(false, game.getCurrentPlayer().getCanAccuse());
+        assertFalse(game.getCurrentPlayer().getCanAccuse());
     }
 
     /**
@@ -188,14 +188,13 @@ public class programTests {
      * @author Baxter Kirikiri
      */
     @Test
-    public void checkCorrectAccusation(){
+    public void correctAccusation() {
         Game game = new Game(false);
         game.setMovesRemaining(2);
         game.actionTransition();
-        game.setMurderScenario(new Scenario((WeaponCard)game.getWeaponCardsMap().get("Candlestick"), (RoomCard)game.getRoomCardsMap().get("Library"), (CharacterCard)game.getCharacterCardsMap().get("Miss Scarlett")));
+        game.setMurderScenario(new Scenario((WeaponCard) game.getWeaponCardsMap().get("Candlestick"), (RoomCard) game.getRoomCardsMap().get("Library"), (CharacterCard) game.getCharacterCardsMap().get("Miss Scarlett")));
         game.finishTransition();
-        game.makeAccusation(game.getCurrentPlayer(),"Miss Scarlett" + "\t" + "Candlestick" + "\t" + "Library");
-
+        game.makeAccusation(game.getCurrentPlayer(), "Miss Scarlett" + "\t" + "Candlestick" + "\t" + "Library");
         assertEquals(Game.States.FINISHED, game.getGameState());
     }
 
@@ -205,12 +204,12 @@ public class programTests {
      * @author Vaibhav Ekambaram
      */
     @Test
-    public void cantMakeSuggestion(){
+    public void cantMakeSuggestion() {
         Game game = new Game(false);
         game.setMovesRemaining(2);
         game.actionTransition();
-        int value = game.makeSuggestion(game.getCurrentPlayer());
-        assertEquals(-1,value);
+        int value = game.makeSuggestion(game.getCurrentPlayer(), null, null, -1);
+        assertEquals(-1, value);
     }
 
     /**
@@ -219,7 +218,7 @@ public class programTests {
      * @author Baxter Kirikiri
      */
     @Test
-    public void canMakeSuggestion(){
+    public void suggestionCouldNotRefute() {
         Game game = new Game(false);
         game.setMovesRemaining(9);
         game.movementInput(new Move(Move.Direction.UP, 5));
@@ -231,13 +230,20 @@ public class programTests {
 
         assertEquals("Lounge", game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
 
-        int value = game.makeSuggestion(game.getCurrentPlayer());
+        String[] refutationPresets = {"-1", "-1", "-1", "-1", "-1"};
 
-        assertEquals(0,value);
+        int value = game.makeSuggestion(game.getCurrentPlayer(), "Col. Mustard" + "\t" + "Dagger", refutationPresets, -1);
+
+        assertEquals(0, value);
     }
 
-   /** @Test
-    public void checkAccusationAfterSuggestion(){
+    /**
+     * Check player is able to make suggestion if located within a room time
+     *
+     * @author Baxter Kirikiri
+     */
+    @Test
+    public void suggestionRefute() {
         Game game = new Game(false);
         game.setMovesRemaining(9);
         game.movementInput(new Move(Move.Direction.UP, 5));
@@ -246,8 +252,13 @@ public class programTests {
         game.movementInput(new Move(Move.Direction.LEFT, 1));
         game.movementInput(new Move(Move.Direction.DOWN, 1));
         game.actionTransition();
-        game.makeSuggestion(game.getCurrentPlayer());
 
+        assertEquals("Lounge", game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
 
-    }**/
+        String[] refutationPresets = {"-1", "Dagger", "-1", "-1", "-1"};
+
+        int value = game.makeSuggestion(game.getCurrentPlayer(), "Col. Mustard" + "\t" + "Dagger", refutationPresets, -1);
+
+        assertEquals(1, value);
+    }
 }

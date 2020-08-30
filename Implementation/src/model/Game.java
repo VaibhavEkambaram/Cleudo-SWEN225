@@ -379,7 +379,7 @@ public class Game {
      * @return integer (-1 invalid, 0 failed, 1 successful)
      * @author Baxter Kirikiri, Vaibhav Ekambaram
      */
-    public int makeAccusation(Player p,String accusationStringPreset) {
+    public int makeAccusation(Player p, String accusationStringPreset) {
         String accusationString;
         AccusationMenu a = null;
         if (runGraphicalOutput) {
@@ -413,7 +413,7 @@ public class Game {
      *
      * @author Baxter Kirikiri, Vaibhav Ekambaram, Cameron Li
      */
-    public int makeSuggestion(Player p) {
+    public int makeSuggestion(Player p, String suggestionStringPreset, String[] refutationPresets, int couldntRefuteCommand) {
 
         SuggestionMenu s = new SuggestionMenu();
 
@@ -427,7 +427,7 @@ public class Game {
 
         // check if player is currently in a room, can not suggest if not
         if (p.getCurrentPosition().getRoom() == null) {
-            if(runGraphicalOutput) {
+            if (runGraphicalOutput) {
                 s.unableToSuggest(p);
             }
             return -1;
@@ -439,7 +439,13 @@ public class Game {
             suggestionRoom = roomCardsMap.get(p.getCurrentPosition().getRoom().toString());
         }
 
-        String suggestionString = s.makeSuggestion(characterNames, weaponNames, roomNames, Objects.requireNonNull(suggestionRoom));
+        String suggestionString;
+
+        if (runGraphicalOutput) {
+            suggestionString = s.makeSuggestion(characterNames, weaponNames, roomNames, Objects.requireNonNull(suggestionRoom));
+        } else {
+            suggestionString = suggestionStringPreset;
+        }
         String[] suggestionStringSplit = suggestionString.split("\t");
 
         suggestionWeapon = weaponCardsMap.get(suggestionStringSplit[1]);
@@ -456,7 +462,9 @@ public class Game {
                     Board newBoard = board.teleportPlayer(findP, room);
                     if (newBoard != null) {
                         board = newBoard;
-                        userInterface.updateDisplay();
+                        if (runGraphicalOutput) {
+                            userInterface.updateDisplay();
+                        }
                     }
                 }
             }
@@ -466,7 +474,9 @@ public class Game {
         Board newBoard = board.teleportWeapon(suggestionWeapon, room);
         if (newBoard != null) {
             board = newBoard;
-            userInterface.updateDisplay();
+            if (runGraphicalOutput) {
+                userInterface.updateDisplay();
+            }
         }
 
         // place all other players in a stack so that they can take turns at refuting
@@ -479,10 +489,22 @@ public class Game {
 
         // iterate through the stack, asking each player to produce a refutation.
         boolean refuted = false;
+        int count = 0;
         while (!refuters.isEmpty()) {
             Player currentTurn = refuters.pop();
 
-            String refute = s.makeRefutation(currentTurn, currentPlayer, new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter));
+
+            String refute;
+
+            if (runGraphicalOutput) {
+                refute = s.makeRefutation(currentTurn, currentPlayer, new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter));
+            } else {
+                refute = refutationPresets[count];
+            }
+
+
+            count++;
+
             if (refute.equals("-1")) {
                 continue;
             }
@@ -492,18 +514,24 @@ public class Game {
 
             Card refutation = null;
 
-            for (Card c : refuteCards) {
-                if (c.toString().equals(refute)) {
-                    refutation = c;
+            if (runGraphicalOutput) {
+                for (Card c : refuteCards) {
+                    if (c.toString().equals(refute)) {
+                        refutation = c;
+                    }
                 }
+            } else {
+                refutation = weaponCardsMap.get(refute);
             }
 
             // if the player successfully refutes the suggestion, end the loop
             if (Objects.requireNonNull(refutation).toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom.toString()) || refutation.toString().equals(suggestionWeapon.toString())) {
-                s.successfulRefutation(p.getCharacter().getCharacterName());
+                if (runGraphicalOutput) {
+                    s.successfulRefutation(p.getCharacter().getCharacterName());
+                }
                 refuted = true;
                 movementTransition();
-                break;
+                return 1;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
                 s.failedRefutation(currentTurn.getPlayerVanityName());
 
@@ -512,9 +540,17 @@ public class Game {
 
         //if the stack is empty and no other player could refute, offer the option of making an Accusation to player who suggested
         if (!refuted) {
-            int i = s.nobodyCouldRefute();
+            int i;
+
+            if (runGraphicalOutput) {
+                i = s.nobodyCouldRefute();
+            } else {
+                i = couldntRefuteCommand;
+            }
+
             if (i == 0) {
-                int accuse = makeAccusation(p,null);
+                int accuse;
+                accuse = makeAccusation(p, null);
                 if (accuse == 1) {
                     gameState = States.FINISHED;
                 } else {

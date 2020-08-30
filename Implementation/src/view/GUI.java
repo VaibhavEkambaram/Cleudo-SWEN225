@@ -386,7 +386,7 @@ public class GUI extends Observable {
      * Execute Action for Suggestion Button
      */
     public void onSuggestion() {
-        int suggest = game.makeSuggestion(game.getCurrentPlayer());
+        int suggest = game.makeSuggestion(game.getCurrentPlayer(),null,null,-1);
         if (suggest == -1) {
             game.movementTransition();
         }
