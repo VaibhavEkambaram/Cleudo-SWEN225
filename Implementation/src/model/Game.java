@@ -3,9 +3,9 @@ package model;/*PLEASE DO NOT EDIT THIS CODE*/
 
 import util.AutoSetup;
 import view.AccusationMenu;
+import view.GUI;
 import view.PlayerSetupMenu;
 import view.SuggestionMenu;
-import view.GUI;
 
 import java.util.*;
 
@@ -321,9 +321,11 @@ public class Game {
         initToRunning();
         movementTransition();
         userInterface.updateDisplay();
+        /*
         while (gameState.equals(States.RUNNING) && running) {
             userInterface.updateDisplay();
         }
+         */
     }
 
     /**
@@ -336,7 +338,6 @@ public class Game {
         // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
-
         userInterface.RollDiceMenu(firstResult,secondResult);
         return firstResult + secondResult;
     }
@@ -362,7 +363,6 @@ public class Game {
         if (newBoard != null) {
             movesRemaining = movesRemaining - move.getSpaces();
             if (movesRemaining < 1) {
-                userInterface.setSuggestionAccusationVisibility(true);
                 actionTransition();
             }
             board = newBoard;
@@ -492,7 +492,6 @@ public class Game {
                 s.successfulRefutation(p.getCharacter().getCharacterName());
                 refuted = true;
                 movementTransition();
-                userInterface.setRollDiceButtonVisibility(true);
                 break;
             } else { //if the card the player used to refute is in their hand but it does not match any of the suggested cards
                 s.failedRefutation(currentTurn.getPlayerVanityName());
@@ -506,15 +505,12 @@ public class Game {
             if (i == 0) {
                 int accuse = makeAccusation(p);
                 if (accuse == 1) {
-                    userInterface.setSuggestionAccusationVisibility(false);
                     gameState = States.FINISHED;
                 } else {
                     movementTransition();
-                    userInterface.setRollDiceButtonVisibility(true);
                 }
             } else {
                 movementTransition();
-                userInterface.setRollDiceButtonVisibility(true);
             }
         }
         return 0;
@@ -587,6 +583,7 @@ public class Game {
             throw new Error("Expected INIT game state but " + gameState);
         }
         gameState = States.RUNNING;
+        userInterface.updateDisplay();
     }
 
     /**
@@ -606,6 +603,8 @@ public class Game {
 
         subState = subStates.MOVEMENT;
         currentPlayer = players.get(currentPlayerIndex);
+        movesRemaining = -1;
+        userInterface.updateDisplay();
     }
 
     /**
@@ -621,7 +620,9 @@ public class Game {
         if (!subState.equals(subStates.MOVEMENT)) {
             throw new Error("Expected Movement sub state but : " + subState);
         }
+        movesRemaining = -1;
         subState = subStates.ACTION;
+        userInterface.updateDisplay();
     }
 
     /**
@@ -634,6 +635,7 @@ public class Game {
             throw new Error("Expected RUNNING game state but : " + gameState);
         }
         gameState = States.FINISHED;
+        userInterface.updateDisplay();
     }
 
     /**

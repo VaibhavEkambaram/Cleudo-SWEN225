@@ -1,15 +1,18 @@
 package view;
 
-import com.sun.javafx.font.directwrite.RECT;
-import model.*;
+//import com.sun.javafx.font.directwrite.RECT;
 
-import javax.sound.sampled.Line;
+import model.Game;
+import model.Move;
+import model.Player;
+import model.Position;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Line2D;
-import java.util.*;
+import java.util.Observable;
 
+import static model.Game.subStates.ACTION;
 import static model.Game.subStates.MOVEMENT;
 
 /**
@@ -94,13 +97,13 @@ public class GUI extends Observable {
         JPanel mainPanel = new JPanel(new GridBagLayout());
 
         // Action Panel
-        actionPanel = new JPanel();
+        actionPanel = new JPanel(new GridLayout(12, 2));
         actionPanel.setBackground(Color.WHITE);
         constraints.weightx = .2;
-        constraints.weighty = .4;
+        constraints.weighty = .9;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        actionPanel.setPreferredSize(new Dimension(200, 500));
+        actionPanel.setPreferredSize(new Dimension(250, 500));
         mainPanel.add(actionPanel, constraints);
 
         // Display Panel
@@ -111,7 +114,7 @@ public class GUI extends Observable {
         constraints.gridheight = 1;
         displayPanel = new JPanel();
         displayPanel.setBackground(new Color(97, 185, 125));
-        displayPanel.setPreferredSize(new Dimension(750, 600));
+        displayPanel.setPreferredSize(new Dimension(500, 500));
         displayPanel.setDoubleBuffered(true);
         mainPanel.setDoubleBuffered(true);
         mainPanel.add(displayPanel, constraints);
@@ -157,7 +160,6 @@ public class GUI extends Observable {
         actionPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         movementPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        actionPanel.setLayout(new GridLayout(12, 2));
 
 
         gameFrame.add(mainPanel);
@@ -316,7 +318,7 @@ public class GUI extends Observable {
 
         gameFrame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent componentEvent) {
-                if (game.getBoard() != null) updateDisplay();
+                updateDisplay();
             }
         });
 
@@ -326,6 +328,8 @@ public class GUI extends Observable {
         setFinishedButtonVisibility(false);
         setSuggestionAccusationVisibility(false);
         showMovement(false);
+        setRollDiceButtonVisibility(false);
+        updateDisplay();
     }
 
 
@@ -335,9 +339,8 @@ public class GUI extends Observable {
     public void onRollDice() {
         game.setMovesRemaining(-1);
         game.setMovesRemaining(game.rollDice());
-        setRollDiceButtonVisibility(false);
-        setFinishedButtonVisibility(true);
-        movementPanel.setVisible(true);
+        movesRemaining = game.getMovesRemaining();
+        updateDisplay();
     }
 
 
@@ -346,9 +349,7 @@ public class GUI extends Observable {
      */
     public void onFinish() {
         game.actionTransition();
-        movementPanel.setVisible(false);
-        setFinishedButtonVisibility(false);
-        setSuggestionAccusationVisibility(true);
+        updateDisplay();
     }
 
     /**
@@ -358,13 +359,11 @@ public class GUI extends Observable {
         int suggest = game.makeSuggestion(game.getCurrentPlayer());
         if (suggest == -1) {
             game.movementTransition();
-            setFinishedButtonVisibility(false);
-            setRollDiceButtonVisibility(true);
-
             drawHand();
             firstDiceImageLabel.setVisible(false);
             secondDiceImageLabel.setVisible(false);
         }
+        updateDisplay();
     }
 
     /**
@@ -376,13 +375,9 @@ public class GUI extends Observable {
             game.finishTransition();
         } else {
             game.movementTransition();
-            setFinishedButtonVisibility(false);
-            setRollDiceButtonVisibility(true);
-
             drawHand();
-            firstDiceImageLabel.setVisible(false);
-            secondDiceImageLabel.setVisible(false);
         }
+        updateDisplay();
     }
 
     /**
@@ -390,11 +385,8 @@ public class GUI extends Observable {
      */
     public void onPass() {
         game.movementTransition();
-        setFinishedButtonVisibility(false);
-        setRollDiceButtonVisibility(true);
         drawHand();
-        firstDiceImageLabel.setVisible(false);
-        secondDiceImageLabel.setVisible(false);
+        updateDisplay();
     }
 
 
@@ -412,6 +404,7 @@ public class GUI extends Observable {
         handPanel.add(secondDiceImageLabel);
         firstDiceImageLabel.setVisible(true);
         secondDiceImageLabel.setVisible(true);
+        updateDisplay();
     }
 
     /**
@@ -431,7 +424,6 @@ public class GUI extends Observable {
             rollDiceButton.setVisible(false);
             actionPanel.remove(rollDiceButton);
         }
-
     }
 
     /**
@@ -597,54 +589,38 @@ public class GUI extends Observable {
         RECT_SIZE = displayPanel.getWidth() > displayPanel.getHeight() ? (displayPanel.getHeight() - BORDER_SIZE) / 25 : (displayPanel.getWidth() - BORDER_SIZE) / 25;
 
         if (game.getGameState().equals(Game.States.RUNNING)) {
-            infoPanel.setVisible(true);
-            if (game.getSubState().equals(MOVEMENT)) {
-                if (game.getMovesRemaining() > 0) {
-                    showMovement(true);
-                }
-                setSuggestionAccusationVisibility(false);
-            } else {
-                showMovement(false);
-                setFinishedButtonVisibility(false);
-
-            }
-            if (game.getSubState().equals(MOVEMENT) || game.getSubState().equals(Game.subStates.ACTION)) {
-                drawHand();
-            }
-        } else {
-            showMovement(false);
-            setSuggestionAccusationVisibility(false);
-            infoPanel.setVisible(false);
-        }
-        if (game.getCurrentPlayer() != currentPlayer) {
-            info.setText(game.getCurrentPlayer().toString() + "\n");
             currentPlayer = game.getCurrentPlayer();
-            if (game.getCurrentPlayer().getCurrentPosition().getRoom() != null) {
-                info.append(game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
-            }
-        }
-
-        if (game.getCurrentPlayer() == currentPlayer) {
-            if (game.getMovesRemaining() != this.movesRemaining && game.getMovesRemaining() > 0) {
-                this.movesRemaining = game.getMovesRemaining();
-                info.setText(game.getCurrentPlayer().toString() + "\n");
-                info.append(this.movesRemaining + " moves remaining\n");
-                if (game.getCurrentPlayer().getCurrentPosition().getRoom() != null) {
-                    info.append("Player is currently in " + game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
-                }
-            } else if (game.getMovesRemaining() < 1) {
-                info.setText(game.getCurrentPlayer().toString() + "\n");
-                if (game.getCurrentPlayer().getCurrentPosition().getRoom() != null) {
-                    info.append("Player is currently in " + game.getCurrentPlayer().getCurrentPosition().getRoom().toString());
+            if (currentPlayer != null) {
+                info.setText(currentPlayer.toString() + "\n");
+                if (game.getSubState().equals(MOVEMENT)) {
+                    setSuggestionAccusationVisibility(false);
+                    if (game.getMovesRemaining() > 0) {
+                        info.append(game.getMovesRemaining() + " moves remaining\n");
+                        setRollDiceButtonVisibility(false);
+                        setFinishedButtonVisibility(true);
+                        showMovement(true);
+                        firstDiceImageLabel.setVisible(true);
+                        secondDiceImageLabel.setVisible(true);
+                    } else {
+                        setRollDiceButtonVisibility(true);
+                        showMovement(false);
+                    }
+                    if (currentPlayer.getCurrentPosition().getRoom() != null) {
+                        info.append("Currently in Room: " + currentPlayer.getCurrentPosition().getRoom().toString() + "\n");
+                    }
+                } else if (game.getSubState().equals(ACTION)) {
+                    setSuggestionAccusationVisibility(true);
+                    setFinishedButtonVisibility(false);
+                    showMovement(false);
+                    setRollDiceButtonVisibility(false);
+                    firstDiceImageLabel.setVisible(false);
+                    secondDiceImageLabel.setVisible(false);
                 }
             }
         }
 
        g = (Graphics2D) displayPanel.getGraphics();
-
-
        paint();
-
     }
 
 
@@ -655,6 +631,9 @@ public class GUI extends Observable {
      * @author Vaibhav Ekambaram
      */
     public void paint() {
+        if (game.getBoard() == null) {
+            return;
+        }
         if (g != null) {
 
             int border = BORDER_SIZE / 2;
@@ -736,6 +715,7 @@ public class GUI extends Observable {
     public void makeMovement(Move.Direction direction) {
         currentPlayer = game.getCurrentPlayer();
         game.movementInput(new Move(direction, 1));
+        updateDisplay();
     }
 
     /**
@@ -782,6 +762,7 @@ public class GUI extends Observable {
                 game.movementInput(move);
             }
         }
+        updateDisplay();
     }
 
 
