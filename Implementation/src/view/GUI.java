@@ -239,7 +239,6 @@ public class GUI extends Observable {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (keyTracker.equals(KeyStates.PRE_ROLL)) {
-                    System.out.println("pre roll");
                     if (e.getKeyCode() == 82) {
                         onRollDice();
                     }
@@ -607,6 +606,7 @@ public class GUI extends Observable {
 
                 currentPosition.draw(g, xValue, yValue, RECT_SIZE, displayPanel);
                 drawWalls(currentPosition, g, i, j, xValue, yValue);
+
             }
         }
     }
@@ -631,8 +631,13 @@ public class GUI extends Observable {
             if (i == 0) {
                 g2.drawLine(xValue, yValue, xValue, yValue + RECT_SIZE);
             }
+
+            if(j==0){
+                g2.drawLine(xValue, yValue, xValue+RECT_SIZE, yValue);
+            }
+
             if (i == 23)
-                g2.drawLine(xValue + RECT_SIZE - 2, yValue, xValue + RECT_SIZE - 2, yValue + RECT_SIZE);
+                g2.drawLine(xValue + RECT_SIZE, yValue, xValue + RECT_SIZE, yValue + RECT_SIZE);
             if (j == 24)
                 g2.drawLine(xValue, yValue + RECT_SIZE, xValue + RECT_SIZE, yValue + RECT_SIZE);
 
