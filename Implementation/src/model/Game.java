@@ -70,11 +70,6 @@ public class Game {
 
 
     /**
-     * Game Initialisation
-     */
-
-
-    /**
      * Create deck of cards and shuffle
      * Generate game murder scenario
      *
@@ -147,7 +142,10 @@ public class Game {
             throw new Error("Expecting PLAYERS Sub State but " + subState);
         }
 
-        userInterface = new GUI(this);
+        if(runGraphicalOutput) {
+            userInterface = new GUI(this);
+        }
+
         PlayerSetupMenu p = new PlayerSetupMenu();
         numPlayers = p.setPlayerCount();
         players = new ArrayList<>();
@@ -308,11 +306,6 @@ public class Game {
 
 
     /**
-     * Core Gameplay
-     */
-
-
-    /**
      * Start the game
      *
      * @author Cameron Li, Vaibhav Ekambaram
@@ -320,7 +313,9 @@ public class Game {
     public void runGame() {
         initToRunning();
         movementTransition();
-        userInterface.updateDisplay();
+        if(runGraphicalOutput) {
+            userInterface.updateDisplay();
+        }
     }
 
     /**
@@ -348,8 +343,8 @@ public class Game {
      * Check validity
      * Transition states if no more moves
      *
-     * @param move
-     * @return
+     * @param move move
+     * @return boolean validator
      * @author Cameron Li
      */
     public boolean movementInput(Move move) {
@@ -399,10 +394,16 @@ public class Game {
 
 
         if (murderScenario.equals(accusationScenario)) {
-            if (runGraphicalOutput) a.successfulAccusation(p, murderScenario);
+            if (runGraphicalOutput) {
+                assert a != null;
+                a.successfulAccusation(p, murderScenario);
+            }
             return 1;
         } else {
-            if (runGraphicalOutput) a.incorrectAccusation(p);
+            if (runGraphicalOutput) {
+                assert a != null;
+                a.incorrectAccusation(p);
+            }
             p.setCanAccuse(false);
             return 0;
         }
@@ -525,7 +526,7 @@ public class Game {
             }
 
             // if the player successfully refutes the suggestion, end the loop
-            if (Objects.requireNonNull(refutation).toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(suggestionRoom.toString()) || refutation.toString().equals(suggestionWeapon.toString())) {
+            if (Objects.requireNonNull(refutation).toString().equals(suggestionCharacter.toString()) || refutation.toString().equals(Objects.requireNonNull(suggestionRoom).toString()) || refutation.toString().equals(suggestionWeapon.toString())) {
                 if (runGraphicalOutput) {
                     s.successfulRefutation(p.getCharacter().getCharacterName());
                 }
@@ -679,7 +680,9 @@ public class Game {
             throw new Error("Expected RUNNING game state but : " + gameState);
         }
         gameState = States.FINISHED;
-        userInterface.updateDisplay();
+        if(runGraphicalOutput) {
+            userInterface.updateDisplay();
+        }
     }
 
     /**
@@ -753,144 +756,4 @@ public class Game {
     public enum subStates {
         PLAYERS, DECK, BOARD, MOVEMENT, ACTION
     }
-
-
-    /**
-     * System.out Core Methods
-     */
-
-
-    /**
-     * MAIN GAME LOOP
-     * This method contains the main game logic. After the game as been setup in the game constructor, this method then
-     * loops through, carrying out the game functions
-     *
-     * @author Vaibhav Ekambaram
-     */
-    /*
-    public void mainGameLoop() {
-        while (gameState.equals(States.RUNNING)) {
-            for (Player p : players) {
-                movesRemaining = -1;
-                System.out.println("**************************************************");
-                System.out.println("Current Player: " + p.getCharacter().getCharacterName() + " (" + p.getCharacter().getCharacterBoardChar() + " on board)");
-                currentPlayer = p;
-                System.out.println("**************************************************");
-                movesRemaining = rollDice();
-                System.out.println("Result: " + movesRemaining);
-                System.out.println("**************************************************");
-                while (subState.equals(subStates.MOVEMENT)) {
-                    if (p.getCurrentPosition().getRoom() != null) {
-                        System.out.println("Currently in " + p.getCurrentPosition().getRoom());
-                        System.out.println("**************************************************");
-                    }
-                    System.out.println("Please enter a move command or type \"finish\" to complete move (" + movesRemaining + " tiles remaining):");
-                    Move move = movementInput(movesRemaining);
-                    if (move != null) {
-                        Board newBoard = this.board.apply(p, move);
-                        if (newBoard != null) {
-                            this.board = newBoard;
-                            movesRemaining = movesRemaining - move.getSpaces();
-                            System.out.println(board.toString());
-                            table.updateDisplay(board.toString());
-                        }
-                    } else {
-                        transitionSubState();
-                        break;
-                    }
-                    if (movesRemaining < 1) {
-                        transitionSubState(); // Transition from Movement to Action
-                    }
-                }
-                System.out.println("\t\t________________________________");
-                System.out.println("\t\tCurrent Players Hand:");
-                System.out.println("\t\t________________________________");
-                for (Card c : p.getHand()) {
-                    if (c instanceof CharacterCard) {
-                        System.out.println("\t\t[Character] " + c.toString());
-                    } else if (c instanceof WeaponCard) {
-                        System.out.println("\t\t[Weapon] " + c.toString());
-                    } else if (c instanceof RoomCard) {
-                        System.out.println("\t\t[Room] " + c.toString());
-                    }
-                }
-                System.out.println("\t\t________________________________");
-                System.out.println("Would you like to make a suggestion, accusation or pass?");
-                System.out.println("Available commands - [suggestion][accusation][pass]:");
-                table.setSuggestionAccusationVisibility(true);
-                String answer = "";
-                String input = new Scanner(System.in).nextLine();
-                try {
-                    answer = input;
-                } catch (Exception e) {
-                    System.out.println("Please enter 'Accusation', 'Suggestion', or 'Pass'");
-                }
-                if (answer.equalsIgnoreCase("a") || answer.equalsIgnoreCase("accusation")) {
-                    int accuse = makeAccusation(p);
-                    if (accuse == 1) {
-                        gameState = States.FINISHED;
-                        break;
-                    }
-                } else if (answer.equalsIgnoreCase("s") || answer.equalsIgnoreCase("suggestion")) {
-                    makeSuggestion(p);
-                }
-                System.out.println("[Hit Enter to move to the next player]");
-                Scanner wait = new Scanner(System.in);
-                wait.nextLine();
-                transitionSubState(); // Transition Action to Movement
-            }
-        }
-    }
-     */
-
-    /**
-     * Asks current player to perform an action
-     * Returns a move to apply to the board
-     *
-     * @return Model.Move
-     * @author Cameron Li, Vaibhav Ekambaram
-     */
-    /*
-    public Move movementInput(int movesRemaining) {
-        Move.Direction direction = null;
-        int spaces = 0;
-        Scanner inputScan = new Scanner(System.in);
-        boolean valid = false;
-        while (!valid) {
-            String command = inputScan.nextLine();
-            try {
-                if (command.length() >= 4 && command.startsWith("up-")) {
-                    direction = Move.Direction.UP;
-                    spaces = Integer.parseInt(command.substring(3));
-                } else if (command.length() >= 6 && command.startsWith("left-")) {
-                    direction = Move.Direction.LEFT;
-                    spaces = Integer.parseInt(command.substring(5));
-                } else if (command.length() >= 7 && command.startsWith("right-")) {
-                    direction = Move.Direction.RIGHT;
-                    spaces = Integer.parseInt(command.substring(6));
-                } else if (command.length() >= 6 && command.startsWith("down-")) {
-                    direction = Move.Direction.DOWN;
-                    spaces = Integer.parseInt(command.substring(5));
-                } else if (command.equals("finish")) {
-                    return null;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a correct number of spaces");
-            }
-            if (direction != null && spaces <= movesRemaining) {
-                valid = true;
-            }
-            if (!valid) {
-                if (spaces > movesRemaining) {
-                    System.out.println("Insufficient amount of moves left");
-                } else {
-                    System.out.println("Please enter a proper command");
-                    System.out.println("Movement is \"direction-spaces\" - e.g. up-4");
-                }
-            }
-        }
-        return new Move(direction, spaces);
-    }
-     */
-
 }

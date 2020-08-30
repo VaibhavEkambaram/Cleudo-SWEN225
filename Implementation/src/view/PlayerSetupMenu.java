@@ -8,6 +8,9 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Setup the game
+ */
 public class PlayerSetupMenu {
     /**
      * Set player count through option pane
@@ -69,7 +72,6 @@ public class PlayerSetupMenu {
                 buttonGroup.add(radButton);
                 fields.add(radButton);
             });
-            fields.add(new JLabel("Note: regardless of choice, players will start at token start, and the game will play clockwise around the board!"));
 
             JOptionPane.showMessageDialog(null, fields, "Set Player Preferences", JOptionPane.PLAIN_MESSAGE);
 

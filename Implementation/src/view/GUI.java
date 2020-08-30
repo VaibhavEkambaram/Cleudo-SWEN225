@@ -1,6 +1,5 @@
 package view;
 
-//import com.sun.javafx.font.directwrite.RECT;
 
 import model.Game;
 import model.Move;
@@ -37,10 +36,7 @@ public class GUI extends Observable {
     private final JPanel displayPanel;
     private final JPanel handPanel;
     private final JPanel actionPanel;
-
-    //private final JPanel movementPanel;
-    JPanel dicePanel;
-
+    private final JPanel dicePanel;
 
     // Buttons
     private final JButton suggestionButton;
@@ -48,12 +44,6 @@ public class GUI extends Observable {
     private final JButton passButton;
     private final JButton rollDiceButton;
     private final JButton finishedButton;
-    /*
-    private final JButton upButton;
-    private final JButton downButton;
-    private final JButton leftButton;
-    private final JButton rightButton;
-     */
 
     // Image Labels
     private JLabel firstDiceImageLabel;
@@ -62,8 +52,6 @@ public class GUI extends Observable {
     // Players
     private Player currentPlayer;
     private Player previousPlayer;
-
-    Graphics2D g;
 
     private int movesRemaining;
 
@@ -158,7 +146,7 @@ public class GUI extends Observable {
         infoPanel.setPreferredSize(new Dimension(500, 90));
 
         // Hand Panel
-        handPanel = new JPanel(new GridLayout(1,0));
+        handPanel = new JPanel(new GridLayout(1, 0));
         handPanel.setBackground(Color.WHITE);
 
         constraints.weightx = 1;
@@ -171,7 +159,7 @@ public class GUI extends Observable {
         scrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        mainPanel.add(scrollPanel,constraints);
+        mainPanel.add(scrollPanel, constraints);
 
         // Borders
         mainPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -179,7 +167,6 @@ public class GUI extends Observable {
         handPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         actionPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        //movementPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
 
         gameFrame.add(mainPanel);
@@ -221,24 +208,6 @@ public class GUI extends Observable {
         actionPanel.add(passButton);
         passButton.addActionListener(e -> onPass());
 
-        /*
-        upButton = new JButton("Up [^]");
-        movementPanel.add(upButton, BorderLayout.PAGE_START);
-        upButton.addActionListener(e -> makeMovement(Move.Direction.UP));
-
-        downButton = new JButton("Down [v]");
-        movementPanel.add(downButton, BorderLayout.CENTER);
-        downButton.addActionListener(e -> makeMovement(Move.Direction.DOWN));
-
-        leftButton = new JButton("Left [<]");
-        movementPanel.add(leftButton, BorderLayout.LINE_START);
-        leftButton.addActionListener(e -> makeMovement(Move.Direction.LEFT));
-
-        rightButton = new JButton("Right [>]");
-        movementPanel.add(rightButton, BorderLayout.LINE_END);
-        rightButton.addActionListener(e -> makeMovement(Move.Direction.RIGHT));
-
-         */
 
 
         suggestionButton.setFocusable(false);
@@ -246,14 +215,14 @@ public class GUI extends Observable {
         passButton.setFocusable(false);
         rollDiceButton.setFocusable(false);
         finishedButton.setFocusable(false);
+        dicePanel.setFocusable(false);
+        if(firstDiceImageLabel!=null) {
+            firstDiceImageLabel.setFocusable(false);
+        }
 
-        /*
-        upButton.setFocusable(false);
-        downButton.setFocusable(false);
-        leftButton.setFocusable(false);
-        rightButton.setFocusable(false);
-
-         */
+        if(secondDiceImageLabel!=null) {
+            secondDiceImageLabel.setFocusable(false);
+        }
 
 
         gameFrame.setFocusable(true);
@@ -270,6 +239,7 @@ public class GUI extends Observable {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (keyTracker.equals(KeyStates.PRE_ROLL)) {
+                    System.out.println("pre roll");
                     if (e.getKeyCode() == 82) {
                         onRollDice();
                     }
@@ -312,13 +282,6 @@ public class GUI extends Observable {
             }
         });
 
-        gameFrame.addWindowStateListener(e -> {
-            if((e.getNewState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH){
-                updateDisplay();
-            } else if((e.getNewState() & Frame.NORMAL) == Frame.NORMAL){
-                updateDisplay();
-            }
-        });
 
 
         // Window Close Listener
@@ -359,7 +322,6 @@ public class GUI extends Observable {
         setRollDiceButtonVisibility(false);
         setSuggestionAccusationVisibility(false);
         setFinishedButtonVisibility(false);
-        showMovement(false);
         updateDisplay();
     }
 
@@ -386,7 +348,7 @@ public class GUI extends Observable {
      * Execute Action for Suggestion Button
      */
     public void onSuggestion() {
-        int suggest = game.makeSuggestion(game.getCurrentPlayer(),null,null,-1);
+        int suggest = game.makeSuggestion(game.getCurrentPlayer(), null, null, -1);
         if (suggest == -1) {
             game.movementTransition();
         }
@@ -397,7 +359,7 @@ public class GUI extends Observable {
      * Execute Action for Accusation Button
      */
     public void onAccusation() {
-        int accuse = game.makeAccusation(game.getCurrentPlayer(),null);
+        int accuse = game.makeAccusation(game.getCurrentPlayer(), null);
         if (accuse == 1) {
             game.finishTransition();
         } else {
@@ -454,6 +416,7 @@ public class GUI extends Observable {
      */
     public void setFinishedButtonVisibility(boolean value) {
         if (value) {
+            keyTracker = KeyStates.MOVEMENT;
             actionPanel.add(finishedButton);
             finishedButton.setVisible(true);
         } else {
@@ -487,30 +450,6 @@ public class GUI extends Observable {
         }
     }
 
-    /**
-     * Set visibility of movement control buttons
-     *
-     * @param value boolean
-     * @author Cameron Li
-     */
-    public void showMovement(boolean value) {
-        if (value) {
-            keyTracker = KeyStates.MOVEMENT;
-            /*
-            movementPanel.add(upButton, BorderLayout.PAGE_START);
-            movementPanel.add(leftButton, BorderLayout.LINE_START);
-            movementPanel.add(downButton, BorderLayout.CENTER);
-            movementPanel.add(rightButton, BorderLayout.LINE_END);
-             */
-        } else {
-            /*
-            movementPanel.remove(upButton);
-            movementPanel.remove(downButton);
-            movementPanel.remove(leftButton);
-            movementPanel.remove(rightButton);
-             */
-        }
-    }
 
     /**
      * Create Menu bar for GUI
@@ -621,7 +560,6 @@ public class GUI extends Observable {
                 if (game.getSubState().equals(Game.subStates.MOVEMENT)) {
                     setSuggestionAccusationVisibility(false);
                     if (game.getMovesRemaining() > 0) {
-                        showMovement(true);
                         info.append(game.getMovesRemaining() + " moves remaining\n\n");
                         info.append("Click on board or use arrow keys to move\n");
                         setRollDiceButtonVisibility(false);
@@ -632,19 +570,15 @@ public class GUI extends Observable {
                         dicePanel.add(secondDiceImageLabel);
                         actionPanel.add(dicePanel);
                     } else {
-                        showMovement(false);
                         setRollDiceButtonVisibility(true);
                     }
                 } else if (game.getSubState().equals(Game.subStates.ACTION)) {
-                    dicePanel.remove(firstDiceImageLabel);
-                    dicePanel.remove(secondDiceImageLabel);
+                    dicePanel.removeAll();
                     actionPanel.remove(dicePanel);
                     setSuggestionAccusationVisibility(true);
                     setFinishedButtonVisibility(false);
-                    showMovement(false);
                     setRollDiceButtonVisibility(false);
-                    firstDiceImageLabel.setVisible(false);
-                    secondDiceImageLabel.setVisible(false);
+
                 }
             }
         }
@@ -662,7 +596,7 @@ public class GUI extends Observable {
         if (game.getBoard() == null) {
             return;
         }
-        g = (Graphics2D) displayPanel.getGraphics();
+        Graphics2D g = (Graphics2D) displayPanel.getGraphics();
         int border = BORDER_SIZE / 2;
         for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {

@@ -44,8 +44,7 @@ public class Board {
      */
     public String toString() {
         StringBuilder boardPrint = new StringBuilder();
-        for (int i = 0; i < positions.length; i++) {
-            Position[] position = positions[i];
+        for (Position[] position : positions) {
             for (int j = 0; j < positions[0].length; j++) {
                 boardPrint.append("|").append(position[j].toString());
             }
