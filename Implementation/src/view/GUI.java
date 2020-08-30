@@ -158,7 +158,7 @@ public class GUI extends Observable {
         infoPanel.setPreferredSize(new Dimension(500, 90));
 
         // Hand Panel
-        handPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        handPanel = new JPanel(new GridLayout(1,0));
         handPanel.setBackground(Color.WHITE);
 
         constraints.weightx = 1;
@@ -416,6 +416,8 @@ public class GUI extends Observable {
      * @author Vaibhav Ekambaram
      */
     public void RollDiceMenu(int firstNumber, int secondNumber) {
+
+
         firstDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + firstNumber + ".png")));
         secondDiceImageLabel = new JLabel(new ImageIcon(getClass().getResource("/resources/dice_" + secondNumber + ".png")));
 

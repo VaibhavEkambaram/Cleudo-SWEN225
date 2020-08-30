@@ -58,7 +58,7 @@ public class Game {
     public Game(boolean run) {
         runGraphicalOutput = run;
         initDeck();
-        if(run) {
+        if (run) {
             initPlayers();
         } else {
             new AutoSetup(this);
@@ -224,13 +224,13 @@ public class Game {
                         if (positionName.equals(r.getRoomChar())) { // Is this an inner room position?
                             newPosition = new Position(x, y, true, true, null, r, null);
                             break;
-                        } else if (positionName.equals("?" + r.getRoomChar())){
+                        } else if (positionName.equals("?" + r.getRoomChar())) {
                             newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Candlestick"));
                             break;
-                        } else if (positionName.equals("!" + r.getRoomChar())){
+                        } else if (positionName.equals("!" + r.getRoomChar())) {
                             newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Dagger"));
                             break;
-                        } else if (positionName.equals("$" + r.getRoomChar())){
+                        } else if (positionName.equals("$" + r.getRoomChar())) {
                             newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Lead Pipe"));
                             break;
                         } else if (positionName.equals("%" + r.getRoomChar())) {
@@ -243,19 +243,19 @@ public class Game {
                             newPosition = new Position(x, y, true, true, null, r, weaponCardsMap.get("Spanner"));
                             break;
                         } else if (positionName.equals("^" + r.getRoomChar())) { // Up door
-                            newPosition = new Position(x, y, true, true, Move.Direction.UP, r,null);
+                            newPosition = new Position(x, y, true, true, Move.Direction.UP, r, null);
                             break;
                         } else if (positionName.equals(">" + r.getRoomChar())) { // Right door
-                            newPosition = new Position(x, y, true, true, Move.Direction.RIGHT, r,null);
+                            newPosition = new Position(x, y, true, true, Move.Direction.RIGHT, r, null);
                             break;
                         } else if (positionName.equals("v" + r.getRoomChar())) { // Down door
-                            newPosition = new Position(x, y, true, true, Move.Direction.DOWN, r,null);
+                            newPosition = new Position(x, y, true, true, Move.Direction.DOWN, r, null);
                             break;
                         } else if (positionName.equals("<" + r.getRoomChar())) {
-                            newPosition = new Position(x, y, true, true, Move.Direction.LEFT, r,null);
+                            newPosition = new Position(x, y, true, true, Move.Direction.LEFT, r, null);
                             break;
                         } else if (positionName.equals(r.getRoomChar().toLowerCase())) { // Is this an outer room position?
-                            newPosition = new Position(x, y, true, false, null, r,null);
+                            newPosition = new Position(x, y, true, false, null, r, null);
                             break;
                         }
                     }
@@ -333,7 +333,11 @@ public class Game {
         // find a random number in the range of 0 to 5, then add 1 as an offset for 1 to 6
         int firstResult = new Random().nextInt(6) + 1;
         int secondResult = new Random().nextInt(6) + 1;
-        userInterface.RollDiceMenu(firstResult,secondResult);
+
+        if (runGraphicalOutput) {
+            userInterface.RollDiceMenu(firstResult, secondResult);
+        }
+
         return firstResult + secondResult;
     }
 
@@ -432,7 +436,6 @@ public class Game {
         suggestionCharacter = characterCardsMap.get(suggestionStringSplit[0]);
 
 
-
         // teleport the suggested player to the suggested room
         for (Player findP : players) {
             if (findP.getCharacter().getCharacterName().equals(suggestionCharacter.getCharacterName())) {
@@ -450,8 +453,8 @@ public class Game {
         }
 
         // teleport the suggested board to the suggested room
-        Board newBoard = board.teleportWeapon(suggestionWeapon,room);
-        if(newBoard != null){
+        Board newBoard = board.teleportWeapon(suggestionWeapon, room);
+        if (newBoard != null) {
             board = newBoard;
             userInterface.updateDisplay();
         }
@@ -470,15 +473,17 @@ public class Game {
             Player currentTurn = refuters.pop();
 
             String refute = s.makeRefutation(currentTurn, currentPlayer, new Scenario(suggestionWeapon, suggestionRoom, suggestionCharacter));
-            if(refute.equals("-1")){ continue;}
+            if (refute.equals("-1")) {
+                continue;
+            }
 
 
             List<Card> refuteCards = currentTurn.getHand();
 
             Card refutation = null;
 
-            for(Card c : refuteCards){
-                if(c.toString().equals(refute)){
+            for (Card c : refuteCards) {
+                if (c.toString().equals(refute)) {
                     refutation = c;
                 }
             }
@@ -655,13 +660,17 @@ public class Game {
         return movesRemaining;
     }
 
-    public Scenario getMurderScenario(){
+    public Scenario getMurderScenario() {
         return murderScenario;
     }
 
-    public String[] getCharacterNames(){ return characterNames; }
+    public String[] getCharacterNames() {
+        return characterNames;
+    }
 
-    public Map getCharacterCardsMap(){ return characterCardsMap; }
+    public Map getCharacterCardsMap() {
+        return characterCardsMap;
+    }
 
     /**
      * Setters
@@ -670,8 +679,6 @@ public class Game {
     public void setMovesRemaining(int value) {
         this.movesRemaining = value;
     }
-
-
 
 
     /**

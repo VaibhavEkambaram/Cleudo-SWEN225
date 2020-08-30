@@ -46,6 +46,9 @@ public class Tests {
     @Test
     public void checkDiceThrowResults(){
         Game game = new Game(false);
+        int value = game.rollDice();
+
+
     }
 
 
