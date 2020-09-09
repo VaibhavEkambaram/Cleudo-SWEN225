@@ -23,6 +23,7 @@ public class Player implements Comparable<Player> {
      * Player Constructor and Initialise Methods
      *
      * @param aCharacter character associated with player
+     * @param playerVanityName display name for player
      */
     public Player(CharacterCard aCharacter, String playerVanityName) {
         character = aCharacter;

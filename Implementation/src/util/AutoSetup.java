@@ -10,6 +10,7 @@ import java.util.Collections;
 public class AutoSetup {
     /**
      * Automatically performs a player setup of 3 players for testing
+     * @param game game
      *
      * @author Baxter Kirikiri
      */

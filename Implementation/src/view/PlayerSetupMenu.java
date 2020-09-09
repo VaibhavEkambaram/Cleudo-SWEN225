@@ -34,6 +34,7 @@ public class PlayerSetupMenu {
      * @param numPlayers        number of players
      * @param players           list of players to write to
      * @param characterCardsMap map of characters
+     * @param test generate test situation?
      * @return list of players
      * @author Vaibhav Ekambaram
      */

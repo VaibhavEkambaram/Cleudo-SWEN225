@@ -7,6 +7,9 @@
       </element>
       <element id="module-output" name="Implementation" />
       <element id="dir-copy" path="$PROJECT_DIR$/Implementation/src" />
+      <element id="directory" name="doc">
+        <element id="dir-copy" path="$PROJECT_DIR$/Implementation/doc" />
+      </element>
     </root>
   </artifact>
 </component>

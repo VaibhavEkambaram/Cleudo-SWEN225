@@ -9,6 +9,9 @@ import view.SuggestionMenu;
 
 import java.util.*;
 
+/**
+ * Main Game Class
+ */
 public class Game {
 
     //------------------------
@@ -53,6 +56,7 @@ public class Game {
      * Game Constructor
      * Primary game springboard for all other methods of the game
      *
+     * @param run boolean validator
      * @author Cameron Li, Vaibhav Ekambaram
      */
     public Game(boolean run) {
@@ -142,7 +146,7 @@ public class Game {
             throw new Error("Expecting PLAYERS Sub State but " + subState);
         }
 
-        if(runGraphicalOutput) {
+        if (runGraphicalOutput) {
             userInterface = new GUI(this);
         }
 
@@ -313,7 +317,7 @@ public class Game {
     public void runGame() {
         initToRunning();
         movementTransition();
-        if(runGraphicalOutput) {
+        if (runGraphicalOutput) {
             userInterface.updateDisplay();
         }
     }
@@ -370,7 +374,8 @@ public class Game {
     /**
      * Handle Accusations
      *
-     * @param p player
+     * @param p                      player
+     * @param accusationStringPreset preset for testing
      * @return integer (-1 invalid, 0 failed, 1 successful)
      * @author Baxter Kirikiri, Vaibhav Ekambaram
      */
@@ -412,6 +417,11 @@ public class Game {
     /**
      * Handles player suggestions.
      *
+     * @param p                      player
+     * @param suggestionStringPreset preset for testing
+     * @param refutationPresets      preset for testing
+     * @param couldntRefuteCommand   preset for testing
+     * @return integer validator
      * @author Baxter Kirikiri, Vaibhav Ekambaram, Cameron Li
      */
     public int makeSuggestion(Player p, String suggestionStringPreset, String[] refutationPresets, int couldntRefuteCommand) {
@@ -680,79 +690,133 @@ public class Game {
             throw new Error("Expected RUNNING game state but : " + gameState);
         }
         gameState = States.FINISHED;
-        if(runGraphicalOutput) {
+        if (runGraphicalOutput) {
             userInterface.updateDisplay();
         }
     }
 
-    /**
-     * Getters
-     */
 
+    /**
+     * Get game state for use with gui
+     *
+     * @return state enum
+     */
     public States getGameState() {
         return gameState;
     }
 
+    /**
+     * Get game substate for use with gui
+     *
+     * @return substate enum
+     */
     public subStates getSubState() {
         return subState;
     }
 
+    /**
+     * Get board
+     *
+     * @return board
+     */
     public Board getBoard() {
         return this.board;
     }
 
+    /**
+     * Get current player
+     *
+     * @return player
+     */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
+    /**
+     * Get number of moves remaining
+     *
+     * @return moves remaining
+     */
     public int getMovesRemaining() {
         return movesRemaining;
     }
 
+    /**
+     * Get the generated murder scenario
+     *
+     * @return scenario
+     */
     public Scenario getMurderScenario() {
         return murderScenario;
     }
 
+    /**
+     * Retrieve character names as an array
+     *
+     * @return array of character names
+     */
     public String[] getCharacterNames() {
         return characterNames;
     }
 
+    /**
+     * Get map of character card names
+     *
+     * @return string, weaponCard map
+     */
     public Map getCharacterCardsMap() {
         return characterCardsMap;
     }
 
+    /**
+     * Get map of weapon card names
+     *
+     * @return string, weaponCard map
+     */
     public Map getWeaponCardsMap() {
         return weaponCardsMap;
     }
 
+    /**
+     * Get map of room card names
+     *
+     * @return string, roomCard map
+     */
     public Map getRoomCardsMap() {
         return roomCardsMap;
     }
 
-    /**
-     * Setters
-     */
 
+    /**
+     * Set number of player moves remaining
+     *
+     * @param value number of moves
+     */
     public void setMovesRemaining(int value) {
         this.movesRemaining = value;
     }
 
+    /**
+     * Set murder scenario
+     *
+     * @param newScenario scenario
+     */
     public void setMurderScenario(Scenario newScenario) {
         murderScenario = newScenario;
     }
 
+
     /**
-     * State Methods
+     * Main Game States
      */
-
-
-    // Main Game States
     public enum States {
         IDLE, INIT, RUNNING, FINISHED
     }
 
 
-    // Sub States for Main Game States
+    /**
+     * Game SubStates
+     */
     public enum subStates {
         PLAYERS, DECK, BOARD, MOVEMENT, ACTION
     }
